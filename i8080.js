@@ -14,6 +14,11 @@ class Computer {
         this.mmu.connect_bus(this.bus);
         this.bus.connect_mmu(this.bus);
     }
+
+    reset() {
+        this.cpu.reset();
+        this.mmu.reset();
+    }
 }
 
 class Bus {
@@ -39,6 +44,10 @@ class MMU {
 
     connect_bus(bus) {
         this.bus = bus;
+    }
+
+    reset() {
+        this.ram = new Array(2**16);
     }
 
     write(address, val) {
@@ -98,18 +107,18 @@ class i8080 {
         // | 10100101 |
         // +----------+
 
-        // Take left nibbles only, and sum.
+        // Take least significant nibbles only, and sum.
 
         // +----------+
         // | 00001111 |
         // |+---------|
         // | 00000101 |
         // +==========+
-        // | 00011100 |
+        // | 00010100 |
         // +----------+
         
-        // Above, can see that binary arithmatic has resulted in a 1 set in bit position 4 which means a
-        // half-carry occurred.
+        // Above, we can see that binary arithmatic has resulted in 1 set in position 4 which means a
+        // half-carry would have occurred in this operation.
         if (((lop & 0xf) + (rop & 0xf)) & (1 << 4)) this.flags |= (1 << 4);
 
         // Zero
@@ -117,7 +126,6 @@ class i8080 {
 
         // Sign
         if (val & (1 << 7)) this.flags |= (1 << 7);
-
     }
 
 
@@ -135,7 +143,7 @@ class i8080 {
 //  ADD Arithmetic Operations (ADD to Accumulator (A))
 //  ===================================================================================
 
-// Description: The specified byte is added to the contents of the accumulator using 
+// The specified byte is added to the contents of the accumulator using 
 // two's complement arithmetic.
 //
 // Condition bits affected: Carry, Sign, Zero, Parity, Auxiliary Carry
@@ -148,7 +156,6 @@ class i8080 {
 
         this.clock += 4;
     }
-
 
 //  ===================================================================================
 //  LXI Operations
@@ -167,7 +174,6 @@ class i8080 {
 // +---------------------+--------------+-------------+
 // | OPCODE (FIRST BYTE) |  SECOND BYTE |  THIRD BYTE |
 // +---------------------+--------------+-------------+
-// |                     |              |             |
 // | 00000001            | 10101010     | 01010101    |
 // +---------------------+--------------+-------------+
 
@@ -176,7 +182,6 @@ class i8080 {
 // +------------+-------------+
 // | REGISTER B |  REGISTER C |
 // +------------+-------------+
-// |            |             |
 // | 01010101   | 10101010    |
 // +------------+-------------+
 
@@ -190,7 +195,6 @@ class i8080 {
 // +---------------------+--------------+-------------+
 // | OPCODE (FIRST BYTE) |  SECOND BYTE |  THIRD BYTE |
 // +---------------------+--------------+-------------+
-// |                     |              |             |
 // | 00110001            | 10101010     | 01010101    |
 // +---------------------+--------------+-------------+
 
@@ -199,7 +203,6 @@ class i8080 {
 // +--------------------+
 // | STACK POINTER (SP) |
 // +--------------------+
-// |                    |
 // | 01010101|10101010  |
 // +--------------------+
 
