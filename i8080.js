@@ -34,6 +34,14 @@ class Bus {
     connect_cpu(cpu) {
         this.cpu = cpu;
     }
+
+    write(addr) {
+
+    }
+
+    read(addr) {
+
+    }
 }
 
 class MMU {
@@ -60,6 +68,17 @@ class MMU {
 }
 
 class i8080 {
+
+    static get Flags() {
+        return {
+            Carry: 0,
+            Parity: 2,
+            AuxillaryCarry: 4,
+            Zero: 6,
+            Sign: 7,
+        };
+    }
+
     constructor() {
         this.reset();
     }
@@ -85,14 +104,21 @@ class i8080 {
         return (bit_count % 2 === 0)
     }
 
+    set_flag(bit_no) {
+        this.flags |= (1 << bit_no);
+    }
+
+    clear_flag(bit_no) {
+        this.flags &= ~(1 << bit_no);
+    }
+
     set_flags(val, lop, rop) {
-        this.flags = 0x2;
 
         // Carry
-        if (val > 255 || val < 0) this.flags |= 1;
+       (val > 255 || val < 0) ? set_flag(i8080.Flags.Carry) : this.clear_flag(i8080.Flags.Carry);
 
         // Parity
-        if (this.parity(val)) this.flags |= (1 << 2);
+        this.parity(val) ? this.set_flag(i8080.Flags.Parity) : this.clear_flag(i8080.Flags.Parity);
 
         // Auxillary Carry
         //
@@ -119,15 +145,14 @@ class i8080 {
         
         // Above, we can see that binary arithmatic has resulted in 1 set in position 4 which means a
         // half-carry would have occurred in this operation.
-        if (((lop & 0xf) + (rop & 0xf)) & (1 << 4)) this.flags |= (1 << 4);
+        ((lop & 0xf) + (rop & 0xf)) & (1 << 4) ? this.set_flag(i8080.Flags.AuxillaryCarry) : this.clear_flag(i8080.Flags.AuxillaryCarry);
 
         // Zero
-        if (val === 0) this.flags |= (1 << 6);
+        val === 0 ? this.set_flag(i8080.Flags.Zero) : this.clear_flag(i8080.Flags.Zero);
 
         // Sign
-        if (val & (1 << 7)) this.flags |= (1 << 7);
+        val & (1 << 7) ? this.set_flag(i8080.Flags.Sign) : this.clear_flag(i8080.Flags.Sign)
     }
-
 
 //  ===================================================================================
 //  NOP
@@ -242,7 +267,42 @@ class i8080 {
 
         this.clock += 10;
     }
-    
+
+
+//  ===================================================================================
+//  Single Register Operations
+//  ===================================================================================
+
+// This section describes instructions which operate on a single register or memory 
+// location. If a memory reference is specified, the memory byte addressed by the H
+// and L registers is operated upon. The H register holds the most significant 8 bits 
+// of the address wh ile the L register holds the least significant 8 bits of the 
+// address.
+
+    daa() {
+        // The eight-bit hexadecimal number in the accumulator is adjusted to form two 
+        // four-bit binary-coded-decimal digits by the following two-step process:
+
+        // (1) If the least significant four bits of the accumulator represents a number
+        // greater than 9, or if the Auxiliary Carry bit is equal to one, the 
+        // accumulator is incremented by six. Otherwise, no incrementing occurs.
+
+        // (2) If the most significant four bits of the accumulator now represent a 
+        // number greater than 9, or if the normal carry bit is equal to one, the most
+        // significant four bits of the accumulator are incremented by six. Otherwise, 
+        // no incrementing occurs.
+
+        // If a carry out of the least significant four bits occurs during Step (1), 
+        // the Auxiliary Carry bit is set; otherwise it is reset. Likewise, if a carry 
+        // out of the most significant four bits occurs during Step (2). the normal 
+        // Carry bit is set; otherwise, it is unaffected:
+
+        // This instruction is used when adding decimal numbers. It is the only 
+        // instruction whose operation is affected by the Auxiliary Carry bit.
+    }
+
+
+
 //  ===================================================================================
 //  MOV Operations
 //  ===================================================================================
