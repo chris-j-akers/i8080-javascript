@@ -67,7 +67,19 @@ class MMU {
     }
 }
 
+//  ===================================================================================
+//  i8080 CPU
+//  ===================================================================================
+
 class i8080 {
+
+    __dbg__get_flags() {
+        let str = '** CPU flag status [';
+        for (let flag in i8080.Flags) {
+            str += `${flag}: ${(this.flags & (1 << i8080.Flags[flag])) ? '1' : '0'}, `
+        }
+        return str.slice(0,-2) + '] **';
+    }
 
     static get Flags() {
         return {
@@ -112,15 +124,21 @@ class i8080 {
         this.flags &= ~(1 << bit_no);
     }
 
+    flag_set(bit_no) {
+        return this.flags & (1 << bit_no);
+    }
+
     set_flags(val, lop, rop) {
 
         // Carry
-       (val > 255 || val < 0) ? set_flag(i8080.Flags.Carry) : this.clear_flag(i8080.Flags.Carry);
+       (val > 255 || val < 0) ? this.set_flag(i8080.Flags.Carry) : this.clear_flag(i8080.Flags.Carry);
 
         // Parity
         this.parity(val) ? this.set_flag(i8080.Flags.Parity) : this.clear_flag(i8080.Flags.Parity);
 
         // Auxillary Carry
+        //
+        // This one's a little tricky!
         //
         // Add the LSB nibbles of each byte together. If the result includes an additional bit set (carried) in 
         // position 4, then an auxillary (or half) carry will occur during this operation.
@@ -175,9 +193,9 @@ class i8080 {
 
     // ADD B
     add_b() {
-        const val = this.A += this.B;
-        this.set_flags(val, this.A, this.B);
-        this.A = val & 0xFF;
+        const val = this.registers.A += this.registers.B;
+        this.set_flags(val, this.registers.A, this.registers.B);
+        this.registers.A = val & 0xFF;
 
         this.clock += 4;
     }
@@ -299,6 +317,20 @@ class i8080 {
 
         // This instruction is used when adding decimal numbers. It is the only 
         // instruction whose operation is affected by the Auxiliary Carry bit.
+
+        if ((this.registers.A & 0x0F) > 9 || this.flag_set(i8080.Flags.AuxillaryCarry)) {
+            const val = this.registers.A += 0x06;
+            this.set_flags(val, this.registers.A, 0x06);
+            this.registers.A = val & 0xFF;
+        }
+
+        if ((this.registers.A & 0xF0) > 0x90 || this.flag_set(i8080.Flags.Carry)) {
+            const val = this.registers.A += 0x60;
+            if (val > 255 || val < 0) this.set_flag(i8080.Flags.Carry);
+            this.registers.A = val & 0xFF;
+        }
+
+        this.clock += 4;
     }
 
 
@@ -323,8 +355,6 @@ class i8080 {
 
 }
 
-
-
 function print_num_as_binary(val) {
     var str = '';
     for (let i = 0; i<16; i++) {
@@ -338,14 +368,36 @@ function print_num_as_binary(val) {
     return str.split('').reverse().join('');
 }
 
+    let c = new Computer();
+    c.reset();
 
-function dump_flags(c) {
-    console.log(`FLAGS`);
-    for (let i=0; i<8; i++) {
-        console.log(`FLAG BIT ${i} = ${c.cpu.flags & (1 << i) ? 1 : 0}`);
-    }
-}
+    console.log('Test: Carry Flag Test after AE+74 (=122)');
 
-const c = new Computer();
-console.log(c); 
+    // Status flags after ADD operation
+    // +---------+----+----+----+----+----+----+----+
+    // | BIT NO. | 7  |  6 |  5 |  4 |  3 |  2 |  0 |
+    // +---------+----+----+----+----+----+----+----+
+    // |         |    |    |    |    |    |    |    |
+    // |   AE    | 1  | 0  | 1  |  0 | 1  | 1  | 1  |
+    // |         |    |    |    |    |    |    |    |
+    // | + 74    | 0  | 1  | 1  | 1  | 0  | 1  | 0  |
+    // |         |    |    |    |    |    |    |    |
+    // | = 122   | 0  | 0  | 1  | 0  | 0  | 0  | 1  |
+    // +---------+----+----+----+----+----+----+----+
+    // Bit 7 was carried, so the carry flag should be set in this calculation.
+    // Note that in the calculation above, the aux carry flag is also set
+
+    c.cpu.registers.B = 0xAE;
+    c.cpu.registers.A = 0x74;
+    c.cpu.add_b();
+    console.log(c.cpu.__dbg__get_flags());
+    
+    // Zero flag test
+
+    console.log('Test: Zero Flag Test after 0x00 + 0x00');
+
+    c.cpu.registers.B = 0x0;
+    c.cpu.registers.A = 0x0;
+    c.cpu.add_b();
+    console.log(c.cpu.__dbg__get_flags());
 
