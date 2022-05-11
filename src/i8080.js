@@ -368,9 +368,8 @@ function print_num_as_binary(val) {
     return str.split('').reverse().join('');
 }
 
+function __tst__carry_flag_set_after_addition() {
     let c = new Computer();
-    c.reset();
-
     console.log('Test: Carry Flag Test after AE+74 (=122)');
 
     // Status flags after ADD operation
@@ -386,18 +385,21 @@ function print_num_as_binary(val) {
     // +---------+----+----+----+----+----+----+----+
     // Bit 7 was carried, so the carry flag should be set in this calculation.
     // Note that in the calculation above, the aux carry flag is also set
+    // Note that the parity flag should also be set (2 bits set in the result)
 
     c.cpu.registers.B = 0xAE;
     c.cpu.registers.A = 0x74;
     c.cpu.add_b();
     console.log(c.cpu.__dbg__get_flags());
-    
-    // Zero flag test
+}
 
+function __tst__zero_flag_set_after_addition() {
+
+    let c = new Computer();
     console.log('Test: Zero Flag Test after 0x00 + 0x00');
 
     c.cpu.registers.B = 0x0;
     c.cpu.registers.A = 0x0;
     c.cpu.add_b();
     console.log(c.cpu.__dbg__get_flags());
-
+}
