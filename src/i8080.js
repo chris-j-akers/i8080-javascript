@@ -75,13 +75,13 @@ class i8080 {
 
     __dbg__get_flags() {
         let str = '** CPU flag status [';
-        for (let flag in i8080.Flags) {
-            str += `${flag}: ${(this.flags & (1 << i8080.Flags[flag])) ? '1' : '0'}, `
+        for (let flag in i8080.FlagType) {
+            str += `${flag}: ${(this.flags & (1 << i8080.FlagType[flag])) ? '1' : '0'}, `
         }
         return str.slice(0,-2) + '] **';
     }
 
-    static get Flags() {
+    static get FlagType() {
         return {
             Carry: 0,
             Parity: 2,
@@ -131,10 +131,10 @@ class i8080 {
     set_flags(val, lop, rop) {
 
         // Carry
-       (val > 255 || val < 0) ? this.set_flag(i8080.Flags.Carry) : this.clear_flag(i8080.Flags.Carry);
+       (val > 255 || val < 0) ? this.set_flag(i8080.FlagType.Carry) : this.clear_flag(i8080.FlagType.Carry);
 
         // Parity
-        this.parity(val) ? this.set_flag(i8080.Flags.Parity) : this.clear_flag(i8080.Flags.Parity);
+        this.parity(val) ? this.set_flag(i8080.FlagType.Parity) : this.clear_flag(i8080.FlagType.Parity);
 
         // Auxillary Carry
         //
@@ -163,13 +163,13 @@ class i8080 {
         
         // Above, we can see that binary arithmatic has resulted in 1 set in position 4 which means a
         // half-carry would have occurred in this operation.
-        ((lop & 0xf) + (rop & 0xf)) & (1 << 4) ? this.set_flag(i8080.Flags.AuxillaryCarry) : this.clear_flag(i8080.Flags.AuxillaryCarry);
+        ((lop & 0xf) + (rop & 0xf)) & (1 << 4) ? this.set_flag(i8080.FlagType.AuxillaryCarry) : this.clear_flag(i8080.FlagType.AuxillaryCarry);
 
         // Zero
-        val === 0 ? this.set_flag(i8080.Flags.Zero) : this.clear_flag(i8080.Flags.Zero);
+        val === 0 ? this.set_flag(i8080.FlagType.Zero) : this.clear_flag(i8080.FlagType.Zero);
 
         // Sign
-        val & (1 << 7) ? this.set_flag(i8080.Flags.Sign) : this.clear_flag(i8080.Flags.Sign)
+        val & (1 << 7) ? this.set_flag(i8080.FlagType.Sign) : this.clear_flag(i8080.FlagType.Sign)
     }
 
 //  ===================================================================================
@@ -318,15 +318,19 @@ class i8080 {
         // This instruction is used when adding decimal numbers. It is the only 
         // instruction whose operation is affected by the Auxiliary Carry bit.
 
-        if ((this.registers.A & 0x0F) > 9 || this.flag_set(i8080.Flags.AuxillaryCarry)) {
+        if ((this.registers.A & 0x0F) > 9 || this.flag_set(i8080.FlagType.AuxillaryCarry)) {
             const val = this.registers.A += 0x06;
             this.set_flags(val, this.registers.A, 0x06);
             this.registers.A = val & 0xFF;
         }
 
-        if ((this.registers.A & 0xF0) > 0x90 || this.flag_set(i8080.Flags.Carry)) {
+        if ((this.registers.A & 0xF0) > 0x90 || this.flag_set(i8080.FlagType.Carry)) {
             const val = this.registers.A += 0x60;
-            if (val > 255 || val < 0) this.set_flag(i8080.Flags.Carry);
+
+            // According to the documentation, we do not clear the Carry if the test
+            // is false, here. We leave it, so calling set_flag() directly instead of
+            // set_flags() to stop the reset on the false condition.
+            if (val > 255 || val < 0) this.set_flag(i8080.FlagType.Carry);
             this.registers.A = val & 0xFF;
         }
 
