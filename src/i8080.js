@@ -22,7 +22,7 @@ class Computer {
 }
 
 class Bus {
-    constructor(mmu, cpu) {
+    constructor() {
         this.mmu = null;
         this.cpu = null;
     }
@@ -35,12 +35,12 @@ class Bus {
         this.cpu = cpu;
     }
 
-    write(addr) {
-
+    write(val, addr) {
+        this.mmu.write(val, addr);
     }
 
     read(addr) {
-
+        return this.mmu.read(addr);
     }
 }
 
@@ -58,12 +58,12 @@ class MMU {
         this.ram = new Array(2**16);
     }
 
-    write(address, val) {
-        this.ram[address] = val;
+    write(val, addr) {
+        this.ram[addr] = val;
     }
 
-    read(address, val) {
-        return this.ram[address];
+    read(addr) {
+        return this.ram[addr];
     }
 }
 
@@ -110,7 +110,7 @@ class i8080 {
 
     parity(val) {
         let bit_count = 0;
-        for (let i = 0; i < 7; i++) {
+        for (let i = 0; i < 8; i++) {
             if (val & (1 << i)) bit_count++;
         }
         return (bit_count % 2 === 0)
@@ -163,7 +163,7 @@ class i8080 {
         
         // Above, we can see that binary arithmatic has resulted in 1 set in position 4 which means a
         // half-carry would have occurred in this operation.
-        ((lop & 0xf) + (rop & 0xf)) & (1 << 4) ? this.set_flag(i8080.FlagType.AuxillaryCarry) : this.clear_flag(i8080.FlagType.AuxillaryCarry);
+        ((lop & 0x0f) + (rop & 0x0f)) & (1 << 4) ? this.set_flag(i8080.FlagType.AuxillaryCarry) : this.clear_flag(i8080.FlagType.AuxillaryCarry);
 
         // Zero
         val === 0 ? this.set_flag(i8080.FlagType.Zero) : this.clear_flag(i8080.FlagType.Zero);
@@ -191,7 +191,7 @@ class i8080 {
 //
 // Condition bits affected: Carry, Sign, Zero, Parity, Auxiliary Carry
 
-    // ADD B
+    // ADD B 0x80
     add_b() {
         const val = this.registers.A += this.registers.B;
         this.set_flags(val, this.registers.A, this.registers.B);
@@ -199,6 +199,82 @@ class i8080 {
 
         this.clock += 4;
     }
+
+    // ADD C 0x81
+    add_c() {
+        const val = this.registers.A += this.registers.C;
+        this.set_flags(val, this.registers.A, this.registers.C);
+        this.registers.A = val & 0xFF;
+
+        this.clock += 4;
+    }
+
+    // ADD D 0x82
+    add_d() {
+        const val = this.registers.A += this.registers.D;
+        this.set_flags(val, this.registers.A, this.registers.D);
+        this.registers.A = val & 0xFF;
+
+        this.clock += 4;
+    }
+
+    // ADD E 0x83
+    add_e() {
+        const val = this.registers.A += this.registers.E;
+        this.set_flags(val, this.registers.A, this.registers.E);
+        this.registers.A = val & 0xFF;
+
+        this.clock += 4;
+    }
+
+    // ADD H 0x84
+    add_h() {
+        const val = this.registers.A += this.registers.H;
+        this.set_flags(val, this.registers.A, this.registers.L);
+        this.registers.A = val & 0xFF;
+
+        this.clock += 4;
+    }
+
+    // ADD L 0x85
+    add_l() {
+        const val = this.registers.A += this.registers.L;
+        this.set_flags(val, this.registers.A, this.registers.L);
+        this.registers.A = val & 0xFF;
+
+        this.clock += 4;
+    }
+
+    // ADD M 0x86
+    add_m() {
+        // Add memory - Address is in HL
+        const mem_data = this.bus.read(((this.registers.H << 8) | this.registers.L) & 0xFFFF);
+        const val = this.registers.A += mem_data;
+        this.set_flags(val, this.registers.A, mem_data);
+        this.registers.A = val & 0xFF;
+
+        this.clock += 7;
+    }
+
+    // ADD A 0x87
+    add_a() {
+        const val = this.registers.A += this.registers.A;
+        this.set_flags(val, this.registers.A, this.registers.A);
+        this.registers.A = val & 0xFF;
+
+        this.clock += 4;
+    }
+
+    adc_b() {
+        const register_with_carry = this.registers.B + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
+        const val = this.registers.A + register_with_carry;
+        this.set_flags(val, this.registers.A, register_with_carry);
+        this.registers.A = val & 0xFF;
+
+        this.clock += 4;
+    }
+
+
 
 //  ===================================================================================
 //  LXI Operations
@@ -361,7 +437,7 @@ class i8080 {
 
 function print_num_as_binary(val) {
     var str = '';
-    for (let i = 0; i<16; i++) {
+    for (let i = 0; i<8; i++) {
         if (val & (1 << i)) {
             str += '1';
         } 
@@ -407,3 +483,39 @@ function __tst__zero_flag_set_after_addition() {
     c.cpu.add_b();
     console.log(c.cpu.__dbg__get_flags());
 }
+
+function __tst__add_with_carry_b() {
+    let c = new Computer();
+    console.log('Test: ADC B');
+
+    c.cpu.registers.B = 0x3D;
+    c.cpu.registers.A = 0x42;
+    c.cpu.clear_flag(i8080.FlagType.Carry);
+    c.cpu.adc_b();
+    
+    console.log(`Value of Accumulator: ${c.cpu.registers.A.toString(16)}, ${print_num_as_binary(c.cpu.registers.A)}`);
+    console.log(`${c.cpu.__dbg__get_flags()}`);
+
+    console.log(`Second Test`);
+    c = new Computer();
+
+    c.cpu.registers.B = 0x3D;
+    c.cpu.registers.A = 0x42;
+    c.cpu.set_flag(i8080.FlagType.Carry);
+    c.cpu.adc_b();
+    
+    console.log(`Value of Accumulator: ${c.cpu.registers.A.toString(16)}, ${print_num_as_binary(c.cpu.registers.A)}`);
+    console.log(`${c.cpu.__dbg__get_flags()}`);
+
+}
+
+function __tst__add_mem() {
+
+    let c = new Computer();
+    console.log(`Test: Add Memory`);
+    console.log(c);
+    c.bus.write(10, 0x10);
+}
+
+
+__tst__add_mem();
