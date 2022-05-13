@@ -74,11 +74,37 @@ class MMU {
 class i8080 {
 
     __dbg__get_flags() {
-        let str = '** CPU flag status [';
+        let str = 'F  [';
         for (let flag in i8080.FlagType) {
             str += `${flag}: ${(this.flags & (1 << i8080.FlagType[flag])) ? '1' : '0'}, `
         }
         return str.slice(0,-2) + '] **';
+    }
+
+    __dbg__get_registers() {
+        let str = 'R  [';
+        let rval = '';
+        for (let register in this.registers) {
+            rval = this.registers[register];
+            str += `${register}: ${rval}, 0x${rval.toString(16)}, ${byte_as_binary(rval)} | `
+        }
+        return str.slice(0,-3) + ']';
+    }
+
+    __dbg__get_sp() {
+        return `SP [${this.stack_pointer}, ${this.stack_pointer.toString(16)}, ${word_as_binary(this.stack_pointer)}]`;
+    }
+
+    __dbg__get_pc() {
+        return `PC [${this.program_counter}, ${this.program_counter.toString(16)}, ${word_as_binary(this.program_counter)}]`;
+    }
+
+    __dbg__get_clock() {
+        return `CL [${this.clock}, ${this.clock.toString(16)}, ${word_as_binary(this.clock)}]`;
+    }
+
+    __dbg__get_state() {
+        return `${this.__dbg__get_registers()}\n${this.__dbg__get_flags()}\n${this.__dbg__get_sp()}\n${this.__dbg__get_pc()}\n${this.__dbg__get_clock()}`;
     }
 
     static get FlagType() {
@@ -249,6 +275,9 @@ class i8080 {
     add_m() {
         // Add memory - Address is in HL
         const mem_data = this.bus.read(((this.registers.H << 8) | this.registers.L) & 0xFFFF);
+
+        console.log(mem_data);
+
         const val = this.registers.A += mem_data;
         this.set_flags(val, this.registers.A, mem_data);
         this.registers.A = val & 0xFF;
@@ -435,9 +464,22 @@ class i8080 {
 
 }
 
-function print_num_as_binary(val) {
+function byte_as_binary(val) {
     var str = '';
     for (let i = 0; i<8; i++) {
+        if (val & (1 << i)) {
+            str += '1';
+        } 
+        else {
+            str += '0';
+        }
+    }
+    return str.split('').reverse().join('');
+}
+
+function word_as_binary(val) {
+    var str = '';
+    for (let i = 0; i<16; i++) {
         if (val & (1 << i)) {
             str += '1';
         } 
@@ -493,7 +535,7 @@ function __tst__add_with_carry_b() {
     c.cpu.clear_flag(i8080.FlagType.Carry);
     c.cpu.adc_b();
     
-    console.log(`Value of Accumulator: ${c.cpu.registers.A.toString(16)}, ${print_num_as_binary(c.cpu.registers.A)}`);
+    console.log(`Value of Accumulator: ${c.cpu.registers.A.toString(16)}, ${byte_as_binary(c.cpu.registers.A)}`);
     console.log(`${c.cpu.__dbg__get_flags()}`);
 
     console.log(`Second Test`);
@@ -504,7 +546,7 @@ function __tst__add_with_carry_b() {
     c.cpu.set_flag(i8080.FlagType.Carry);
     c.cpu.adc_b();
     
-    console.log(`Value of Accumulator: ${c.cpu.registers.A.toString(16)}, ${print_num_as_binary(c.cpu.registers.A)}`);
+    console.log(`Value of Accumulator: ${c.cpu.registers.A.toString(16)}, ${byte_as_binary(c.cpu.registers.A)}`);
     console.log(`${c.cpu.__dbg__get_flags()}`);
 
 }
@@ -512,11 +554,42 @@ function __tst__add_with_carry_b() {
 function __tst__add_mem() {
 
     let c = new Computer();
-    console.log(`Test: Add Memory`);
-    console.log(c);
-    c.bus.write(20,0x10);
 
+    const mem_addr = 0x10;
+    c.bus.write(20,mem_addr);
+    const mem_data = c.cpu.bus.read(mem_addr);
+
+    console.log(`Test: Add Memory`);
+
+    c.cpu.registers.H = (mem_addr & 0xff) >> 8;
+    c.cpu.registers.L = mem_addr & 0xff;
+    c.cpu.registers.A = 0x0;
+    c.cpu.add_m();
+
+    console.log(`addr: ${word_as_binary(mem_addr)}`);
+    console.log(`data: ${byte_as_binary(mem_data)}`)
+    
+    console.log(`Loading ${byte_as_binary((mem_data & 0xff) >> 8)} into H and ${byte_as_binary(mem_data & 0xff)} into L to make address 0x${(c.cpu.registers.H + c.cpu.registers.L).toString(16)}`)
+    console.log(`Result in A is: ${byte_as_binary(c.cpu.registers.A)}, which is ${c.cpu.registers.A}`);
+
+    console.log(c.cpu.__dbg__get_registers());
+    console.log(c.cpu.__dbg__get_flags());
+}
+
+function __tst_dbg_strings() {
+    const c = new Computer();
+    console.log(c.cpu.__dbg__get_registers());
+    console.log(c.cpu.__dbg__get_flags());
+    console.log(c.cpu.__dbg__get_sp());
+    console.log(c.cpu.__dbg__get_pc());
+    console.log(c.cpu.__dbg__get_clock());
+}
+
+function __tst_get_state_string() {
+
+    const c = new Computer();
+    console.log(c.cpu.__dbg__get_state());
 }
 
 
-__tst__add_mem();
+__tst_get_state_string();
