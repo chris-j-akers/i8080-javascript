@@ -72,7 +72,9 @@ class MMU {
 //  ===================================================================================
 
 class i8080 {
-
+    //  ===================================================================================
+    //  Methods to retrieve strings about the state of the CPU. Useful for debugging
+    //  ===================================================================================
     __dbg__get_flags() {
         let str = 'F  [';
         for (let flag in i8080.FlagType) {
@@ -107,6 +109,9 @@ class i8080 {
         return `${this.__dbg__get_registers()}\n${this.__dbg__get_flags()}\n${this.__dbg__get_sp()}\n${this.__dbg__get_pc()}\n${this.__dbg__get_clock()}`;
     }
 
+    //  ===================================================================================
+    //  An 'Enum'. Allows us to reference each bit in the flags register using its name
+    //  ===================================================================================
     static get FlagType() {
         return {
             Carry: 0,
@@ -117,6 +122,9 @@ class i8080 {
         };
     }
 
+    //  ===================================================================================
+    //  Constructor methods,
+    //  ===================================================================================
     constructor() {
         this.reset();
     }
@@ -134,7 +142,12 @@ class i8080 {
         this.bus = bus;
     }
 
+    //  ===================================================================================
+    //  Flag helper methods for testing, setting and clearing flags and their values
+    //  ===================================================================================
     parity(val) {
+        // If the number of bits in a value is even, then the value has parity and parity
+        // flag should be set.
         let bit_count = 0;
         for (let i = 0; i < 8; i++) {
             if (val & (1 << i)) bit_count++;
@@ -155,6 +168,10 @@ class i8080 {
     }
 
     set_flags(val, lop, rop) {
+
+        // The CPU flags are set/cleared based on results of some operations. The left-hand, right-hand
+        // and results of those operations are tested, here, to decide which flag bits will be set once
+        // the operation is complete.  Mostly simply, but the Aux Carry needed a bit of extra research.
 
         // Carry
        (val > 255 || val < 0) ? this.set_flag(i8080.FlagType.Carry) : this.clear_flag(i8080.FlagType.Carry);
@@ -495,19 +512,18 @@ function __tst__carry_flag_set_after_addition() {
     console.log('Test: Carry Flag Test after AE+74 (=122)');
 
     // Status flags after ADD operation
-    // +---------+----+----+----+----+----+----+----+
-    // | BIT NO. | 7  |  6 |  5 |  4 |  3 |  2 |  0 |
-    // +---------+----+----+----+----+----+----+----+
-    // |         |    |    |    |    |    |    |    |
-    // |   AE    | 1  | 0  | 1  |  0 | 1  | 1  | 1  |
-    // |         |    |    |    |    |    |    |    |
-    // | + 74    | 0  | 1  | 1  | 1  | 0  | 1  | 0  |
-    // |         |    |    |    |    |    |    |    |
-    // | = 122   | 0  | 0  | 1  | 0  | 0  | 0  | 1  |
-    // +---------+----+----+----+----+----+----+----+
+    // +---------+---+---+---+---+---+---+---+---+---+
+    // | BIT NO. | C | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
+    // +---------+---+---+---+---+---+---+---+---+---+
+    // |  AE     |   | 1 | 0 | 1 | 0 | 1 | 1 | 1 | 0 |
+    // | +       |   |   |   |   |   |   |   |   |   |
+    // |  74     |   | 0 | 1 | 1 | 1 | 0 | 1 | 0 | 0 |
+    // | ===     |   |   |   |   |   |   |   |   |   |
+    // | 122     | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 1 | 0 |
+    // +---------+---+---+---+---+---+---+---+---+---+
     // Bit 7 was carried, so the carry flag should be set in this calculation.
-    // Note that in the calculation above, the aux carry flag is also set
-    // Note that the parity flag should also be set (2 bits set in the result)
+    // In addition, the aux carry and the parity flag should also be set 
+    // (2 bits set in the result not including carry)
 
     c.cpu.registers.B = 0xAE;
     c.cpu.registers.A = 0x74;
