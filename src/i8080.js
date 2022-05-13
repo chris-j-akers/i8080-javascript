@@ -12,7 +12,7 @@ class Computer {
 
         // Connect the bus to the MMU and vice versa
         this.mmu.connect_bus(this.bus);
-        this.bus.connect_mmu(this.bus);
+        this.bus.connect_mmu(this.mmu);
     }
 
     reset() {
@@ -36,7 +36,7 @@ class Bus {
     }
 
     write(val, addr) {
-        this.mmu.write(val, addr);
+        this.mmu.write_ram(val, addr);
     }
 
     read(addr) {
@@ -58,7 +58,7 @@ class MMU {
         this.ram = new Array(2**16);
     }
 
-    write(val, addr) {
+    write_ram(val, addr) {
         this.ram[addr] = val;
     }
 
@@ -514,7 +514,8 @@ function __tst__add_mem() {
     let c = new Computer();
     console.log(`Test: Add Memory`);
     console.log(c);
-    c.bus.write(10, 0x10);
+    c.bus.write(20,0x10);
+
 }
 
 
