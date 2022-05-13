@@ -17,7 +17,6 @@ function __util__byte_as_binary(val) {
     return str.split('').reverse().join('');
 }
 
-
 //  ===================================================================================
 //  Return a string representation of a word (16-bits) in binary 
 // e.g. 
