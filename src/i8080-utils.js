@@ -1,4 +1,3 @@
-
 //  ===================================================================================
 //  Return a string representation of a byte (8-bits) in binary format
 // e.g. 

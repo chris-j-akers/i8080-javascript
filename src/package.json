@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "test": "jest"
+  },
+  "name": "src",
+  "version": "1.0.0",
+  "main": "i8080.js",
+  "directories": {
+    "__tests__": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "type": "module"
+}

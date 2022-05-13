@@ -20,6 +20,7 @@ class Computer {
         this.mmu.reset();
     }
 }
+module.exports = Computer;
 
 class Bus {
     constructor() {
@@ -80,7 +81,7 @@ class i8080 {
         for (let flag in i8080.FlagType) {
             str += `${flag}: ${(this.flags & (1 << i8080.FlagType[flag])) ? '1' : '0'}, `
         }
-        return str.slice(0,-2) + '] **';
+        return str.slice(0,-2) + ']';
     }
 
     __dbg__get_registers() {
@@ -234,62 +235,17 @@ class i8080 {
 //
 // Condition bits affected: Carry, Sign, Zero, Parity, Auxiliary Carry
 
-    // ADD B 0x80
-    add_b() {
-        const val = this.registers.A += this.registers.B;
-        this.set_flags(val, this.registers.A, this.registers.B);
+    // ADD
+
+    add_reg(reg) {
+        const val = this.registers.A += reg;
+        this.set_flags(val, this.registers.A, reg);
         this.registers.A = val & 0xFF;
 
         this.clock += 4;
     }
 
-    // ADD C 0x81
-    add_c() {
-        const val = this.registers.A += this.registers.C;
-        this.set_flags(val, this.registers.A, this.registers.C);
-        this.registers.A = val & 0xFF;
-
-        this.clock += 4;
-    }
-
-    // ADD D 0x82
-    add_d() {
-        const val = this.registers.A += this.registers.D;
-        this.set_flags(val, this.registers.A, this.registers.D);
-        this.registers.A = val & 0xFF;
-
-        this.clock += 4;
-    }
-
-    // ADD E 0x83
-    add_e() {
-        const val = this.registers.A += this.registers.E;
-        this.set_flags(val, this.registers.A, this.registers.E);
-        this.registers.A = val & 0xFF;
-
-        this.clock += 4;
-    }
-
-    // ADD H 0x84
-    add_h() {
-        const val = this.registers.A += this.registers.H;
-        this.set_flags(val, this.registers.A, this.registers.L);
-        this.registers.A = val & 0xFF;
-
-        this.clock += 4;
-    }
-
-    // ADD L 0x85
-    add_l() {
-        const val = this.registers.A += this.registers.L;
-        this.set_flags(val, this.registers.A, this.registers.L);
-        this.registers.A = val & 0xFF;
-
-        this.clock += 4;
-    }
-
-    // ADD M 0x86
-    add_m() {
+    add_mem() {
         // Add memory - Address is in HL
         const mem_data = this.bus.read(((this.registers.H << 8) | this.registers.L) & 0xFFFF);
         const val = this.registers.A += mem_data;
@@ -299,17 +255,10 @@ class i8080 {
         this.clock += 7;
     }
 
-    // ADD A 0x87
-    add_a() {
-        const val = this.registers.A += this.registers.A;
-        this.set_flags(val, this.registers.A, this.registers.A);
-        this.registers.A = val & 0xFF;
+    // ADC
 
-        this.clock += 4;
-    }
-
-    adc_b() {
-        const register_with_carry = this.registers.B + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
+    adc_reg(reg) {
+        const register_with_carry = reg + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         const val = this.registers.A + register_with_carry;
         this.set_flags(val, this.registers.A, register_with_carry);
         this.registers.A = val & 0xFF;
@@ -577,5 +526,24 @@ function __tst_get_state_string() {
     console.log(c.cpu.__dbg__get_state());
 }
 
+function test_aux_carry() {
 
-__tst__add_mem();
+    const c = new Computer();
+
+    console.log(c.cpu.__dbg__get_state());
+
+    c.cpu.registers.A = 0x0F;
+    c.cpu.registers.B = 0x0F;
+
+    const lop = c.cpu.registers.A;
+    const rop = c.cpu.registers.B;
+
+    console.log(((lop & 0x0f) + (rop & 0x0f)) & (1 << 4));
+
+    console.log(__util__byte_as_binary(lop & 0x0f));
+    console.log(__util__byte_as_binary(rop & 0x0f));
+    console.log(c.cpu.__dbg__get_state());
+    c.cpu.add_reg(c.cpu.registers.B);
+    console.log(c.cpu.__dbg__get_state());
+
+}
