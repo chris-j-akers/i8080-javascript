@@ -88,21 +88,21 @@ class i8080 {
         let rval = '';
         for (let register in this.registers) {
             rval = this.registers[register];
-            str += `${register}: ${rval}, 0x${rval.toString(16)}, ${byte_as_binary(rval)} | `
+            str += `${register}: ${rval}, 0x${rval.toString(16)}, ${__util__byte_as_binary(rval)} | `
         }
         return str.slice(0,-3) + ']';
     }
 
     __dbg__get_sp() {
-        return `SP [${this.stack_pointer}, ${this.stack_pointer.toString(16)}, ${word_as_binary(this.stack_pointer)}]`;
+        return `SP [${this.stack_pointer}, ${this.stack_pointer.toString(16)}, ${__util__word_as_binary(this.stack_pointer)}]`;
     }
 
     __dbg__get_pc() {
-        return `PC [${this.program_counter}, ${this.program_counter.toString(16)}, ${word_as_binary(this.program_counter)}]`;
+        return `PC [${this.program_counter}, ${this.program_counter.toString(16)}, ${__util__word_as_binary(this.program_counter)}]`;
     }
 
     __dbg__get_clock() {
-        return `CL [${this.clock}, ${this.clock.toString(16)}, ${word_as_binary(this.clock)}]`;
+        return `CL [${this.clock}, ${this.clock.toString(16)}, ${__util__word_as_binary(this.clock)}]`;
     }
 
     __dbg__get_state() {
@@ -292,9 +292,6 @@ class i8080 {
     add_m() {
         // Add memory - Address is in HL
         const mem_data = this.bus.read(((this.registers.H << 8) | this.registers.L) & 0xFFFF);
-
-        console.log(mem_data);
-
         const val = this.registers.A += mem_data;
         this.set_flags(val, this.registers.A, mem_data);
         this.registers.A = val & 0xFF;
@@ -481,31 +478,6 @@ class i8080 {
 
 }
 
-function byte_as_binary(val) {
-    var str = '';
-    for (let i = 0; i<8; i++) {
-        if (val & (1 << i)) {
-            str += '1';
-        } 
-        else {
-            str += '0';
-        }
-    }
-    return str.split('').reverse().join('');
-}
-
-function word_as_binary(val) {
-    var str = '';
-    for (let i = 0; i<16; i++) {
-        if (val & (1 << i)) {
-            str += '1';
-        } 
-        else {
-            str += '0';
-        }
-    }
-    return str.split('').reverse().join('');
-}
 
 function __tst__carry_flag_set_after_addition() {
     let c = new Computer();
@@ -551,7 +523,7 @@ function __tst__add_with_carry_b() {
     c.cpu.clear_flag(i8080.FlagType.Carry);
     c.cpu.adc_b();
     
-    console.log(`Value of Accumulator: ${c.cpu.registers.A.toString(16)}, ${byte_as_binary(c.cpu.registers.A)}`);
+    console.log(`Value of Accumulator: ${c.cpu.registers.A.toString(16)}, ${__util__byte_as_binary(c.cpu.registers.A)}`);
     console.log(`${c.cpu.__dbg__get_flags()}`);
 
     console.log(`Second Test`);
@@ -562,7 +534,7 @@ function __tst__add_with_carry_b() {
     c.cpu.set_flag(i8080.FlagType.Carry);
     c.cpu.adc_b();
     
-    console.log(`Value of Accumulator: ${c.cpu.registers.A.toString(16)}, ${byte_as_binary(c.cpu.registers.A)}`);
+    console.log(`Value of Accumulator: ${c.cpu.registers.A.toString(16)}, ${c.cpu.__util__byte_as_binary(c.cpu.registers.A)}`);
     console.log(`${c.cpu.__dbg__get_flags()}`);
 
 }
@@ -582,14 +554,12 @@ function __tst__add_mem() {
     c.cpu.registers.A = 0x0;
     c.cpu.add_m();
 
-    console.log(`addr: ${word_as_binary(mem_addr)}`);
-    console.log(`data: ${byte_as_binary(mem_data)}`)
+    console.log(`addr: ${__util__word_as_binary(mem_addr)}`);
+    console.log(`data: ${__util__byte_as_binary(mem_data)}`)
     
-    console.log(`Loading ${byte_as_binary((mem_data & 0xff) >> 8)} into H and ${byte_as_binary(mem_data & 0xff)} into L to make address 0x${(c.cpu.registers.H + c.cpu.registers.L).toString(16)}`)
-    console.log(`Result in A is: ${byte_as_binary(c.cpu.registers.A)}, which is ${c.cpu.registers.A}`);
+    console.log(`Loading ${__util__byte_as_binary((mem_data & 0xff) >> 8)} into H and ${__util__byte_as_binary(mem_data & 0xff)} into L to make address 0x${(c.cpu.registers.H + c.cpu.registers.L).toString(16)}`)
+    console.log(c.cpu.__dbg__get_state());
 
-    console.log(c.cpu.__dbg__get_registers());
-    console.log(c.cpu.__dbg__get_flags());
 }
 
 function __tst_dbg_strings() {
@@ -608,4 +578,4 @@ function __tst_get_state_string() {
 }
 
 
-__tst_get_state_string();
+__tst__add_mem();
