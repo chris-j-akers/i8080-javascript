@@ -68,7 +68,7 @@ function __tst__add_mem() {
 
     console.log(`Test: Add Memory`);
 
-    c.cpu.registers.H = (mem_addr & 0xff) >> 8;
+    c.cpu.registers.H = (mem_addr >> 8) & 0xff;
     c.cpu.registers.L = mem_addr & 0xff;
     c.cpu.registers.A = 0x0;
     c.cpu.add_m();
