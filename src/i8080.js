@@ -127,16 +127,16 @@ class i8080 {
     //  ===================================================================================
     constructor() {
         this.reset();
+        this.bus = null;
     }
 
     reset() {
-        this.scratch_registers = {B:0x0, C:0x0, D:0x0, E:0x0, H:0x0, L:0x0};
         this.accumulator = 0x0;
+        this.scratch_registers = {B:0x0, C:0x0, D:0x0, E:0x0, H:0x0, L:0x0};
         this.stack_pointer = 0x0;
         this.program_counter = 0x0;
         this.flags = 0x2;
         this.clock = 0x0;
-        this.bus = null;
     }
 
     connect_bus(bus) {
@@ -248,7 +248,7 @@ class i8080 {
     add_mem() {
         // Add memory - Address is in HL
         const mem_data = this.bus.read(((this.scratch_registers.H << 8) | this.scratch_registers.L) & 0xFFFF);
-        const val = this.accumulator += mem_data;
+        const val = this.accumulator + mem_data;
         this.set_flags(val, this.accumulator, mem_data);
         this.accumulator = val & 0xFF;
 
@@ -256,7 +256,6 @@ class i8080 {
     }
 
     // ADC
-
     adc_reg(reg) {
         const register_with_carry = reg + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         const val = this.accumulator + register_with_carry;
