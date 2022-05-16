@@ -404,24 +404,38 @@ class i8080 {
         this.clock += 4;
     }
 
-
-
 //  ===================================================================================
 //  MOV Operations
 //  ===================================================================================
 //
-// Moving data from register to register, memory to register, memory to memory!
-//
-// MOV DST, SRC
+// Moving data from register to register, memory to register, register to memory!
 
-    mov_bb() {
+    mov_reg(reg_source, reg_destination) {
+        this.scratch_registers[reg_destination] = this.scratch_registers[reg_source];
         this.clock += 5
     }
 
-    mov_db() {
-        this.D = this.B;
+    mov_to_mem(reg_source) {
+        const addr = ((this.scratch_registers.H << 8) | this.scratch_registers.L) & 0xFFFF;
+        this.bus.write(this.scratch_registers[reg_source], addr);
+        this.clock += 7
+    }
 
-        this.clock += 5
+    mov_from_mem(reg_destination) {
+        const addr = ((this.scratch_registers.H << 8) | this.scratch_registers.L) & 0xFFFF;
+        this.scratch_registers[reg_destination] = this.bus.read(addr);
+        this.clock += 7
+    }
+
+    mvi_reg(val, reg_destination ) {
+        this.scratch_registers[reg_destination] = (val & 0xFF);
+        this.clock += 7
+    }
+
+    mvi_to_mem(val) {
+        const addr = ((this.scratch_registers.H << 8) | this.scratch_registers.L) & 0xFFFF;
+        this.bus.write(val, addr);
+        this.clock += 7
     }
 }
 
