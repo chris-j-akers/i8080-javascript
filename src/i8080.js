@@ -86,8 +86,8 @@ class i8080 {
     __dbg__get_registers() {
         let str = 'R  [';
         let rval = '';
-        for (let register in this.registers) {
-            rval = this.registers[register];
+        for (let register in this.scratch_registers) {
+            rval = this.scratch_registers[register];
             str += `${register}: ${rval}, 0x${rval.toString(16)}, ${__util__byte_as_binary(rval)} | `
         }
         return str.slice(0,-3) + ']';
@@ -130,7 +130,8 @@ class i8080 {
     }
 
     reset() {
-        this.registers = {B:0x0, C:0x0, D:0x0, E:0x0, H:0x0, L:0x0, A:0x0};
+        this.scratch_registers = {B:0x0, C:0x0, D:0x0, E:0x0, H:0x0, L:0x0};
+        this.accumulator = 0x0;
         this.stack_pointer = 0x0;
         this.program_counter = 0x0;
         this.flags = 0x2;
@@ -237,19 +238,19 @@ class i8080 {
     // ADD
 
     add_reg(reg) {
-        const val = this.registers.A += reg;
-        this.set_flags(val, this.registers.A, reg);
-        this.registers.A = val & 0xFF;
+        const val = this.accumulator += reg;
+        this.set_flags(val, this.accumulator, reg);
+        this.accumulator = val & 0xFF;
 
         this.clock += 4;
     }
 
     add_mem() {
         // Add memory - Address is in HL
-        const mem_data = this.bus.read(((this.registers.H << 8) | this.registers.L) & 0xFFFF);
-        const val = this.registers.A += mem_data;
-        this.set_flags(val, this.registers.A, mem_data);
-        this.registers.A = val & 0xFF;
+        const mem_data = this.bus.read(((this.scratch_registers.H << 8) | this.scratch_registers.L) & 0xFFFF);
+        const val = this.accumulator += mem_data;
+        this.set_flags(val, this.accumulator, mem_data);
+        this.accumulator = val & 0xFF;
 
         this.clock += 7;
     }
@@ -258,9 +259,9 @@ class i8080 {
 
     adc_reg(reg) {
         const register_with_carry = reg + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
-        const val = this.registers.A + register_with_carry;
-        this.set_flags(val, this.registers.A, register_with_carry);
-        this.registers.A = val & 0xFF;
+        const val = this.accumulator + register_with_carry;
+        this.set_flags(val, this.accumulator, register_with_carry);
+        this.accumulator = val & 0xFF;
 
         this.clock += 4;
     }
@@ -320,24 +321,24 @@ class i8080 {
 
     // LXI B,d16
     lxi_b(val) {
-        this.registers.B = val & 0xFF;
-        this.registers.C = (val >> 8) & 0xFF;
+        this.scratch_registers.B = val & 0xFF;
+        this.scratch_registers.C = (val >> 8) & 0xFF;
 
         this.clock += 10;
     }
 
     // LXI D,d16
     lxi_d(val) {
-        this.registers.D = val & 0xFF;
-        this.registers.E = (val >> 8) & 0xFF;
+        this.scratch_registers.D = val & 0xFF;
+        this.scratch_registers.E = (val >> 8) & 0xFF;
 
         this.clock += 10;
     }
 
     // LXI H,d16
     lxi_h(val) {
-        this.registers.H = val & 0xFF;
-        this.registers.L = (val >> 8) & 0xFF;
+        this.scratch_registers.H = val & 0xFF;
+        this.scratch_registers.L = (val >> 8) & 0xFF;
 
         this.clock += 10;
     }
@@ -385,20 +386,20 @@ class i8080 {
         // This instruction is used when adding decimal numbers. It is the only 
         // instruction whose operation is affected by the Auxiliary Carry bit.
 
-        if ((this.registers.A & 0x0F) > 9 || this.flag_set(i8080.FlagType.AuxillaryCarry)) {
-            const val = this.registers.A += 0x06;
-            this.set_flags(val, this.registers.A, 0x06);
-            this.registers.A = val & 0xFF;
+        if ((this.scratch_registers.A & 0x0F) > 9 || this.flag_set(i8080.FlagType.AuxillaryCarry)) {
+            const val = this.scratch_registers.A += 0x06;
+            this.set_flags(val, this.scratch_registers.A, 0x06);
+            this.scratch_registers.A = val & 0xFF;
         }
 
-        if ((this.registers.A & 0xF0) > 0x90 || this.flag_set(i8080.FlagType.Carry)) {
-            const val = this.registers.A += 0x60;
+        if ((this.scratch_registers.A & 0xF0) > 0x90 || this.flag_set(i8080.FlagType.Carry)) {
+            const val = this.scratch_registers.A += 0x60;
 
             // According to the documentation, we do not clear the Carry if the test
             // is false, here. We leave it, so calling set_flag() directly instead of
             // set_flags() to stop the reset on the false condition.
             if (val > 255 || val < 0) this.set_flag(i8080.FlagType.Carry);
-            this.registers.A = val & 0xFF;
+            this.scratch_registers.A = val & 0xFF;
         }
 
         this.clock += 4;
