@@ -265,6 +265,18 @@ class i8080 {
         this.clock += 4;
     }
 
+    adc_mem() {
+        const mem_data = this.bus.read(((this.scratch_registers.H << 8) | this.scratch_registers.L) & 0xFFFF);
+        const carry = (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
+        const mem_data_with_carry = mem_data + carry;
+        const val = this.accumulator + mem_data_with_carry;
+
+        this.set_flags(val, this.accumulator, mem_data_with_carry);
+        this.accumulator = val & 0xFF;
+
+        this.clock += 7;
+    }
+
 
 
 //  ===================================================================================
@@ -385,20 +397,20 @@ class i8080 {
         // This instruction is used when adding decimal numbers. It is the only 
         // instruction whose operation is affected by the Auxiliary Carry bit.
 
-        if ((this.scratch_registers.A & 0x0F) > 9 || this.flag_set(i8080.FlagType.AuxillaryCarry)) {
-            const val = this.scratch_registers.A += 0x06;
-            this.set_flags(val, this.scratch_registers.A, 0x06);
-            this.scratch_registers.A = val & 0xFF;
+        if ((this.accumulator & 0x0F) > 9 || this.flag_set(i8080.FlagType.AuxillaryCarry)) {
+            const val = this.accumulator += 0x06;
+            this.set_flags(val, this.accumulator, 0x06);
+            this.accumulator = val & 0xFF;
         }
 
-        if ((this.scratch_registers.A & 0xF0) > 0x90 || this.flag_set(i8080.FlagType.Carry)) {
-            const val = this.scratch_registers.A += 0x60;
+        if ((this.accumulator & 0xF0) > 0x90 || this.flag_set(i8080.FlagType.Carry)) {
+            const val = this.accumulator += 0x60;
 
             // According to the documentation, we do not clear the Carry if the test
             // is false, here. We leave it, so calling set_flag() directly instead of
             // set_flags() to stop the reset on the false condition.
             if (val > 255 || val < 0) this.set_flag(i8080.FlagType.Carry);
-            this.scratch_registers.A = val & 0xFF;
+            this.accumulator = val & 0xFF;
         }
 
         this.clock += 4;
