@@ -269,6 +269,7 @@ class i8080 {
         const mem_data = this.bus.read(((this.scratch_registers.H << 8) | this.scratch_registers.L) & 0xFFFF);
         const carry = (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         const mem_data_with_carry = mem_data + carry;
+
         const val = this.accumulator + mem_data_with_carry;
 
         this.set_flags(val, this.accumulator, mem_data_with_carry);
