@@ -423,7 +423,7 @@ class i8080 {
 //
 // Moving data from register to register, memory to register, register to memory!
 
-    mov_reg(reg_source, reg_destination) {
+    mov_reg(reg_destination, reg_source) {
         this.scratch_registers[reg_destination] = this.scratch_registers[reg_source];
         this.clock += 5
     }
@@ -440,7 +440,7 @@ class i8080 {
         this.clock += 7
     }
 
-    mvi_reg(val, reg_destination ) {
+    mvi_reg(reg_destination, val) {
         this.scratch_registers[reg_destination] = (val & 0xFF);
         this.clock += 7
     }
