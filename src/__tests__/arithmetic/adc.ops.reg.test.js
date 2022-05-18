@@ -256,24 +256,24 @@ describe('ADC / REGISTERS', () => {
 // +-----------------------+-----------------------+-------+-----------------------+-------+
 // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
 // +-----------------------+-----------------------+-------+-----------------------+-------+
-// | 255 | 0xFF | 11111111 | 001 | 0x01 | 00000001 |     0 | 000 | 0x00 | 00000000 | C|P|A |
+// | 255 | 0xFF | 11111111 | 020 | 0x14 | 00000001 |     0 | 019 | 0x13 | 00010011 | C|A   |
 // +-----------------------+-----------------------+-------+-----------------------+-------+
     
     const c = new Source.Computer();
     const FlagType = Source.i8080.FlagType;
 
     for (reg in c.cpu.scratch_registers) {
-      c.cpu.accumulator = 0x01;
-      c.cpu.scratch_registers[reg] = 0xFE;
+      c.cpu.accumulator = 0x14;
+      c.cpu.scratch_registers[reg] = 0xFF;
 
-      c.cpu.add_reg(c.cpu.scratch_registers[reg]);
+      c.cpu.adc_reg(c.cpu.scratch_registers[reg]);
 
-      expect(c.cpu.accumulator).toBe(0xff); 
-      expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-      expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
+      expect(c.cpu.accumulator).toBe(0x13); 
+      expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+      expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
       expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
       expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
-      expect(c.cpu.flag_set(FlagType.Sign)).toBeTruthy();
+      expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
       c.reset();
     }
   });
@@ -307,12 +307,11 @@ describe('ADC / REGISTERS', () => {
     }
   });
 
-  test('UNSET FLAGS', () => {
-
+  test('UNSET FLAGS | CARRY UNSET', () => {
 // +-----------------------+-----------------------+-------+-----------------------+-------+
 // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
 // +-----------------------+-----------------------+-------+-----------------------+-------+
-// | 000 | 0x00 | 00000000 | 001 | 0x01 | 00000001 |     1 | 002 | 0x02 | 00000010 |       |
+// | 001 | 0x01 | 00000001 | 001 | 0x01 | 00000001 |     0 | 002 | 0x02 | 00000010 |       |
 // +-----------------------+-----------------------+-------+-----------------------+-------+
 
     const c = new Source.Computer();
@@ -323,13 +322,11 @@ describe('ADC / REGISTERS', () => {
         c.cpu.accumulator = 0x00;
         c.cpu.scratch_registers[reg] = 0x01;
 
-        c.cpu.set_flag(FlagType.Carry);
         c.cpu.set_flag(FlagType.Parity);
         c.cpu.set_flag(FlagType.AuxillaryCarry);
         c.cpu.set_flag(FlagType.Zero);
         c.cpu.set_flag(FlagType.Sign);
 
-        expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
         expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
         expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
         expect(c.cpu.flag_set(FlagType.Zero)).toBeTruthy();
@@ -337,7 +334,7 @@ describe('ADC / REGISTERS', () => {
 
         c.cpu.adc_reg(c.cpu.scratch_registers[reg]);
 
-        expect(c.cpu.accumulator).toBe(0x02);
+        expect(c.cpu.accumulator).toBe(0x01);
         expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
         expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
         expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
@@ -347,4 +344,42 @@ describe('ADC / REGISTERS', () => {
         c.reset();
     }
   });
+
+  test('UNSET FLAGS | CARRY SET', () => {
+    // +-----------------------+-----------------------+-------+-----------------------+-------+
+    // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+    // +-----------------------+-----------------------+-------+-----------------------+-------+
+    // | 001 | 0x01 | 00000001 | 000 | 0x00 | 00000000 |     1 | 002 | 0x02 | 00000010 |       |
+    // +-----------------------+-----------------------+-------+-----------------------+-------+
+    
+        const c = new Source.Computer();
+        const FlagType = Source.i8080.FlagType;
+    
+        // Inputs
+        for (reg in c.cpu.scratch_registers) {
+            c.cpu.accumulator = 0x00;
+            c.cpu.scratch_registers[reg] = 0x01;
+    
+            c.cpu.set_flag(FlagType.Parity);
+            c.cpu.set_flag(FlagType.AuxillaryCarry);
+            c.cpu.set_flag(FlagType.Zero);
+            c.cpu.set_flag(FlagType.Sign);
+    
+            expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
+            expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
+            expect(c.cpu.flag_set(FlagType.Zero)).toBeTruthy();
+            expect(c.cpu.flag_set(FlagType.Sign)).toBeTruthy();
+    
+            c.cpu.adc_reg(c.cpu.scratch_registers[reg]);
+    
+            expect(c.cpu.accumulator).toBe(0x01);
+            expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+            expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
+            expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
+            expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
+            expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
+    
+            c.reset();
+        }
+      });
 });
