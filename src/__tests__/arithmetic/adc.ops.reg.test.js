@@ -3,7 +3,6 @@ const Source = require('../../i8080');
 describe('ADC / REGISTERS', () => {
 
   test('NO FLAGS SET | CARRY UNSET', () => {
-
 // +-----------------------+-----------------------+-------+-----------------------+-------+
 // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
 // +-----------------------+-----------------------+-------+-----------------------+-------+
@@ -30,7 +29,6 @@ describe('ADC / REGISTERS', () => {
   });
 
   test('NO FLAGS SET | CARRY SET', () => {
-
 // +-----------------------+-----------------------+-------+-----------------------+-------+
 // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
 // +-----------------------+-----------------------+-------+-----------------------+-------+
@@ -58,7 +56,6 @@ describe('ADC / REGISTERS', () => {
   });
 
   test('SET ZERO | CARRY UNSET', () => {
-
 // +-----------------------+-----------------------+-------+-----------------------+-------+
 // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
 // +-----------------------+-----------------------+-------+-----------------------+-------+
@@ -84,9 +81,7 @@ describe('ADC / REGISTERS', () => {
     }
   });
 
-
   test('SET PARITY | CARRY UNSET)', () => {
-
 // +-----------------------+-----------------------+-------+-----------------------+-------+
 // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
 // +-----------------------+-----------------------+-------+-----------------------+-------+
@@ -113,7 +108,6 @@ describe('ADC / REGISTERS', () => {
   });
 
   test('SET PARITY | CARRY SET)', () => {
-
 // +-----------------------+-----------------------+-------+-----------------------+-------+
 // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
 // +-----------------------+-----------------------+-------+-----------------------+-------+
@@ -142,7 +136,6 @@ describe('ADC / REGISTERS', () => {
   });
 
   test('SET AUX CARRY | CARRY UNSET', () => {
-
 // +-----------------------+-----------------------+-------+-----------------------+-------+
 // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
 // +-----------------------+-----------------------+-------+-----------------------+-------+
@@ -169,7 +162,6 @@ describe('ADC / REGISTERS', () => {
   });
 
   test('SET AUX CARRY | CARRY SET', () => {
-
 // +-----------------------+-----------------------+-------+-----------------------+-------+
 // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
 // +-----------------------+-----------------------+-------+-----------------------+-------+
@@ -197,7 +189,6 @@ describe('ADC / REGISTERS', () => {
   });
 
   test('SET SIGN | CARRY UNSET', () => {
-
 // +-----------------------+-----------------------+-------+-----------------------+-------+
 // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
 // +-----------------------+-----------------------+-------+-----------------------+-------+
@@ -224,7 +215,6 @@ describe('ADC / REGISTERS', () => {
   });
 
   test('SET SIGN | CARRY SET', () => {
-
 // +-----------------------+-----------------------+-------+-----------------------+-------+
 // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
 // +-----------------------+-----------------------+-------+-----------------------+-------+
@@ -252,7 +242,6 @@ describe('ADC / REGISTERS', () => {
   });
 
   test('SET CARRY | CARRY UNSET', () => {
-
 // +-----------------------+-----------------------+-------+-----------------------+-------+
 // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
 // +-----------------------+-----------------------+-------+-----------------------+-------+
@@ -279,7 +268,6 @@ describe('ADC / REGISTERS', () => {
   });
 
   test('SET CARRY | CARRY SET', () => {
-
 // +-----------------------+-----------------------+-------+-----------------------+-------+
 // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
 // +-----------------------+-----------------------+-------+-----------------------+-------+
@@ -293,10 +281,8 @@ describe('ADC / REGISTERS', () => {
       c.cpu.scratch_registers[reg] = 0xFE;
       c.cpu.set_flag(FlagType.Carry);
 
-      // Operation
       c.cpu.adc_reg(c.cpu.scratch_registers[reg]);
 
-      // Results
       expect(c.cpu.accumulator).toBe(0x00);
       expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
       expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
@@ -317,7 +303,6 @@ describe('ADC / REGISTERS', () => {
     const c = new Source.Computer();
     const FlagType = Source.i8080.FlagType;
 
-    // Inputs
     for (reg in c.cpu.scratch_registers) {
         c.cpu.accumulator = 0x00;
         c.cpu.scratch_registers[reg] = 0x01;
@@ -346,16 +331,15 @@ describe('ADC / REGISTERS', () => {
   });
 
   test('UNSET FLAGS | CARRY SET', () => {
-    // +-----------------------+-----------------------+-------+-----------------------+-------+
-    // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
-    // +-----------------------+-----------------------+-------+-----------------------+-------+
-    // | 001 | 0x01 | 00000001 | 000 | 0x00 | 00000000 |     1 | 002 | 0x02 | 00000010 |       |
-    // +-----------------------+-----------------------+-------+-----------------------+-------+
+// +-----------------------+-----------------------+-------+-----------------------+-------+
+// |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+// +-----------------------+-----------------------+-------+-----------------------+-------+
+// | 001 | 0x01 | 00000001 | 000 | 0x00 | 00000000 |     1 | 002 | 0x02 | 00000010 |       |
+// +-----------------------+-----------------------+-------+-----------------------+-------+
     
         const c = new Source.Computer();
         const FlagType = Source.i8080.FlagType;
     
-        // Inputs
         for (reg in c.cpu.scratch_registers) {
             c.cpu.accumulator = 0x00;
             c.cpu.scratch_registers[reg] = 0x01;

@@ -2,7 +2,6 @@ const Source = require('../../i8080');
 
 describe('ADC / ACCUMULATOR', () => {
   test('NO FLAGS SET | CARRY UNSET', () => {
-
 // +-----------------------+-------+-----------------------+-------+
 // |      Accumulator      | Carry |      Expected         | Flags |
 // +-----------------------+-------+-----------------------+-------+
@@ -21,7 +20,6 @@ describe('ADC / ACCUMULATOR', () => {
     expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
     expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
     expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
-
     c.reset();
   });
 
@@ -46,7 +44,6 @@ describe('ADC / ACCUMULATOR', () => {
     expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
     expect(c.cpu.flag_set(FlagType.Zero)).toBeTruthy();
     expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
-
   });
 
   test('SET PARITY | CARRY UNSET', () => {
@@ -70,7 +67,6 @@ describe('ADC / ACCUMULATOR', () => {
     expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
     expect(c.cpu.flag_set(FlagType.Zero)).toBeTruthy();
     expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
-
   });
 
   test('SET PARITY | CARRY SET', () => {
@@ -88,14 +84,12 @@ describe('ADC / ACCUMULATOR', () => {
     c.cpu.set_flag(FlagType.Carry);
     c.cpu.adc_reg(c.cpu.accumulator);
 
-    // Results
     expect(c.cpu.accumulator).toBe(0x0F);
     expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
     expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
     expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
     expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
     expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
-
   });
 
   test('SET AUX CARRY | CARRY UNSET', () => {
@@ -118,7 +112,6 @@ describe('ADC / ACCUMULATOR', () => {
     expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
     expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
     expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
-
   });
 
   test('SET AUX CARRY | CARRY SET', () => {
@@ -142,7 +135,6 @@ describe('ADC / ACCUMULATOR', () => {
     expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
     expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
     expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
-
   });
 
   test('SET SIGN | CARRY UNSET', () => {
@@ -166,9 +158,7 @@ describe('ADC / ACCUMULATOR', () => {
     expect(c.cpu.flag_set(FlagType.Sign)).toBeTruthy();
   });
 
-
   test('SET SIGN | CARRY SET', () => {
-
 // +-----------------------+-------+-----------------------+-------+
 // |      Accumulator      | Carry |      Expected         | Flags |
 // +-----------------------+-------+-----------------------+-------+
@@ -188,12 +178,9 @@ describe('ADC / ACCUMULATOR', () => {
     expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
     expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
     expect(c.cpu.flag_set(FlagType.Sign)).toBeTruthy();
-
-
   });
 
   test('SET CARRY | CARRY UNSET', () => {
-
 // +-----------------------+-------+-----------------------+-------+
 // |      Accumulator      | Carry |      Expected         | Flags |
 // +-----------------------+-------+-----------------------+-------+
@@ -212,11 +199,9 @@ describe('ADC / ACCUMULATOR', () => {
     expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
     expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
     expect(c.cpu.flag_set(FlagType.Sign)).toBeTruthy();
-
   });
 
 test('SET CARRY | CARRY SET', () => {
-
 // +-----------------------+-------+-----------------------+-------+
 // |      Accumulator      | Carry |      Expected         | Flags |
 // +-----------------------+-------+-----------------------+-------+
@@ -239,7 +224,6 @@ test('SET CARRY | CARRY SET', () => {
   });
 
   test('UNSET FLAGS | CARRY UNSET', () => {
-
   // +-----------------------+-------+-----------------------+-------+
   // |      Accumulator      | Carry |      Expected         | Flags |
   // +-----------------------+-------+-----------------------+-------+
@@ -272,11 +256,9 @@ test('SET CARRY | CARRY SET', () => {
     expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
     expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
     expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
-
   });
 
   test('UNSET FLAGS | CARRY SET', () => {
-
 // +-----------------------+-------+-----------------------+-------+
 // |      Accumulator      | Carry |      Expected         | Flags |
 // +-----------------------+-------+-----------------------+-------+
@@ -304,13 +286,12 @@ test('SET CARRY | CARRY SET', () => {
 
     expect(c.cpu.accumulator).toBe(0x03);
     expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+
     // Can't stop Parity being truthy, here, because we'll always end up with and odd
     // number in the Accumulator tests with a Carry, so always an even number of bits.
     expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
     expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
     expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
     expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
-
   });
-
 });
