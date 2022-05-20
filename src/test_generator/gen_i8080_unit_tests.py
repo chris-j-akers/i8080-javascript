@@ -1,11 +1,10 @@
-from asyncio.format_helpers import _get_function_source
-from cgi import test
 import yaml
 from pathlib import Path
 
 # Our test modules
 import mov_tests.mov_tests as mov_tests
 import arithmetic_tests.adc.adc_tests as adc_tests
+import arithmetic_tests.add.add_tests as add_tests
 
 OUTPUT_DIRECTORY='../__tests__'
 
