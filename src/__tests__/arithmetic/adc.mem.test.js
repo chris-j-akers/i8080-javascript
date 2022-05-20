@@ -12,14 +12,14 @@ describe('ADC Memory', () => {
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		  c.bus.write(data, mem_addr);
-		  c.cpu.scratch_registers.H = (mem_addr >> 8) & 0xff;
-		  c.cpu.scratch_registers.L = mem_addr & 0xff;
-		  c.cpu.accumulator = 0;
+		  c.cpu.registers.H = (mem_addr >> 8) & 0xff;
+		  c.cpu.registers.L = mem_addr & 0xff;
+		  c.cpu.registers.A = 0;
 		  
 		
 		  c.cpu.adc_mem();
 		
-		  expect(c.cpu.accumulator).toEqual(1);
+		  expect(c.cpu.registers.A).toEqual(1);
 		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
@@ -37,15 +37,15 @@ describe('ADC Memory', () => {
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		  c.bus.write(data, mem_addr);
-		  c.cpu.scratch_registers.H = (mem_addr >> 8) & 0xff;
-		  c.cpu.scratch_registers.L = mem_addr & 0xff;
-		  c.cpu.accumulator = 0;
+		  c.cpu.registers.H = (mem_addr >> 8) & 0xff;
+		  c.cpu.registers.L = mem_addr & 0xff;
+		  c.cpu.registers.A = 0;
 		  c.cpu.set_flag(FlagType.Carry);
 		
 		
 		  c.cpu.adc_mem();
 		
-		  expect(c.cpu.accumulator).toEqual(2);
+		  expect(c.cpu.registers.A).toEqual(2);
 		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
@@ -63,14 +63,14 @@ describe('ADC Memory', () => {
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		  c.bus.write(data, mem_addr);
-		  c.cpu.scratch_registers.H = (mem_addr >> 8) & 0xff;
-		  c.cpu.scratch_registers.L = mem_addr & 0xff;
-		  c.cpu.accumulator = 0;
+		  c.cpu.registers.H = (mem_addr >> 8) & 0xff;
+		  c.cpu.registers.L = mem_addr & 0xff;
+		  c.cpu.registers.A = 0;
 		  
 		
 		  c.cpu.adc_mem();
 		
-		  expect(c.cpu.accumulator).toEqual(0);
+		  expect(c.cpu.registers.A).toEqual(0);
 		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
 		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
@@ -88,14 +88,14 @@ describe('ADC Memory', () => {
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		  c.bus.write(data, mem_addr);
-		  c.cpu.scratch_registers.H = (mem_addr >> 8) & 0xff;
-		  c.cpu.scratch_registers.L = mem_addr & 0xff;
-		  c.cpu.accumulator = 1;
+		  c.cpu.registers.H = (mem_addr >> 8) & 0xff;
+		  c.cpu.registers.L = mem_addr & 0xff;
+		  c.cpu.registers.A = 1;
 		  
 		
 		  c.cpu.adc_mem();
 		
-		  expect(c.cpu.accumulator).toEqual(85);
+		  expect(c.cpu.registers.A).toEqual(85);
 		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
 		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
@@ -113,15 +113,15 @@ describe('ADC Memory', () => {
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		  c.bus.write(data, mem_addr);
-		  c.cpu.scratch_registers.H = (mem_addr >> 8) & 0xff;
-		  c.cpu.scratch_registers.L = mem_addr & 0xff;
-		  c.cpu.accumulator = 1;
+		  c.cpu.registers.H = (mem_addr >> 8) & 0xff;
+		  c.cpu.registers.L = mem_addr & 0xff;
+		  c.cpu.registers.A = 1;
 		  c.cpu.set_flag(FlagType.Carry);
 		
 		
 		  c.cpu.adc_mem();
 		
-		  expect(c.cpu.accumulator).toEqual(85);
+		  expect(c.cpu.registers.A).toEqual(85);
 		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
 		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
@@ -139,14 +139,14 @@ describe('ADC Memory', () => {
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		  c.bus.write(data, mem_addr);
-		  c.cpu.scratch_registers.H = (mem_addr >> 8) & 0xff;
-		  c.cpu.scratch_registers.L = mem_addr & 0xff;
-		  c.cpu.accumulator = 1;
+		  c.cpu.registers.H = (mem_addr >> 8) & 0xff;
+		  c.cpu.registers.L = mem_addr & 0xff;
+		  c.cpu.registers.A = 1;
 		  
 		
 		  c.cpu.adc_mem();
 		
-		  expect(c.cpu.accumulator).toEqual(16);
+		  expect(c.cpu.registers.A).toEqual(16);
 		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
@@ -164,15 +164,15 @@ describe('ADC Memory', () => {
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		  c.bus.write(data, mem_addr);
-		  c.cpu.scratch_registers.H = (mem_addr >> 8) & 0xff;
-		  c.cpu.scratch_registers.L = mem_addr & 0xff;
-		  c.cpu.accumulator = 1;
+		  c.cpu.registers.H = (mem_addr >> 8) & 0xff;
+		  c.cpu.registers.L = mem_addr & 0xff;
+		  c.cpu.registers.A = 1;
 		  c.cpu.set_flag(FlagType.Carry);
 		
 		
 		  c.cpu.adc_mem();
 		
-		  expect(c.cpu.accumulator).toEqual(16);
+		  expect(c.cpu.registers.A).toEqual(16);
 		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
@@ -190,14 +190,14 @@ describe('ADC Memory', () => {
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		  c.bus.write(data, mem_addr);
-		  c.cpu.scratch_registers.H = (mem_addr >> 8) & 0xff;
-		  c.cpu.scratch_registers.L = mem_addr & 0xff;
-		  c.cpu.accumulator = 1;
+		  c.cpu.registers.H = (mem_addr >> 8) & 0xff;
+		  c.cpu.registers.L = mem_addr & 0xff;
+		  c.cpu.registers.A = 1;
 		  
 		
 		  c.cpu.adc_mem();
 		
-		  expect(c.cpu.accumulator).toEqual(128);
+		  expect(c.cpu.registers.A).toEqual(128);
 		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
@@ -215,15 +215,15 @@ describe('ADC Memory', () => {
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		  c.bus.write(data, mem_addr);
-		  c.cpu.scratch_registers.H = (mem_addr >> 8) & 0xff;
-		  c.cpu.scratch_registers.L = mem_addr & 0xff;
-		  c.cpu.accumulator = 0;
+		  c.cpu.registers.H = (mem_addr >> 8) & 0xff;
+		  c.cpu.registers.L = mem_addr & 0xff;
+		  c.cpu.registers.A = 0;
 		  c.cpu.set_flag(FlagType.Carry);
 		
 		
 		  c.cpu.adc_mem();
 		
-		  expect(c.cpu.accumulator).toEqual(128);
+		  expect(c.cpu.registers.A).toEqual(128);
 		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
@@ -241,14 +241,14 @@ describe('ADC Memory', () => {
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		  c.bus.write(data, mem_addr);
-		  c.cpu.scratch_registers.H = (mem_addr >> 8) & 0xff;
-		  c.cpu.scratch_registers.L = mem_addr & 0xff;
-		  c.cpu.accumulator = 20;
+		  c.cpu.registers.H = (mem_addr >> 8) & 0xff;
+		  c.cpu.registers.L = mem_addr & 0xff;
+		  c.cpu.registers.A = 20;
 		  
 		
 		  c.cpu.adc_mem();
 		
-		  expect(c.cpu.accumulator).toEqual(19);
+		  expect(c.cpu.registers.A).toEqual(19);
 		  expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		  expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
@@ -266,15 +266,15 @@ describe('ADC Memory', () => {
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		  c.bus.write(data, mem_addr);
-		  c.cpu.scratch_registers.H = (mem_addr >> 8) & 0xff;
-		  c.cpu.scratch_registers.L = mem_addr & 0xff;
-		  c.cpu.accumulator = 20;
+		  c.cpu.registers.H = (mem_addr >> 8) & 0xff;
+		  c.cpu.registers.L = mem_addr & 0xff;
+		  c.cpu.registers.A = 20;
 		  c.cpu.set_flag(FlagType.Carry);
 		
 		
 		  c.cpu.adc_mem();
 		
-		  expect(c.cpu.accumulator).toEqual(20);
+		  expect(c.cpu.registers.A).toEqual(20);
 		  expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		  expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
 		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();

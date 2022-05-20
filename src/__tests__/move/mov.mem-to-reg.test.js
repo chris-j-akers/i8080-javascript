@@ -6,10 +6,10 @@ describe('MOV Memory to Register', () => {
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		    c.bus.write(data, mem_addr);
-		    c.cpu.scratch_registers.H = (mem_addr >> 8) & 0xff;
-		    c.cpu.scratch_registers.L = mem_addr & 0xff;
+		    c.cpu.registers.H = (mem_addr >> 8) & 0xff;
+		    c.cpu.registers.L = mem_addr & 0xff;
 		    c.cpu.mov_from_mem('B');
-		    expect(c.cpu.scratch_registers.B).toEqual(data);
+		    expect(c.cpu.registers.B).toEqual(data);
 		    c.reset();
 		}
 		});
@@ -19,10 +19,10 @@ describe('MOV Memory to Register', () => {
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		    c.bus.write(data, mem_addr);
-		    c.cpu.scratch_registers.H = (mem_addr >> 8) & 0xff;
-		    c.cpu.scratch_registers.L = mem_addr & 0xff;
+		    c.cpu.registers.H = (mem_addr >> 8) & 0xff;
+		    c.cpu.registers.L = mem_addr & 0xff;
 		    c.cpu.mov_from_mem('C');
-		    expect(c.cpu.scratch_registers.C).toEqual(data);
+		    expect(c.cpu.registers.C).toEqual(data);
 		    c.reset();
 		}
 		});
@@ -32,10 +32,10 @@ describe('MOV Memory to Register', () => {
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		    c.bus.write(data, mem_addr);
-		    c.cpu.scratch_registers.H = (mem_addr >> 8) & 0xff;
-		    c.cpu.scratch_registers.L = mem_addr & 0xff;
+		    c.cpu.registers.H = (mem_addr >> 8) & 0xff;
+		    c.cpu.registers.L = mem_addr & 0xff;
 		    c.cpu.mov_from_mem('D');
-		    expect(c.cpu.scratch_registers.D).toEqual(data);
+		    expect(c.cpu.registers.D).toEqual(data);
 		    c.reset();
 		}
 		});
@@ -45,10 +45,10 @@ describe('MOV Memory to Register', () => {
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		    c.bus.write(data, mem_addr);
-		    c.cpu.scratch_registers.H = (mem_addr >> 8) & 0xff;
-		    c.cpu.scratch_registers.L = mem_addr & 0xff;
+		    c.cpu.registers.H = (mem_addr >> 8) & 0xff;
+		    c.cpu.registers.L = mem_addr & 0xff;
 		    c.cpu.mov_from_mem('E');
-		    expect(c.cpu.scratch_registers.E).toEqual(data);
+		    expect(c.cpu.registers.E).toEqual(data);
 		    c.reset();
 		}
 		});
@@ -58,10 +58,10 @@ describe('MOV Memory to Register', () => {
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		    c.bus.write(data, mem_addr);
-		    c.cpu.scratch_registers.H = (mem_addr >> 8) & 0xff;
-		    c.cpu.scratch_registers.L = mem_addr & 0xff;
+		    c.cpu.registers.H = (mem_addr >> 8) & 0xff;
+		    c.cpu.registers.L = mem_addr & 0xff;
 		    c.cpu.mov_from_mem('H');
-		    expect(c.cpu.scratch_registers.H).toEqual(data);
+		    expect(c.cpu.registers.H).toEqual(data);
 		    c.reset();
 		}
 		});
@@ -71,10 +71,10 @@ describe('MOV Memory to Register', () => {
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		    c.bus.write(data, mem_addr);
-		    c.cpu.scratch_registers.H = (mem_addr >> 8) & 0xff;
-		    c.cpu.scratch_registers.L = mem_addr & 0xff;
+		    c.cpu.registers.H = (mem_addr >> 8) & 0xff;
+		    c.cpu.registers.L = mem_addr & 0xff;
 		    c.cpu.mov_from_mem('L');
-		    expect(c.cpu.scratch_registers.L).toEqual(data);
+		    expect(c.cpu.registers.L).toEqual(data);
 		    c.reset();
 		}
 		});

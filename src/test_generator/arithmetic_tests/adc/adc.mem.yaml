@@ -20,14 +20,14 @@ test_suite:
 
     for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {{
       c.bus.write(data, mem_addr);
-      c.cpu.scratch_registers.H = (mem_addr >> 8) & 0xff;
-      c.cpu.scratch_registers.L = mem_addr & 0xff;
-      c.cpu.accumulator = {accumulator};
+      c.cpu.registers.H = (mem_addr >> 8) & 0xff;
+      c.cpu.registers.L = mem_addr & 0xff;
+      c.cpu.registers.A = {accumulator};
       {set_carry}
 
       c.cpu.adc_mem();
 
-      expect(c.cpu.accumulator).toEqual({expected_result});
+      expect(c.cpu.registers.A).toEqual({expected_result});
       expect(c.cpu.flag_set(FlagType.Carry)).{carry}();
       expect(c.cpu.flag_set(FlagType.Parity)).{parity}();
       expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).{auxillary_carry}();

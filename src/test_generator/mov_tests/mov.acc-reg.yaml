@@ -12,9 +12,9 @@ test_suite:
   boilerplate: |
       const c = new Source.Computer();
       for (let byte = 0x00; byte <= 0xFF; byte++) {{
-          c.cpu.scratch_registers.A = byte
+          c.cpu.registers.A = byte
           c.cpu.mov_reg('{reg_destination}', 'A')
-          expect(c.cpu.scratch_registers.{reg_destination}).toEqual(byte);
+          expect(c.cpu.registers.{reg_destination}).toEqual(byte);
       }}
       }});
   tests:

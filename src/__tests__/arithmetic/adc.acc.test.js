@@ -4,11 +4,11 @@ describe('ADC Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.accumulator = 2;
+		c.cpu.registers.A = 2;
 		
-		c.cpu.adc_reg(c.cpu.accumulator);
+		c.cpu.adc_reg(c.cpu.registers.A);
 		
-		expect(c.cpu.accumulator).toEqual(4);
+		expect(c.cpu.registers.A).toEqual(4);
 		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
 		expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
@@ -21,11 +21,11 @@ describe('ADC Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.accumulator = 0;
+		c.cpu.registers.A = 0;
 		
-		c.cpu.adc_reg(c.cpu.accumulator);
+		c.cpu.adc_reg(c.cpu.registers.A);
 		
-		expect(c.cpu.accumulator).toEqual(0);
+		expect(c.cpu.registers.A).toEqual(0);
 		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
 		expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
@@ -38,11 +38,11 @@ describe('ADC Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.accumulator = 0;
+		c.cpu.registers.A = 0;
 		
-		c.cpu.adc_reg(c.cpu.accumulator);
+		c.cpu.adc_reg(c.cpu.registers.A);
 		
-		expect(c.cpu.accumulator).toEqual(0);
+		expect(c.cpu.registers.A).toEqual(0);
 		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
 		expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
@@ -55,12 +55,12 @@ describe('ADC Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.accumulator = 7;
+		c.cpu.registers.A = 7;
 		c.cpu.set_flag(FlagType.Carry);
 		
-		c.cpu.adc_reg(c.cpu.accumulator);
+		c.cpu.adc_reg(c.cpu.registers.A);
 		
-		expect(c.cpu.accumulator).toEqual(15);
+		expect(c.cpu.registers.A).toEqual(15);
 		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
 		expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
@@ -73,11 +73,11 @@ describe('ADC Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.accumulator = 9;
+		c.cpu.registers.A = 9;
 		
-		c.cpu.adc_reg(c.cpu.accumulator);
+		c.cpu.adc_reg(c.cpu.registers.A);
 		
-		expect(c.cpu.accumulator).toEqual(18);
+		expect(c.cpu.registers.A).toEqual(18);
 		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
 		expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
@@ -90,12 +90,12 @@ describe('ADC Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.accumulator = 8;
+		c.cpu.registers.A = 8;
 		c.cpu.set_flag(FlagType.Carry);
 		
-		c.cpu.adc_reg(c.cpu.accumulator);
+		c.cpu.adc_reg(c.cpu.registers.A);
 		
-		expect(c.cpu.accumulator).toEqual(17);
+		expect(c.cpu.registers.A).toEqual(17);
 		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
 		expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
@@ -108,11 +108,11 @@ describe('ADC Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.accumulator = 89;
+		c.cpu.registers.A = 89;
 		
-		c.cpu.adc_reg(c.cpu.accumulator);
+		c.cpu.adc_reg(c.cpu.registers.A);
 		
-		expect(c.cpu.accumulator).toEqual(178);
+		expect(c.cpu.registers.A).toEqual(178);
 		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
 		expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
@@ -125,12 +125,12 @@ describe('ADC Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.accumulator = 88;
+		c.cpu.registers.A = 88;
 		c.cpu.set_flag(FlagType.Carry);
 		
-		c.cpu.adc_reg(c.cpu.accumulator);
+		c.cpu.adc_reg(c.cpu.registers.A);
 		
-		expect(c.cpu.accumulator).toEqual(177);
+		expect(c.cpu.registers.A).toEqual(177);
 		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
 		expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
@@ -143,11 +143,11 @@ describe('ADC Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.accumulator = 241;
+		c.cpu.registers.A = 241;
 		
-		c.cpu.adc_reg(c.cpu.accumulator);
+		c.cpu.adc_reg(c.cpu.registers.A);
 		
-		expect(c.cpu.accumulator).toEqual(226);
+		expect(c.cpu.registers.A).toEqual(226);
 		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
 		expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
@@ -160,12 +160,12 @@ describe('ADC Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.accumulator = 240;
+		c.cpu.registers.A = 240;
 		c.cpu.set_flag(FlagType.Carry);
 		
-		c.cpu.adc_reg(c.cpu.accumulator);
+		c.cpu.adc_reg(c.cpu.registers.A);
 		
-		expect(c.cpu.accumulator).toEqual(225);
+		expect(c.cpu.registers.A).toEqual(225);
 		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
 		expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();

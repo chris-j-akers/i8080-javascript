@@ -4,13 +4,13 @@ describe('ADD Register', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		for (reg in c.cpu.scratch_registers) {
-		  c.cpu.accumulator = 0;
-		  c.cpu.scratch_registers[reg] = 1;
+		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
+		  c.cpu.registers.A = 0;
+		  c.cpu.registers[reg] = 1;
 		
-		  c.cpu.add_reg(c.cpu.scratch_registers[reg]);
+		  c.cpu.add_reg(c.cpu.registers[reg]);
 		
-		  expect(c.cpu.accumulator).toEqual(1);
+		  expect(c.cpu.registers.A).toEqual(1);
 		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
@@ -24,13 +24,13 @@ describe('ADD Register', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		for (reg in c.cpu.scratch_registers) {
-		  c.cpu.accumulator = 0;
-		  c.cpu.scratch_registers[reg] = 0;
+		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
+		  c.cpu.registers.A = 0;
+		  c.cpu.registers[reg] = 0;
 		
-		  c.cpu.add_reg(c.cpu.scratch_registers[reg]);
+		  c.cpu.add_reg(c.cpu.registers[reg]);
 		
-		  expect(c.cpu.accumulator).toEqual(0);
+		  expect(c.cpu.registers.A).toEqual(0);
 		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
 		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
@@ -44,13 +44,13 @@ describe('ADD Register', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		for (reg in c.cpu.scratch_registers) {
-		  c.cpu.accumulator = 1;
-		  c.cpu.scratch_registers[reg] = 84;
+		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
+		  c.cpu.registers.A = 1;
+		  c.cpu.registers[reg] = 84;
 		
-		  c.cpu.add_reg(c.cpu.scratch_registers[reg]);
+		  c.cpu.add_reg(c.cpu.registers[reg]);
 		
-		  expect(c.cpu.accumulator).toEqual(85);
+		  expect(c.cpu.registers.A).toEqual(85);
 		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
 		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
@@ -64,13 +64,13 @@ describe('ADD Register', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		for (reg in c.cpu.scratch_registers) {
-		  c.cpu.accumulator = 15;
-		  c.cpu.scratch_registers[reg] = 15;
+		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
+		  c.cpu.registers.A = 15;
+		  c.cpu.registers[reg] = 15;
 		
-		  c.cpu.add_reg(c.cpu.scratch_registers[reg]);
+		  c.cpu.add_reg(c.cpu.registers[reg]);
 		
-		  expect(c.cpu.accumulator).toEqual(30);
+		  expect(c.cpu.registers.A).toEqual(30);
 		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
 		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
@@ -84,13 +84,13 @@ describe('ADD Register', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		for (reg in c.cpu.scratch_registers) {
-		  c.cpu.accumulator = 112;
-		  c.cpu.scratch_registers[reg] = 64;
+		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
+		  c.cpu.registers.A = 112;
+		  c.cpu.registers[reg] = 64;
 		
-		  c.cpu.add_reg(c.cpu.scratch_registers[reg]);
+		  c.cpu.add_reg(c.cpu.registers[reg]);
 		
-		  expect(c.cpu.accumulator).toEqual(176);
+		  expect(c.cpu.registers.A).toEqual(176);
 		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
@@ -104,13 +104,13 @@ describe('ADD Register', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		for (reg in c.cpu.scratch_registers) {
-		  c.cpu.accumulator = 66;
-		  c.cpu.scratch_registers[reg] = 192;
+		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
+		  c.cpu.registers.A = 66;
+		  c.cpu.registers[reg] = 192;
 		
-		  c.cpu.add_reg(c.cpu.scratch_registers[reg]);
+		  c.cpu.add_reg(c.cpu.registers[reg]);
 		
-		  expect(c.cpu.accumulator).toEqual(2);
+		  expect(c.cpu.registers.A).toEqual(2);
 		  expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		  expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();

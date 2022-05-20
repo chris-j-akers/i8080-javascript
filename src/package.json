@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "jest --verbose"
+    "test": "jest"
   },
   "name": "src",
   "version": "1.0.0",

@@ -137,4 +137,5 @@ function draft_test() {
     }
 }
 
-
+// registers = {A:0, B:0, C:0, D:0, E:0, H:0, L:0}
+// console.log(Object.keys(registers).filter(register => register != 'A'))

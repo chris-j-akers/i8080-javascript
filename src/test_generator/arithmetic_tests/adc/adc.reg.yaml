@@ -12,13 +12,13 @@ test_suite:
     const c = new Source.Computer();
     const FlagType = Source.i8080.FlagType;
 
-    for (reg in c.cpu.scratch_registers) {{
-      c.cpu.accumulator = {accumulator};
-      c.cpu.scratch_registers[reg] = {data};
+    for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {{
+      c.cpu.registers.A = {accumulator};
+      c.cpu.registers[reg] = {data};
       {set_carry}
-      c.cpu.adc_reg(c.cpu.scratch_registers[reg]);
+      c.cpu.adc_reg(c.cpu.registers[reg]);
 
-      expect(c.cpu.accumulator).toEqual({expected_result});
+      expect(c.cpu.registers.A).toEqual({expected_result});
       expect(c.cpu.flag_set(FlagType.Carry)).{carry}();
       expect(c.cpu.flag_set(FlagType.Parity)).{parity}();
       expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).{auxillary_carry}();

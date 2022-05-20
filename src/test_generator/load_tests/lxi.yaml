@@ -13,8 +13,8 @@ test_suite:
 
     for (let word = 0x0000; word <= 0xFFFF; word++) {{
         c.cpu.{opcode_function}(word);
-        expect(c.cpu.scratch_registers.{low_byte_register}).toEqual(word & 0x00FF);
-        expect(c.cpu.scratch_registers.{high_byte_register}).toEqual((word >> 8) & 0x00FF);
+        expect(c.cpu.registers.{low_byte_register}).toEqual(word & 0x00FF);
+        expect(c.cpu.registers.{high_byte_register}).toEqual((word >> 8) & 0x00FF);
     }}
     }});
 

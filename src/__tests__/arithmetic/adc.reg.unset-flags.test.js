@@ -4,9 +4,9 @@ describe('ADC Register (Unset All Flags)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		for (reg in c.cpu.scratch_registers) {
-		  c.cpu.accumulator = 1;
-		  c.cpu.scratch_registers[reg] = 1;
+		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
+		  c.cpu.registers.A = 1;
+		  c.cpu.registers[reg] = 1;
 		
 		  c.cpu.set_flag(FlagType.Parity);
 		  c.cpu.set_flag(FlagType.AuxillaryCarry);
@@ -19,9 +19,9 @@ describe('ADC Register (Unset All Flags)', () => {
 		  expect(c.cpu.flag_set(FlagType.Sign)).toBeTruthy();
 		  
 		  
-		  c.cpu.adc_reg(c.cpu.scratch_registers[reg]);
+		  c.cpu.adc_reg(c.cpu.registers[reg]);
 		
-		  expect(c.cpu.accumulator).toEqual(2);
+		  expect(c.cpu.registers.A).toEqual(2);
 		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
@@ -35,9 +35,9 @@ describe('ADC Register (Unset All Flags)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		for (reg in c.cpu.scratch_registers) {
-		  c.cpu.accumulator = 0;
-		  c.cpu.scratch_registers[reg] = 1;
+		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
+		  c.cpu.registers.A = 0;
+		  c.cpu.registers[reg] = 1;
 		
 		  c.cpu.set_flag(FlagType.Parity);
 		  c.cpu.set_flag(FlagType.AuxillaryCarry);
@@ -51,9 +51,9 @@ describe('ADC Register (Unset All Flags)', () => {
 		  
 		  c.cpu.set_flag(FlagType.Carry);
 		
-		  c.cpu.adc_reg(c.cpu.scratch_registers[reg]);
+		  c.cpu.adc_reg(c.cpu.registers[reg]);
 		
-		  expect(c.cpu.accumulator).toEqual(2);
+		  expect(c.cpu.registers.A).toEqual(2);
 		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
 		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
