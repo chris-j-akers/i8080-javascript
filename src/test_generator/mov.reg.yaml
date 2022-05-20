@@ -1,0 +1,240 @@
+---
+test_suite:
+  generator_function: generate_mov_reg_test_suite
+  description: 'MOV Register to Register'
+  output_file_name: 'mov.reg.test.js'
+  header: |
+    const Source = require('../../i8080');
+  footer: |
+    });
+  boiler_plate: |
+      const c = new Source.Computer();
+      for (let byte = 0x00; byte <= 0xFF; byte++) {{
+          c.cpu.scratch_registers.{reg_source} = byte;
+          c.cpu.mov_reg(c.cpu.scratch_registers.{reg_destination}, c.cpu.scratch_registers.{reg_source})
+          expect(c.cpu.scratch_registers.{reg_destination}).toEqual(byte);
+      }}
+      }});
+  tests:
+
+# Move to B register
+
+    - test:
+      name: 'MOVE B,B'
+      reg_source: 'B'
+      reg_destination: 'B'
+
+    - test:
+      name: 'MOVE B,C'
+      reg_source: 'C'
+      reg_destination: 'B'
+
+    - test:
+      name: 'MOVE B,D'
+      reg_source: 'D'
+      reg_destination: 'B'
+
+    - test:
+      name: 'MOVE B,E'
+      reg_source: 'E'
+      reg_destination: 'B'
+
+    - test:
+      name: 'MOVE B,H'
+      reg_source: 'H'
+      reg_destination: 'B'
+
+    - test:
+      name: 'MOVE B,L'
+      reg_source: 'L'
+      reg_destination: 'B'
+
+    - test:
+      name: 'MOVE B,A'
+      reg_source: 'A'
+      reg_destination: 'B'
+
+# Move to C register
+
+    - test:
+      name: 'MOVE C,B'
+      reg_source: 'B'
+      reg_destination: 'C'
+
+    - test:
+      name: 'MOVE C,C'
+      reg_source: 'C'
+      reg_destination: 'C'
+
+    - test:
+      name: 'MOVE C,D'
+      reg_source: 'D'
+      reg_destination: 'C'
+
+    - test:
+      name: 'MOVE C,E'
+      reg_source: 'E'
+      reg_destination: 'C'
+
+    - test:
+      name: 'MOVE C,H'
+      reg_source: 'H'
+      reg_destination: 'C'
+
+    - test:
+      name: 'MOVE C,L'
+      reg_source: 'L'
+      reg_destination: 'C'
+
+    - test:
+      name: 'MOVE C,A'
+      reg_source: 'A'
+      reg_destination: 'C'
+
+# Move to D register
+
+    - test:
+      name: 'MOVE D,B'
+      reg_source: 'B'
+      reg_destination: 'D'
+
+    - test:
+      name: 'MOVE D,C'
+      reg_source: 'C'
+      reg_destination: 'D'
+
+    - test:
+      name: 'MOVE D,D'
+      reg_source: 'D'
+      reg_destination: 'D'
+
+    - test:
+      name: 'MOVE D,E'
+      reg_source: 'E'
+      reg_destination: 'D'
+
+    - test:
+      name: 'MOVE D,H'
+      reg_source: 'H'
+      reg_destination: 'D'
+
+    - test:
+      name: 'MOVE D,L'
+      reg_source: 'L'
+      reg_destination: 'D'
+      
+    - test:
+      name: 'MOVE D,A'
+      reg_source: 'A'
+      reg_destination: 'D'
+
+# Move to E register
+
+    - test:
+      name: 'MOVE E,B'
+      reg_source: 'B'
+      reg_destination: 'E'
+
+    - test:
+      name: 'MOVE E,C'
+      reg_source: 'C'
+      reg_destination: 'E'
+
+    - test:
+      name: 'MOVE E,D'
+      reg_source: 'D'
+      reg_destination: 'E'
+
+    - test:
+      name: 'MOVE E,E'
+      reg_source: 'E'
+      reg_destination: 'E'
+
+    - test:
+      name: 'MOVE E,H'
+      reg_source: 'H'
+      reg_destination: 'E'
+
+    - test:
+      name: 'MOVE E,L'
+      reg_source: 'L'
+      reg_destination: 'E'
+      
+    - test:
+      name: 'MOVE E,A'
+      reg_source: 'A'
+      reg_destination: 'E'
+
+# Move to H register
+
+    - test:
+      name: 'MOVE H,B'
+      reg_source: 'B'
+      reg_destination: 'H'
+
+    - test:
+      name: 'MOVE H,C'
+      reg_source: 'C'
+      reg_destination: 'H'
+
+    - test:
+      name: 'MOVE H,D'
+      reg_source: 'D'
+      reg_destination: 'H'
+
+    - test:
+      name: 'MOVE H,E'
+      reg_source: 'E'
+      reg_destination: 'H'
+
+    - test:
+      name: 'MOVE H,H'
+      reg_source: 'H'
+      reg_destination: 'H'
+
+    - test:
+      name: 'MOVE H,L'
+      reg_source: 'L'
+      reg_destination: 'H'
+      
+    - test:
+      name: 'MOVE H,A'
+      reg_source: 'A'
+      reg_destination: 'H'
+
+# Move to L register
+
+    - test:
+      name: 'MOVE L,B'
+      reg_source: 'B'
+      reg_destination: 'L'
+
+    - test:
+      name: 'MOVE L,C'
+      reg_source: 'C'
+      reg_destination: 'L'
+
+    - test:
+      name: 'MOVE L,D'
+      reg_source: 'D'
+      reg_destination: 'L'
+
+    - test:
+      name: 'MOVE L,E'
+      reg_source: 'E'
+      reg_destination: 'L'
+
+    - test:
+      name: 'MOVE L,H'
+      reg_source: 'H'
+      reg_destination: 'L'
+
+    - test:
+      name: 'MOVE L,L'
+      reg_source: 'L'
+      reg_destination: 'L'
+      
+    - test:
+      name: 'MOVE L,A'
+      reg_source: 'A'
+      reg_destination: 'L'
