@@ -1,0 +1,31 @@
+---
+test_suite:
+  enable: True
+  generator_function: load_tests.generate_lxi_sp
+  description: 'LXI Stack Pointer'
+  output_file_name: '/load/lxi.stack-pointer.test.js'
+  header: |
+    const Source = require('../../i8080');
+  footer: |
+    });
+  boilerplate: |
+    const c = new Source.Computer();
+
+    for (let word = 0x0000; word <= 0xFFFF; word++) {
+        c.cpu.lxi_sp(word);
+
+        const word_msb = (word >> 8) & 0x00FF
+        const word_lsb = word & 0x00FF
+
+        const sp_msb = (c.cpu.stack_pointer >> 8) & 0x00FF;
+        const sp_lsb = c.cpu.stack_pointer & 0x00FF;
+
+        expect(sp_msb).toEqual(word_lsb);
+        expect(sp_lsb).toEqual(word_msb);
+    }
+    });
+
+  tests:
+    - test:
+      name: LXI SP,d16
+      comment: 'No parameters for this one - the data is always put into the SP'

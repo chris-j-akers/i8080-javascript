@@ -1,0 +1,42 @@
+---
+test_suite:
+  enable: True
+  generator_function: load_tests.generate_lxi
+  description: 'LXI Register'
+  output_file_name: '/load/lxi.reg.test.js'
+  header: |
+    const Source = require('../../i8080');
+  footer: |
+    });
+  boilerplate: |
+    const c = new Source.Computer();
+
+    for (let word = 0x0000; word <= 0xFFFF; word++) {{
+        c.cpu.{opcode_function}(word);
+        expect(c.cpu.scratch_registers.{low_byte_register}).toEqual(word & 0x00FF);
+        expect(c.cpu.scratch_registers.{high_byte_register}).toEqual((word >> 8) & 0x00FF);
+    }}
+    }});
+
+  tests:
+
+    - test:
+      name: LXI B,d16
+      comment: 
+      opcode_function: lxi_b
+      low_byte_register: B
+      high_byte_register: C 
+      
+    - test:
+      name: LXI D,d16
+      comment: 
+      opcode_function: lxi_d
+      low_byte_register: D
+      high_byte_register: E    
+    
+    - test:
+      name: LXI H,d16
+      comment: 
+      opcode_function: lxi_h
+      low_byte_register: H
+      high_byte_register: L
