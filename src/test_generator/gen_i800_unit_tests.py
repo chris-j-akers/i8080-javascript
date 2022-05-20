@@ -1,0 +1,35 @@
+from asyncio.format_helpers import _get_function_source
+from cgi import test
+import yaml
+from pathlib import Path
+
+# Our test modules
+import mov_tests.mov_tests as mov_tests
+import arithmetic_tests.adc.adc_tests as adc_tests
+
+WORKING_DIRECTORY='../__tests__'
+
+def generate_test(test_suite, working_dir, populate_function):
+    output_file = f'{working_dir}{test_suite["output_file_name"]}'
+    with open(output_file, 'w') as test_file:
+        test_file.write(test_suite['header'])
+        test_file.write(f'describe(\'{test_suite["description"]}\', () => {{\n')
+        for test in test_suite['tests']:
+            test_file.write(f'\ttest(\'{test["name"]}\', () => {{\n')
+            boilerplate = eval('{function}({p1},{p2})'.format(function=populate_function, p1="test_suite['boiler_plate']", p2="test"))
+            for line in boilerplate.split('\n'):
+                test_file.write(f'\t\t{line}\n')
+        test_file.write(test_suite['footer'])
+    
+def main():
+    print(f'searching for YAML config files')
+    for file in Path('./').rglob('*.yaml'):
+        with open(file) as yaml_file:
+            test_suite = yaml.safe_load(yaml_file)['test_suite'];
+            if test_suite['enable'] == True:
+                print('generating test suite from: {0}'.format(file))
+                generator_function = test_suite['generator_function']
+                generate_test(test_suite, WORKING_DIRECTORY, generator_function)
+
+if __name__ == '__main__':
+    main()

@@ -1,8 +1,10 @@
+# Tests moving fata from register to register using the MOV OpCode
 ---
 test_suite:
-  generator_function: generate_mov_reg_test_suite
+  enable: True
+  generator_function: mov_tests.generate_mov_reg_to_reg
   description: 'MOV Register to Register'
-  output_file_name: 'mov.reg.test.js'
+  output_file_name: '/move/mov.reg-reg.test.js'
   header: |
     const Source = require('../../i8080');
   footer: |
@@ -11,7 +13,7 @@ test_suite:
       const c = new Source.Computer();
       for (let byte = 0x00; byte <= 0xFF; byte++) {{
           c.cpu.scratch_registers.{reg_source} = byte;
-          c.cpu.mov_reg(c.cpu.scratch_registers.{reg_destination}, c.cpu.scratch_registers.{reg_source})
+          c.cpu.mov_reg('{reg_destination}', '{reg_source}')
           expect(c.cpu.scratch_registers.{reg_destination}).toEqual(byte);
       }}
       }});
@@ -49,11 +51,6 @@ test_suite:
       reg_source: 'L'
       reg_destination: 'B'
 
-    - test:
-      name: 'MOVE B,A'
-      reg_source: 'A'
-      reg_destination: 'B'
-
 # Move to C register
 
     - test:
@@ -84,11 +81,6 @@ test_suite:
     - test:
       name: 'MOVE C,L'
       reg_source: 'L'
-      reg_destination: 'C'
-
-    - test:
-      name: 'MOVE C,A'
-      reg_source: 'A'
       reg_destination: 'C'
 
 # Move to D register
@@ -122,11 +114,6 @@ test_suite:
       name: 'MOVE D,L'
       reg_source: 'L'
       reg_destination: 'D'
-      
-    - test:
-      name: 'MOVE D,A'
-      reg_source: 'A'
-      reg_destination: 'D'
 
 # Move to E register
 
@@ -158,11 +145,6 @@ test_suite:
     - test:
       name: 'MOVE E,L'
       reg_source: 'L'
-      reg_destination: 'E'
-      
-    - test:
-      name: 'MOVE E,A'
-      reg_source: 'A'
       reg_destination: 'E'
 
 # Move to H register
@@ -197,11 +179,6 @@ test_suite:
       reg_source: 'L'
       reg_destination: 'H'
       
-    - test:
-      name: 'MOVE H,A'
-      reg_source: 'A'
-      reg_destination: 'H'
-
 # Move to L register
 
     - test:
@@ -232,9 +209,4 @@ test_suite:
     - test:
       name: 'MOVE L,L'
       reg_source: 'L'
-      reg_destination: 'L'
-      
-    - test:
-      name: 'MOVE L,A'
-      reg_source: 'A'
       reg_destination: 'L'

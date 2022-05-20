@@ -1,0 +1,78 @@
+---
+test_suite:
+  enable: True
+  generator_function: adc_tests.generate_adc_acc
+  description: 'ADC Accumulator (Unset All Flags)'
+  output_file_name: '/arithmetic/adc.acc.unset-flags.test.js'
+  header: |
+    const Source = require('../../i8080');
+  footer: |
+    });
+  boiler_plate: |
+    const c = new Source.Computer();
+    const FlagType = Source.i8080.FlagType;
+
+    c.cpu.accumulator = 0x01;
+
+    c.cpu.set_flag(FlagType.Parity);
+    c.cpu.set_flag(FlagType.AuxillaryCarry);
+    c.cpu.set_flag(FlagType.Zero);
+    c.cpu.set_flag(FlagType.Sign);
+
+    // We're not setting this as this is the Carry test, remember!
+    expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+
+    expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
+    expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
+    expect(c.cpu.flag_set(FlagType.Zero)).toBeTruthy();
+    expect(c.cpu.flag_set(FlagType.Sign)).toBeTruthy();
+
+    c.cpu.adc_reg(c.cpu.accumulator);
+
+    expect(c.cpu.accumulator).toBe(0x02);
+    expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+    expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
+    expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
+    expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
+    expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
+    }});
+
+  tests:
+
+    - test:
+      name: UNSET FLAGS | CARRY UNSET
+      comment: |
+        // +-----------------------+-------+-----------------------+-------+
+        // |      Accumulator      | Carry |      Expected         | Flags |
+        // +-----------------------+-------+-----------------------+-------+
+        // | 001 | 0X01 | 00000001 |     0 | 002 | 0x02 | 00000010 |       |
+        // +-----------------------+-------+-----------------------+-------+
+      accumulator: 1
+      set_carry: False
+      expected_result: 2
+      carry: toBeFalsy
+      parity: toBeFalsy
+      auxillary_carry: toBeFalsy
+      zero: toBeFalsy
+      sign: toBeFalsy
+      
+    - test:
+      name: UNSET FLAGS | CARRY SET
+      comment: |
+        // +-----------------------+-------+-----------------------+-------+
+        // |      Accumulator      | Carry |      Expected         | Flags |
+        // +-----------------------+-------+-----------------------+-------+
+        // | 001 | 0X01 | 00000001 |     1 | 003| 0x03 | 00000011  | P     |
+        // +-----------------------+-------+-----------------------+-------+
+      accumulator: 1
+      set_carry: True
+      expected_result: 3
+      carry: toBeFalsy
+
+# Can't stop Parity being truthy, here, because we'll always end up with and odd
+# number in the Accumulator tests with a Carry, so always an even number of bits.
+      parity: toBeTruthy
+
+      auxillary_carry: toBeFalsy
+      zero: toBeFalsy
+      sign: toBeFalsy

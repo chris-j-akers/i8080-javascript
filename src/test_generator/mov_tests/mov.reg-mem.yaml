@@ -1,0 +1,51 @@
+# Tests moving data from register to memory using MOV OpCode
+---
+test_suite:
+  enable: True
+  generator_function: mov_tests.generate_mov_reg_to_mem
+  description: 'MOV to Register to Memory'
+  output_file_name: '/move/mov.reg-to-mem.test.js'
+  header: |
+    const Source = require('../../i8080');
+    const max_mem_addr = 0x00FF;
+  footer: |
+    });
+  boiler_plate: |
+      const c = new Source.Computer();
+      const data = 0xFFFF;
+      for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {{
+          c.cpu.scratch_registers.H = (mem_addr >> 8) & 0xff;
+          c.cpu.scratch_registers.L = mem_addr & 0xff;
+          c.cpu.mov_to_mem('{reg_source}');
+          expect(c.cpu.bus.read(mem_addr)).toEqual(c.cpu.scratch_registers.{reg_source});
+          c.reset();
+      }}
+      }});
+  tests:
+
+    - test:
+      name: 'MOVE M,B'
+      reg_source: 'B'
+
+    - test:
+      name: 'MOVE M,C'
+      reg_source: 'C'
+
+    - test:
+      name: 'MOVE M,D'
+      reg_source: 'D'
+
+    - test:
+      name: 'MOVE M,E'
+      reg_source: 'E'
+
+    - test:
+      name: 'MOVE M,H'
+      reg_source: 'H'
+
+    - test:
+      name: 'MOVE M,L'
+      reg_source: 'L'
+
+
+

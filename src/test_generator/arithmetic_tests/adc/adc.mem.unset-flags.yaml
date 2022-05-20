@@ -1,0 +1,87 @@
+---
+test_suite:
+  enable: True
+  generator_function: adc_tests.generate_adc_mem
+  description: 'ADC Memory (Unset All Flags)'
+  output_file_name: '/arithmetic/adc.mem.unset-flags.test.js'
+  header: |
+    const Source = require('../../i8080');
+
+    // The full test should run to 0xFFFF, but this can take a while. To start off with, and fix
+    // any broader bugs, set this to a low value.
+    const max_mem_addr = 0x01;
+  footer: |
+    });
+  boiler_plate: |
+    const c = new Source.Computer();
+    const FlagType = Source.i8080.FlagType;
+
+    const data = {data};
+
+    for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {{
+      c.bus.write(data, mem_addr);
+      c.cpu.scratch_registers.H = (mem_addr >> 8) & 0xff;
+      c.cpu.scratch_registers.L = mem_addr & 0xff;
+      c.cpu.accumulator = {accumulator};
+      {set_carry}
+
+      c.cpu.set_flag(FlagType.Parity);
+      c.cpu.set_flag(FlagType.AuxillaryCarry);
+      c.cpu.set_flag(FlagType.Zero);
+      c.cpu.set_flag(FlagType.Sign);
+
+      expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
+      expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
+      expect(c.cpu.flag_set(FlagType.Zero)).toBeTruthy();
+      expect(c.cpu.flag_set(FlagType.Sign)).toBeTruthy();
+
+      c.cpu.adc_mem();
+
+      expect(c.cpu.accumulator).toEqual({expected_result});
+      expect(c.cpu.flag_set(FlagType.Carry)).{carry}();
+      expect(c.cpu.flag_set(FlagType.Parity)).{parity}();
+      expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).{auxillary_carry}();
+      expect(c.cpu.flag_set(FlagType.Zero)).{zero}();
+      expect(c.cpu.flag_set(FlagType.Sign)).{sign}();
+
+      c.reset();
+    }}
+    }});
+
+  tests:
+
+    - test:
+      name: UNSET FLAGS | CARRY UNSET
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Memory          |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 001 | 0x01 | 00000001 | 000 | 0x00 | 00000000 |     0 | 001 | 0x01 | 00000001 |       |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 1
+      accumulator: 0
+      set_carry: False
+      expected_result: 1
+      carry: toBeFalsy
+      parity: toBeFalsy
+      auxillary_carry: toBeFalsy
+      zero: toBeFalsy
+      sign: toBeFalsy
+      
+    - test:
+      name: UNSET FLAGS | CARRY SET
+      comment: |
+          // +-----------------------+-----------------------+-------+-----------------------+-------+
+          // |       Memory          |      Accumulator      | Carry |       Expected        | Flags |
+          // +-----------------------+-----------------------+-------+-----------------------+-------+
+          // | 000 | 0x00 | 00000001 | 000 | 0x00 | 00000000 |     1 | 002 | 0x02 | 00000010 |       |
+          // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 1
+      accumulator: 0
+      set_carry: True
+      expected_result: 2
+      carry: toBeFalsy
+      parity: toBeFalsy
+      auxillary_carry: toBeFalsy
+      zero: toBeFalsy
+      sign: toBeFalsy
