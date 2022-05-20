@@ -8,7 +8,7 @@ test_suite:
     const Source = require('../../i8080');
   footer: |
     });
-  boiler_plate: |
+  boilerplate: |
       const c = new Source.Computer();
       const FlagType = Source.i8080.FlagType;
 

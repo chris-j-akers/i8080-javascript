@@ -16,7 +16,7 @@ def generate_test(test_suite, working_dir, populate_function):
         test_file.write(f'describe(\'{test_suite["description"]}\', () => {{\n')
         for test in test_suite['tests']:
             test_file.write(f'\ttest(\'{test["name"]}\', () => {{\n')
-            boilerplate = eval('{function}({p1},{p2})'.format(function=populate_function, p1="test_suite['boiler_plate']", p2="test"))
+            boilerplate = eval('{function}({p1},{p2})'.format(function=populate_function, p1="test_suite['boilerplate']", p2="test"))
             for line in boilerplate.split('\n'):
                 test_file.write(f'\t\t{line}\n')
         test_file.write(test_suite['footer'])

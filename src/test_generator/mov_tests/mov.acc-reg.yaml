@@ -9,7 +9,7 @@ test_suite:
     const Source = require('../../i8080');
   footer: |
     });
-  boiler_plate: |
+  boilerplate: |
       const c = new Source.Computer();
       for (let byte = 0x00; byte <= 0xFF; byte++) {{
           c.cpu.scratch_registers.A = byte

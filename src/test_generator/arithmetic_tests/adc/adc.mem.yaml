@@ -12,7 +12,7 @@ test_suite:
     const max_mem_addr = 0x01;
   footer: |
     });
-  boiler_plate: |
+  boilerplate: |
     const c = new Source.Computer();
     const FlagType = Source.i8080.FlagType;
 
