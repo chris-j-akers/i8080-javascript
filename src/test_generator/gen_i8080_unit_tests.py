@@ -7,7 +7,7 @@ from pathlib import Path
 import mov_tests.mov_tests as mov_tests
 import arithmetic_tests.adc.adc_tests as adc_tests
 
-WORKING_DIRECTORY='../__tests__'
+OUTPUT_DIRECTORY='../__tests__'
 
 def generate_test(test_suite, working_dir, populate_function):
     output_file = f'{working_dir}{test_suite["output_file_name"]}'
@@ -29,7 +29,7 @@ def main():
             if test_suite['enable'] == True:
                 print('generating test suite from: {0}'.format(file))
                 generator_function = test_suite['generator_function']
-                generate_test(test_suite, WORKING_DIRECTORY, generator_function)
+                generate_test(test_suite, OUTPUT_DIRECTORY, generator_function)
 
 if __name__ == '__main__':
     main()
