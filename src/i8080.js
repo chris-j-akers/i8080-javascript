@@ -281,10 +281,19 @@ class i8080 {
 //  SUBTRACT Arithmetic Operations (ADD to Accumulator (A))
 //  ===================================================================================
 
-// The specified byte is added to the contents of the accumulator using 
-// two's complement arithmetic.
-//
-// Condition bits affected: Carry, Sign, Zero, Parity, Auxiliary Carry
+    sub_reg(reg) {
+
+    }
+
+    sbb_reg(reg) {
+        console.log(reg);
+        const register_with_carry = reg + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
+        const reg_twos_complement = ~(register_with_carry) + 1;
+
+        const val = this.registers.A + reg_twos_complement;
+        this.set_flags(val, this.registers.A, reg_twos_complement);
+        this.registers.A = val & 0xFF;
+    }
 
 
 

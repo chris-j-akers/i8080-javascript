@@ -1,3 +1,5 @@
+
+
 function __tst__carry_flag_set_after_addition() {
     let c = new Computer();
     console.log('Test: Carry Flag Test after AE+74 (=122)');
@@ -137,5 +139,31 @@ function draft_test() {
     }
 }
 
-// registers = {A:0, B:0, C:0, D:0, E:0, H:0, L:0}
-// console.log(Object.keys(registers).filter(register => register != 'A'))
+function sbb_test() {
+
+    const testno = 0x3;
+    const tctest = ~(testno) + 1;
+    console.log(__util__byte_as_binary(tctest));
+
+    const c = new Computer();
+    const FlagType = i8080.FlagType;
+    c.cpu.registers.A = 197;
+    c.cpu.registers.L = 98;
+    // c.cpu.set_flag(FlagType.Carry);
+
+    console.log(c.cpu.__dbg__get_state());
+    c.cpu.sbb_reg(c.cpu.registers.L);
+    console.log(c.cpu.__dbg__get_state());
+
+    c.cpu.registers.A = 12;
+    c.cpu.registers.L = 15;
+    // c.cpu.set_flag(FlagType.Carry);
+
+    console.log(c.cpu.__dbg__get_state());
+    c.cpu.sbb_reg(c.cpu.registers.L);
+    console.log(c.cpu.__dbg__get_state());
+    
+}
+
+sbb_test()
+

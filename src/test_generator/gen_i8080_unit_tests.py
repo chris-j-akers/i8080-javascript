@@ -6,6 +6,7 @@ import config
 import mov_tests.mov_tests as mov_tests
 import arithmetic_tests.adc.adc_tests as adc_tests
 import arithmetic_tests.add.add_tests as add_tests
+import arithmetic_tests.sbb.sbb_tests as sbb_tests
 import load_tests.load_tests as load_tests
 
 
