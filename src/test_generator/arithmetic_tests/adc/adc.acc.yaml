@@ -112,7 +112,6 @@ test_suite:
       zero: toBeFalsy
       sign: toBeFalsy
 
-
     - test:
       name: SET AUX CARRY | CARRY SET
       comment: |

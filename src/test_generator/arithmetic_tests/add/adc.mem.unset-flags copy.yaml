@@ -1,0 +1,70 @@
+---
+test_suite:
+  enable: True
+  generator_function: add_tests.generate_add_mem
+  description: 'ADD Memory (Unset All Flags)'
+  output_file_name: '/arithmetic/add.mem.unset-flags.test.js'
+  header: |
+    const Source = require('../../i8080');
+
+    // The full test should run to 0xFFFF, but this can take a while. To start off with, and fix
+    // any broader bugs, set this to a low value.
+    const max_mem_addr = 0x01;
+  footer: |
+    });
+  boilerplate: |
+    const c = new Source.Computer();
+    const FlagType = Source.i8080.FlagType;
+
+    const data = {data};
+
+    for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {{
+      c.bus.write(data, mem_addr);
+      c.cpu.registers.H = (mem_addr >> 8) & 0xff;
+      c.cpu.registers.L = mem_addr & 0xff;
+      c.cpu.registers.A = {accumulator};
+
+      c.cpu.set_flag(FlagType.Carry);
+      c.cpu.set_flag(FlagType.Parity);
+      c.cpu.set_flag(FlagType.AuxillaryCarry);
+      c.cpu.set_flag(FlagType.Zero);
+      c.cpu.set_flag(FlagType.Sign);
+
+      expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+      expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
+      expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
+      expect(c.cpu.flag_set(FlagType.Zero)).toBeTruthy();
+      expect(c.cpu.flag_set(FlagType.Sign)).toBeTruthy();
+
+      c.cpu.add_mem();
+
+      expect(c.cpu.registers.A).toEqual({expected_result});
+      expect(c.cpu.flag_set(FlagType.Carry)).{carry}();
+      expect(c.cpu.flag_set(FlagType.Parity)).{parity}();
+      expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).{auxillary_carry}();
+      expect(c.cpu.flag_set(FlagType.Zero)).{zero}();
+      expect(c.cpu.flag_set(FlagType.Sign)).{sign}();
+
+      c.reset();
+    }}
+    }});
+
+  tests:
+
+    - test:
+      name: UNSET FLAGS
+      comment: |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // |       Memory          |      Accumulator      |       Expected        | Flags |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // | 001 | 0x01 | 00000001 | 000 | 0x00 | 00000000 | 001 | 0x01 | 00000001 |       |
+        // +-----------------------+-----------------------+-----------------------+-------+
+      data: 1
+      accumulator: 0
+      set_carry: False
+      expected_result: 1
+      carry: toBeFalsy
+      parity: toBeFalsy
+      auxillary_carry: toBeFalsy
+      zero: toBeFalsy
+      sign: toBeFalsy
