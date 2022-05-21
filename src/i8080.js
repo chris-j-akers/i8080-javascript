@@ -237,7 +237,7 @@ class i8080 {
     // ADD
 
     add_reg(reg) {
-        const val = this.registers.A += reg;
+        const val = this.registers.A + reg;
         this.set_flags(val, this.registers.A, reg);
         this.registers.A = val & 0xFF;
 
