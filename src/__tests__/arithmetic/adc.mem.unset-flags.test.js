@@ -1,10 +1,7 @@
 const Source = require('../../i8080');
-
-// The full test should run to 0xFFFF, but this can take a while. To start off with, and fix
-// any broader bugs, set this to a low value.
-const max_mem_addr = 0x01;
 describe('ADC Memory (Unset All Flags)', () => {
 	test('UNSET FLAGS | CARRY UNSET', () => {
+		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -41,6 +38,7 @@ describe('ADC Memory (Unset All Flags)', () => {
 		});
 		
 	test('UNSET FLAGS | CARRY SET', () => {
+		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		

@@ -1,5 +1,4 @@
-def generate_mov_reg_to_mem(boilerplate, test):
-    return boilerplate.format(reg_source = test['reg_source'])
+import config
 
 def generate_adc_acc(boilerplate, test):
     return boilerplate.format(comment=test['comment'],
@@ -14,7 +13,8 @@ def generate_adc_acc(boilerplate, test):
 
 
 def generate_adc_mem(boilerplate, test):
-    return boilerplate.format(comment=test['comment'],
+    return boilerplate.format(max_mem_addr=config.MAX_MEM_ADDR,
+                                    comment=test['comment'],
                                     data=test['data'],
                                     accumulator=test['accumulator'],
                                     set_carry = "c.cpu.set_flag(FlagType.Carry);\n" if test['set_carry'] else "",

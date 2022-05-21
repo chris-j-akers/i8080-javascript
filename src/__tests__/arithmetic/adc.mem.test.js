@@ -1,10 +1,7 @@
 const Source = require('../../i8080');
-
-// The full test should run to 0xFFFF, but this can take a while. To start off with, and fix
-// any broader bugs, set this to a low value.
-const max_mem_addr = 0x01;
 describe('ADC Memory', () => {
 	test('NO FLAGS SET | CARRY UNSET', () => {
+		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -30,6 +27,7 @@ describe('ADC Memory', () => {
 		});
 		
 	test('NO FLAGS SET | CARRY SET', () => {
+		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -56,6 +54,7 @@ describe('ADC Memory', () => {
 		});
 		
 	test('SET ZERO | CARRY UNSET', () => {
+		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -81,6 +80,7 @@ describe('ADC Memory', () => {
 		});
 		
 	test('SET PARITY | CARRY UNSET', () => {
+		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -106,6 +106,7 @@ describe('ADC Memory', () => {
 		});
 		
 	test('SET PARITY | CARRY SET', () => {
+		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -132,6 +133,7 @@ describe('ADC Memory', () => {
 		});
 		
 	test('SET AUX CARRY | CARRY UNSET', () => {
+		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -157,6 +159,7 @@ describe('ADC Memory', () => {
 		});
 		
 	test('SET AUX CARRY | CARRY SET', () => {
+		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -183,6 +186,7 @@ describe('ADC Memory', () => {
 		});
 		
 	test('SET SIGN | CARRY UNSET', () => {
+		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -208,6 +212,7 @@ describe('ADC Memory', () => {
 		});
 		
 	test('SET SIGN | CARRY SET', () => {
+		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -234,6 +239,7 @@ describe('ADC Memory', () => {
 		});
 		
 	test('SET CARRY | CARRY UNSET', () => {
+		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -259,6 +265,7 @@ describe('ADC Memory', () => {
 		});
 		
 	test('SET CARRY | CARRY SET', () => {
+		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		

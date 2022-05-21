@@ -1,10 +1,7 @@
 const Source = require('../../i8080');
-
-// The full test should run to 0xFFFF, but this can take a while. To start off with, and fix
-// any broader bugs, set this to a low value.
-const max_mem_addr = 0x01;
 describe('ADD Memory', () => {
 	test('NO FLAGS SET', () => {
+		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -29,6 +26,7 @@ describe('ADD Memory', () => {
 		});
 		
 	test('SET ZERO', () => {
+		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -53,6 +51,7 @@ describe('ADD Memory', () => {
 		});
 		
 	test('SET PARITY', () => {
+		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -77,6 +76,7 @@ describe('ADD Memory', () => {
 		});
 		
 	test('SET AUX CARRY', () => {
+		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -101,6 +101,7 @@ describe('ADD Memory', () => {
 		});
 		
 	test('SET SIGN', () => {
+		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -125,6 +126,7 @@ describe('ADD Memory', () => {
 		});
 		
 	test('SET CARRY', () => {
+		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		

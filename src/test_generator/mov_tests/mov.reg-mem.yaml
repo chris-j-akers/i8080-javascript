@@ -7,20 +7,20 @@ test_suite:
   output_file_name: '/move/mov.reg-to-mem.test.js'
   header: |
     const Source = require('../../i8080');
-    const max_mem_addr = 0x00FF;
   footer: |
     });
   boilerplate: |
-      const c = new Source.Computer();
-      const data = 0xFFFF;
-      for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {{
-          c.cpu.registers.H = (mem_addr >> 8) & 0xff;
-          c.cpu.registers.L = mem_addr & 0xff;
-          c.cpu.mov_to_mem('{reg_source}');
-          expect(c.cpu.bus.read(mem_addr)).toEqual(c.cpu.registers.{reg_source});
-          c.reset();
-      }}
-      }});
+    const max_mem_addr = {max_mem_addr};
+    const c = new Source.Computer();
+    const data = 0xFFFF;
+    for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {{
+        c.cpu.registers.H = (mem_addr >> 8) & 0xff;
+        c.cpu.registers.L = mem_addr & 0xff;
+        c.cpu.mov_to_mem('{reg_source}');
+        expect(c.cpu.bus.read(mem_addr)).toEqual(c.cpu.registers.{reg_source});
+        c.reset();
+    }}
+    }});
   tests:
 
     - test:

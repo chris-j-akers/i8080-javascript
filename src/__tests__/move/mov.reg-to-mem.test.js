@@ -1,7 +1,7 @@
 const Source = require('../../i8080');
-const max_mem_addr = 0x00FF;
 describe('MOV to Register to Memory', () => {
 	test('MOVE M,B', () => {
+		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
@@ -14,6 +14,7 @@ describe('MOV to Register to Memory', () => {
 		});
 		
 	test('MOVE M,C', () => {
+		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
@@ -26,6 +27,7 @@ describe('MOV to Register to Memory', () => {
 		});
 		
 	test('MOVE M,D', () => {
+		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
@@ -38,6 +40,7 @@ describe('MOV to Register to Memory', () => {
 		});
 		
 	test('MOVE M,E', () => {
+		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
@@ -50,6 +53,7 @@ describe('MOV to Register to Memory', () => {
 		});
 		
 	test('MOVE M,H', () => {
+		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
@@ -62,6 +66,7 @@ describe('MOV to Register to Memory', () => {
 		});
 		
 	test('MOVE M,L', () => {
+		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
