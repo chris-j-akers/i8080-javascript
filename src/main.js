@@ -165,5 +165,36 @@ function sbb_test() {
     
 }
 
-sbb_test()
+function sbb_test2() {
+
+    const c = new Computer();
+    const FlagType = i8080.FlagType;
+
+
+    c.cpu.registers.A = 12;
+    c.cpu.registers.L = 4;
+    console.log(c.cpu.__dbg__get_state());
+    // c.cpu.set_flag(FlagType.Carry);
+    c.cpu.sbb_reg(c.cpu.registers.L);
+    console.log(c.cpu.__dbg__get_state());
+
+    // console.log(c.cpu.__dbg__get_state());
+    // console.log('\n\n');
+    c.reset();
+    // c.cpu.set_flag(FlagType.Carry);
+    // c.cpu.registers.L = 2;
+    // c.cpu.registers.A = 4;
+    // c.cpu.sbb_reg(c.cpu.registers.L);
+    // console.log(c.cpu.__dbg__get_state());
+
+    // c.reset();
+    // console.log('\n\n');
+    // c.cpu.set_flag(FlagType.Carry);
+    // c.cpu.registers.A = 1;
+    // c.cpu.sbb_reg(c.cpu.registers.A);
+    // console.log(c.cpu.__dbg__get_state());
+}
+
+
+sbb_test2()
 

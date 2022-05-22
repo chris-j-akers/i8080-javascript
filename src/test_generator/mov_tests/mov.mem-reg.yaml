@@ -47,3 +47,7 @@ test_suite:
     - test:
       name: 'MOVE L,M'
       reg_destination: 'L'
+
+    - test:
+      name: 'MOVE A,M'
+      reg_destination: 'A'

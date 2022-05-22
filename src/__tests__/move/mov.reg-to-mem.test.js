@@ -78,4 +78,17 @@ describe('MOV to Register to Memory', () => {
 		}
 		});
 		
+	test('MOVE M,A', () => {
+		const max_mem_addr = 255;
+		const c = new Source.Computer();
+		const data = 0xFFFF;
+		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
+		    c.cpu.registers.H = (mem_addr >> 8) & 0xff;
+		    c.cpu.registers.L = mem_addr & 0xff;
+		    c.cpu.mov_to_mem('A');
+		    expect(c.cpu.bus.read(mem_addr)).toEqual(c.cpu.registers.A);
+		    c.reset();
+		}
+		});
+		
 });

@@ -47,5 +47,9 @@ test_suite:
       name: 'MOVE M,L'
       reg_source: 'L'
 
+    - test:
+      name: 'MOVE M,A'
+      reg_source: 'A'
+
 
 

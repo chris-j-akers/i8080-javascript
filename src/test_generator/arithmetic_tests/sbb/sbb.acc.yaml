@@ -1,0 +1,200 @@
+---
+test_suite:
+  enable: True
+  generator_function: sbb_tests.generate_sbb_acc
+  description: 'SBB Accumulator Flag'
+  output_file_name: '/arithmetic/sbb.acc.test.js'
+  header: |
+    const Source = require('../../i8080');
+  footer: |
+    });
+  boilerplate: |
+      const c = new Source.Computer();
+      const FlagType = Source.i8080.FlagType;
+
+      c.cpu.registers.A = {accumulator};
+      {set_carry}
+      c.cpu.sbb_reg(c.cpu.registers.A);
+
+      expect(c.cpu.registers.A).toEqual({expected_result});
+      expect(c.cpu.flag_set(FlagType.Carry)).{carry}();
+      expect(c.cpu.flag_set(FlagType.Parity)).{parity}();
+      expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).{auxillary_carry}();
+      expect(c.cpu.flag_set(FlagType.Zero)).{zero}();
+      expect(c.cpu.flag_set(FlagType.Sign)).{sign}();
+      c.reset();
+      }});
+
+  tests:
+
+    - test:
+      name: ZERO FLAG SET | CARRY UNSET
+      comment: |
+        // +-----------------------+-------+-----------------------+-------+
+        // |      Accumulator      | Carry |      Expected         | Flags |
+        // +-----------------------+-------+-----------------------+-------+
+        // | 010 | 0x0A | 00001010 |     0 | 000 | 0x00 | 00000000 | Z     |
+        // +-----------------------+-------+-----------------------+-------+
+      accumulator: 1
+      set_carry: False
+      expected_result: 0
+      carry: False
+      parity: True
+      auxillary_carry: True
+      zero: True
+      sign: False
+      
+    - test:
+      name: SIGN FLAG SET | CARRY SET
+      comment: |
+        // +-----------------------+-------+-----------------------+-------+
+        // |      Accumulator      | Carry |      Expected         | Flags |
+        // +-----------------------+-------+-----------------------+-------+
+        // | 001 | 0x00 | 00000000 |     1 | 255 | 0xFF | 11111111 | C|P   |
+        // +-----------------------+-------+-----------------------+-------+
+      accumulator: 1
+      set_carry: True
+      expected_result: 255
+      carry: True
+      parity: True
+      auxillary_carry: False
+      zero: False
+      sign: True
+
+    - test:
+      name: SET PARITY | CARRY UNSET
+      comment: |
+        // +-----------------------+-------+-----------------------+-------+
+        // |      Accumulator      | Carry |      Expected         | Flags |
+        // +-----------------------+-------+-----------------------+-------+
+        // | 000 | 0x00 | 00000000 |     0 | 000 | 0x00 | 0000000 | P      |
+        // +-----------------------+-------+-----------------------+-------+
+      accumulator: 10
+      set_carry: False
+      expected_result: 0
+      carry: False
+      parity: True
+      auxillary_carry: True
+      zero: True
+      sign: False
+
+    - test:
+      name: SET PARITY | CARRY SET
+      comment: |
+        // +-----------------------+-------+-----------------------+-------+
+        // |      Accumulator      | Carry |      Expected         | Flags |
+        // +-----------------------+-------+-----------------------+-------+
+        // | 007 | 0x07 | 00000111 |     1 | 255 | 0xFF | 11111111 | C|P|S |
+        // +-----------------------+-------+-----------------------+-------+
+      accumulator: 007
+      set_carry: True
+      expected_result: 255
+      carry: True
+      parity: True
+      auxillary_carry: False
+      zero: False
+      sign: True
+
+    # - test:
+    #   name: SET AUX CARRY | CARRY UNSET
+    #   comment: |
+    #     // +-----------------------+-------+-----------------------+-------+
+    #     // |      Accumulator      | Carry |      Expected         | Flags |
+    #     // +-----------------------+-------+-----------------------+-------+
+    #     // | 009 | 0x09 | 00001001 |     0 | 018 | 0x12 | 00010010 | P|A   |
+    #     // +-----------------------+-------+-----------------------+-------+
+    #   accumulator: 9
+    #   set_carry: False
+    #   expected_result: 18
+    #   carry: False
+    #   parity: True
+    #   auxillary_carry: True
+    #   zero: False
+    #   sign: False
+
+    # - test:
+    #   name: SET AUX CARRY | CARRY SET
+    #   comment: |
+    #     // +-----------------------+-------+-----------------------+-------+
+    #     // |      Accumulator      | Carry |      Expected         | Flags |
+    #     // +-----------------------+-------+-----------------------+-------+
+    #     // | 008 | 0x08 | 00001000 |     1 | 017 | 0x11 | 00010001 | P|A   |
+    #     // +-----------------------+-------+-----------------------+-------+
+    #   accumulator: 8
+    #   set_carry: True
+    #   expected_result: 17
+    #   carry: False
+    #   parity: True
+    #   auxillary_carry: True
+    #   zero: False
+    #   sign: False
+
+
+    # - test:
+    #   name: SET SIGN | CARRY UNSET
+    #   comment: |
+    #     // +-----------------------+-------+-----------------------+-------+
+    #     // |      Accumulator      | Carry |      Expected         | Flags |
+    #     // +-----------------------+-------+-----------------------+-------+
+    #     // | 089 | 0x59 | 01011001 |     0 | 178 | 0xB2 | 10110010 | P|A|S |
+    #     // +-----------------------+-------+-----------------------+-------+
+    #   accumulator: 89
+    #   set_carry: False
+    #   expected_result: 178
+    #   carry: False
+    #   parity: True
+    #   auxillary_carry: True
+    #   zero: False
+    #   sign: True
+
+    # - test:
+    #   name: SET SIGN | CARRY SET
+    #   comment: |
+    #     // +-----------------------+-------+-----------------------+-------+
+    #     // |      Accumulator      | Carry |      Expected         | Flags |
+    #     // +-----------------------+-------+-----------------------+-------+
+    #     // | 088 | 0x58 | 01011000 |     1 | 177 | 0xB1 | 10110001 | P|A|S |
+    #     // +-----------------------+-------+-----------------------+-------+
+    #   accumulator: 88
+    #   set_carry: True
+    #   expected_result: 177
+    #   carry: False
+    #   parity: True
+    #   auxillary_carry: True
+    #   zero: False
+    #   sign: True
+
+    # - test:
+    #   name: SET CARRY | CARRY UNSET
+    #   comment: |
+    #     // +-----------------------+-------+-----------------------+-------+
+    #     // |      Accumulator      | Carry |      Expected         | Flags |
+    #     // +-----------------------+-------+-----------------------+-------+
+    #     // | 241 | 0xF1 | 11110001 |     0 | 226 | 0xE2 | 11100010 | C|P|S |
+    #     // +-----------------------+-------+-----------------------+-------+
+    #   accumulator: 241
+    #   set_carry: False
+    #   expected_result: 226
+    #   carry: True
+    #   parity: True
+    #   auxillary_carry: False
+    #   zero: False
+    #   sign: True
+
+
+    # - test:
+    #   name: SET CARRY | CARRY SET
+    #   comment: |
+    #     // +-----------------------+-------+-----------------------+-------+
+    #     // |      Accumulator      | Carry |      Expected         | Flags |
+    #     // +-----------------------+-------+-----------------------+-------+
+    #     // | 240 | 0xF0 | 11110000 |     1 | 225 | 0xE1 | 11100001 | C|P|S |
+    #     // +-----------------------+-------+-----------------------+-------+
+    #   accumulator: 240
+    #   set_carry: True
+    #   expected_result: 225
+    #   carry: True
+    #   parity: True
+    #   auxillary_carry: False
+    #   zero: False
+    #   sign: True
