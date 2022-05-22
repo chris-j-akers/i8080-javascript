@@ -1,6 +1,6 @@
 const Source = require('../../i8080');
 describe('ADD Register (Unset All Flags)', () => {
-	test('UNSET FLAGS', () => {
+	test('Unset All Flags', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		

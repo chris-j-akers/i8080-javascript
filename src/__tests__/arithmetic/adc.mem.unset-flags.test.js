@@ -1,6 +1,6 @@
 const Source = require('../../i8080');
 describe('ADC Memory (Unset All Flags)', () => {
-	test('UNSET FLAGS | CARRY UNSET', () => {
+	test('Unset All Flags (With Carry Unset)', () => {
 		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
@@ -37,7 +37,7 @@ describe('ADC Memory (Unset All Flags)', () => {
 		}
 		});
 		
-	test('UNSET FLAGS | CARRY SET', () => {
+	test('Unset All Flags (With Carry Set)', () => {
 		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;

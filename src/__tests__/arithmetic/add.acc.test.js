@@ -1,6 +1,6 @@
 const Source = require('../../i8080');
 describe('ADD Accumulator', () => {
-	test('NO FLAGS SET', () => {
+	test('No Flags Set', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -16,7 +16,7 @@ describe('ADD Accumulator', () => {
 		c.reset();
 		});
 		
-	test('SET ZERO', () => {
+	test('Set Parity and Zero Flags', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -32,7 +32,7 @@ describe('ADD Accumulator', () => {
 		c.reset();
 		});
 		
-	test('SET PARITY', () => {
+	test('Set Parity and Zero Flag', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -48,7 +48,7 @@ describe('ADD Accumulator', () => {
 		c.reset();
 		});
 		
-	test('SET AUX CARRY', () => {
+	test('Set Parity and Aux Carry Flag', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -64,7 +64,7 @@ describe('ADD Accumulator', () => {
 		c.reset();
 		});
 		
-	test('SET SIGN', () => {
+	test('Set Parity, Aux Carry and Sign Flags', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -80,7 +80,7 @@ describe('ADD Accumulator', () => {
 		c.reset();
 		});
 		
-	test('SET CARRY', () => {
+	test('Set Carry, Parity and Sign Flag', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		

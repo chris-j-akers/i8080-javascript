@@ -1,6 +1,6 @@
 const Source = require('../../i8080');
 describe('ADD Register', () => {
-	test('NO FLAGS SET', () => {
+	test('No Flags Set', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -20,7 +20,7 @@ describe('ADD Register', () => {
 		}
 		});
 		
-	test('SET ZERO', () => {
+	test('Set Parity and Zero Flags', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -40,7 +40,7 @@ describe('ADD Register', () => {
 		}
 		});
 		
-	test('SET PARITY', () => {
+	test('Set Parity Flag', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -60,7 +60,7 @@ describe('ADD Register', () => {
 		}
 		});
 		
-	test('SET AUX CARRY', () => {
+	test('Set Parity and Aux Carry Flags', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -80,7 +80,7 @@ describe('ADD Register', () => {
 		}
 		});
 		
-	test('SET SIGN', () => {
+	test('Set Sign Flag', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -100,7 +100,7 @@ describe('ADD Register', () => {
 		}
 		});
 		
-	test('SET CARRY', () => {
+	test('Set Carry Flag', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		

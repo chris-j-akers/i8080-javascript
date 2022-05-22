@@ -1,6 +1,6 @@
 const Source = require('../../i8080');
 describe('ADC Accumulator', () => {
-	test('NO FLAGS SET | CARRY UNSET', () => {
+	test('No Flags Set (With Carry Unset)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -17,7 +17,7 @@ describe('ADC Accumulator', () => {
 		c.reset();
 		});
 		
-	test('SET ZERO | CARRY UNSET', () => {
+	test('Set Parity and Zero Flag (With Carry Unset)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -34,7 +34,7 @@ describe('ADC Accumulator', () => {
 		c.reset();
 		});
 		
-	test('SET PARITY | CARRY UNSET', () => {
+	test('Set Parity and Zero Flag (With Carry Unset)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -51,7 +51,7 @@ describe('ADC Accumulator', () => {
 		c.reset();
 		});
 		
-	test('SET PARITY | CARRY SET', () => {
+	test('Set Parity (With Carry Set)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -69,7 +69,7 @@ describe('ADC Accumulator', () => {
 		c.reset();
 		});
 		
-	test('SET AUX CARRY | CARRY UNSET', () => {
+	test('Set Parity and Aux Carry Flags (With Carry Unset)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -86,7 +86,7 @@ describe('ADC Accumulator', () => {
 		c.reset();
 		});
 		
-	test('SET AUX CARRY | CARRY SET', () => {
+	test('Set Parity and Aux Carry Flags (With Carry Set)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -104,7 +104,7 @@ describe('ADC Accumulator', () => {
 		c.reset();
 		});
 		
-	test('SET SIGN | CARRY UNSET', () => {
+	test('Set Parity, Aux Carry and Sign Flags (With Carry Unset)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -121,7 +121,7 @@ describe('ADC Accumulator', () => {
 		c.reset();
 		});
 		
-	test('SET SIGN | CARRY SET', () => {
+	test('Set Parity, Aux Carry and Sign Flags (With Carry Set)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -139,7 +139,7 @@ describe('ADC Accumulator', () => {
 		c.reset();
 		});
 		
-	test('SET CARRY | CARRY UNSET', () => {
+	test('Set Carry, Parity and Sign Flags (With Carry Unset)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -156,7 +156,7 @@ describe('ADC Accumulator', () => {
 		c.reset();
 		});
 		
-	test('SET CARRY | CARRY SET', () => {
+	test('Set Carry, Parity and Sign Flags (With Carry Set)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		

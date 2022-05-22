@@ -1,6 +1,6 @@
 const Source = require('../../i8080');
 describe('ADD Memory (Unset All Flags)', () => {
-	test('UNSET FLAGS', () => {
+	test('Unset All Flags', () => {
 		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;

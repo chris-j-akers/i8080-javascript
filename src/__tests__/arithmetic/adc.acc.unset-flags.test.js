@@ -1,6 +1,6 @@
 const Source = require('../../i8080');
 describe('ADC Accumulator (Unset All Flags)', () => {
-	test('UNSET FLAGS | CARRY UNSET', () => {
+	test('Unset All Flags (Carry Bit Unset)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -30,7 +30,7 @@ describe('ADC Accumulator (Unset All Flags)', () => {
 		expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
 		});
 		
-	test('UNSET FLAGS | CARRY SET', () => {
+	test('Unset All Flags and Set Parity (Carry Bit Unset)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		

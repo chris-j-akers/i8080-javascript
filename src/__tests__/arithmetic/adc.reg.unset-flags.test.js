@@ -1,6 +1,6 @@
 const Source = require('../../i8080');
 describe('ADC Register (Unset All Flags)', () => {
-	test('UNSET FLAGS | CARRY UNSET', () => {
+	test('Unset All Flags (With Carry Unset)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -31,7 +31,7 @@ describe('ADC Register (Unset All Flags)', () => {
 		}
 		});
 		
-	test('UNSET FLAGS | CARRY SET', () => {
+	test('Unset All Flags (With Carry Set)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		

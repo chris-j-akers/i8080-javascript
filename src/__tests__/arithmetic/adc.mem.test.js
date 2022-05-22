@@ -1,6 +1,6 @@
 const Source = require('../../i8080');
 describe('ADC Memory', () => {
-	test('NO FLAGS SET | CARRY UNSET', () => {
+	test('No Flags Set (With Carry Unset)', () => {
 		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
@@ -26,7 +26,7 @@ describe('ADC Memory', () => {
 		}
 		});
 		
-	test('NO FLAGS SET | CARRY SET', () => {
+	test('No Flags Set (With Carry Set)', () => {
 		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
@@ -53,7 +53,7 @@ describe('ADC Memory', () => {
 		}
 		});
 		
-	test('SET ZERO | CARRY UNSET', () => {
+	test('Set Parity and Zero Flags (With Carry Unset)', () => {
 		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
@@ -79,7 +79,7 @@ describe('ADC Memory', () => {
 		}
 		});
 		
-	test('SET PARITY | CARRY UNSET', () => {
+	test('Set Parity Flag (With Carry Unset)', () => {
 		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
@@ -105,7 +105,7 @@ describe('ADC Memory', () => {
 		}
 		});
 		
-	test('SET PARITY | CARRY SET', () => {
+	test('Set Parity Flag (With Carry Set)', () => {
 		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
@@ -132,7 +132,7 @@ describe('ADC Memory', () => {
 		}
 		});
 		
-	test('SET AUX CARRY | CARRY UNSET', () => {
+	test('Set Aux Carry Flag (With Carry Unset)', () => {
 		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
@@ -158,7 +158,7 @@ describe('ADC Memory', () => {
 		}
 		});
 		
-	test('SET AUX CARRY | CARRY SET', () => {
+	test('Set Aux Carry Flag (With Carry Set)', () => {
 		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
@@ -185,7 +185,7 @@ describe('ADC Memory', () => {
 		}
 		});
 		
-	test('SET SIGN | CARRY UNSET', () => {
+	test('Set Aux Carry and Sign Flag (With Carry Unset)', () => {
 		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
@@ -211,7 +211,7 @@ describe('ADC Memory', () => {
 		}
 		});
 		
-	test('SET SIGN | CARRY SET', () => {
+	test('Set Sign Flag (With Carry Set)', () => {
 		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
@@ -238,7 +238,7 @@ describe('ADC Memory', () => {
 		}
 		});
 		
-	test('SET CARRY | CARRY UNSET', () => {
+	test('Set Carry and Aux Carry Flag (With Carry Unset)', () => {
 		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
@@ -264,7 +264,7 @@ describe('ADC Memory', () => {
 		}
 		});
 		
-	test('SET CARRY | CARRY SET', () => {
+	test('Set Carry and Parity Flag (With Carry Set)', () => {
 		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
