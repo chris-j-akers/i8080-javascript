@@ -143,6 +143,16 @@ class i8080 {
     }
 
     //  ===================================================================================
+    //  Helper methods,
+    //  ===================================================================================
+
+    get_mem_addr() {
+        // Functions that pull data from memory, or push data to memory all get the
+        // address from the H and L registers.
+        return ((this.registers.H << 8) | this.registers.L) & 0xFFFF;
+    }
+
+    //  ===================================================================================
     //  Flag helper methods for testing, setting and clearing flags and their values
     //  ===================================================================================
     parity(val) {
@@ -167,7 +177,7 @@ class i8080 {
         return this.flags & (1 << bit_no);
     }
 
-    set_flags(val, lop, rop) {
+    set_flags(val, lhs, rhs) {
 
         // The CPU flags are set/cleared based on results of some operations. The left-hand, right-hand
         // and results of those operations are tested, here, to decide which flag bits will be set once
@@ -180,8 +190,6 @@ class i8080 {
         this.parity(val) ? this.set_flag(i8080.FlagType.Parity) : this.clear_flag(i8080.FlagType.Parity);
 
         // Auxillary Carry
-        //
-        // This one's a little tricky!
         //
         // Add the LSB nibbles of each byte together. If the result includes an additional bit set (carried) in 
         // position 4, then an auxillary (or half) carry will occur during this operation.
@@ -206,7 +214,8 @@ class i8080 {
         
         // Above, we can see that binary arithmatic has resulted in 1 set in position 4 which means a
         // half-carry would have occurred in this operation.
-        ((lop & 0x0f) + (rop & 0x0f)) & (1 << 4) ? this.set_flag(i8080.FlagType.AuxillaryCarry) : this.clear_flag(i8080.FlagType.AuxillaryCarry);
+
+        ((lhs & 0x0f) + (rhs & 0x0f)) & (1 << 4) ? this.set_flag(i8080.FlagType.AuxillaryCarry) : this.clear_flag(i8080.FlagType.AuxillaryCarry);
 
         // Zero
         val === 0 ? this.set_flag(i8080.FlagType.Zero) : this.clear_flag(i8080.FlagType.Zero);
@@ -246,7 +255,7 @@ class i8080 {
 
     add_mem() {
         // Add memory - Address is in HL
-        const mem_data = this.bus.read(((this.registers.H << 8) | this.registers.L) & 0xFFFF);
+        const mem_data = this.bus.read(this.get_mem_addr());
         const val = this.registers.A + mem_data;
         this.set_flags(val, this.registers.A, mem_data);
         this.registers.A = val & 0xFF;
@@ -265,7 +274,7 @@ class i8080 {
     }
 
     adc_mem() {
-        const mem_data = this.bus.read(((this.registers.H << 8) | this.registers.L) & 0xFFFF);
+        const mem_data = this.bus.read(this.get_mem_addr());
         const carry = (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         const mem_data_with_carry = mem_data + carry;
 
@@ -446,13 +455,13 @@ class i8080 {
     }
 
     mov_to_mem(reg_source) {
-        const addr = ((this.registers.H << 8) | this.registers.L) & 0xFFFF;
+        const addr = this.get_mem_addr();
         this.bus.write(this.registers[reg_source], addr);
         this.clock += 7
     }
 
     mov_from_mem(reg_destination) {
-        const addr = ((this.registers.H << 8) | this.registers.L) & 0xFFFF;
+        const addr = this.get_mem_addr();
         this.registers[reg_destination] = this.bus.read(addr);
         this.clock += 7
     }
@@ -463,7 +472,7 @@ class i8080 {
     }
 
     mvi_to_mem(val) {
-        const addr = ((this.registers.H << 8) | this.registers.L) & 0xFFFF;
+        const addr = this.get_mem_addr();
         this.bus.write(val, addr);
         this.clock += 7
     }
