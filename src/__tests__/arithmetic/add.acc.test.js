@@ -4,7 +4,7 @@ describe('ADD Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.registers.A = 2;
+		c.cpu.mvi_reg('A',2);
 		c.cpu.add_reg(c.cpu.registers.A);
 		
 		expect(c.cpu.registers.A).toEqual(4);
@@ -20,7 +20,7 @@ describe('ADD Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.registers.A = 0;
+		c.cpu.mvi_reg('A',0);
 		c.cpu.add_reg(c.cpu.registers.A);
 		
 		expect(c.cpu.registers.A).toEqual(0);
@@ -36,7 +36,7 @@ describe('ADD Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.registers.A = 0;
+		c.cpu.mvi_reg('A',0);
 		c.cpu.add_reg(c.cpu.registers.A);
 		
 		expect(c.cpu.registers.A).toEqual(0);
@@ -52,7 +52,7 @@ describe('ADD Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.registers.A = 9;
+		c.cpu.mvi_reg('A',9);
 		c.cpu.add_reg(c.cpu.registers.A);
 		
 		expect(c.cpu.registers.A).toEqual(18);
@@ -68,7 +68,7 @@ describe('ADD Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.registers.A = 89;
+		c.cpu.mvi_reg('A',89);
 		c.cpu.add_reg(c.cpu.registers.A);
 		
 		expect(c.cpu.registers.A).toEqual(178);
@@ -84,7 +84,7 @@ describe('ADD Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.registers.A = 241;
+		c.cpu.mvi_reg('A',241);
 		c.cpu.add_reg(c.cpu.registers.A);
 		
 		expect(c.cpu.registers.A).toEqual(226);

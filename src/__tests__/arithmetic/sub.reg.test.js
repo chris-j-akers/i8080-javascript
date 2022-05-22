@@ -5,8 +5,9 @@ describe('SUB Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 32;
-		  c.cpu.registers[reg] = 1;
+		  c.cpu.mvi_reg('A', 32);
+		  c.cpu.mvi_reg(reg, 1);
+		  
 		  c.cpu.sub_reg(c.cpu.registers[reg]);
 		
 		  expect(c.cpu.registers.A).toEqual(31);
@@ -24,8 +25,9 @@ describe('SUB Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 1;
-		  c.cpu.registers[reg] = 1;
+		  c.cpu.mvi_reg('A', 1);
+		  c.cpu.mvi_reg(reg, 1);
+		  
 		  c.cpu.sub_reg(c.cpu.registers[reg]);
 		
 		  expect(c.cpu.registers.A).toEqual(0);
@@ -43,8 +45,9 @@ describe('SUB Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 32;
-		  c.cpu.registers[reg] = 2;
+		  c.cpu.mvi_reg('A', 32);
+		  c.cpu.mvi_reg(reg, 2);
+		  
 		  c.cpu.sub_reg(c.cpu.registers[reg]);
 		
 		  expect(c.cpu.registers.A).toEqual(30);
@@ -62,8 +65,9 @@ describe('SUB Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 127;
-		  c.cpu.registers[reg] = 3;
+		  c.cpu.mvi_reg('A', 127);
+		  c.cpu.mvi_reg(reg, 3);
+		  
 		  c.cpu.sub_reg(c.cpu.registers[reg]);
 		
 		  expect(c.cpu.registers.A).toEqual(124);
@@ -81,8 +85,9 @@ describe('SUB Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 255;
-		  c.cpu.registers[reg] = 1;
+		  c.cpu.mvi_reg('A', 255);
+		  c.cpu.mvi_reg(reg, 1);
+		  
 		  c.cpu.sub_reg(c.cpu.registers[reg]);
 		
 		  expect(c.cpu.registers.A).toEqual(254);
@@ -100,8 +105,9 @@ describe('SUB Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 5;
-		  c.cpu.registers[reg] = 10;
+		  c.cpu.mvi_reg('A', 5);
+		  c.cpu.mvi_reg(reg, 10);
+		  
 		  c.cpu.sub_reg(c.cpu.registers[reg]);
 		
 		  expect(c.cpu.registers.A).toEqual(251);

@@ -12,8 +12,10 @@ test_suite:
       const c = new Source.Computer();
       const FlagType = Source.i8080.FlagType;
 
-      c.cpu.registers.A = {accumulator};
+      c.cpu.mvi_reg('A',{accumulator});
+
       {set_carry}
+      
       c.cpu.adc_reg(c.cpu.registers.A);
 
       expect(c.cpu.registers.A).toEqual({expected_result});

@@ -5,8 +5,10 @@ describe('SBB Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 32;
-		  c.cpu.registers[reg] = 1;
+		  c.cpu.mvi_reg('A', 32);
+		  c.cpu.mvi_reg(reg, 1);
+		
+		  
 		  
 		  c.cpu.sbb_reg(c.cpu.registers[reg]);
 		
@@ -25,10 +27,12 @@ describe('SBB Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 33;
-		  c.cpu.registers[reg] = 1;
+		  c.cpu.mvi_reg('A', 33);
+		  c.cpu.mvi_reg(reg, 1);
+		
 		  c.cpu.set_flag(FlagType.Carry);
 		
+		  
 		  c.cpu.sbb_reg(c.cpu.registers[reg]);
 		
 		  expect(c.cpu.registers.A).toEqual(31);
@@ -46,8 +50,10 @@ describe('SBB Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 1;
-		  c.cpu.registers[reg] = 1;
+		  c.cpu.mvi_reg('A', 1);
+		  c.cpu.mvi_reg(reg, 1);
+		
+		  
 		  
 		  c.cpu.sbb_reg(c.cpu.registers[reg]);
 		
@@ -66,10 +72,12 @@ describe('SBB Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 3;
-		  c.cpu.registers[reg] = 2;
+		  c.cpu.mvi_reg('A', 3);
+		  c.cpu.mvi_reg(reg, 2);
+		
 		  c.cpu.set_flag(FlagType.Carry);
 		
+		  
 		  c.cpu.sbb_reg(c.cpu.registers[reg]);
 		
 		  expect(c.cpu.registers.A).toEqual(0);
@@ -87,8 +95,10 @@ describe('SBB Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 32;
-		  c.cpu.registers[reg] = 2;
+		  c.cpu.mvi_reg('A', 32);
+		  c.cpu.mvi_reg(reg, 2);
+		
+		  
 		  
 		  c.cpu.sbb_reg(c.cpu.registers[reg]);
 		
@@ -107,10 +117,12 @@ describe('SBB Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 32;
-		  c.cpu.registers[reg] = 1;
+		  c.cpu.mvi_reg('A', 32);
+		  c.cpu.mvi_reg(reg, 1);
+		
 		  c.cpu.set_flag(FlagType.Carry);
 		
+		  
 		  c.cpu.sbb_reg(c.cpu.registers[reg]);
 		
 		  expect(c.cpu.registers.A).toEqual(30);
@@ -128,8 +140,10 @@ describe('SBB Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 127;
-		  c.cpu.registers[reg] = 3;
+		  c.cpu.mvi_reg('A', 127);
+		  c.cpu.mvi_reg(reg, 3);
+		
+		  
 		  
 		  c.cpu.sbb_reg(c.cpu.registers[reg]);
 		
@@ -148,10 +162,12 @@ describe('SBB Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 127;
-		  c.cpu.registers[reg] = 4;
+		  c.cpu.mvi_reg('A', 127);
+		  c.cpu.mvi_reg(reg, 4);
+		
 		  c.cpu.set_flag(FlagType.Carry);
 		
+		  
 		  c.cpu.sbb_reg(c.cpu.registers[reg]);
 		
 		  expect(c.cpu.registers.A).toEqual(122);
@@ -169,8 +185,10 @@ describe('SBB Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 255;
-		  c.cpu.registers[reg] = 1;
+		  c.cpu.mvi_reg('A', 255);
+		  c.cpu.mvi_reg(reg, 1);
+		
+		  
 		  
 		  c.cpu.sbb_reg(c.cpu.registers[reg]);
 		
@@ -189,10 +207,12 @@ describe('SBB Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 253;
-		  c.cpu.registers[reg] = 3;
+		  c.cpu.mvi_reg('A', 253);
+		  c.cpu.mvi_reg(reg, 3);
+		
 		  c.cpu.set_flag(FlagType.Carry);
 		
+		  
 		  c.cpu.sbb_reg(c.cpu.registers[reg]);
 		
 		  expect(c.cpu.registers.A).toEqual(249);
@@ -210,8 +230,10 @@ describe('SBB Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 5;
-		  c.cpu.registers[reg] = 10;
+		  c.cpu.mvi_reg('A', 5);
+		  c.cpu.mvi_reg(reg, 10);
+		
+		  
 		  
 		  c.cpu.sbb_reg(c.cpu.registers[reg]);
 		
@@ -230,10 +252,12 @@ describe('SBB Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 5;
-		  c.cpu.registers[reg] = 9;
+		  c.cpu.mvi_reg('A', 5);
+		  c.cpu.mvi_reg(reg, 9);
+		
 		  c.cpu.set_flag(FlagType.Carry);
 		
+		  
 		  c.cpu.sbb_reg(c.cpu.registers[reg]);
 		
 		  expect(c.cpu.registers.A).toEqual(251);

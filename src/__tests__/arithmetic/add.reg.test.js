@@ -5,8 +5,8 @@ describe('ADD Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 0;
-		  c.cpu.registers[reg] = 1;
+		  c.cpu.mvi_reg('A', 0);
+		  c.cpu.mvi_reg(reg, 1);
 		
 		  c.cpu.add_reg(c.cpu.registers[reg]);
 		
@@ -25,8 +25,8 @@ describe('ADD Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 0;
-		  c.cpu.registers[reg] = 0;
+		  c.cpu.mvi_reg('A', 0);
+		  c.cpu.mvi_reg(reg, 0);
 		
 		  c.cpu.add_reg(c.cpu.registers[reg]);
 		
@@ -45,8 +45,8 @@ describe('ADD Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 1;
-		  c.cpu.registers[reg] = 84;
+		  c.cpu.mvi_reg('A', 1);
+		  c.cpu.mvi_reg(reg, 84);
 		
 		  c.cpu.add_reg(c.cpu.registers[reg]);
 		
@@ -65,8 +65,8 @@ describe('ADD Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 15;
-		  c.cpu.registers[reg] = 15;
+		  c.cpu.mvi_reg('A', 15);
+		  c.cpu.mvi_reg(reg, 15);
 		
 		  c.cpu.add_reg(c.cpu.registers[reg]);
 		
@@ -85,8 +85,8 @@ describe('ADD Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 112;
-		  c.cpu.registers[reg] = 64;
+		  c.cpu.mvi_reg('A', 112);
+		  c.cpu.mvi_reg(reg, 64);
 		
 		  c.cpu.add_reg(c.cpu.registers[reg]);
 		
@@ -105,8 +105,8 @@ describe('ADD Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 66;
-		  c.cpu.registers[reg] = 192;
+		  c.cpu.mvi_reg('A', 66);
+		  c.cpu.mvi_reg(reg, 192);
 		
 		  c.cpu.add_reg(c.cpu.registers[reg]);
 		

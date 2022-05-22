@@ -4,7 +4,7 @@ describe('SUB Accumulator Flag', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.registers.A = 1;
+		c.cpu.mvi_reg('A',1);
 		c.cpu.sub_reg(c.cpu.registers.A);
 		
 		expect(c.cpu.registers.A).toEqual(0);
@@ -20,7 +20,7 @@ describe('SUB Accumulator Flag', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.registers.A = 255;
+		c.cpu.mvi_reg('A',255);
 		c.cpu.sub_reg(c.cpu.registers.A);
 		
 		expect(c.cpu.registers.A).toEqual(0);

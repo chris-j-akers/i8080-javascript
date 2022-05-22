@@ -4,7 +4,7 @@ describe('ADD Accumulator (Unset All Flags)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.registers.A = 0x01;
+		c.cpu.mvi_reg('A', 0x01);
 		
 		c.cpu.set_flag(FlagType.Carry);
 		c.cpu.set_flag(FlagType.Parity);

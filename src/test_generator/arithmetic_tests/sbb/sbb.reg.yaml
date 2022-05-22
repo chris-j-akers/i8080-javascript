@@ -13,9 +13,11 @@ test_suite:
     const FlagType = Source.i8080.FlagType;
 
     for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {{
-      c.cpu.registers.A = {accumulator};
-      c.cpu.registers[reg] = {data};
+      c.cpu.mvi_reg('A', {accumulator});
+      c.cpu.mvi_reg(reg, {data});
+
       {set_carry}
+      
       c.cpu.sbb_reg(c.cpu.registers[reg]);
 
       expect(c.cpu.registers.A).toEqual({expected_result});

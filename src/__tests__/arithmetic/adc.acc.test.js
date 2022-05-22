@@ -4,7 +4,9 @@ describe('ADC Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.registers.A = 2;
+		c.cpu.mvi_reg('A',2);
+		
+		
 		
 		c.cpu.adc_reg(c.cpu.registers.A);
 		
@@ -21,7 +23,9 @@ describe('ADC Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.registers.A = 0;
+		c.cpu.mvi_reg('A',0);
+		
+		
 		
 		c.cpu.adc_reg(c.cpu.registers.A);
 		
@@ -38,7 +42,9 @@ describe('ADC Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.registers.A = 0;
+		c.cpu.mvi_reg('A',0);
+		
+		
 		
 		c.cpu.adc_reg(c.cpu.registers.A);
 		
@@ -55,8 +61,10 @@ describe('ADC Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.registers.A = 7;
+		c.cpu.mvi_reg('A',7);
+		
 		c.cpu.set_flag(FlagType.Carry);
+		
 		
 		c.cpu.adc_reg(c.cpu.registers.A);
 		
@@ -73,7 +81,9 @@ describe('ADC Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.registers.A = 9;
+		c.cpu.mvi_reg('A',9);
+		
+		
 		
 		c.cpu.adc_reg(c.cpu.registers.A);
 		
@@ -90,8 +100,10 @@ describe('ADC Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.registers.A = 8;
+		c.cpu.mvi_reg('A',8);
+		
 		c.cpu.set_flag(FlagType.Carry);
+		
 		
 		c.cpu.adc_reg(c.cpu.registers.A);
 		
@@ -108,7 +120,9 @@ describe('ADC Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.registers.A = 89;
+		c.cpu.mvi_reg('A',89);
+		
+		
 		
 		c.cpu.adc_reg(c.cpu.registers.A);
 		
@@ -125,8 +139,10 @@ describe('ADC Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.registers.A = 88;
+		c.cpu.mvi_reg('A',88);
+		
 		c.cpu.set_flag(FlagType.Carry);
+		
 		
 		c.cpu.adc_reg(c.cpu.registers.A);
 		
@@ -143,7 +159,9 @@ describe('ADC Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.registers.A = 241;
+		c.cpu.mvi_reg('A',241);
+		
+		
 		
 		c.cpu.adc_reg(c.cpu.registers.A);
 		
@@ -160,8 +178,10 @@ describe('ADC Accumulator', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		c.cpu.registers.A = 240;
+		c.cpu.mvi_reg('A',240);
+		
 		c.cpu.set_flag(FlagType.Carry);
+		
 		
 		c.cpu.adc_reg(c.cpu.registers.A);
 		

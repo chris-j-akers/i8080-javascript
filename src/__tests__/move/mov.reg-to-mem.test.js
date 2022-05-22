@@ -5,11 +5,11 @@ describe('MOV to Register to Memory', () => {
 		const c = new Source.Computer();
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		    c.cpu.registers.H = (mem_addr >> 8) & 0xff;
-		    c.cpu.registers.L = mem_addr & 0xff;
-		    c.cpu.mov_to_mem('B');
-		    expect(c.cpu.bus.read(mem_addr)).toEqual(c.cpu.registers.B);
-		    c.reset();
+		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
+		  c.cpu.mvi_reg('L', mem_addr & 0xff);
+		  c.cpu.mov_to_mem('B');
+		  expect(c.cpu.bus.read(mem_addr)).toEqual(c.cpu.registers.B);
+		  c.reset();
 		}
 		});
 		
@@ -18,11 +18,11 @@ describe('MOV to Register to Memory', () => {
 		const c = new Source.Computer();
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		    c.cpu.registers.H = (mem_addr >> 8) & 0xff;
-		    c.cpu.registers.L = mem_addr & 0xff;
-		    c.cpu.mov_to_mem('C');
-		    expect(c.cpu.bus.read(mem_addr)).toEqual(c.cpu.registers.C);
-		    c.reset();
+		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
+		  c.cpu.mvi_reg('L', mem_addr & 0xff);
+		  c.cpu.mov_to_mem('C');
+		  expect(c.cpu.bus.read(mem_addr)).toEqual(c.cpu.registers.C);
+		  c.reset();
 		}
 		});
 		
@@ -31,11 +31,11 @@ describe('MOV to Register to Memory', () => {
 		const c = new Source.Computer();
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		    c.cpu.registers.H = (mem_addr >> 8) & 0xff;
-		    c.cpu.registers.L = mem_addr & 0xff;
-		    c.cpu.mov_to_mem('D');
-		    expect(c.cpu.bus.read(mem_addr)).toEqual(c.cpu.registers.D);
-		    c.reset();
+		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
+		  c.cpu.mvi_reg('L', mem_addr & 0xff);
+		  c.cpu.mov_to_mem('D');
+		  expect(c.cpu.bus.read(mem_addr)).toEqual(c.cpu.registers.D);
+		  c.reset();
 		}
 		});
 		
@@ -44,11 +44,11 @@ describe('MOV to Register to Memory', () => {
 		const c = new Source.Computer();
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		    c.cpu.registers.H = (mem_addr >> 8) & 0xff;
-		    c.cpu.registers.L = mem_addr & 0xff;
-		    c.cpu.mov_to_mem('E');
-		    expect(c.cpu.bus.read(mem_addr)).toEqual(c.cpu.registers.E);
-		    c.reset();
+		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
+		  c.cpu.mvi_reg('L', mem_addr & 0xff);
+		  c.cpu.mov_to_mem('E');
+		  expect(c.cpu.bus.read(mem_addr)).toEqual(c.cpu.registers.E);
+		  c.reset();
 		}
 		});
 		
@@ -57,11 +57,11 @@ describe('MOV to Register to Memory', () => {
 		const c = new Source.Computer();
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		    c.cpu.registers.H = (mem_addr >> 8) & 0xff;
-		    c.cpu.registers.L = mem_addr & 0xff;
-		    c.cpu.mov_to_mem('H');
-		    expect(c.cpu.bus.read(mem_addr)).toEqual(c.cpu.registers.H);
-		    c.reset();
+		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
+		  c.cpu.mvi_reg('L', mem_addr & 0xff);
+		  c.cpu.mov_to_mem('H');
+		  expect(c.cpu.bus.read(mem_addr)).toEqual(c.cpu.registers.H);
+		  c.reset();
 		}
 		});
 		
@@ -70,11 +70,11 @@ describe('MOV to Register to Memory', () => {
 		const c = new Source.Computer();
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		    c.cpu.registers.H = (mem_addr >> 8) & 0xff;
-		    c.cpu.registers.L = mem_addr & 0xff;
-		    c.cpu.mov_to_mem('L');
-		    expect(c.cpu.bus.read(mem_addr)).toEqual(c.cpu.registers.L);
-		    c.reset();
+		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
+		  c.cpu.mvi_reg('L', mem_addr & 0xff);
+		  c.cpu.mov_to_mem('L');
+		  expect(c.cpu.bus.read(mem_addr)).toEqual(c.cpu.registers.L);
+		  c.reset();
 		}
 		});
 		
@@ -83,11 +83,11 @@ describe('MOV to Register to Memory', () => {
 		const c = new Source.Computer();
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		    c.cpu.registers.H = (mem_addr >> 8) & 0xff;
-		    c.cpu.registers.L = mem_addr & 0xff;
-		    c.cpu.mov_to_mem('A');
-		    expect(c.cpu.bus.read(mem_addr)).toEqual(c.cpu.registers.A);
-		    c.reset();
+		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
+		  c.cpu.mvi_reg('L', mem_addr & 0xff);
+		  c.cpu.mov_to_mem('A');
+		  expect(c.cpu.bus.read(mem_addr)).toEqual(c.cpu.registers.A);
+		  c.reset();
 		}
 		});
 		

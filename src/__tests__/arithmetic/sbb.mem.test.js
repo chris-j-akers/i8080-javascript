@@ -8,10 +8,10 @@ describe('SBB Memory', () => {
 		const data = 1;
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.bus.write(data, mem_addr);
-		  c.cpu.registers.H = (mem_addr >> 8) & 0xff;
-		  c.cpu.registers.L = mem_addr & 0xff;
-		  c.cpu.registers.A = 32;
+		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
+		  c.cpu.mvi_reg('L', mem_addr & 0xff);
+		  c.cpu.mvi_to_mem(data);
+		  c.cpu.mvi_reg('A', 32)
 		  
 		
 		  c.cpu.sbb_mem();
@@ -34,10 +34,10 @@ describe('SBB Memory', () => {
 		const data = 1;
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.bus.write(data, mem_addr);
-		  c.cpu.registers.H = (mem_addr >> 8) & 0xff;
-		  c.cpu.registers.L = mem_addr & 0xff;
-		  c.cpu.registers.A = 33;
+		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
+		  c.cpu.mvi_reg('L', mem_addr & 0xff);
+		  c.cpu.mvi_to_mem(data);
+		  c.cpu.mvi_reg('A', 33)
 		  c.cpu.set_flag(FlagType.Carry);
 		
 		
@@ -61,10 +61,10 @@ describe('SBB Memory', () => {
 		const data = 1;
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.bus.write(data, mem_addr);
-		  c.cpu.registers.H = (mem_addr >> 8) & 0xff;
-		  c.cpu.registers.L = mem_addr & 0xff;
-		  c.cpu.registers.A = 1;
+		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
+		  c.cpu.mvi_reg('L', mem_addr & 0xff);
+		  c.cpu.mvi_to_mem(data);
+		  c.cpu.mvi_reg('A', 1)
 		  
 		
 		  c.cpu.sbb_mem();
@@ -87,10 +87,10 @@ describe('SBB Memory', () => {
 		const data = 2;
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.bus.write(data, mem_addr);
-		  c.cpu.registers.H = (mem_addr >> 8) & 0xff;
-		  c.cpu.registers.L = mem_addr & 0xff;
-		  c.cpu.registers.A = 3;
+		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
+		  c.cpu.mvi_reg('L', mem_addr & 0xff);
+		  c.cpu.mvi_to_mem(data);
+		  c.cpu.mvi_reg('A', 3)
 		  c.cpu.set_flag(FlagType.Carry);
 		
 		
@@ -114,10 +114,10 @@ describe('SBB Memory', () => {
 		const data = 2;
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.bus.write(data, mem_addr);
-		  c.cpu.registers.H = (mem_addr >> 8) & 0xff;
-		  c.cpu.registers.L = mem_addr & 0xff;
-		  c.cpu.registers.A = 32;
+		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
+		  c.cpu.mvi_reg('L', mem_addr & 0xff);
+		  c.cpu.mvi_to_mem(data);
+		  c.cpu.mvi_reg('A', 32)
 		  
 		
 		  c.cpu.sbb_mem();
@@ -140,10 +140,10 @@ describe('SBB Memory', () => {
 		const data = 1;
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.bus.write(data, mem_addr);
-		  c.cpu.registers.H = (mem_addr >> 8) & 0xff;
-		  c.cpu.registers.L = mem_addr & 0xff;
-		  c.cpu.registers.A = 32;
+		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
+		  c.cpu.mvi_reg('L', mem_addr & 0xff);
+		  c.cpu.mvi_to_mem(data);
+		  c.cpu.mvi_reg('A', 32)
 		  c.cpu.set_flag(FlagType.Carry);
 		
 		
@@ -167,10 +167,10 @@ describe('SBB Memory', () => {
 		const data = 3;
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.bus.write(data, mem_addr);
-		  c.cpu.registers.H = (mem_addr >> 8) & 0xff;
-		  c.cpu.registers.L = mem_addr & 0xff;
-		  c.cpu.registers.A = 127;
+		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
+		  c.cpu.mvi_reg('L', mem_addr & 0xff);
+		  c.cpu.mvi_to_mem(data);
+		  c.cpu.mvi_reg('A', 127)
 		  
 		
 		  c.cpu.sbb_mem();
@@ -193,10 +193,10 @@ describe('SBB Memory', () => {
 		const data = 4;
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.bus.write(data, mem_addr);
-		  c.cpu.registers.H = (mem_addr >> 8) & 0xff;
-		  c.cpu.registers.L = mem_addr & 0xff;
-		  c.cpu.registers.A = 127;
+		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
+		  c.cpu.mvi_reg('L', mem_addr & 0xff);
+		  c.cpu.mvi_to_mem(data);
+		  c.cpu.mvi_reg('A', 127)
 		  c.cpu.set_flag(FlagType.Carry);
 		
 		
@@ -220,10 +220,10 @@ describe('SBB Memory', () => {
 		const data = 1;
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.bus.write(data, mem_addr);
-		  c.cpu.registers.H = (mem_addr >> 8) & 0xff;
-		  c.cpu.registers.L = mem_addr & 0xff;
-		  c.cpu.registers.A = 255;
+		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
+		  c.cpu.mvi_reg('L', mem_addr & 0xff);
+		  c.cpu.mvi_to_mem(data);
+		  c.cpu.mvi_reg('A', 255)
 		  
 		
 		  c.cpu.sbb_mem();
@@ -246,10 +246,10 @@ describe('SBB Memory', () => {
 		const data = 3;
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.bus.write(data, mem_addr);
-		  c.cpu.registers.H = (mem_addr >> 8) & 0xff;
-		  c.cpu.registers.L = mem_addr & 0xff;
-		  c.cpu.registers.A = 253;
+		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
+		  c.cpu.mvi_reg('L', mem_addr & 0xff);
+		  c.cpu.mvi_to_mem(data);
+		  c.cpu.mvi_reg('A', 253)
 		  c.cpu.set_flag(FlagType.Carry);
 		
 		
@@ -273,10 +273,10 @@ describe('SBB Memory', () => {
 		const data = 10;
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.bus.write(data, mem_addr);
-		  c.cpu.registers.H = (mem_addr >> 8) & 0xff;
-		  c.cpu.registers.L = mem_addr & 0xff;
-		  c.cpu.registers.A = 5;
+		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
+		  c.cpu.mvi_reg('L', mem_addr & 0xff);
+		  c.cpu.mvi_to_mem(data);
+		  c.cpu.mvi_reg('A', 5)
 		  
 		
 		  c.cpu.sbb_mem();
@@ -299,10 +299,10 @@ describe('SBB Memory', () => {
 		const data = 9;
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.bus.write(data, mem_addr);
-		  c.cpu.registers.H = (mem_addr >> 8) & 0xff;
-		  c.cpu.registers.L = mem_addr & 0xff;
-		  c.cpu.registers.A = 5;
+		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
+		  c.cpu.mvi_reg('L', mem_addr & 0xff);
+		  c.cpu.mvi_to_mem(data);
+		  c.cpu.mvi_reg('A', 5)
 		  c.cpu.set_flag(FlagType.Carry);
 		
 		

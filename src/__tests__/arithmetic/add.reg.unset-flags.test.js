@@ -5,8 +5,8 @@ describe('ADD Register (Unset All Flags)', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 0;
-		  c.cpu.registers[reg] = 1;
+		  c.cpu.mvi_reg('A', 0);
+		  c.cpu.mvi_reg(reg, 1);
 		
 		  c.cpu.set_flag(FlagType.Carry);
 		  c.cpu.set_flag(FlagType.Parity);

@@ -5,8 +5,10 @@ describe('ADC Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 0;
-		  c.cpu.registers[reg] = 1;
+		  c.cpu.mvi_reg('A', 0);
+		  c.cpu.mvi_reg(reg, 1);
+		
+		  
 		  
 		  c.cpu.adc_reg(c.cpu.registers[reg]);
 		
@@ -25,10 +27,12 @@ describe('ADC Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 0;
-		  c.cpu.registers[reg] = 1;
+		  c.cpu.mvi_reg('A', 0);
+		  c.cpu.mvi_reg(reg, 1);
+		
 		  c.cpu.set_flag(FlagType.Carry);
 		
+		  
 		  c.cpu.adc_reg(c.cpu.registers[reg]);
 		
 		  expect(c.cpu.registers.A).toEqual(2);
@@ -46,8 +50,10 @@ describe('ADC Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 0;
-		  c.cpu.registers[reg] = 0;
+		  c.cpu.mvi_reg('A', 0);
+		  c.cpu.mvi_reg(reg, 0);
+		
+		  
 		  
 		  c.cpu.adc_reg(c.cpu.registers[reg]);
 		
@@ -66,8 +72,10 @@ describe('ADC Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 1;
-		  c.cpu.registers[reg] = 84;
+		  c.cpu.mvi_reg('A', 1);
+		  c.cpu.mvi_reg(reg, 84);
+		
+		  
 		  
 		  c.cpu.adc_reg(c.cpu.registers[reg]);
 		
@@ -86,10 +94,12 @@ describe('ADC Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 1;
-		  c.cpu.registers[reg] = 83;
+		  c.cpu.mvi_reg('A', 1);
+		  c.cpu.mvi_reg(reg, 83);
+		
 		  c.cpu.set_flag(FlagType.Carry);
 		
+		  
 		  c.cpu.adc_reg(c.cpu.registers[reg]);
 		
 		  expect(c.cpu.registers.A).toEqual(85);
@@ -107,8 +117,10 @@ describe('ADC Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 1;
-		  c.cpu.registers[reg] = 15;
+		  c.cpu.mvi_reg('A', 1);
+		  c.cpu.mvi_reg(reg, 15);
+		
+		  
 		  
 		  c.cpu.adc_reg(c.cpu.registers[reg]);
 		
@@ -127,10 +139,12 @@ describe('ADC Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 1;
-		  c.cpu.registers[reg] = 14;
+		  c.cpu.mvi_reg('A', 1);
+		  c.cpu.mvi_reg(reg, 14);
+		
 		  c.cpu.set_flag(FlagType.Carry);
 		
+		  
 		  c.cpu.adc_reg(c.cpu.registers[reg]);
 		
 		  expect(c.cpu.registers.A).toEqual(16);
@@ -148,8 +162,10 @@ describe('ADC Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 1;
-		  c.cpu.registers[reg] = 127;
+		  c.cpu.mvi_reg('A', 1);
+		  c.cpu.mvi_reg(reg, 127);
+		
+		  
 		  
 		  c.cpu.adc_reg(c.cpu.registers[reg]);
 		
@@ -168,10 +184,12 @@ describe('ADC Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 1;
-		  c.cpu.registers[reg] = 126;
+		  c.cpu.mvi_reg('A', 1);
+		  c.cpu.mvi_reg(reg, 126);
+		
 		  c.cpu.set_flag(FlagType.Carry);
 		
+		  
 		  c.cpu.adc_reg(c.cpu.registers[reg]);
 		
 		  expect(c.cpu.registers.A).toEqual(128);
@@ -189,8 +207,10 @@ describe('ADC Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 20;
-		  c.cpu.registers[reg] = 255;
+		  c.cpu.mvi_reg('A', 20);
+		  c.cpu.mvi_reg(reg, 255);
+		
+		  
 		  
 		  c.cpu.adc_reg(c.cpu.registers[reg]);
 		
@@ -209,10 +229,12 @@ describe('ADC Register', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.registers.A = 1;
-		  c.cpu.registers[reg] = 254;
+		  c.cpu.mvi_reg('A', 1);
+		  c.cpu.mvi_reg(reg, 254);
+		
 		  c.cpu.set_flag(FlagType.Carry);
 		
+		  
 		  c.cpu.adc_reg(c.cpu.registers[reg]);
 		
 		  expect(c.cpu.registers.A).toEqual(0);
