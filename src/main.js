@@ -205,6 +205,24 @@ function sub_test() {
     c.cpu.sub_reg(c.cpu.registers.A);
     console.log(c.cpu.__dbg__get_state());
 
+}
+
+
+function mvi_test() {
+
+    // const c = new Source.Computer();
+    // for (let byte = 0x00; byte <= 0xFF; byte++) {
+    //     c.cpu.registers.{reg_source} = byte;
+    //     c.cpu.mov_reg('{reg_destination}', '{reg_source}')
+    //     expect(c.cpu.registers.{reg_destination}).toEqual(byte);
+    // }
+
+    const c = new Source.Computer();
+    for (let byte = 0x00; byte <= 0xFF; byte++) {
+        c.cpu.mvi_reg('{reg_destination', byte);
+        expect(c.cpu.registers.{reg_destination}).toEqual(byte);
+    
+
 
 }
 

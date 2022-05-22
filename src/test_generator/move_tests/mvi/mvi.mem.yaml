@@ -1,0 +1,29 @@
+# Tests moving fata from register to register using the MOV OpCode
+---
+test_suite:
+  enable: True
+  generator_function: mvi_tests.generate_mvi_mem
+  description: 'MVI Memory'
+  output_file_name: '/move/mvi.mem.test.js'
+  header: |
+    const Source = require('../../i8080');
+  footer: |
+    });
+  boilerplate: |
+    const max_mem_addr = {max_mem_addr};
+    const c = new Source.Computer();
+    const data = 0xFFFF;
+    for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {{
+        c.bus.write(data, mem_addr);
+        c.cpu.registers.H = (mem_addr >> 8) & 0xff;
+        c.cpu.registers.L = mem_addr & 0xff;
+        c.cpu.mvi_to_mem(data);
+        expect(c.bus.read(mem_addr)).toEqual(data);
+        c.reset();
+    }}
+    }});
+
+  tests:
+
+    - test:
+      name: 'MVI M'

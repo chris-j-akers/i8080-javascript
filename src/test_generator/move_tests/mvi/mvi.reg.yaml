@@ -1,0 +1,47 @@
+# Tests moving fata from register to register using the MOV OpCode
+---
+test_suite:
+  enable: True
+  generator_function: mvi_tests.generate_mvi_reg
+  description: 'MVI Register'
+  output_file_name: '/move/mvi.reg.test.js'
+  header: |
+    const Source = require('../../i8080');
+  footer: |
+    });
+  boilerplate: |
+    const c = new Source.Computer();
+    for (let byte = 0x00; byte <= 0xFF; byte++) {{
+        c.cpu.mvi_reg('{reg_destination}', byte);
+        expect(c.cpu.registers.{reg_destination}).toEqual(byte);
+    }}
+    }});
+  tests:
+
+    - test:
+      name: 'MVI B'
+      reg_destination: 'B'
+
+    - test:
+      name: 'MVI C'
+      reg_destination: 'C'
+
+    - test:
+      name: 'MVI D'
+      reg_destination: 'D'
+
+    - test:
+      name: 'MVI E'
+      reg_destination: 'E'
+
+    - test:
+      name: 'MVI H'
+      reg_destination: 'H'
+
+    - test:
+      name: 'MVI L'
+      reg_destination: 'L'
+    
+    - test:
+      name: 'MVI A'
+      reg_destination: 'A'
