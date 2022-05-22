@@ -148,7 +148,7 @@ class i8080 {
 
     get_mem_addr() {
         // Functions that pull data from memory, or push data to memory all get the
-        // address from the H and L registers.
+        // 16-bit address from the H and L registers.
         return ((this.registers.H << 8) | this.registers.L) & 0xFFFF;
     }
 
@@ -295,11 +295,19 @@ class i8080 {
     }
 
     sbb_reg(reg) {
+        
+        // 'The 8080 sets the carry flag when the unsigned value subtracted is greater 
+        //  than the unsigned value it is subtracted from. So for SUB B carry is set if 
+        //  and only if the unsigned value of B register is greater than the unsigned 
+        //  value of A register.'
+        // https://retrocomputing.stackexchange.com/questions/5953/carry-flag-in-8080-8085-subtraction#:~:text=The%208080%20sets%20the%20carry,unsigned%20value%20of%20A%20register.
+        
         const register_with_carry = reg + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         const reg_twos_complement = ~(register_with_carry) + 1;
 
-        const val = this.registers.A + reg_twos_complement;
+        const val = (this.registers.A + reg_twos_complement);
         this.set_flags(val, this.registers.A, reg_twos_complement);
+
         this.registers.A = val & 0xFF;
     }
 
