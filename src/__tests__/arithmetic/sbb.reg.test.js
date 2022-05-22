@@ -225,4 +225,25 @@ describe('SBB Register', () => {
 		}
 		});
 		
+	test('SET CARRY | CARRY SET', () => {
+		const c = new Source.Computer();
+		const FlagType = Source.i8080.FlagType;
+		
+		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
+		  c.cpu.registers.A = 5;
+		  c.cpu.registers[reg] = 9;
+		  c.cpu.set_flag(FlagType.Carry);
+		
+		  c.cpu.sbb_reg(c.cpu.registers[reg]);
+		
+		  expect(c.cpu.registers.A).toEqual(251);
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		  expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
+		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
+		  expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
+		  expect(c.cpu.flag_set(FlagType.Sign)).toBeTruthy();
+		  c.reset();
+		}
+		});
+		
 });

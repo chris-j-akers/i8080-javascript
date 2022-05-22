@@ -54,6 +54,15 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
+	test('MOVE B,A', () => {
+		const c = new Source.Computer();
+		for (let byte = 0x00; byte <= 0xFF; byte++) {
+		    c.cpu.registers.A = byte;
+		    c.cpu.mov_reg('B', 'A')
+		    expect(c.cpu.registers.B).toEqual(byte);
+		}
+		});
+		
 	test('MOVE C,B', () => {
 		const c = new Source.Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -104,6 +113,15 @@ describe('MOV Register to Register', () => {
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		    c.cpu.registers.L = byte;
 		    c.cpu.mov_reg('C', 'L')
+		    expect(c.cpu.registers.C).toEqual(byte);
+		}
+		});
+		
+	test('MOVE C,A', () => {
+		const c = new Source.Computer();
+		for (let byte = 0x00; byte <= 0xFF; byte++) {
+		    c.cpu.registers.A = byte;
+		    c.cpu.mov_reg('C', 'A')
 		    expect(c.cpu.registers.C).toEqual(byte);
 		}
 		});
@@ -162,6 +180,15 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
+	test('MOVE D,A', () => {
+		const c = new Source.Computer();
+		for (let byte = 0x00; byte <= 0xFF; byte++) {
+		    c.cpu.registers.A = byte;
+		    c.cpu.mov_reg('D', 'A')
+		    expect(c.cpu.registers.D).toEqual(byte);
+		}
+		});
+		
 	test('MOVE E,B', () => {
 		const c = new Source.Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -212,6 +239,15 @@ describe('MOV Register to Register', () => {
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		    c.cpu.registers.L = byte;
 		    c.cpu.mov_reg('E', 'L')
+		    expect(c.cpu.registers.E).toEqual(byte);
+		}
+		});
+		
+	test('MOVE E,A', () => {
+		const c = new Source.Computer();
+		for (let byte = 0x00; byte <= 0xFF; byte++) {
+		    c.cpu.registers.A = byte;
+		    c.cpu.mov_reg('E', 'A')
 		    expect(c.cpu.registers.E).toEqual(byte);
 		}
 		});
@@ -270,6 +306,15 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
+	test('MOVE H,A', () => {
+		const c = new Source.Computer();
+		for (let byte = 0x00; byte <= 0xFF; byte++) {
+		    c.cpu.registers.A = byte;
+		    c.cpu.mov_reg('A', 'A')
+		    expect(c.cpu.registers.A).toEqual(byte);
+		}
+		});
+		
 	test('MOVE L,B', () => {
 		const c = new Source.Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -321,6 +366,78 @@ describe('MOV Register to Register', () => {
 		    c.cpu.registers.L = byte;
 		    c.cpu.mov_reg('L', 'L')
 		    expect(c.cpu.registers.L).toEqual(byte);
+		}
+		});
+		
+	test('MOVE L,A', () => {
+		const c = new Source.Computer();
+		for (let byte = 0x00; byte <= 0xFF; byte++) {
+		    c.cpu.registers.A = byte;
+		    c.cpu.mov_reg('A', 'A')
+		    expect(c.cpu.registers.A).toEqual(byte);
+		}
+		});
+		
+	test('MOVE A,B', () => {
+		const c = new Source.Computer();
+		for (let byte = 0x00; byte <= 0xFF; byte++) {
+		    c.cpu.registers.B = byte;
+		    c.cpu.mov_reg('A', 'B')
+		    expect(c.cpu.registers.A).toEqual(byte);
+		}
+		});
+		
+	test('MOVE A,C', () => {
+		const c = new Source.Computer();
+		for (let byte = 0x00; byte <= 0xFF; byte++) {
+		    c.cpu.registers.C = byte;
+		    c.cpu.mov_reg('A', 'C')
+		    expect(c.cpu.registers.A).toEqual(byte);
+		}
+		});
+		
+	test('MOVE A,D', () => {
+		const c = new Source.Computer();
+		for (let byte = 0x00; byte <= 0xFF; byte++) {
+		    c.cpu.registers.D = byte;
+		    c.cpu.mov_reg('A', 'D')
+		    expect(c.cpu.registers.A).toEqual(byte);
+		}
+		});
+		
+	test('MOVE A,E', () => {
+		const c = new Source.Computer();
+		for (let byte = 0x00; byte <= 0xFF; byte++) {
+		    c.cpu.registers.E = byte;
+		    c.cpu.mov_reg('A', 'E')
+		    expect(c.cpu.registers.A).toEqual(byte);
+		}
+		});
+		
+	test('MOVE A,H', () => {
+		const c = new Source.Computer();
+		for (let byte = 0x00; byte <= 0xFF; byte++) {
+		    c.cpu.registers.H = byte;
+		    c.cpu.mov_reg('A', 'H')
+		    expect(c.cpu.registers.A).toEqual(byte);
+		}
+		});
+		
+	test('MOVE A,L', () => {
+		const c = new Source.Computer();
+		for (let byte = 0x00; byte <= 0xFF; byte++) {
+		    c.cpu.registers.L = byte;
+		    c.cpu.mov_reg('A', 'L')
+		    expect(c.cpu.registers.A).toEqual(byte);
+		}
+		});
+		
+	test('MOVE A,A', () => {
+		const c = new Source.Computer();
+		for (let byte = 0x00; byte <= 0xFF; byte++) {
+		    c.cpu.registers.A = byte;
+		    c.cpu.mov_reg('A', 'A')
+		    expect(c.cpu.registers.A).toEqual(byte);
 		}
 		});
 		

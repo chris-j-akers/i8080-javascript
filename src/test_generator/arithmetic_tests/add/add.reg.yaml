@@ -41,11 +41,11 @@ test_suite:
       data: 1
       accumulator: 0
       expected_result: 1
-      carry: toBeFalsy
-      parity: toBeFalsy
-      auxillary_carry: toBeFalsy
-      zero: toBeFalsy
-      sign: toBeFalsy
+      carry: False
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: False
  
     - test:
       name: SET ZERO
@@ -58,11 +58,11 @@ test_suite:
       data: 0
       accumulator: 0
       expected_result: 0
-      carry: toBeFalsy
-      parity: toBeTruthy
-      auxillary_carry: toBeFalsy
-      zero: toBeTruthy
-      sign: toBeFalsy
+      carry: False
+      parity: True
+      auxillary_carry: False
+      zero: True
+      sign: False
 
     - test:
       name: SET PARITY
@@ -75,11 +75,11 @@ test_suite:
       data: 84
       accumulator: 1
       expected_result: 85
-      carry: toBeFalsy
-      parity: toBeTruthy
-      auxillary_carry: toBeFalsy
-      zero: toBeFalsy
-      sign: toBeFalsy
+      carry: False
+      parity: True
+      auxillary_carry: False
+      zero: False
+      sign: False
 
     - test:
       name: SET AUX CARRY
@@ -92,11 +92,11 @@ test_suite:
       data: 15
       accumulator: 15
       expected_result: 30
-      carry: toBeFalsy
-      parity: toBeTruthy
-      auxillary_carry: toBeTruthy
-      zero: toBeFalsy
-      sign: toBeFalsy
+      carry: False
+      parity: True
+      auxillary_carry: True
+      zero: False
+      sign: False
 
     - test:
       name: SET SIGN
@@ -109,11 +109,11 @@ test_suite:
       data: 64
       accumulator: 112
       expected_result: 176
-      carry: toBeFalsy
-      parity: toBeFalsy
-      auxillary_carry: toBeFalsy
-      zero: toBeFalsy
-      sign: toBeTruthy
+      carry: False
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: True
 
     - test:
       name: SET CARRY
@@ -126,8 +126,8 @@ test_suite:
       data: 192
       accumulator: 66
       expected_result: 2
-      carry: toBeTruthy
-      parity: toBeFalsy
-      auxillary_carry: toBeFalsy
-      zero: toBeFalsy
-      sign: toBeFalsy
+      carry: True
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: False

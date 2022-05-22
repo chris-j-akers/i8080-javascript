@@ -38,11 +38,11 @@ test_suite:
       accumulator: 2
       set_carry: False
       expected_result: 4
-      carry: toBeFalsy
-      parity: toBeFalsy
-      auxillary_carry: toBeFalsy
-      zero: toBeFalsy
-      sign: toBeFalsy
+      carry: False
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: False
       
     - test:
       name: SET ZERO | CARRY UNSET
@@ -55,11 +55,11 @@ test_suite:
       accumulator: 0
       set_carry: False
       expected_result: 0
-      carry: toBeFalsy
-      parity: toBeTruthy
-      auxillary_carry: toBeFalsy
-      zero: toBeTruthy
-      sign: toBeFalsy
+      carry: False
+      parity: True
+      auxillary_carry: False
+      zero: True
+      sign: False
 
     - test:
       name: SET PARITY | CARRY UNSET
@@ -72,11 +72,11 @@ test_suite:
       accumulator: 0
       set_carry: False
       expected_result: 0
-      carry: toBeFalsy
-      parity: toBeTruthy
-      auxillary_carry: toBeFalsy
-      zero: toBeTruthy
-      sign: toBeFalsy
+      carry: False
+      parity: True
+      auxillary_carry: False
+      zero: True
+      sign: False
 
     - test:
       name: SET PARITY | CARRY SET
@@ -89,11 +89,11 @@ test_suite:
       accumulator: 007
       set_carry: True
       expected_result: 15
-      carry: toBeFalsy
-      parity: toBeTruthy
-      auxillary_carry: toBeFalsy
-      zero: toBeFalsy
-      sign: toBeFalsy
+      carry: False
+      parity: True
+      auxillary_carry: False
+      zero: False
+      sign: False
 
     - test:
       name: SET AUX CARRY | CARRY UNSET
@@ -106,11 +106,11 @@ test_suite:
       accumulator: 9
       set_carry: False
       expected_result: 18
-      carry: toBeFalsy
-      parity: toBeTruthy
-      auxillary_carry: toBeTruthy
-      zero: toBeFalsy
-      sign: toBeFalsy
+      carry: False
+      parity: True
+      auxillary_carry: True
+      zero: False
+      sign: False
 
     - test:
       name: SET AUX CARRY | CARRY SET
@@ -123,11 +123,11 @@ test_suite:
       accumulator: 8
       set_carry: True
       expected_result: 17
-      carry: toBeFalsy
-      parity: toBeTruthy
-      auxillary_carry: toBeTruthy
-      zero: toBeFalsy
-      sign: toBeFalsy
+      carry: False
+      parity: True
+      auxillary_carry: True
+      zero: False
+      sign: False
 
 
     - test:
@@ -141,11 +141,11 @@ test_suite:
       accumulator: 89
       set_carry: False
       expected_result: 178
-      carry: toBeFalsy
-      parity: toBeTruthy
-      auxillary_carry: toBeTruthy
-      zero: toBeFalsy
-      sign: toBeTruthy
+      carry: False
+      parity: True
+      auxillary_carry: True
+      zero: False
+      sign: True
 
     - test:
       name: SET SIGN | CARRY SET
@@ -158,11 +158,11 @@ test_suite:
       accumulator: 88
       set_carry: True
       expected_result: 177
-      carry: toBeFalsy
-      parity: toBeTruthy
-      auxillary_carry: toBeTruthy
-      zero: toBeFalsy
-      sign: toBeTruthy
+      carry: False
+      parity: True
+      auxillary_carry: True
+      zero: False
+      sign: True
 
     - test:
       name: SET CARRY | CARRY UNSET
@@ -175,11 +175,11 @@ test_suite:
       accumulator: 241
       set_carry: False
       expected_result: 226
-      carry: toBeTruthy
-      parity: toBeTruthy
-      auxillary_carry: toBeFalsy
-      zero: toBeFalsy
-      sign: toBeTruthy
+      carry: True
+      parity: True
+      auxillary_carry: False
+      zero: False
+      sign: True
 
 
     - test:
@@ -193,8 +193,8 @@ test_suite:
       accumulator: 240
       set_carry: True
       expected_result: 225
-      carry: toBeTruthy
-      parity: toBeTruthy
-      auxillary_carry: toBeFalsy
-      zero: toBeFalsy
-      sign: toBeTruthy
+      carry: True
+      parity: True
+      auxillary_carry: False
+      zero: False
+      sign: True

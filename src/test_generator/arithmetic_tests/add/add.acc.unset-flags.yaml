@@ -48,8 +48,8 @@ test_suite:
         // +-----------------------+-------+-----------------------+-------+
       accumulator: 1
       expected_result: 2
-      carry: toBeFalsy
-      parity: toBeFalsy
-      auxillary_carry: toBeFalsy
-      zero: toBeFalsy
-      sign: toBeFalsy
+      carry: False
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: False

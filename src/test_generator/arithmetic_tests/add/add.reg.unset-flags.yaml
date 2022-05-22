@@ -53,9 +53,9 @@ test_suite:
       data: 1
       accumulator: 0
       expected_result: 1
-      carry: toBeFalsy
-      parity: toBeFalsy
-      auxillary_carry: toBeFalsy
-      zero: toBeFalsy
-      sign: toBeFalsy
+      carry: False
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: False
  

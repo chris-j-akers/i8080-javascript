@@ -50,6 +50,11 @@ test_suite:
       name: 'MOVE B,L'
       reg_source: 'L'
       reg_destination: 'B'
+    
+    - test:
+      name: 'MOVE B,A'
+      reg_source: 'A'
+      reg_destination: 'B'
 
 # Move to C register
 
@@ -81,6 +86,11 @@ test_suite:
     - test:
       name: 'MOVE C,L'
       reg_source: 'L'
+      reg_destination: 'C'
+
+    - test:
+      name: 'MOVE C,A'
+      reg_source: 'A'
       reg_destination: 'C'
 
 # Move to D register
@@ -115,6 +125,11 @@ test_suite:
       reg_source: 'L'
       reg_destination: 'D'
 
+    - test:
+      name: 'MOVE D,A'
+      reg_source: 'A'
+      reg_destination: 'D'
+
 # Move to E register
 
     - test:
@@ -145,6 +160,11 @@ test_suite:
     - test:
       name: 'MOVE E,L'
       reg_source: 'L'
+      reg_destination: 'E'
+
+    - test:
+      name: 'MOVE E,A'
+      reg_source: 'A'
       reg_destination: 'E'
 
 # Move to H register
@@ -178,6 +198,11 @@ test_suite:
       name: 'MOVE H,L'
       reg_source: 'L'
       reg_destination: 'H'
+
+    - test:
+      name: 'MOVE H,A'
+      reg_source: 'A'
+      reg_destination: 'A'
       
 # Move to L register
 
@@ -210,3 +235,45 @@ test_suite:
       name: 'MOVE L,L'
       reg_source: 'L'
       reg_destination: 'L'
+
+    - test:
+      name: 'MOVE L,A'
+      reg_source: 'A'
+      reg_destination: 'A'
+
+# Move to A register (Accumulator)
+
+    - test:
+      name: 'MOVE A,B'
+      reg_source: 'B'
+      reg_destination: 'A'
+
+    - test:
+      name: 'MOVE A,C'
+      reg_source: 'C'
+      reg_destination: 'A'
+
+    - test:
+      name: 'MOVE A,D'
+      reg_source: 'D'
+      reg_destination: 'A'
+
+    - test:
+      name: 'MOVE A,E'
+      reg_source: 'E'
+      reg_destination: 'A'
+
+    - test:
+      name: 'MOVE A,H'
+      reg_source: 'H'
+      reg_destination: 'A'
+
+    - test:
+      name: 'MOVE A,L'
+      reg_source: 'L'
+      reg_destination: 'A'
+
+    - test:
+      name: 'MOVE A,A'
+      reg_source: 'A'
+      reg_destination: 'A'

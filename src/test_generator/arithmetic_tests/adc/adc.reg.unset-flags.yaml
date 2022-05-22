@@ -53,11 +53,11 @@ test_suite:
       accumulator: 01
       set_carry: False
       expected_result: 2
-      carry: toBeFalsy
-      parity: toBeFalsy
-      auxillary_carry: toBeFalsy
-      zero: toBeFalsy
-      sign: toBeFalsy
+      carry: False
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: False
 
     - test:
       name: UNSET FLAGS | CARRY SET
@@ -71,9 +71,9 @@ test_suite:
       accumulator: 0
       set_carry: True
       expected_result: 2
-      carry: toBeFalsy
-      parity: toBeFalsy
-      auxillary_carry: toBeFalsy
-      zero: toBeFalsy
-      sign: toBeFalsy
+      carry: False
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: False
       

@@ -286,7 +286,6 @@ class i8080 {
     }
 
     sbb_reg(reg) {
-        console.log(reg);
         const register_with_carry = reg + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         const reg_twos_complement = ~(register_with_carry) + 1;
 
