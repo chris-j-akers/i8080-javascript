@@ -1,0 +1,60 @@
+---
+test_suite:
+  enable: True
+  generator_function: sub_tests.generate_sub_acc
+  description: 'SUB Accumulator Flag'
+  output_file_name: '/arithmetic/sub.acc.test.js'
+  header: |
+    const Source = require('../../i8080');
+  footer: |
+    });
+  boilerplate: |
+      const c = new Source.Computer();
+      const FlagType = Source.i8080.FlagType;
+
+      c.cpu.registers.A = {accumulator};
+      c.cpu.sub_reg(c.cpu.registers.A);
+
+      expect(c.cpu.registers.A).toEqual({expected_result});
+      expect(c.cpu.flag_set(FlagType.Carry)).{carry}();
+      expect(c.cpu.flag_set(FlagType.Parity)).{parity}();
+      expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).{auxillary_carry}();
+      expect(c.cpu.flag_set(FlagType.Zero)).{zero}();
+      expect(c.cpu.flag_set(FlagType.Sign)).{sign}();
+      c.reset();
+      }});
+
+  tests:
+
+    - test:
+      name: Zero, AuxCarry, Parity Flags Set 
+      comment: |
+        // +-----------------------+-----------------------+-------+
+        // |      Accumulator      |      Expected         | Flags |
+        // +-----------------------+-----------------------+-------+
+        // | 001 | 0x01 | 00000001 | 000 | 0x00 | 00000000 | Z|P   |
+        // +-----------------------+-----------------------+-------+
+      accumulator: 1
+      expected_result: 0
+      carry: False
+      parity: True
+      auxillary_carry: True
+      zero: True
+      sign: False
+
+    - test:
+      name: Carry, Sign Flags Set
+      comment: |
+        // +-----------------------+-----------------------+-------+
+        // |      Accumulator      |      Expected         | Flags |
+        // +-----------------------+-----------------------+-------+
+        // | 255 | 0xFF | 11111111 | 000 | 0x00 | 00000000 | C|S   |
+        // +-----------------------+-----------------------+-------+
+      accumulator: 255
+      expected_result: 0
+      carry: False
+      parity: True
+      auxillary_carry: True
+      zero: True
+      sign: False
+      

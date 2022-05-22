@@ -195,6 +195,18 @@ function sbb_test2() {
     // console.log(c.cpu.__dbg__get_state());
 }
 
+function sub_test() {
+
+    const c = new Computer();
+    const FlagType = i8080.FlagType;
+
+    c.cpu.registers.A = 255;
+    console.log(c.cpu.__dbg__get_state());
+    c.cpu.sub_reg(c.cpu.registers.A);
+    console.log(c.cpu.__dbg__get_state());
+
+
+}
 
 sbb_test2()
 
