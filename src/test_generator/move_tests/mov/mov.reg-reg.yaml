@@ -10,13 +10,13 @@ test_suite:
   footer: |
     });
   boilerplate: |
-      const c = new Source.Computer();
-      for (let byte = 0x00; byte <= 0xFF; byte++) {{
-          c.cpu.registers.{reg_source} = byte;
-          c.cpu.mov_reg('{reg_destination}', '{reg_source}')
-          expect(c.cpu.registers.{reg_destination}).toEqual(byte);
-      }}
-      }});
+    const c = new Source.Computer();
+    for (let byte = 0x00; byte <= 0xFF; byte++) {{
+        c.cpu.registers.{reg_source} = byte;
+        c.cpu.mov_reg('{reg_destination}', '{reg_source}')
+        expect(c.cpu.registers.{reg_destination}).toEqual(byte);
+    }}
+    }});
   tests:
 
 # Move to B register
