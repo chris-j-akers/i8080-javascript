@@ -291,7 +291,13 @@ class i8080 {
 //  ===================================================================================
 
     sub_reg(reg) {
+        const reg_twos_complement = ~(reg) + 1;
 
+        const val = (this.registers.A + reg_twos_complement);
+        this.set_flags(val, this.registers.A, reg_twos_complement);
+
+        this.registers.A = val & 0xFF;
+        this.clock += 7;
     }
 
     sbb_reg(reg) {

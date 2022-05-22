@@ -1,0 +1,134 @@
+---
+test_suite:
+  enable: True
+  generator_function: sub_tests.generate_sub_reg
+  description: 'SUB Register'
+  output_file_name: '/arithmetic/sub.reg.test.js'
+  header: |
+    const Source = require('../../i8080');
+  footer: |
+    });
+  boilerplate: |
+    const c = new Source.Computer();
+    const FlagType = Source.i8080.FlagType;
+
+    for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {{
+      c.cpu.registers.A = {accumulator};
+      c.cpu.registers[reg] = {data};
+      c.cpu.sub_reg(c.cpu.registers[reg]);
+
+      expect(c.cpu.registers.A).toEqual({expected_result});
+      expect(c.cpu.flag_set(FlagType.Carry)).{carry}();
+      expect(c.cpu.flag_set(FlagType.Parity)).{parity}();
+      expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).{auxillary_carry}();
+      expect(c.cpu.flag_set(FlagType.Zero)).{zero}();
+      expect(c.cpu.flag_set(FlagType.Sign)).{sign}();
+      c.reset();
+    }}
+    }});
+
+  tests:
+
+    - test:
+      name: NO FLAGS SET
+      comment: |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // |       Register        |      Accumulator      |       Expected        | Flags |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // | 001 | 0x01 | 00000001 | 032 | 0x20 | 00100000 | 31 | 0x1F | 000011111 |       |
+        // +-----------------------+-----------------------+-----------------------+-------+
+      data: 1
+      accumulator: 32
+      expected_result: 31
+      carry: False
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: False
+      
+      
+    - test:
+      name: SET ZERO
+      comment: |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // |       Register        |      Accumulator      |       Expected        | Flags |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // | 001 | 0x01 | 00000001 | 001 | 0x01 | 00000001 | 000 | 0x00 | 00000000 | P|A|Z |
+        // +-----------------------+-----------------------+-----------------------+-------+
+      data: 1
+      accumulator: 1
+      expected_result: 0
+      carry: False
+      parity: True
+      auxillary_carry: True
+      zero: True
+      sign: False
+
+    - test:
+      name: SET PARITY
+      comment: |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // |       Register        |      Accumulator      |       Expected        | Flags |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // | 002 | 0x02 | 00000010 | 032 | 0x20 | 00100000 | 030 | 0x1E | 00011110 | P     |
+        // +-----------------------+-----------------------+-----------------------+-------+
+      data: 2
+      accumulator: 32
+      expected_result: 30
+      carry: False
+      parity: True
+      auxillary_carry: False
+      zero: False
+      sign: False
+
+    - test:
+      name: SET AUX CARRY
+      comment: |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // |       Register        |      Accumulator      |       Expected        | Flags |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // | 003 | 0x03 | 00000011 | 127 | 0x7F | 01111111 | 124 | 0x7C | 01111100 | A     |
+        // +-----------------------+-----------------------+-----------------------+-------+
+      data: 3
+      accumulator: 127
+      expected_result: 124
+      carry: False
+      parity: False
+      auxillary_carry: True
+      zero: False
+      sign: False
+
+
+    - test:
+      name: SET SIGN
+      comment: |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // |       Register        |      Accumulator      |       Expected        | Flags |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // | 001 | 0x01 | 00000001 | 255 | 0xFF | 11111111 | 254 | 0xFE | 11111110 | A|S   |
+        // +-----------------------+-----------------------+-----------------------+-------+
+      data: 1
+      accumulator: 255
+      expected_result: 254
+      carry: False
+      parity: False
+      auxillary_carry: True
+      zero: False
+      sign: True
+
+    - test:
+      name: SET CARRY 
+      comment: |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // |       Register        |      Accumulator      |       Expected        | Flags |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // | 255 | 0xFF | 11111111 | 020 | 0x14 | 00000001 | 251 | 0xFB | 11111011 | C|S   |
+        // +-----------------------+-----------------------+-----------------------+-------+
+      data: 10
+      accumulator: 5
+      expected_result: 251
+      carry: True
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: True
