@@ -207,24 +207,19 @@ function sub_test() {
 
 }
 
+function ana_test() {
 
-function mvi_test() {
+    const c = new Computer();
+    const FlagType = i8080.FlagType;
 
-    // const c = new Source.Computer();
-    // for (let byte = 0x00; byte <= 0xFF; byte++) {
-    //     c.cpu.registers.{reg_source} = byte;
-    //     c.cpu.mov_reg('{reg_destination}', '{reg_source}')
-    //     expect(c.cpu.registers.{reg_destination}).toEqual(byte);
-    // }
-
-    const c = new Source.Computer();
-    for (let byte = 0x00; byte <= 0xFF; byte++) {
-        c.cpu.mvi_reg('{reg_destination', byte);
-        expect(c.cpu.registers.{reg_destination}).toEqual(byte);
+    c.cpu.mvi_reg('A', 0x0FC);
+    c.cpu.mvi_reg('C', 0x0F);
+    console.log(c.cpu.__dbg__get_state());
+    c.cpu.ana_reg('C');
+    console.log(c.cpu.__dbg__get_state());
     
-
-
 }
 
-sbb_test2()
+ana_test();
+
 
