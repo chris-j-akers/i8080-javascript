@@ -174,8 +174,8 @@ function sbb_test2() {
     c.cpu.registers.A = 12;
     c.cpu.registers.L = 4;
     console.log(c.cpu.__dbg__get_state());
-    // c.cpu.set_flag(FlagType.Carry);
-    c.cpu.sbb_reg(c.cpu.registers.L);
+    c.cpu.set_flag(FlagType.Carry);
+    c.cpu.sbb_reg(c.cpu.registers.A);
     console.log(c.cpu.__dbg__get_state());
 
     // console.log(c.cpu.__dbg__get_state());

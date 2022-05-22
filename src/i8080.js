@@ -309,8 +309,23 @@ class i8080 {
         this.set_flags(val, this.registers.A, reg_twos_complement);
 
         this.registers.A = val & 0xFF;
+        this.clock += 7;
     }
 
+
+    sbb_mem() {
+        const mem_data = this.bus.read(this.get_mem_addr());
+        const carry = (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
+        const mem_data_with_carry = mem_data + carry;
+
+        const mem_data_twos_complement = ~(mem_data_with_carry)+1;
+
+        const val = this.registers.A + mem_data_twos_complement;
+        this.set_flags(val, this.registers.A, mem_data_twos_complement);
+
+        this.registers.A = val & 0xFF;
+        this.clock += 7;
+    }
 
 
 
