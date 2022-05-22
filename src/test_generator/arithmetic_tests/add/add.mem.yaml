@@ -36,7 +36,7 @@ test_suite:
   tests:
 
     - test:
-      name: NO FLAGS SET
+      name: No Flags Set
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Data            |      Accumulator      | Carry |       Expected        | Flags |
@@ -53,7 +53,7 @@ test_suite:
       sign: False
             
     - test:
-      name: SET ZERO
+      name: Parity and Zero Flag Set
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Memory          |      Accumulator      | Carry |       Expected        | Flags |
@@ -70,7 +70,7 @@ test_suite:
       sign: False
 
     - test:
-      name: SET PARITY
+      name: Parity Flag Set
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Memory          |      Accumulator      | Carry |       Expected        | Flags |
@@ -87,7 +87,7 @@ test_suite:
       sign: False
 
     - test:
-      name: SET AUX CARRY
+      name: Aux Carry Flag Set
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Memory          |      Accumulator      | Carry |       Expected        | Flags |
@@ -104,7 +104,7 @@ test_suite:
       sign: False
 
     - test:
-      name: SET SIGN
+      name: Aux Carry and Sign Flags Set
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Memory          |      Accumulator      | Carry |       Expected        | Flags |
@@ -121,7 +121,7 @@ test_suite:
       sign: True
 
     - test:
-      name: SET CARRY
+      name: Carry and Aux Carry Flags Set
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Memory          |      Accumulator      | Carry |       Expected        | Flags |

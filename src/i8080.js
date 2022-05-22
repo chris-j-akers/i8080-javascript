@@ -300,6 +300,18 @@ class i8080 {
         this.clock += 7;
     }
 
+    sub_mem() {
+
+        const mem_data = this.bus.read(this.get_mem_addr());
+        const mem_data_twos_complement = ~(mem_data)+1;
+
+        const val = this.registers.A + mem_data_twos_complement;
+        this.set_flags(val, this.registers.A, mem_data_twos_complement);
+
+        this.registers.A = val & 0xFF;
+        this.clock += 7;
+    }
+
     sbb_reg(reg) {
         
         // 'The 8080 sets the carry flag when the unsigned value subtracted is greater 

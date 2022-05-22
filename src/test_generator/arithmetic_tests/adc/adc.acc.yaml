@@ -28,7 +28,7 @@ test_suite:
   tests:
 
     - test:
-      name: NO FLAGS SET | CARRY UNSET
+      name: No Flags Set (With Carry Unset)
       comment: |
         // +-----------------------+-------+-----------------------+-------+
         // |      Accumulator      | Carry |      Expected         | Flags |
@@ -45,7 +45,7 @@ test_suite:
       sign: False
       
     - test:
-      name: SET ZERO | CARRY UNSET
+      name: Set Parity and Zero Flag (With Carry Unset)
       comment: |
         // +-----------------------+-------+-----------------------+-------+
         // |      Accumulator      | Carry |      Expected         | Flags |
@@ -62,12 +62,12 @@ test_suite:
       sign: False
 
     - test:
-      name: SET PARITY | CARRY UNSET
+      name: Set Parity and Zero Flag (With Carry Unset)
       comment: |
         // +-----------------------+-------+-----------------------+-------+
         // |      Accumulator      | Carry |      Expected         | Flags |
         // +-----------------------+-------+-----------------------+-------+
-        // | 000 | 0x00 | 00000000 |     0 | 000 | 0x00 | 0000000 | P      |
+        // | 000 | 0x00 | 00000000 |     0 | 000 | 0x00 | 0000000  | P|Z   |
         // +-----------------------+-------+-----------------------+-------+
       accumulator: 0
       set_carry: False
@@ -79,7 +79,7 @@ test_suite:
       sign: False
 
     - test:
-      name: SET PARITY | CARRY SET
+      name: Set Parity (With Carry Set)
       comment: |
         // +-----------------------+-------+-----------------------+-------+
         // |      Accumulator      | Carry |      Expected         | Flags |
@@ -96,7 +96,7 @@ test_suite:
       sign: False
 
     - test:
-      name: SET AUX CARRY | CARRY UNSET
+      name: Set Parity and Aux Carry Flags (With Carry Unset)
       comment: |
         // +-----------------------+-------+-----------------------+-------+
         // |      Accumulator      | Carry |      Expected         | Flags |
@@ -113,7 +113,7 @@ test_suite:
       sign: False
 
     - test:
-      name: SET AUX CARRY | CARRY SET
+      name: Set Parity and Aux Carry Flags (With Carry Set)
       comment: |
         // +-----------------------+-------+-----------------------+-------+
         // |      Accumulator      | Carry |      Expected         | Flags |
@@ -131,7 +131,7 @@ test_suite:
 
 
     - test:
-      name: SET SIGN | CARRY UNSET
+      name: Set Parity, Aux Carry and Sign Flags (With Carry Unset)
       comment: |
         // +-----------------------+-------+-----------------------+-------+
         // |      Accumulator      | Carry |      Expected         | Flags |
@@ -148,7 +148,7 @@ test_suite:
       sign: True
 
     - test:
-      name: SET SIGN | CARRY SET
+      name: Set Parity, Aux Carry and Sign Flags (With Carry Set)
       comment: |
         // +-----------------------+-------+-----------------------+-------+
         // |      Accumulator      | Carry |      Expected         | Flags |
@@ -165,7 +165,7 @@ test_suite:
       sign: True
 
     - test:
-      name: SET CARRY | CARRY UNSET
+      name: Set Carry, Parity and Sign Flags (With Carry Unset)
       comment: |
         // +-----------------------+-------+-----------------------+-------+
         // |      Accumulator      | Carry |      Expected         | Flags |
@@ -183,7 +183,7 @@ test_suite:
 
 
     - test:
-      name: SET CARRY | CARRY SET
+      name: Set Carry, Parity and Sign Flags (With Carry Set)
       comment: |
         // +-----------------------+-------+-----------------------+-------+
         // |      Accumulator      | Carry |      Expected         | Flags |

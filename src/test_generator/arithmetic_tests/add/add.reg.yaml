@@ -31,7 +31,7 @@ test_suite:
   tests:
 
     - test:
-      name: NO FLAGS SET
+      name: No Flags Set
       comment: |
         // +-----------------------+-----------------------+-----------------------+-------+
         // |       Register        |      Accumulator      |       Expected        | Flags |
@@ -48,7 +48,7 @@ test_suite:
       sign: False
  
     - test:
-      name: SET ZERO
+      name: Set Parity and Zero Flags
       comment: |
         // +-----------------------+-----------------------+-----------------------+-------+
         // |       Register        |      Accumulator      |       Expected        | Flags |
@@ -65,7 +65,7 @@ test_suite:
       sign: False
 
     - test:
-      name: SET PARITY
+      name: Set Parity Flag
       comment: |
         // +-----------------------+-----------------------+-----------------------+-------+
         // |       Register        |      Accumulator      |       Expected        | Flags |
@@ -82,7 +82,7 @@ test_suite:
       sign: False
 
     - test:
-      name: SET AUX CARRY
+      name: Set Parity and Aux Carry Flags
       comment: |
         // +-----------------------+-----------------------+-----------------------+-------+
         // |       Register        |      Accumulator      |       Expected        | Flags |
@@ -99,7 +99,7 @@ test_suite:
       sign: False
 
     - test:
-      name: SET SIGN
+      name: Set Sign Flag
       comment: |
         // +-----------------------+-----------------------+-----------------------+-------+
         // |       Register        |      Accumulator      |       Expected        | Flags |
@@ -116,7 +116,7 @@ test_suite:
       sign: True
 
     - test:
-      name: SET CARRY
+      name: Set Carry Flag
       comment: |
         // +-----------------------+-----------------------+-----------------------+-------+
         // |       Register        |      Accumulator      |       Expected        | Flags |

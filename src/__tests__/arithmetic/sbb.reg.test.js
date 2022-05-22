@@ -1,6 +1,6 @@
 const Source = require('../../i8080');
 describe('SBB Register', () => {
-	test('NO FLAGS SET | CARRY UNSET', () => {
+	test('No Flags Set (Carry Bit Reset)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -20,7 +20,7 @@ describe('SBB Register', () => {
 		}
 		});
 		
-	test('NO FLAGS SET | CARRY SET', () => {
+	test('No Flags Set (Carry Bit Set)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -41,7 +41,7 @@ describe('SBB Register', () => {
 		}
 		});
 		
-	test('SET ZERO | CARRY UNSET', () => {
+	test('Parity, Aux Carry and Zero Flags Set (Carry Bit Reset)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -61,7 +61,7 @@ describe('SBB Register', () => {
 		}
 		});
 		
-	test('SET ZERO | CARRY SET', () => {
+	test('Parity, Aux Carry and Zero Flags Set (Carry Bit Set)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -82,7 +82,7 @@ describe('SBB Register', () => {
 		}
 		});
 		
-	test('SET PARITY | CARRY UNSET', () => {
+	test('arity Flag Set (Carry Bit Reset)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -102,7 +102,7 @@ describe('SBB Register', () => {
 		}
 		});
 		
-	test('SET PARITY | CARRY SET', () => {
+	test('Parity Flag Set (Carry Bit Set)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -123,7 +123,7 @@ describe('SBB Register', () => {
 		}
 		});
 		
-	test('SET AUX CARRY | CARRY UNSET', () => {
+	test('Aux Carry Set (Carry Bit Reset)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -143,7 +143,7 @@ describe('SBB Register', () => {
 		}
 		});
 		
-	test('SET AUX CARRY | CARRY SET', () => {
+	test('Aux Carry Set (Carry Bit Set)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -164,7 +164,7 @@ describe('SBB Register', () => {
 		}
 		});
 		
-	test('SET SIGN | CARRY UNSET', () => {
+	test('Aux Carry and Sign Flag Set (Carry Bit Reset)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -184,7 +184,7 @@ describe('SBB Register', () => {
 		}
 		});
 		
-	test('SET SIGN | CARRY SET', () => {
+	test('Aux Carry and Sign Flag Set (Carry Bit Set)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -205,7 +205,7 @@ describe('SBB Register', () => {
 		}
 		});
 		
-	test('SET CARRY | CARRY UNSET', () => {
+	test('Carry and Sign Flag Set (Carry Bit Reset)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
@@ -225,7 +225,7 @@ describe('SBB Register', () => {
 		}
 		});
 		
-	test('SET CARRY | CARRY SET', () => {
+	test('Carry and Sign Flag Set (Carry Bit Set)', () => {
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		

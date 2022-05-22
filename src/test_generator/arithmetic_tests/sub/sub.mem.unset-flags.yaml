@@ -1,20 +1,25 @@
 ---
 test_suite:
   enable: True
-  generator_function: add_tests.generate_add_reg
-  description: 'ADD Register (Unset All Flags)'
-  output_file_name: '/arithmetic/add.reg.unset-flags.test.js'
+  generator_function: sub_tests.generate_sub_mem
+  description: 'SUB Memory (Unset All Flags)'
+  output_file_name: '/arithmetic/sub.mem.test.js'
   header: |
     const Source = require('../../i8080');
   footer: |
     });
   boilerplate: |
+    const max_mem_addr = {max_mem_addr};
     const c = new Source.Computer();
     const FlagType = Source.i8080.FlagType;
 
-    for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {{
+    const data = {data};
+
+    for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {{
+      c.bus.write(data, mem_addr);
+      c.cpu.registers.H = (mem_addr >> 8) & 0xff;
+      c.cpu.registers.L = mem_addr & 0xff;
       c.cpu.registers.A = {accumulator};
-      c.cpu.registers[reg] = {data};
 
       c.cpu.set_flag(FlagType.Carry);
       c.cpu.set_flag(FlagType.Parity);
@@ -28,7 +33,7 @@ test_suite:
       expect(c.cpu.flag_set(FlagType.Zero)).toBeTruthy();
       expect(c.cpu.flag_set(FlagType.Sign)).toBeTruthy();
 
-      c.cpu.add_reg(c.cpu.registers[reg]);
+      c.cpu.sub_mem();
 
       expect(c.cpu.registers.A).toEqual({expected_result});
       expect(c.cpu.flag_set(FlagType.Carry)).{carry}();
@@ -45,17 +50,17 @@ test_suite:
     - test:
       name: Unset All Flags
       comment: |
-        // +-----------------------+-----------------------+-----------------------+-------+
-        // |       Register        |      Accumulator      |       Expected        | Flags |
-        // +-----------------------+-----------------------+-----------------------+-------+
-        // | 001 | 0x01 | 00000001 | 000 | 0x00 | 00000000 | 001 | 0x01 | 00000001 |       |
-        // +-----------------------+-----------------------+-------+-----------------------+
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 001 | 0x01 | 00000001 | 032 | 0x20 | 00100000 |     0 | 31 | 0x1F | 000011111 |       |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
       data: 1
-      accumulator: 0
-      expected_result: 1
+      accumulator: 32
+      expected_result: 31
       carry: False
       parity: False
       auxillary_carry: False
       zero: False
       sign: False
- 
+      

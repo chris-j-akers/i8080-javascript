@@ -31,7 +31,7 @@ test_suite:
   tests:
 
     - test:
-      name: NO FLAGS SET | CARRY UNSET
+      name: No Flags Set (With Carry Unset)
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
@@ -49,7 +49,7 @@ test_suite:
       sign: False
       
     - test:
-      name: NO FLAGS SET | CARRY SET
+      name: No Flags Set (With Carry Set)
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
@@ -67,7 +67,7 @@ test_suite:
       sign: False
       
     - test:
-      name: SET ZERO | CARRY UNSET
+      name: Set Parity and Zero Flags (With Carry Unset)
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
@@ -85,7 +85,7 @@ test_suite:
       sign: False
 
     - test:
-      name: SET PARITY | CARRY UNSET
+      name: Set Parity Flag (With Carry Unset)
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
@@ -103,7 +103,7 @@ test_suite:
       sign: False
 
     - test:
-      name: SET PARITY | CARRY SET
+      name: Set Parity Flag (With Carry Set)
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
@@ -121,7 +121,7 @@ test_suite:
       sign: False
 
     - test:
-      name: SET AUX CARRY | CARRY UNSET
+      name: Set Aux Carry Flag (With Carry Unset)
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
@@ -139,7 +139,7 @@ test_suite:
       sign: False
 
     - test:
-      name: SET AUX CARRY | CARRY SET
+      name: Set Aux Carry Flag (With Carry Set)
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
@@ -157,7 +157,7 @@ test_suite:
       sign: False
 
     - test:
-      name: SET SIGN | CARRY UNSET
+      name: Set Aux Carry and Sign Flag (With Carry Unset)
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
@@ -175,7 +175,7 @@ test_suite:
       sign: True
 
     - test:
-      name: SET SIGN | CARRY SET
+      name: Set Sign Flag (With Carry Set)
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
@@ -193,7 +193,7 @@ test_suite:
       sign: True
 
     - test:
-      name: SET CARRY | CARRY UNSET
+      name: Set Carry and Aux Carry Flag (With Carry Unset)
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
@@ -211,7 +211,7 @@ test_suite:
       sign: False
 
     - test:
-      name: SET CARRY | CARRY SET
+      name: Set Carry and Parity Flag (With Carry Set)
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Register        |      Accumulator      | Carry |       Expected        | Flags |

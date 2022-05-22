@@ -1,17 +1,12 @@
 const Source = require('../../i8080');
-describe('SUB Memory (Unset All Flags)', () => {
+describe('SUB Register (Unset All Flags)', () => {
 	test('Unset All Flags', () => {
-		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		const FlagType = Source.i8080.FlagType;
 		
-		const data = 1;
-		
-		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.bus.write(data, mem_addr);
-		  c.cpu.registers.H = (mem_addr >> 8) & 0xff;
-		  c.cpu.registers.L = mem_addr & 0xff;
+		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
 		  c.cpu.registers.A = 32;
+		  c.cpu.registers[reg] = 1;
 		
 		  c.cpu.set_flag(FlagType.Carry);
 		  c.cpu.set_flag(FlagType.Parity);
@@ -25,7 +20,7 @@ describe('SUB Memory (Unset All Flags)', () => {
 		  expect(c.cpu.flag_set(FlagType.Zero)).toBeTruthy();
 		  expect(c.cpu.flag_set(FlagType.Sign)).toBeTruthy();
 		
-		  c.cpu.sub_mem();
+		  c.cpu.sub_reg(c.cpu.registers[reg]);
 		
 		  expect(c.cpu.registers.A).toEqual(31);
 		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();

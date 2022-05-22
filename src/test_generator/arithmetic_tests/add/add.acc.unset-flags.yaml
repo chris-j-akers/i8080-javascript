@@ -39,7 +39,7 @@ test_suite:
   tests:
 
     - test:
-      name: UNSET FLAGS
+      name: Unset All Flags
       comment: |
         // +-----------------------+-------+-----------------------+-------+
         // |      Accumulator      | Carry |      Expected         | Flags |

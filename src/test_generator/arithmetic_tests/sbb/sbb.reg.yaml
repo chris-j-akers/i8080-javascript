@@ -31,7 +31,7 @@ test_suite:
   tests:
 
     - test:
-      name: NO FLAGS SET | CARRY UNSET
+      name: No Flags Set (Carry Bit Reset)
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
@@ -49,7 +49,7 @@ test_suite:
       sign: False
       
     - test:
-      name: NO FLAGS SET | CARRY SET
+      name: No Flags Set (Carry Bit Set)
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
@@ -67,7 +67,7 @@ test_suite:
       sign: False
       
     - test:
-      name: SET ZERO | CARRY UNSET
+      name: Parity, Aux Carry and Zero Flags Set (Carry Bit Reset)
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
@@ -85,7 +85,7 @@ test_suite:
       sign: False
 
     - test:
-      name: SET ZERO | CARRY SET
+      name: Parity, Aux Carry and Zero Flags Set (Carry Bit Set)
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
@@ -103,7 +103,7 @@ test_suite:
       sign: False
 
     - test:
-      name: SET PARITY | CARRY UNSET
+      name: arity Flag Set (Carry Bit Reset)
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
@@ -121,7 +121,7 @@ test_suite:
       sign: False
 
     - test:
-      name: SET PARITY | CARRY SET
+      name: Parity Flag Set (Carry Bit Set)
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
@@ -139,7 +139,7 @@ test_suite:
       sign: False
 
     - test:
-      name: SET AUX CARRY | CARRY UNSET
+      name: Aux Carry Set (Carry Bit Reset)
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
@@ -157,7 +157,7 @@ test_suite:
       sign: False
 
     - test:
-      name: SET AUX CARRY | CARRY SET
+      name: Aux Carry Set (Carry Bit Set)
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
@@ -175,7 +175,7 @@ test_suite:
       sign: False
 
     - test:
-      name: SET SIGN | CARRY UNSET
+      name: Aux Carry and Sign Flag Set (Carry Bit Reset)
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
@@ -193,7 +193,7 @@ test_suite:
       sign: True
 
     - test:
-      name: SET SIGN | CARRY SET
+      name: Aux Carry and Sign Flag Set (Carry Bit Set)
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
@@ -211,7 +211,7 @@ test_suite:
       sign: True
 
     - test:
-      name: SET CARRY | CARRY UNSET
+      name: Carry and Sign Flag Set (Carry Bit Reset)
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
@@ -229,7 +229,7 @@ test_suite:
       sign: True
 
     - test:
-      name: SET CARRY | CARRY SET
+      name: Carry and Sign Flag Set (Carry Bit Set)
       comment: |
         // +-----------------------+-----------------------+-------+-----------------------+-------+
         // |       Register        |      Accumulator      | Carry |       Expected        | Flags |

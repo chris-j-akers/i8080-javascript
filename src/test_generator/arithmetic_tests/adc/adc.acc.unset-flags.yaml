@@ -41,7 +41,7 @@ test_suite:
   tests:
 
     - test:
-      name: UNSET FLAGS | CARRY UNSET
+      name: Unset All Flags (Carry Bit Unset)
       comment: |
         // +-----------------------+-------+-----------------------+-------+
         // |      Accumulator      | Carry |      Expected         | Flags |
@@ -58,7 +58,7 @@ test_suite:
       sign: False
       
     - test:
-      name: UNSET FLAGS | CARRY SET
+      name: Unset All Flags and Set Parity (Carry Bit Unset)
       comment: |
         // +-----------------------+-------+-----------------------+-------+
         // |      Accumulator      | Carry |      Expected         | Flags |
