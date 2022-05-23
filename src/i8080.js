@@ -146,14 +146,33 @@ class i8080 {
         this.bus = bus;
     }
 
-    //  ===================================================================================
-    //  Helper methods,
-    //  ===================================================================================
+    /**
+     * Operations that *retrieve* data from memory get the relevant address from
+     * one of the register pairs (BC, DE, HL). The first register in the pair
+     * stores the high-byte of the address and the second register stores the
+     * low-byte.
+     * 
+     * @param {character} The register which stores the high-byte of the address 
+     * @param {character} The register which stores the low-byte of the address
+     * @returns A 16-bit memory address.
+     */
+    get_mem_addr(reg_highbyte, reg_lowbyte) {
+        return ((this.registers[reg_highbyte] << 8) | this.registers[reg_lowbyte]) & 0xFFFF;
+    }
 
-    get_mem_addr() {
-        // Functions that pull data from memory, or push data to memory all get the
-        // 16-bit address from the H and L registers.
-        return ((this.registers.H << 8) | this.registers.L) & 0xFFFF;
+    /**
+     * Operations that *store* data in memory get the relevant address from
+     * one of the register pairs (BC, DE, HL). The first register in the pair
+     * stores the high-byte of the address and the second register stores the
+     * low-byte.
+     * 
+     * @param {number} addr The address that needs to be loaded
+     * @param {character} reg_highbyte The register which will store the high-byte of the address
+     * @param {character} reg_lowbyte  The register which will store the low-byte of the address
+     */
+    load_mem_addr(addr, reg_highbyte, reg_lowbyte) {
+        this.mvi_reg(reg_highbyte,(addr >> 8) & 0xff);
+        this.mvi_reg(reg_lowbyte,addr & 0xff);
     }
 
     //  ===================================================================================
@@ -265,7 +284,7 @@ class i8080 {
 
     add_mem() {
         // Add memory - Address is in HL
-        const mem_data = this.bus.read(this.get_mem_addr());
+        const mem_data = this.bus.read(this.get_mem_addr('H','L'));
         const val = this.registers.A + mem_data;
         this.set_flags_on_arithmetic_op(val, this.registers.A, mem_data);
         this.registers.A = val & 0xFF;
@@ -283,7 +302,7 @@ class i8080 {
     }
 
     adc_mem() {
-        const mem_data = this.bus.read(this.get_mem_addr());
+        const mem_data = this.bus.read(this.get_mem_addr('H','L'));
         const carry = (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         const mem_data_with_carry = mem_data + carry;
         const val = this.registers.A + mem_data_with_carry;
@@ -308,7 +327,7 @@ class i8080 {
     }
 
     sub_mem() {
-        const mem_data = this.bus.read(this.get_mem_addr());
+        const mem_data = this.bus.read(this.get_mem_addr('H','L'));
         const mem_data_twos_complement = ~(mem_data)+1;
 
         const val = this.registers.A + mem_data_twos_complement;
@@ -330,7 +349,7 @@ class i8080 {
     }
 
     sbb_mem() {
-        const mem_data = this.bus.read(this.get_mem_addr());
+        const mem_data = this.bus.read(this.get_mem_addr('H','L'));
         const carry = (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         const mem_data_with_carry = mem_data + carry;
 
@@ -488,13 +507,13 @@ class i8080 {
     }
 
     mov_to_mem(reg_source) {
-        const addr = this.get_mem_addr();
+        const addr = this.get_mem_addr('H', 'L');
         this.bus.write(this.registers[reg_source], addr);
         this.clock += 7
     }
 
     mov_from_mem(reg_destination) {
-        const addr = this.get_mem_addr();
+        const addr = this.get_mem_addr('H', 'L');
         this.registers[reg_destination] = this.bus.read(addr);
         this.clock += 7
     }
@@ -509,7 +528,7 @@ class i8080 {
     }
 
     mvi_to_mem(val) {
-        const addr = this.get_mem_addr();
+        const addr = this.get_mem_addr('H', 'L');
         this.bus.write(val, addr);
         this.clock += 7
     }
@@ -529,33 +548,61 @@ class i8080 {
     ana_reg(reg) {
         this.registers.A &= this.registers[reg];
         this.set_flags_on_logical_op();
+        
+        this.clock += 4;
     }
 
     ana_mem() {
-        this.registers.A &= this.bus.read(this.get_mem_addr());
+        this.registers.A &= this.bus.read(this.get_mem_addr('H','L'));
         this.set_flags_on_logical_op();
+
+        this.clock += 7;
     }
 
     xra_reg(reg) {
         this.registers.A ^= this.registers[reg];
         this.set_flags_on_logical_op();
+
+        this.clock += 4;
     }
 
     xra_mem() {
-        this.registers.A ^= this.bus.read(this.get_mem_addr());
+        this.registers.A ^= this.bus.read(this.get_mem_addr('H','L'));
         this.set_flags_on_logical_op();
+
+        this.clock += 7;
     }
 
     ora_reg(reg) {
         this.registers.A |= this.registers[reg];
         this.set_flags_on_logical_op();
+
+        this.clock += 4;
     }
 
     ora_mem() {
-        this.registers.A |= this.bus.read(this.get_mem_addr());
+        this.registers.A |= this.bus.read(this.get_mem_addr('H','L'));
         this.set_flags_on_logical_op();
+
+        this.clock += 7;
     }
 
+
+    // Store Accumulator
+
+    stax_b() {
+        const addr = this.get_mem_addr('B','C');
+        this.bus.write(addr, this.registers.A);
+
+        this.clock += 7;
+    }
+
+    stax_d() {
+        const addr = this.get_mem_addr('D','E');
+        this.bus.write(addr, this.registers.A);
+
+        this.clock += 7;
+    }
 
 }
 

@@ -220,6 +220,18 @@ function ana_test() {
     
 }
 
-ana_test();
+function stax_test() {
+    const c = new Computer();
+    c.cpu.bus.write(10, 2000);
+
+    c.cpu.load_mem_addr(2000, 'B', 'C');
+    console.log(c.cpu.__dbg__get_state());
+
+    const t = c.cpu.get_mem_addr('B','C');
+    console.log(t);
+
+}
+
+stax_test();
 
 
