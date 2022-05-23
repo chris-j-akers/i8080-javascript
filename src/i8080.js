@@ -21,6 +21,10 @@ class Computer {
     }
 }
 
+/**
+ * The bus links the CPU and other 'periphials' together. This is usually just
+ * memory, but could also be a video display buffer or similar.
+ */
 class Bus {
     constructor() {
         this.mmu = null;
@@ -36,7 +40,7 @@ class Bus {
     }
 
     write(val, addr) {
-        this.mmu.write_ram(val, addr);
+        this.mmu.write(val, addr);
     }
 
     read(addr) {
@@ -58,7 +62,7 @@ class MMU {
         this.ram = new Array(2**16);
     }
 
-    write_ram(val, addr) {
+    write(val, addr) {
         this.ram[addr] = val;
     }
 
