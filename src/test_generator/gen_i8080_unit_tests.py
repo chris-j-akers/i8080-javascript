@@ -10,6 +10,7 @@ import arithmetic_tests.add.add_tests as add_tests
 import arithmetic_tests.sbb.sbb_tests as sbb_tests
 import arithmetic_tests.sub.sub_tests as sub_tests
 import load_tests.load_tests as load_tests
+import logical_tests.ana.ana_tests as ana_tests
 
 
 def generate_test(test_suite, working_dir, populate_function):
