@@ -474,11 +474,9 @@ class i8080 {
         this.clock += 4;
     }
 
-//  ===================================================================================
-//  MOV Operations
-//  ===================================================================================
-//
-// Moving data from register to register, memory to register, register to memory!
+    // +------------------------------------------------------------------------------+
+    // |                                MOV Operations                                |
+    // +------------------------------------------------------------------------------+
 
     mov_reg(reg_destination, reg_source) {
         this.registers[reg_destination] = this.registers[reg_source];
@@ -497,11 +495,9 @@ class i8080 {
         this.clock += 7
     }
 
-//  ===================================================================================
-//  MVI (Move Immediate) Operations
-//  ===================================================================================
-//
-// Moving literal values directly to a register or memory
+// +-------------------------------------------------------------------------------------+
+// |                                    MVI Operations                                   |
+// +-------------------------------------------------------------------------------------+
 
     mvi_reg(reg_destination, val) {
         this.registers[reg_destination] = (val & 0xFF);
@@ -518,8 +514,6 @@ class i8080 {
 //  Logical Bit-Wise Operations
 //  ===================================================================================
 //
-// AND, OR, XOR etc.
-
     
     set_flags_on_logical_op() {
         this.clear_flag(i8080.FlagType.Carry);
@@ -533,10 +527,31 @@ class i8080 {
         this.set_flags_on_logical_op();
     }
 
-    ana_mem(reg, mem) {
+    ana_mem() {
         this.registers.A &= this.bus.read(this.get_mem_addr());
         this.set_flags_on_logical_op();
     }
+
+    xra_reg(reg) {
+        this.registers.A ^= this.registers[reg];
+        this.set_flags_on_logical_op();
+    }
+
+    xra_mem() {
+        this.registers.A ^= this.bus.read(this.get_mem_addr());
+        this.set_flags_on_logical_op();
+    }
+
+    ora_reg(reg) {
+        this.registers.A ||= this.registers[reg];
+        this.set_flags_on_logical_op();
+    }
+
+    ora_mem() {
+        this.registers.A ||= this.bus.read(this.get_mem_addr());
+        this.set_flags_on_logical_op();
+    }
+
 
 }
 
