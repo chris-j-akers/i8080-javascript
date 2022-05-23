@@ -1,0 +1,105 @@
+---
+test_suite:
+  enable: True
+  generator_function: xra_tests.generate_xra_reg
+  description: 'XRA Register'
+  output_file_name: '/logical/xra.reg.test.js'
+  header: |
+    const Source = require('../../i8080');
+  footer: |
+    });
+  boilerplate: |
+    const c = new Source.Computer();
+    const FlagType = Source.i8080.FlagType;
+
+    for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {{
+      c.cpu.mvi_reg('A', {accumulator});
+      c.cpu.mvi_reg(reg, {data});
+
+      {set_carry}
+
+      c.cpu.xra_reg(reg);
+
+      expect(c.cpu.registers.A).toEqual({expected_result});
+      expect(c.cpu.flag_set(FlagType.Carry)).{carry}();
+      expect(c.cpu.flag_set(FlagType.Parity)).{parity}();
+      expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).{auxillary_carry}();
+      expect(c.cpu.flag_set(FlagType.Zero)).{zero}();
+      expect(c.cpu.flag_set(FlagType.Sign)).{sign}();
+      c.reset();
+      }}
+    }});
+
+  tests:
+
+    - test:
+      name: Reset Carry Flag
+      comment: |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // |       Register        |      Accumulator      |       Expected        | Flags |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // | 100 | 0x64 | 01100100 | 004 | 0x04 | 00000100 | 004 | 0x04 | 00000100 |       |
+        // +-----------------------+-----------------------+-----------------------+-------+
+      set_carry: True
+      data: 16
+      accumulator: 20
+      expected_result: 4
+      carry: False
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: False
+
+    - test:
+      name: Set Zero Flag
+      comment: |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // |       Register        |      Accumulator      |       Expected        | Flags |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // | 255 | 0xFF | 11111111 | 000 | 0x00 | 00000000 | 000 | 0x00 | 00000000 | P|Z   |
+        // +-----------------------+-----------------------+-----------------------+-------+
+      set_carry: False
+      data: 255
+      accumulator: 255
+      expected_result: 0
+      carry: False
+      parity: Truth
+      auxillary_carry: False
+      zero: True
+      sign: False
+
+    - test:
+      name: Set Sign Flag
+      comment: |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // |       Register        |      Accumulator      |       Expected        | Flags |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // | 255 | 0xFF | 11111111 | 127 | 0x7F | 01111111 | 128 | 0x80 | 10000000 | S     |
+        // +-----------------------+-----------------------+-----------------------+-------+
+      set_carry: False
+      data: 255
+      accumulator: 127
+      expected_result: 128
+      carry: False
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: True
+ 
+    - test:
+      name: Set Parity Flag
+      comment: |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // |       Register        |      Accumulator      |       Expected        | Flags |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // | 080 | 0x50 | 01010000 | 085 | 0x55 | 01010101 | 005 | 0x05 | 00000101 | P     |
+        // +-----------------------+-----------------------+-----------------------+-------+
+      set_carry: False
+      data: 80
+      accumulator: 85
+      expected_result: 5
+      carry: False
+      parity: True
+      auxillary_carry: False
+      zero: False
+      sign: False

@@ -1,0 +1,64 @@
+---
+test_suite:
+  enable: True
+  generator_function: xra_tests.generate_xra_acc
+  description: 'XRA Accumulator'
+  output_file_name: '/logical/xra.acc.test.js'
+  header: |
+    const Source = require('../../i8080');
+  footer: |
+    });
+  boilerplate: |
+    const c = new Source.Computer();
+    const FlagType = Source.i8080.FlagType;
+
+    c.cpu.mvi_reg('A', {accumulator});
+
+    {set_carry}
+
+    c.cpu.ana_reg('A');
+
+    expect(c.cpu.registers.A).toEqual({expected_result});
+    expect(c.cpu.flag_set(FlagType.Carry)).{carry}();
+    expect(c.cpu.flag_set(FlagType.Parity)).{parity}();
+    expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).{auxillary_carry}();
+    expect(c.cpu.flag_set(FlagType.Zero)).{zero}();
+    expect(c.cpu.flag_set(FlagType.Sign)).{sign}();
+    c.reset();
+    }});
+
+  tests:
+
+    - test:
+      name: Zero Accumulator
+      comment: |
+        // +-----------------------+-----------------------+-------+
+        // |      Accumulator      |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+
+        // | 004 | 0x04 | 00000100 | 000 | 0x00 | 00000000 | Z|P   |
+        // +-----------------------+-----------------------+-------+
+      set_carry: False
+      accumulator: 4
+      expected_result: 4
+      carry: False
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: False
+
+    - test:
+      name: Zero Accumulator and Reset Carry
+      comment: |
+        // +-----------------------+-----------------------+-------+
+        // |      Accumulator      |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+
+        // | 004 | 0x04 | 00000100 | 000 | 0x00 | 00000000 | Z|P   |
+        // +-----------------------+-----------------------+-------+
+      set_carry: True
+      accumulator: 4
+      expected_result: 4
+      carry: False
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: False      
