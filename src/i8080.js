@@ -543,12 +543,12 @@ class i8080 {
     }
 
     ora_reg(reg) {
-        this.registers.A ||= this.registers[reg];
+        this.registers.A |= this.registers[reg];
         this.set_flags_on_logical_op();
     }
 
     ora_mem() {
-        this.registers.A ||= this.bus.read(this.get_mem_addr());
+        this.registers.A |= this.bus.read(this.get_mem_addr());
         this.set_flags_on_logical_op();
     }
 
