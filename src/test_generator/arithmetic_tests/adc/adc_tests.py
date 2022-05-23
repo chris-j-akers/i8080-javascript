@@ -3,7 +3,9 @@ import config
 def generate_adc_acc(boilerplate, test):
     return boilerplate.format(comment=test['comment'],
                                     accumulator=test['accumulator'],
-                                    set_carry = "c.cpu.set_flag(FlagType.Carry);\n" if test['set_carry'] else "",
+                                    set_carry = "c.cpu.set_flag(FlagType.Carry);\nexpect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();\n" 
+                                        if test['set_carry'] 
+                                        else "expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();\n",
                                     expected_result=test['expected_result'],
                                     carry='toBeTruthy' if test['carry'] else 'toBeFalsy',
                                     parity='toBeTruthy' if test['parity'] else 'toBeFalsy',
@@ -17,7 +19,9 @@ def generate_adc_mem(boilerplate, test):
                                     comment=test['comment'],
                                     data=test['data'],
                                     accumulator=test['accumulator'],
-                                    set_carry = "c.cpu.set_flag(FlagType.Carry);\n" if test['set_carry'] else "",
+                                    set_carry = "c.cpu.set_flag(FlagType.Carry);\nexpect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();\n" 
+                                        if test['set_carry'] 
+                                        else "expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();\n",
                                     expected_result=test['expected_result'],
                                     carry='toBeTruthy' if test['carry'] else 'toBeFalsy',
                                     parity='toBeTruthy' if test['parity'] else 'toBeFalsy',
@@ -30,7 +34,9 @@ def generate_adc_reg(boilerplate, test):
     return boilerplate.format(comment=test['comment'],
                                     data=test['data'],
                                     accumulator=test['accumulator'],
-                                    set_carry = "c.cpu.set_flag(FlagType.Carry);\n" if test['set_carry'] else "",
+                                    set_carry = "c.cpu.set_flag(FlagType.Carry);\nexpect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();\n" 
+                                        if test['set_carry'] 
+                                        else "expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();\n",
                                     expected_result=test['expected_result'],
                                     carry='toBeTruthy' if test['carry'] else 'toBeFalsy',
                                     parity='toBeTruthy' if test['parity'] else 'toBeFalsy',

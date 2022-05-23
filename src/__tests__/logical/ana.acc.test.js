@@ -8,6 +8,8 @@ describe('ANA Accumulator', () => {
 		
 		c.cpu.set_flag(FlagType.Carry);
 		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		
+		
 		c.cpu.ana_reg('A');
 		
 		expect(c.cpu.registers.A).toEqual(4);
@@ -25,8 +27,9 @@ describe('ANA Accumulator', () => {
 		
 		c.cpu.mvi_reg('A', 0);
 		
-		c.cpu.set_flag(FlagType.Carry);
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
+		
 		c.cpu.ana_reg('A');
 		
 		expect(c.cpu.registers.A).toEqual(0);
@@ -44,8 +47,9 @@ describe('ANA Accumulator', () => {
 		
 		c.cpu.mvi_reg('A', 128);
 		
-		c.cpu.set_flag(FlagType.Carry);
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
+		
 		c.cpu.ana_reg('A');
 		
 		expect(c.cpu.registers.A).toEqual(128);
@@ -63,8 +67,9 @@ describe('ANA Accumulator', () => {
 		
 		c.cpu.mvi_reg('A', 5);
 		
-		c.cpu.set_flag(FlagType.Carry);
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
+		
 		c.cpu.ana_reg('A');
 		
 		expect(c.cpu.registers.A).toEqual(5);

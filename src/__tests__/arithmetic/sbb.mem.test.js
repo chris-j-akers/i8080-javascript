@@ -12,7 +12,8 @@ describe('SBB Memory', () => {
 		  c.cpu.mvi_reg('L', mem_addr & 0xff);
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 32)
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		
 		  c.cpu.sbb_mem();
 		
@@ -39,6 +40,7 @@ describe('SBB Memory', () => {
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 33)
 		  c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		
 		  c.cpu.sbb_mem();
@@ -65,7 +67,8 @@ describe('SBB Memory', () => {
 		  c.cpu.mvi_reg('L', mem_addr & 0xff);
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 1)
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		
 		  c.cpu.sbb_mem();
 		
@@ -92,6 +95,7 @@ describe('SBB Memory', () => {
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 3)
 		  c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		
 		  c.cpu.sbb_mem();
@@ -118,7 +122,8 @@ describe('SBB Memory', () => {
 		  c.cpu.mvi_reg('L', mem_addr & 0xff);
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 32)
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		
 		  c.cpu.sbb_mem();
 		
@@ -145,6 +150,7 @@ describe('SBB Memory', () => {
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 32)
 		  c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		
 		  c.cpu.sbb_mem();
@@ -171,7 +177,8 @@ describe('SBB Memory', () => {
 		  c.cpu.mvi_reg('L', mem_addr & 0xff);
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 127)
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		
 		  c.cpu.sbb_mem();
 		
@@ -198,6 +205,7 @@ describe('SBB Memory', () => {
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 127)
 		  c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		
 		  c.cpu.sbb_mem();
@@ -224,7 +232,8 @@ describe('SBB Memory', () => {
 		  c.cpu.mvi_reg('L', mem_addr & 0xff);
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 255)
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		
 		  c.cpu.sbb_mem();
 		
@@ -251,6 +260,7 @@ describe('SBB Memory', () => {
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 253)
 		  c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		
 		  c.cpu.sbb_mem();
@@ -277,7 +287,8 @@ describe('SBB Memory', () => {
 		  c.cpu.mvi_reg('L', mem_addr & 0xff);
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 5)
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		
 		  c.cpu.sbb_mem();
 		
@@ -304,6 +315,7 @@ describe('SBB Memory', () => {
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 5)
 		  c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		
 		  c.cpu.sbb_mem();

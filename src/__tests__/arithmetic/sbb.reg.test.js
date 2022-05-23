@@ -8,7 +8,8 @@ describe('SBB Register', () => {
 		  c.cpu.mvi_reg('A', 32);
 		  c.cpu.mvi_reg(reg, 1);
 		
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		  
 		  c.cpu.sbb_reg(c.cpu.registers[reg]);
 		
@@ -31,6 +32,7 @@ describe('SBB Register', () => {
 		  c.cpu.mvi_reg(reg, 1);
 		
 		  c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		  
 		  c.cpu.sbb_reg(c.cpu.registers[reg]);
@@ -53,7 +55,8 @@ describe('SBB Register', () => {
 		  c.cpu.mvi_reg('A', 1);
 		  c.cpu.mvi_reg(reg, 1);
 		
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		  
 		  c.cpu.sbb_reg(c.cpu.registers[reg]);
 		
@@ -76,6 +79,7 @@ describe('SBB Register', () => {
 		  c.cpu.mvi_reg(reg, 2);
 		
 		  c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		  
 		  c.cpu.sbb_reg(c.cpu.registers[reg]);
@@ -98,7 +102,8 @@ describe('SBB Register', () => {
 		  c.cpu.mvi_reg('A', 32);
 		  c.cpu.mvi_reg(reg, 2);
 		
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		  
 		  c.cpu.sbb_reg(c.cpu.registers[reg]);
 		
@@ -121,6 +126,7 @@ describe('SBB Register', () => {
 		  c.cpu.mvi_reg(reg, 1);
 		
 		  c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		  
 		  c.cpu.sbb_reg(c.cpu.registers[reg]);
@@ -143,7 +149,8 @@ describe('SBB Register', () => {
 		  c.cpu.mvi_reg('A', 127);
 		  c.cpu.mvi_reg(reg, 3);
 		
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		  
 		  c.cpu.sbb_reg(c.cpu.registers[reg]);
 		
@@ -166,6 +173,7 @@ describe('SBB Register', () => {
 		  c.cpu.mvi_reg(reg, 4);
 		
 		  c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		  
 		  c.cpu.sbb_reg(c.cpu.registers[reg]);
@@ -188,7 +196,8 @@ describe('SBB Register', () => {
 		  c.cpu.mvi_reg('A', 255);
 		  c.cpu.mvi_reg(reg, 1);
 		
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		  
 		  c.cpu.sbb_reg(c.cpu.registers[reg]);
 		
@@ -211,6 +220,7 @@ describe('SBB Register', () => {
 		  c.cpu.mvi_reg(reg, 3);
 		
 		  c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		  
 		  c.cpu.sbb_reg(c.cpu.registers[reg]);
@@ -233,7 +243,8 @@ describe('SBB Register', () => {
 		  c.cpu.mvi_reg('A', 5);
 		  c.cpu.mvi_reg(reg, 10);
 		
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		  
 		  c.cpu.sbb_reg(c.cpu.registers[reg]);
 		
@@ -256,6 +267,7 @@ describe('SBB Register', () => {
 		  c.cpu.mvi_reg(reg, 9);
 		
 		  c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		  
 		  c.cpu.sbb_reg(c.cpu.registers[reg]);

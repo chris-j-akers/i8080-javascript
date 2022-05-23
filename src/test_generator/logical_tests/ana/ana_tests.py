@@ -2,6 +2,9 @@ import config
 
 def generate_ana_reg(boilerplate, test):
     return boilerplate.format(data=test['data'],
+                        set_carry = "c.cpu.set_flag(FlagType.Carry);\nexpect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();\n" 
+                            if test['set_carry'] 
+                            else "expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();\n",
                         accumulator=test['accumulator'],
                         expected_result=test['expected_result'],
                         carry='toBeTruthy' if test['carry'] else 'toBeFalsy',
@@ -12,6 +15,9 @@ def generate_ana_reg(boilerplate, test):
 
 def generate_ana_acc(boilerplate, test):
     return boilerplate.format(accumulator=test['accumulator'],
+                        set_carry = "c.cpu.set_flag(FlagType.Carry);\nexpect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();\n" 
+                            if test['set_carry'] 
+                            else "expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();\n",
                         expected_result=test['expected_result'],
                         carry='toBeTruthy' if test['carry'] else 'toBeFalsy',
                         parity='toBeTruthy' if test['parity'] else 'toBeFalsy',
@@ -21,6 +27,9 @@ def generate_ana_acc(boilerplate, test):
 
 def generate_ana_mem(boilerplate, test):
     return boilerplate.format(max_mem_addr=config.MAX_MEM_ADDR,
+                        set_carry = "c.cpu.set_flag(FlagType.Carry);\nexpect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();\n" 
+                            if test['set_carry'] 
+                            else "expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();\n",
                         data=test['data'],
                         accumulator=test['accumulator'],
                         expected_result=test['expected_result'],

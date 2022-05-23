@@ -5,6 +5,7 @@ describe('SBB Accumulator Flag', () => {
 		const FlagType = Source.i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',1);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		
 		c.cpu.sbb_reg(c.cpu.registers.A);
 		
@@ -23,6 +24,7 @@ describe('SBB Accumulator Flag', () => {
 		
 		c.cpu.mvi_reg('A',1);
 		c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		c.cpu.sbb_reg(c.cpu.registers.A);
 		

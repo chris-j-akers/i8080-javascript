@@ -8,7 +8,8 @@ describe('ADC Register', () => {
 		  c.cpu.mvi_reg('A', 0);
 		  c.cpu.mvi_reg(reg, 1);
 		
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		  
 		  c.cpu.adc_reg(c.cpu.registers[reg]);
 		
@@ -31,6 +32,7 @@ describe('ADC Register', () => {
 		  c.cpu.mvi_reg(reg, 1);
 		
 		  c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		  
 		  c.cpu.adc_reg(c.cpu.registers[reg]);
@@ -53,7 +55,8 @@ describe('ADC Register', () => {
 		  c.cpu.mvi_reg('A', 0);
 		  c.cpu.mvi_reg(reg, 0);
 		
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		  
 		  c.cpu.adc_reg(c.cpu.registers[reg]);
 		
@@ -75,7 +78,8 @@ describe('ADC Register', () => {
 		  c.cpu.mvi_reg('A', 1);
 		  c.cpu.mvi_reg(reg, 84);
 		
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		  
 		  c.cpu.adc_reg(c.cpu.registers[reg]);
 		
@@ -98,6 +102,7 @@ describe('ADC Register', () => {
 		  c.cpu.mvi_reg(reg, 83);
 		
 		  c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		  
 		  c.cpu.adc_reg(c.cpu.registers[reg]);
@@ -120,7 +125,8 @@ describe('ADC Register', () => {
 		  c.cpu.mvi_reg('A', 1);
 		  c.cpu.mvi_reg(reg, 15);
 		
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		  
 		  c.cpu.adc_reg(c.cpu.registers[reg]);
 		
@@ -143,6 +149,7 @@ describe('ADC Register', () => {
 		  c.cpu.mvi_reg(reg, 14);
 		
 		  c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		  
 		  c.cpu.adc_reg(c.cpu.registers[reg]);
@@ -165,7 +172,8 @@ describe('ADC Register', () => {
 		  c.cpu.mvi_reg('A', 1);
 		  c.cpu.mvi_reg(reg, 127);
 		
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		  
 		  c.cpu.adc_reg(c.cpu.registers[reg]);
 		
@@ -188,6 +196,7 @@ describe('ADC Register', () => {
 		  c.cpu.mvi_reg(reg, 126);
 		
 		  c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		  
 		  c.cpu.adc_reg(c.cpu.registers[reg]);
@@ -210,7 +219,8 @@ describe('ADC Register', () => {
 		  c.cpu.mvi_reg('A', 20);
 		  c.cpu.mvi_reg(reg, 255);
 		
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		  
 		  c.cpu.adc_reg(c.cpu.registers[reg]);
 		
@@ -233,6 +243,7 @@ describe('ADC Register', () => {
 		  c.cpu.mvi_reg(reg, 254);
 		
 		  c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		  
 		  c.cpu.adc_reg(c.cpu.registers[reg]);

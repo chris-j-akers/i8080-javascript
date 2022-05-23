@@ -14,8 +14,8 @@ test_suite:
 
     c.cpu.mvi_reg('A', {accumulator});
 
-    c.cpu.set_flag(FlagType.Carry);
-    expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+    {set_carry}
+
     c.cpu.ana_reg('A');
 
     expect(c.cpu.registers.A).toEqual({expected_result});
@@ -37,6 +37,7 @@ test_suite:
         // +-----------------------+-----------------------+-------+
         // | 004 | 0x04 | 00000100 | 004 | 0x04 | 00000100 |       |
         // +-----------------------+-----------------------+-------+
+      set_carry: True
       accumulator: 4
       expected_result: 4
       carry: False
@@ -53,6 +54,7 @@ test_suite:
         // +-----------------------+-----------------------+-------+
         // | 000 | 0x00 | 00000000 | 000 | 0x00 | 00000000 |       |
         // +-----------------------+-----------------------+-------+
+      set_carry: False
       accumulator: 0
       expected_result: 0
       carry: False
@@ -69,6 +71,7 @@ test_suite:
         // +-----------------------+-----------------------+-------+
         // | 128 | 0x80 | 10000000 | 128 | 0x80 | 10000000 | S     |
         // +-----------------------+-----------------------+-------+
+      set_carry: False
       accumulator: 128
       expected_result: 128
       carry: False
@@ -85,6 +88,7 @@ test_suite:
         // +-----------------------+-----------------------+-------+
         // | 005 | 0x05 | 00000101 | 005 | 0x05 | 00000101 | P     |
         // +-----------------------+-----------------------+-------+
+      set_carry: False
       data: 255
       accumulator: 5
       expected_result: 5

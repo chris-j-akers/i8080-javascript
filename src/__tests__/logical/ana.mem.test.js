@@ -14,7 +14,9 @@ describe('ANA Memory', () => {
 		  c.cpu.mvi_reg('A', 4)
 		
 		  c.cpu.set_flag(FlagType.Carry);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		
+		
 		  c.cpu.ana_mem();
 		
 		  expect(c.cpu.registers.A).toEqual(4);
@@ -40,8 +42,9 @@ describe('ANA Memory', () => {
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 0)
 		
-		  c.cpu.set_flag(FlagType.Carry);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
+		
 		  c.cpu.ana_mem();
 		
 		  expect(c.cpu.registers.A).toEqual(0);
@@ -67,8 +70,9 @@ describe('ANA Memory', () => {
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 128)
 		
-		  c.cpu.set_flag(FlagType.Carry);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
+		
 		  c.cpu.ana_mem();
 		
 		  expect(c.cpu.registers.A).toEqual(128);
@@ -94,8 +98,9 @@ describe('ANA Memory', () => {
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 5)
 		
-		  c.cpu.set_flag(FlagType.Carry);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
+		
 		  c.cpu.ana_mem();
 		
 		  expect(c.cpu.registers.A).toEqual(5);

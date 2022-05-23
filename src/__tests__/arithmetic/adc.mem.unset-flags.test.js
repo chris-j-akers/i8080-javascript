@@ -14,7 +14,8 @@ describe('ADC Memory (Unset All Flags)', () => {
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 0)
 		  
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		
 		  c.cpu.set_flag(FlagType.Parity);
 		  c.cpu.set_flag(FlagType.AuxillaryCarry);
@@ -54,6 +55,7 @@ describe('ADC Memory (Unset All Flags)', () => {
 		  c.cpu.mvi_reg('A', 0)
 		  
 		  c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		
 		  c.cpu.set_flag(FlagType.Parity);

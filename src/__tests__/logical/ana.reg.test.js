@@ -9,7 +9,8 @@ describe('ANA Register', () => {
 		  c.cpu.mvi_reg(reg, 100);
 		
 		  c.cpu.set_flag(FlagType.Carry);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		
 		  c.cpu.ana_reg(reg);
 		
 		  expect(c.cpu.registers.A).toEqual(4);
@@ -30,8 +31,8 @@ describe('ANA Register', () => {
 		  c.cpu.mvi_reg('A', 0);
 		  c.cpu.mvi_reg(reg, 255);
 		
-		  c.cpu.set_flag(FlagType.Carry);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		  c.cpu.ana_reg(reg);
 		
 		  expect(c.cpu.registers.A).toEqual(0);
@@ -52,8 +53,8 @@ describe('ANA Register', () => {
 		  c.cpu.mvi_reg('A', 128);
 		  c.cpu.mvi_reg(reg, 255);
 		
-		  c.cpu.set_flag(FlagType.Carry);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		  c.cpu.ana_reg(reg);
 		
 		  expect(c.cpu.registers.A).toEqual(128);
@@ -74,8 +75,8 @@ describe('ANA Register', () => {
 		  c.cpu.mvi_reg('A', 5);
 		  c.cpu.mvi_reg(reg, 255);
 		
-		  c.cpu.set_flag(FlagType.Carry);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		  c.cpu.ana_reg(reg);
 		
 		  expect(c.cpu.registers.A).toEqual(5);

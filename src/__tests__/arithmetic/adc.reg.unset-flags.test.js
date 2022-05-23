@@ -18,7 +18,8 @@ describe('ADC Register (Unset All Flags)', () => {
 		  expect(c.cpu.flag_set(FlagType.Zero)).toBeTruthy();
 		  expect(c.cpu.flag_set(FlagType.Sign)).toBeTruthy();
 		  
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		  c.cpu.adc_reg(c.cpu.registers[reg]);
 		
 		  expect(c.cpu.registers.A).toEqual(2);
@@ -50,6 +51,7 @@ describe('ADC Register (Unset All Flags)', () => {
 		  expect(c.cpu.flag_set(FlagType.Sign)).toBeTruthy();
 		  
 		  c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		  c.cpu.adc_reg(c.cpu.registers[reg]);
 		

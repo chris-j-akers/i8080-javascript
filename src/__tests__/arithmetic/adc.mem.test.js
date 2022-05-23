@@ -13,7 +13,8 @@ describe('ADC Memory', () => {
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 0)
 		  
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		
 		  c.cpu.adc_mem();
 		
@@ -41,6 +42,7 @@ describe('ADC Memory', () => {
 		  c.cpu.mvi_reg('A', 0)
 		  
 		  c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		
 		  c.cpu.adc_mem();
@@ -68,7 +70,8 @@ describe('ADC Memory', () => {
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 0)
 		  
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		
 		  c.cpu.adc_mem();
 		
@@ -95,7 +98,8 @@ describe('ADC Memory', () => {
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 1)
 		  
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		
 		  c.cpu.adc_mem();
 		
@@ -123,6 +127,7 @@ describe('ADC Memory', () => {
 		  c.cpu.mvi_reg('A', 1)
 		  
 		  c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		
 		  c.cpu.adc_mem();
@@ -150,7 +155,8 @@ describe('ADC Memory', () => {
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 1)
 		  
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		
 		  c.cpu.adc_mem();
 		
@@ -178,6 +184,7 @@ describe('ADC Memory', () => {
 		  c.cpu.mvi_reg('A', 1)
 		  
 		  c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		
 		  c.cpu.adc_mem();
@@ -205,7 +212,8 @@ describe('ADC Memory', () => {
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 1)
 		  
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		
 		  c.cpu.adc_mem();
 		
@@ -233,6 +241,7 @@ describe('ADC Memory', () => {
 		  c.cpu.mvi_reg('A', 0)
 		  
 		  c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		
 		  c.cpu.adc_mem();
@@ -260,7 +269,8 @@ describe('ADC Memory', () => {
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 20)
 		  
-		  
+		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		
 		
 		  c.cpu.adc_mem();
 		
@@ -288,6 +298,7 @@ describe('ADC Memory', () => {
 		  c.cpu.mvi_reg('A', 20)
 		  
 		  c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		
 		  c.cpu.adc_mem();

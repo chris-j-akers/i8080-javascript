@@ -6,6 +6,7 @@ describe('ADC Accumulator', () => {
 		
 		c.cpu.mvi_reg('A',2);
 		
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		
 		
 		c.cpu.adc_reg(c.cpu.registers.A);
@@ -25,6 +26,7 @@ describe('ADC Accumulator', () => {
 		
 		c.cpu.mvi_reg('A',0);
 		
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		
 		
 		c.cpu.adc_reg(c.cpu.registers.A);
@@ -44,6 +46,7 @@ describe('ADC Accumulator', () => {
 		
 		c.cpu.mvi_reg('A',0);
 		
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		
 		
 		c.cpu.adc_reg(c.cpu.registers.A);
@@ -64,6 +67,7 @@ describe('ADC Accumulator', () => {
 		c.cpu.mvi_reg('A',7);
 		
 		c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		
 		c.cpu.adc_reg(c.cpu.registers.A);
@@ -83,6 +87,7 @@ describe('ADC Accumulator', () => {
 		
 		c.cpu.mvi_reg('A',9);
 		
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		
 		
 		c.cpu.adc_reg(c.cpu.registers.A);
@@ -103,6 +108,7 @@ describe('ADC Accumulator', () => {
 		c.cpu.mvi_reg('A',8);
 		
 		c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		
 		c.cpu.adc_reg(c.cpu.registers.A);
@@ -122,6 +128,7 @@ describe('ADC Accumulator', () => {
 		
 		c.cpu.mvi_reg('A',89);
 		
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		
 		
 		c.cpu.adc_reg(c.cpu.registers.A);
@@ -142,6 +149,7 @@ describe('ADC Accumulator', () => {
 		c.cpu.mvi_reg('A',88);
 		
 		c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		
 		c.cpu.adc_reg(c.cpu.registers.A);
@@ -161,6 +169,7 @@ describe('ADC Accumulator', () => {
 		
 		c.cpu.mvi_reg('A',241);
 		
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
 		
 		
 		c.cpu.adc_reg(c.cpu.registers.A);
@@ -181,6 +190,7 @@ describe('ADC Accumulator', () => {
 		c.cpu.mvi_reg('A',240);
 		
 		c.cpu.set_flag(FlagType.Carry);
+		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
 		
 		
 		c.cpu.adc_reg(c.cpu.registers.A);
