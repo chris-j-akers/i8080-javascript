@@ -523,23 +523,23 @@ class i8080 {
     
     set_flags_on_logical_op() {
         this.clear_flag(i8080.FlagType.Carry);
-        this.registers.A === 0 ? this.set_flag(FlagType.Zero) : this.clear_flag(i8080.FlagType.Zero);
-        val & (1 << 7) ? this.set_flag(i8080.FlagType.Sign) : this.clear_flag(i8080.FlagType.Sign)
-        this.parity(registers.A) ? this.set_flag(FlagType.Parity) : this.clear_flag(i8080.FlagType.Parity);
+        this.registers.A === 0 ? this.set_flag(i8080.FlagType.Zero) : this.clear_flag(i8080.FlagType.Zero);
+        this.registers.A & (1 << 7) ? this.set_flag(i8080.FlagType.Sign) : this.clear_flag(i8080.FlagType.Sign)
+        this.parity(this.registers.A) ? this.set_flag(i8080.FlagType.Parity) : this.clear_flag(i8080.FlagType.Parity);
     }
 
     ana_reg(reg) {
         this.registers.A &= this.registers[reg];
-        set_flags_on_logical_op();
-
+        this.set_flags_on_logical_op();
     }
 
     ana_mem(reg, mem) {
-
+        this.registers.A &= this.bus.read(this.get_mem_addr());
+        this.set_flags_on_logical_op();
     }
 
 }
 
-// Allows us to use Jest for unit testing
+// Enables the use of Jest for unit testing
 if (typeof module !== 'undefined') module.exports = { i8080 : i8080, 
                                                       Computer : Computer };
