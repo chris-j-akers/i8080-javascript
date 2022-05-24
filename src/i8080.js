@@ -386,41 +386,85 @@ class i8080 {
 //  SUBTRACT Arithmetic Operations (SUB, SBB)
 //  ===================================================================================
 
+    
+    /**
+     *  Subtract value held in register `reg` from the current value in the
+     *  Accumulator. Result is loaded to the Accumulator.
+     *
+     * e.g. If the value in the Accumulator is currently 10 and the value in
+     * register `B` is 5, then `sub_reg('B')` will subtract 5 from 10 and leave 5
+     * in the Accumulator.
+     * 
+     * Flags affected: C, P, AC, Z, S
+     *
+     * @param {character} reg Name of register that contains value to be
+     * subtracted from the Accumulator (B,C,D,E,H,L)
+     */
     sub_reg(reg) {
-        const reg_twos_complement = ~(reg) + 1;
-        const result = (this.registers.A + reg_twos_complement);
-        this.set_flags_on_arithmetic_op(result, this.registers.A, reg_twos_complement);
+        const reg_twos_comp = ~(reg) + 1;
+        const result = (this.registers.A + reg_twos_comp);
+        this.set_flags_on_arithmetic_op(result, this.registers.A, reg_twos_comp);
         this.registers.A = result & 0xFF;
         this.clock += 7;
     }
 
+    /**
+     * Subtract value held in the 16-bit memory address currently loaded into
+     * registers `H` and `L` from the Accumulator, leaving the result in the
+     * Accumulator.
+     *
+     * Flags affected: C, P, AC, Z, S
+     * 
+     * e.g. If the Accumulator currentyl holds the value 10 and `H` and `L` point
+     * to the memory location at address 0x100 which holds the value 5, then 5
+     * will be subtracted from 10, leaving 5 in the Accumulator.
+     *
+     */
     sub_mem() {
-        const mem_data = this.bus.read(this.get_mem_addr('H','L'));
-        const mem_data_twos_complement = ~(mem_data)+1;
-        const result = this.registers.A + mem_data_twos_complement;
-        this.set_flags_on_arithmetic_op(result, this.registers.A, mem_data_twos_complement);
+        const data = this.bus.read(this.get_mem_addr('H','L'));
+        const data_twos_comp = ~(data)+1;
+        const result = this.registers.A + data_twos_comp;
+        this.set_flags_on_arithmetic_op(result, this.registers.A, data_twos_comp);
         this.registers.A = result & 0xFF;
         this.clock += 7;
     }
 
     sbb_reg(reg) {        
-        const register_with_carry = reg + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
-        const reg_twos_complement = ~(register_with_carry) + 1;
-        const result = (this.registers.A + reg_twos_complement);
-        this.set_flags_on_arithmetic_op(result, this.registers.A, reg_twos_complement);
+        const reg_carry = reg + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
+        const reg_carry_twos_comp = ~(reg_carry) + 1;
+        const result = (this.registers.A + reg_carry_twos_comp);
+        this.set_flags_on_arithmetic_op(result, this.registers.A, reg_carry_twos_comp);
         this.registers.A = result & 0xFF;
         this.clock += 7;
     }
 
     sbb_mem() {
-        const mem_data = this.bus.read(this.get_mem_addr('H','L'));
+        const data = this.bus.read(this.get_mem_addr('H','L'));
         const carry = (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
-        const mem_data_with_carry = mem_data + carry;
-        const mem_data_twos_complement = ~(mem_data_with_carry)+1;
-        const result = this.registers.A + mem_data_twos_complement;
-        this.set_flags_on_arithmetic_op(result, this.registers.A, mem_data_twos_complement);
+        const data_carry = data + carry;
+        const data_carry_twos_comp = ~(data_carry)+1;
+        const result = this.registers.A + data_carry_twos_comp;
+        this.set_flags_on_arithmetic_op(result, this.registers.A, data_carry_twos_comp);
         this.registers.A = result & 0xFF;
         this.clock += 7;
+    }
+
+    sui(val) {
+        const val_twos_comp = ~(reg) + 1;
+        const result = (this.registers.A + val_twos_comp);
+        this.set_flags_on_arithmetic_op(result, this.registers.A, reg_twos_comp);
+        this.registers.A = result & 0xFF;
+        this.clock += 7;        
+    }
+
+    sbi(val) {
+        const carry = (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
+        const val_carry = val + carry;
+        const val_carry_twos_comp = ~(val_carry) + 1;
+        const result = this.registers.A + val_carry_twos_comp;
+        this.set_flags_on_arithmetic_op(result, this.registers.A, val_carry_twos_comp);
+        this.registers.A = result & 0xFF;
+        this.clock += 4;
     }
 
 //  ===================================================================================

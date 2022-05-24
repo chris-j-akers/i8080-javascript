@@ -9,6 +9,10 @@ import arithmetic_tests.adc.adc_tests as adc_tests
 import arithmetic_tests.add.add_tests as add_tests
 import arithmetic_tests.sbb.sbb_tests as sbb_tests
 import arithmetic_tests.sub.sub_tests as sub_tests
+import arithmetic_tests.sbi.sbi_tests as sbi_tests
+import arithmetic_tests.sui.sui_tests as sui_tests
+import arithmetic_tests.aci.aci_tests as aci_tests
+import arithmetic_tests.adi.adi_tests as adi_tests
 import load_tests.load_tests as load_tests
 import logical_tests.ana.ana_tests as ana_tests
 import logical_tests.xra.xra_tests as xra_tests
