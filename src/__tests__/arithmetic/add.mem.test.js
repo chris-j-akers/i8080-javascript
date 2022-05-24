@@ -8,8 +8,7 @@ describe('ADD Memory', () => {
 		const data = 1;
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
-		  c.cpu.mvi_reg('L', mem_addr & 0xff);
+		  c.cpu.load_mem_addr(mem_addr, 'H', 'L');
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 0)
 		
@@ -33,8 +32,7 @@ describe('ADD Memory', () => {
 		const data = 0;
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
-		  c.cpu.mvi_reg('L', mem_addr & 0xff);
+		  c.cpu.load_mem_addr(mem_addr, 'H', 'L');
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 0)
 		
@@ -58,8 +56,7 @@ describe('ADD Memory', () => {
 		const data = 84;
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
-		  c.cpu.mvi_reg('L', mem_addr & 0xff);
+		  c.cpu.load_mem_addr(mem_addr, 'H', 'L');
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 1)
 		
@@ -83,8 +80,7 @@ describe('ADD Memory', () => {
 		const data = 15;
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
-		  c.cpu.mvi_reg('L', mem_addr & 0xff);
+		  c.cpu.load_mem_addr(mem_addr, 'H', 'L');
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 1)
 		
@@ -108,8 +104,7 @@ describe('ADD Memory', () => {
 		const data = 127;
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
-		  c.cpu.mvi_reg('L', mem_addr & 0xff);
+		  c.cpu.load_mem_addr(mem_addr, 'H', 'L');
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 1)
 		
@@ -133,8 +128,7 @@ describe('ADD Memory', () => {
 		const data = 255;
 		
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
-		  c.cpu.mvi_reg('L', mem_addr & 0xff);
+		  c.cpu.load_mem_addr(mem_addr, 'H', 'L');
 		  c.cpu.mvi_to_mem(data);
 		  c.cpu.mvi_reg('A', 20)
 		
