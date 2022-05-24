@@ -71,9 +71,6 @@ class MMU {
     }
 }
 
-//  ===================================================================================
-//  i8080 CPU
-//  ===================================================================================
 
 /**
  * An Intel 8080 CPU implemented in software.
@@ -122,7 +119,10 @@ class i8080 {
 
     /** 
      * Used when setting or getting bit flags. Means we can use the flag name
-     * instead of having to remember the bit position. A sort of enum.
+     * instead of having to remember the bit position. A sort of enumy type
+     * thing.
+     * 
+     * NOTE, this isn't read-only, but we're all adults, right?
     */
     static get FlagType() {
         return {
@@ -143,8 +143,9 @@ class i8080 {
     }
 
     /**
-     * Reset the CPU, setting all registers, flags, program counter, clock and
-     * stack-pointer to 0.
+     * Reset the CPU, setting all registers, the program counter, clock and
+     * stack-pointer to 0. Note, Flags are set to 0x2 because, according to the
+     * 8080 Programmers Manual, bit-1 (unused) is always set to 1 as default
      */
     reset() {
         this.registers = {A: 0x0, B:0x0, C:0x0, D:0x0, E:0x0, H:0x0, L:0x0};
@@ -154,16 +155,24 @@ class i8080 {
         this.clock = 0x0;
     }
 
+    /**
+     * Connect a `Bus` object to this CPU. A bus is used to access memory and
+     * peripherals.
+     * @param {ref} bus 
+     */
     connect_bus(bus) {
         this.bus = bus;
     }
 
     /**
+     * Store a 16-bit memory address into a pair of 8-bit registers.
+     *
      * Operations that *retrieve* data from memory get the relevant address from
      * one of the register pairs (BC, DE, HL). The first register in the pair
      * stores the high-byte of the address and the second register stores the
-     * low-byte.
-     * 
+     * low-byte. This is a helper function to simplify this process as it occurs
+     * a lot.
+     *
      * @param {character} The register which stores the high-byte of the address 
      * @param {character} The register which stores the low-byte of the address
      * @returns A 16-bit memory address.
@@ -173,26 +182,32 @@ class i8080 {
     }
 
     /**
-     * Operations that *store* data in memory get the relevant address from
-     * one of the register pairs (BC, DE, HL). The first register in the pair
-     * stores the high-byte of the address and the second register stores the
-     * low-byte.
-     * 
+     * Load a 16-bit memory address a pair of 8-bit registers.
+     *
+     * Operations that *store* data in memory get the relevant address from one
+     * of the register pairs (BC, DE, HL). The first register in the pair stores
+     * the high-byte of the address and the second register stores the low-byte.
+     * This is a helper function to simplify this process as it occurs a lot.
+     *
      * @param {number} addr The address that needs to be loaded
-     * @param {character} reg_highbyte The register which will store the high-byte of the address
-     * @param {character} reg_lowbyte  The register which will store the low-byte of the address
+     * @param {character} reg_highbyte The register which will store the
+     * high-byte of the address
+     * @param {character} reg_lowbyte  The register which will store the
+     * low-byte of the address
      */
     load_mem_addr(addr, reg_highbyte, reg_lowbyte) {
         this.mvi_reg(reg_highbyte,(addr >> 8) & 0xff);
         this.mvi_reg(reg_lowbyte,addr & 0xff);
     }
 
-    //  ===================================================================================
-    //  Flag helper methods for testing, setting and clearing flags and their values
-    //  ===================================================================================
+
+    /**
+     * Test whether the number of bits set to `1` in `val` is even. If so, then
+     * returns `True`, else returns `False`. Used for setting the `Parity` flag.
+     * @param {number} val to check
+     * @returns `True` or `False`
+     */
     parity(val) {
-        // If the number of bits in a value is even, then the value has parity and parity
-        // flag should be set.
         let bit_count = 0;
         for (let i = 0; i < 8; i++) {
             if (val & (1 << i)) bit_count++;
@@ -200,16 +215,32 @@ class i8080 {
         return (bit_count % 2 === 0)
     }
 
-    set_flag(bit_no) {
-        this.flags |= (1 << bit_no);
+    /**
+     * Sets one of the flag bits in the flag register.
+     *
+     * @param {number} bit_pos bit position of the flag to set (see `FlagType`
+     * object)
+     */
+    set_flag(bit_pos) {
+        this.flags |= (1 << bit_pos);
     }
 
-    clear_flag(bit_no) {
-        this.flags &= ~(1 << bit_no);
+    /**
+     *
+     * @param {number} bit_pos bit position of the flag to clear (see `FlagType`
+     * object))
+     */
+    clear_flag(bit_pos) {
+        this.flags &= ~(1 << bit_pos);
     }
 
-    flag_set(bit_no) {
-        return this.flags & (1 << bit_no);
+    /**
+     * 
+     * @param {number} bit_pos of the flag to check (see `FlagType` object))
+     * @returns `True` or `False`depending on whether the selected flag is set.
+     */
+    flag_set(bit_pos) {
+        return this.flags & (1 << bit_pos);
     }
 
 
@@ -225,29 +256,29 @@ class i8080 {
     }
 
     /**
-     * Sets or Clears CPU Flags based on the results of addition or subtraction
-     * operations. In the case of Aux Carry, though, only the left-hand side and
-     * right-hand side of the operation is taken into account.
+     * Sets or Clears CPU Flags based on the results of arithmetic operations.
+     * In the case of Aux Carry, though, only the left-hand side and right-hand
+     * side of the operation is taken into account.
      *
-     * @param {number} val The result of the operation.
+     * @param {number} result The result of the operation.
      * @param {number} lhs The left-hand side of the operation.
      * @param {number} rhs The right-hand side of the operation.
      *
      */
-    set_flags_on_arithmetic_op(val, lhs, rhs) {
+    set_flags_on_arithmetic_op(result, lhs, rhs) {
 
         /**
          * Carry Flag: Maximum storage size of any value in a 8080 register is
          * 1-byte (8-bits), so 255. Any higher result than that must mean a
-         * Carry out of the 7th bit must have occured.
+         * Carry out of the 7th bit occured.
          */
-        val > 255 || val < 0 ? this.set_flag(i8080.FlagType.Carry) : this.clear_flag(i8080.FlagType.Carry);
+        result > 255 || result < 0 ? this.set_flag(i8080.FlagType.Carry) : this.clear_flag(i8080.FlagType.Carry);
 
         /**
          * Parity Flag: Set if the number of 1's is even. A very old form of
          * tame CRC checking
          */
-        this.parity(val) ? this.set_flag(i8080.FlagType.Parity) : this.clear_flag(i8080.FlagType.Parity);
+        this.parity(result) ? this.set_flag(i8080.FlagType.Parity) : this.clear_flag(i8080.FlagType.Parity);
 
         /**
         * Auxillary Carry Flag
@@ -286,16 +317,16 @@ class i8080 {
         /**
          * Zero Flag: Set if the operation result is 0
          */
-        val === 0 ? this.set_flag(i8080.FlagType.Zero) : this.clear_flag(i8080.FlagType.Zero);
+        result === 0 ? this.set_flag(i8080.FlagType.Zero) : this.clear_flag(i8080.FlagType.Zero);
 
         /**
-         * Sign Flag: Set if bit 7 of the result is 1. NOTE, It is up to the
-         * 8080 programmer to decide whether or not to treat a number with bit-7
-         * set as negative. All the 8080 does is detect that bit-7 is set in the
-         * result of some operation and, in turn, sets the Sign flag
-         * accordingly. 
+         * Sign Flag: Set if bit 7 of the result is 1. It is up to the 8080
+         * programmer to decide whether or not to treat a number with bit-7 set
+         * as negative. All the 8080 does is detect that bit-7 is set in the
+         * result of some operation and sets the Sign flag accordingly. It
+         * doesn't care what the number actually is.
          */
-        val & (1 << 7) ? this.set_flag(i8080.FlagType.Sign) : this.clear_flag(i8080.FlagType.Sign)
+        result & (1 << 7) ? this.set_flag(i8080.FlagType.Sign) : this.clear_flag(i8080.FlagType.Sign)
     }
 
 //  ===================================================================================
@@ -333,6 +364,22 @@ class i8080 {
         this.set_flags_on_arithmetic_op(result, this.registers.A, mem_data_with_carry);
         this.registers.A = result & 0xFF;
         this.clock += 7;
+    }
+
+    adi(val) {
+        const result = this.registers.A + val;
+        this.set_flags_on_arithmetic_op(result, this.registers.A, val);
+        this.registers.A = result & 0xFF;
+        this.clock += 4;
+    }
+
+    aci(val) {
+        const carry = (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
+        const val_with_carry = val + carry;
+        const result = this.registers.A + val_with_carry;
+        this.set_flags_on_arithmetic_op(result, this.registers.A, val_with_carry);
+        this.registers.A = result & 0xFF;
+        this.clock += 4;
     }
 
 //  ===================================================================================

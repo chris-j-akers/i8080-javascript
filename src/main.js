@@ -257,7 +257,3 @@ function ac_test() {
 
 
 }
-
-ac_test();
-
-
