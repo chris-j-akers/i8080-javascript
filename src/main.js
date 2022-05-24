@@ -232,6 +232,32 @@ function stax_test() {
 
 }
 
-stax_test();
+function ac_test() {
+    const max_mem_addr = 255;
+    const c = new Computer();
+    const FlagType = i8080.FlagType;
+    
+    const data = 127;
+    
+    c.cpu.mvi_reg('H', (100 >> 8) & 0xff);
+    c.cpu.mvi_reg('L', 100 & 0xff);
+
+    console.log('After HL Load');
+    console.log(c.cpu.__dbg__get_state());
+
+    c.cpu.mvi_to_mem(data);
+    c.cpu.mvi_reg('A', 1)
+    
+    c.cpu.adc_mem();
+
+    console.log(((127 & 0x0f) + (1 & 0x0f)) & (1 << 4) ? 'True' : 'False');
+
+    console.log('After Calc');
+    console.log(c.cpu.__dbg__get_state());
+
+
+}
+
+ac_test();
 
 
