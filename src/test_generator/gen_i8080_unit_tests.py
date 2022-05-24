@@ -17,6 +17,7 @@ import load_tests.load_tests as load_tests
 import logical_tests.ana.ana_tests as ana_tests
 import logical_tests.xra.xra_tests as xra_tests
 import logical_tests.ora.ora_tests as ora_tests
+import store_tests.stax.stax_tests as stax_tests
 
 
 def generate_test(test_suite, working_dir, populate_function):

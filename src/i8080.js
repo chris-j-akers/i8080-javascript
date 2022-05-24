@@ -89,7 +89,7 @@ class i8080 {
     }
 
     /**
-     * @returns a formatted string listing each register and its current value
+     * @returns {string} a formatted string listing each register and its current value
      */
     __dbg__get_registers() {
         let str = 'R  [';
@@ -382,10 +382,6 @@ class i8080 {
         this.clock += 4;
     }
 
-//  ===================================================================================
-//  SUBTRACT Arithmetic Operations (SUB, SBB)
-//  ===================================================================================
-
     
     /**
      *  Subtract value held in register `reg` from the current value in the
@@ -516,7 +512,13 @@ class i8080 {
 
 // Condition bits affected: None
 
-    // LXI B,d16
+    /**
+     * Stores a 16-bit immediate value in register pair B, C. Register B stores
+     * the low-byte of the value and register C stores the high-byte (little
+     * endian).
+     *
+     * @param {number} val 16-bit value to be stored.
+     */
     lxi_b(val) {
         this.registers.B = val & 0xFF;
         this.registers.C = (val >> 8) & 0xFF;
@@ -524,7 +526,13 @@ class i8080 {
         this.clock += 10;
     }
 
-    // LXI D,d16
+    /**
+     * Stores a 16-bit immediate value in register pair D, E. Register D stores
+     * the low-byte of the value and register E stores the high-byte (little
+     * endian).
+     *
+     * @param {number} val 16-bit value to be stored.
+     */
     lxi_d(val) {
         this.registers.D = val & 0xFF;
         this.registers.E = (val >> 8) & 0xFF;
@@ -532,7 +540,13 @@ class i8080 {
         this.clock += 10;
     }
 
-    // LXI H,d16
+    /**
+     * Stores a 16-bit immediate value in register pair H, L. Register H stores
+     * the low-byte of the value and register L stores the high-byte (little
+     * endian).
+     *
+     * @param {number} val 16-bit value to be stored.
+     */
     lxi_h(val) {
         this.registers.H = val & 0xFF;
         this.registers.L = (val >> 8) & 0xFF;
@@ -540,7 +554,13 @@ class i8080 {
         this.clock += 10;
     }
 
-    // LXI SP,d16
+    /**
+     * Loads the Stack Pointer with a 16-bit immediate value. The low-byte of
+     * the value is loaded to the high-byte of the stack pointer and the
+     * high-byte of the value is loaded to the low-byte of the stack pointer.
+     *
+     * @param {number} val 16-bit value to be stored.
+     */
     lxi_sp(val) {
         const second_byte = val >> 8 & 0xFF;
         const third_byte = val & 0xFF;
@@ -602,9 +622,9 @@ class i8080 {
         this.clock += 4;
     }
 
-    // +------------------------------------------------------------------------------+
-    // |                                MOV Operations                                |
-    // +------------------------------------------------------------------------------+
+    // +-----------------------------------------------------------------------+
+    // |                           MOV Operations                              |
+    // +-----------------------------------------------------------------------+
 
     mov_reg(reg_destination, reg_source) {
         this.registers[reg_destination] = this.registers[reg_source];
@@ -697,15 +717,13 @@ class i8080 {
 
     stax_b() {
         const addr = this.get_mem_addr('B','C');
-        this.bus.write(addr, this.registers.A);
-
+        this.bus.write(this.registers.A, addr);
         this.clock += 7;
     }
 
     stax_d() {
         const addr = this.get_mem_addr('D','E');
-        this.bus.write(addr, this.registers.A);
-
+        this.bus.write(this.registers.A, addr);
         this.clock += 7;
     }
 

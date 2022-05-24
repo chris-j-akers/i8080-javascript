@@ -1,0 +1,37 @@
+# Tests moving data from Memory locations to Register using MOV OpCode
+---
+test_suite:
+  enable: True
+  generator_function: stax_tests.generate_stax_b
+  description: 'STAX B'
+  output_file_name: '/store/stax.b.js'
+  header: |
+    const Source = require('../../i8080');
+  footer: |
+    });
+  boilerplate: |
+    const max_mem_addr = {max_mem_addr};
+    const c = new Source.Computer();
+    c.cpu.mvi_reg('A', 0xFF);
+    for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {{
+
+      c.cpu.load_mem_addr(mem_addr, '{register_high_byte}', '{register_low_byte}');
+      c.cpu.{stax_function}();
+
+      expect(c.bus.read(mem_addr)).toEqual(0xFF);
+
+    }}
+    }});
+  tests:
+
+    - test:
+      name: Store Accumulator in address found in registers D,C
+      register_high_byte: B
+      register_low_byte: C
+      stax_function: stax_b
+
+    - test:
+      name: Store Accumulator in address found in registers D,C
+      register_high_byte: D
+      register_low_byte: E     
+      stax_function: stax_d

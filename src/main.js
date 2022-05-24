@@ -257,3 +257,28 @@ function ac_test() {
 
 
 }
+
+
+function staxb() {
+
+    const max_mem_addr = 10;
+    const c = new Computer();
+    c.cpu.mvi_reg('A', 0xFF);
+    for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
+
+    
+      // Store memory address in B,C
+      c.cpu.load_mem_addr(mem_addr, 'B', 'C');
+      console.log(c.cpu.__dbg__get_state());
+      
+      // Store accumulator into mem_addr
+      c.cpu.stax_b();
+    
+      console.log(c.cpu.__dbg__get_state());
+      console.log(c);
+
+    }
+
+}
+
+staxb();
