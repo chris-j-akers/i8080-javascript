@@ -355,6 +355,15 @@ class i8080 {
 //  ADD Arithmetic Operations (ADD,ADC)
 //  ===================================================================================
 
+    /**
+     * Add the value stored in register `reg` to the Accumulator.
+     * 
+     * Flags Affected: C, P, AC, Z, S
+     * 
+     * Covers Mnemonics: ADD
+     * 
+     * @param {char} reg The name of the register which contains the value to be added.
+     */
     add_reg(reg) {
         const result = this.registers.A + reg;
         this.set_flags_on_arithmetic_op(result, this.registers.A, reg);
