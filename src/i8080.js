@@ -75,10 +75,14 @@ class MMU {
 //  i8080 CPU
 //  ===================================================================================
 
+/**
+ * An Intel 8080 CPU implemented in software.
+ */
 class i8080 {
-    //  ===================================================================================
-    //  Methods to retrieve strings about the state of the CPU. Useful for debugging
-    //  ===================================================================================
+
+    /**
+     * @returns a formatted string listing each flag and its current value
+     */
     __dbg__get_flags() {
         let str = 'F  [';
         for (let flag in i8080.FlagType) {
@@ -87,6 +91,9 @@ class i8080 {
         return str.slice(0,-2) + ']';
     }
 
+    /**
+     * @returns a formatted string listing each register and its current value
+     */
     __dbg__get_registers() {
         let str = 'R  [';
         let rval = '';
@@ -113,9 +120,10 @@ class i8080 {
         return `${this.__dbg__get_registers()}\n${this.__dbg__get_flags()}\n${this.__dbg__get_sp()}\n${this.__dbg__get_pc()}\n${this.__dbg__get_clock()}`;
     }
 
-    //  ===================================================================================
-    //  An 'Enum'. Allows us to reference each bit in the flags register using its name
-    //  ===================================================================================
+    /** 
+     * Used when setting or getting bit flags. Means we can use the flag name
+     * instead of having to remember the bit position. A sort of enum.
+    */
     static get FlagType() {
         return {
             Carry: 0,
@@ -126,14 +134,18 @@ class i8080 {
         };
     }
 
-    //  ===================================================================================
-    //  Constructor methods,
-    //  ===================================================================================
+    /**
+     * Constructor for the i8080 object.
+     */
     constructor() {
         this.reset();
         this.bus = null;
     }
 
+    /**
+     * Reset the CPU, setting all registers, flags, program counter, clock and
+     * stack-pointer to 0.
+     */
     reset() {
         this.registers = {A: 0x0, B:0x0, C:0x0, D:0x0, E:0x0, H:0x0, L:0x0};
         this.stack_pointer = 0x0;
@@ -212,61 +224,77 @@ class i8080 {
         this.clock += 4;
     }
 
-//  ===================================================================================
-//  ARITHMETIC OPERATIONS
-//  ===================================================================================
-
-
     /**
-     * Sets or Clears CPU Flags based on the results and, in the case of Aux Carry, the
-     * left-hand side and right-hand side of an arithmetic operation. 
-     * 
+     * Sets or Clears CPU Flags based on the results of addition or subtraction
+     * operations. In the case of Aux Carry, though, only the left-hand side and
+     * right-hand side of the operation is taken into account.
+     *
      * @param {number} val The result of the operation.
      * @param {number} lhs The left-hand side of the operation.
      * @param {number} rhs The right-hand side of the operation.
-     * 
+     *
      */
     set_flags_on_arithmetic_op(val, lhs, rhs) {
 
-        // Carry Flag
-       (val > 255 || val < 0) ? this.set_flag(i8080.FlagType.Carry) : this.clear_flag(i8080.FlagType.Carry);
+        /**
+         * Carry Flag: Maximum storage size of any value in a 8080 register is
+         * 1-byte (8-bits), so 255. Any higher result than that must mean a
+         * Carry out of the 7th bit must have occured.
+         */
+        val > 255 || val < 0 ? this.set_flag(i8080.FlagType.Carry) : this.clear_flag(i8080.FlagType.Carry);
 
-        // Parity Flag
+        /**
+         * Parity Flag: Set if the number of 1's is even. A very old form of
+         * tame CRC checking
+         */
         this.parity(val) ? this.set_flag(i8080.FlagType.Parity) : this.clear_flag(i8080.FlagType.Parity);
 
-        // Auxillary Carry Flag
-        
-        // Add the LSB nibbles of each byte together. If the result includes a bit 
-        // carried into position 4, then an auxillary (or half) carry will occur 
-        // during this operation and the flag must be set.
-        
-        // In the example below, we can see that binary arithmatic has resulted in 
-        // 1 set in position 4 which means a half-carry would have occurred in this 
-        // operation.
-        
-        // Let's add 159 to 165.
-        // +----------+
-        // | 10011111 |
-        // |+---------|
-        // | 10100101 |
-        // +----------+
-
-        // Take least significant nibbles only, and sum.
-
-        // +----------+
-        // | 00001111 |
-        // |+---------|
-        // | 00000101 |
-        // +==========+
-        // | 00010100 |
-        // +----------+
-        
+        /**
+        * Auxillary Carry Flag
+        *
+        * Add the LSB nibbles of each byte together. If the result includes a
+        * bit carried into position 4, then an auxillary (or half) carry will
+        * occur during this operation and the flag must be set.
+        *
+        * In the example below, we can see that adding the two least significant
+        * nibbles of numbers 159 and 165 together results in a 1 being carried
+        * to bit position 4. This means an auxillary carry (or half-carry) will
+        * occur during this add operation and the flag must be set accordingly.
+        *
+        * +---------------+
+        * | 159: 10011111 |
+        * |+--------------|
+        * | 165: 10100101 |
+        * +---------------+
+        *
+        * Take least significant nibbles only, and sum.
+        *
+        * +----------+
+        * | 00001111 |
+        * |+---------|
+        * | 00000101 |
+        * +==========+
+        * | 00010100 |
+        * +----------+
+        *
+        * Result has meant a carry out of bit-3 to bit-4, so we set Aux Carry in
+        * this case.
+        *
+        * */
         ((lhs & 0x0f) + (rhs & 0x0f)) & (1 << 4) ? this.set_flag(i8080.FlagType.AuxillaryCarry) : this.clear_flag(i8080.FlagType.AuxillaryCarry);
 
-        // Zero Flag
+        /**
+         * Zero Flag: Set if the operation result is 0
+         */
         val === 0 ? this.set_flag(i8080.FlagType.Zero) : this.clear_flag(i8080.FlagType.Zero);
 
-        // Sign Flag
+        /**
+         * Sign Flag: Set if bit 7 of the result is 1. NOTE, It is up to the
+         * 8080 programmer to decide whether or not to treat a number with bit-7
+         * set as negative. All the 8080 does is detect that bit-7 is set in the
+         * result of some operation and, in turn, sets the Sign flag
+         * accordingly. 
+         */
         val & (1 << 7) ? this.set_flag(i8080.FlagType.Sign) : this.clear_flag(i8080.FlagType.Sign)
     }
 
@@ -275,29 +303,25 @@ class i8080 {
 //  ===================================================================================
 
     add_reg(reg) {
-        const val = this.registers.A + reg;
-        this.set_flags_on_arithmetic_op(val, this.registers.A, reg);
-        this.registers.A = val & 0xFF;
-
+        const result = this.registers.A + reg;
+        this.set_flags_on_arithmetic_op(result, this.registers.A, reg);
+        this.registers.A = result & 0xFF;
         this.clock += 4;
     }
 
     add_mem() {
-        // Add memory - Address is in HL
         const mem_data = this.bus.read(this.get_mem_addr('H','L'));
-        const val = this.registers.A + mem_data;
-        this.set_flags_on_arithmetic_op(val, this.registers.A, mem_data);
-        this.registers.A = val & 0xFF;
-
+        const result = this.registers.A + mem_data;
+        this.set_flags_on_arithmetic_op(result, this.registers.A, mem_data);
+        this.registers.A = result & 0xFF;
         this.clock += 7;
     }
 
     adc_reg(reg) {
         const register_with_carry = reg + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
-        const val = this.registers.A + register_with_carry;
-        this.set_flags_on_arithmetic_op(val, this.registers.A, register_with_carry);
-        this.registers.A = val & 0xFF;
-
+        const result = this.registers.A + register_with_carry;
+        this.set_flags_on_arithmetic_op(result, this.registers.A, register_with_carry);
+        this.registers.A = result & 0xFF;
         this.clock += 4;
     }
 
@@ -305,10 +329,9 @@ class i8080 {
         const mem_data = this.bus.read(this.get_mem_addr('H','L'));
         const carry = (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         const mem_data_with_carry = mem_data + carry;
-        const val = this.registers.A + mem_data_with_carry;
-        this.set_flags_on_arithmetic_op(val, this.registers.A, mem_data_with_carry);
-        this.registers.A = val & 0xFF;
-
+        const result = this.registers.A + mem_data_with_carry;
+        this.set_flags_on_arithmetic_op(result, this.registers.A, mem_data_with_carry);
+        this.registers.A = result & 0xFF;
         this.clock += 7;
     }
 
@@ -318,33 +341,27 @@ class i8080 {
 
     sub_reg(reg) {
         const reg_twos_complement = ~(reg) + 1;
-
-        const val = (this.registers.A + reg_twos_complement);
-        this.set_flags_on_arithmetic_op(val, this.registers.A, reg_twos_complement);
-
-        this.registers.A = val & 0xFF;
+        const result = (this.registers.A + reg_twos_complement);
+        this.set_flags_on_arithmetic_op(result, this.registers.A, reg_twos_complement);
+        this.registers.A = result & 0xFF;
         this.clock += 7;
     }
 
     sub_mem() {
         const mem_data = this.bus.read(this.get_mem_addr('H','L'));
         const mem_data_twos_complement = ~(mem_data)+1;
-
-        const val = this.registers.A + mem_data_twos_complement;
-        this.set_flags_on_arithmetic_op(val, this.registers.A, mem_data_twos_complement);
-
-        this.registers.A = val & 0xFF;
+        const result = this.registers.A + mem_data_twos_complement;
+        this.set_flags_on_arithmetic_op(result, this.registers.A, mem_data_twos_complement);
+        this.registers.A = result & 0xFF;
         this.clock += 7;
     }
 
     sbb_reg(reg) {        
         const register_with_carry = reg + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         const reg_twos_complement = ~(register_with_carry) + 1;
-
-        const val = (this.registers.A + reg_twos_complement);
-        this.set_flags_on_arithmetic_op(val, this.registers.A, reg_twos_complement);
-
-        this.registers.A = val & 0xFF;
+        const result = (this.registers.A + reg_twos_complement);
+        this.set_flags_on_arithmetic_op(result, this.registers.A, reg_twos_complement);
+        this.registers.A = result & 0xFF;
         this.clock += 7;
     }
 
@@ -352,13 +369,10 @@ class i8080 {
         const mem_data = this.bus.read(this.get_mem_addr('H','L'));
         const carry = (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         const mem_data_with_carry = mem_data + carry;
-
         const mem_data_twos_complement = ~(mem_data_with_carry)+1;
-
-        const val = this.registers.A + mem_data_twos_complement;
-        this.set_flags_on_arithmetic_op(val, this.registers.A, mem_data_twos_complement);
-
-        this.registers.A = val & 0xFF;
+        const result = this.registers.A + mem_data_twos_complement;
+        this.set_flags_on_arithmetic_op(result, this.registers.A, mem_data_twos_complement);
+        this.registers.A = result & 0xFF;
         this.clock += 7;
     }
 
