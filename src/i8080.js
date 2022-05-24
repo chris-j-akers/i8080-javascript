@@ -89,7 +89,8 @@ class i8080 {
     }
 
     /**
-     * @returns {string} a formatted string listing each register and its current value
+     * @returns {string} a formatted string listing each register and its
+     * current value
      */
     __dbg__get_registers() {
         let str = 'R  [';
@@ -101,18 +102,39 @@ class i8080 {
         return str.slice(0,-3) + ']';
     }
 
+    /**
+     *
+     * @returns {string} a formatted string containing the current value of the
+     * stack pointer
+     */
     __dbg__get_sp() {
         return `SP [${this.stack_pointer}, ${this.stack_pointer.toString(16)}, ${__util__word_as_binary(this.stack_pointer)}]`;
     }
 
+    /**
+     *
+     * @returns {string} a formatted string containing the current value of the
+     * program counter
+     */
     __dbg__get_pc() {
         return `PC [${this.program_counter}, ${this.program_counter.toString(16)}, ${__util__word_as_binary(this.program_counter)}]`;
     }
 
+    /**
+     *
+     * @returns {string} a formatted string containing the current value of the
+     * CPU clock
+     */
     __dbg__get_clock() {
         return `CL [${this.clock}, ${this.clock.toString(16)}, ${__util__word_as_binary(this.clock)}]`;
     }
 
+    /**
+     *
+     * @returns {string} a formatted string containing the state of all CPU
+     * registers and flags, plus the values of the clock, stack pointer and
+     * program counter.
+     */
     __dbg__get_state() {
         return `${this.__dbg__get_registers()}\n${this.__dbg__get_flags()}\n${this.__dbg__get_sp()}\n${this.__dbg__get_pc()}\n${this.__dbg__get_clock()}`;
     }
@@ -120,7 +142,7 @@ class i8080 {
     /** 
      * Used when setting or getting bit flags. Means we can use the flag name
      * instead of having to remember the bit position. A sort of enumy type
-     * thing.
+     * sort of thing.
      * 
      * NOTE, this isn't read-only, but we're all adults, right?
     */
@@ -145,7 +167,7 @@ class i8080 {
     /**
      * Reset the CPU, setting all registers, the program counter, clock and
      * stack-pointer to 0. Note, Flags are set to 0x2 because, according to the
-     * 8080 Programmers Manual, bit-1 (unused) is always set to 1 as default
+     * 8080 Programmers Manual, bit-1 (unused) is always set to 1 as default.
      */
     reset() {
         this.registers = {A: 0x0, B:0x0, C:0x0, D:0x0, E:0x0, H:0x0, L:0x0};
@@ -170,8 +192,7 @@ class i8080 {
      * Operations that *retrieve* data from memory get the relevant address from
      * one of the register pairs (BC, DE, HL). The first register in the pair
      * stores the high-byte of the address and the second register stores the
-     * low-byte. This is a helper function to simplify this process as it occurs
-     * a lot.
+     * low-byte. 
      *
      * @param {character} The register which stores the high-byte of the address 
      * @param {character} The register which stores the low-byte of the address
@@ -187,7 +208,6 @@ class i8080 {
      * Operations that *store* data in memory get the relevant address from one
      * of the register pairs (BC, DE, HL). The first register in the pair stores
      * the high-byte of the address and the second register stores the low-byte.
-     * This is a helper function to simplify this process as it occurs a lot.
      *
      * @param {number} addr The address that needs to be loaded
      * @param {character} reg_highbyte The register which will store the
@@ -205,7 +225,7 @@ class i8080 {
      * Test whether the number of bits set to `1` in `val` is even. If so, then
      * returns `True`, else returns `False`. Used for setting the `Parity` flag.
      * @param {number} val to check
-     * @returns `True` or `False`
+     * @returns `True` if number of bits set is even (or 0) or `False`if odd.
      */
     parity(val) {
         let bit_count = 0;
@@ -216,7 +236,7 @@ class i8080 {
     }
 
     /**
-     * Sets one of the flag bits in the flag register.
+     * Sets the specified flag bit in the flag register.
      *
      * @param {number} bit_pos bit position of the flag to set (see `FlagType`
      * object)
@@ -226,7 +246,8 @@ class i8080 {
     }
 
     /**
-     *
+     * Clears (Unsets) the specified flag bit in the flag register.
+     * 
      * @param {number} bit_pos bit position of the flag to clear (see `FlagType`
      * object))
      */
@@ -235,6 +256,7 @@ class i8080 {
     }
 
     /**
+     * Used to determine whether a specified flag is set.
      * 
      * @param {number} bit_pos of the flag to check (see `FlagType` object))
      * @returns `True` or `False`depending on whether the selected flag is set.
@@ -257,8 +279,8 @@ class i8080 {
 
     /**
      * Sets or Clears CPU Flags based on the results of arithmetic operations.
-     * In the case of Aux Carry, though, only the left-hand side and right-hand
-     * side of the operation is taken into account.
+     * In the case of Aux Carry, only the left-hand side and right-hand side of
+     * the operation is taken into account.
      *
      * @param {number} result The result of the operation.
      * @param {number} lhs The left-hand side of the operation.
@@ -323,7 +345,7 @@ class i8080 {
          * Sign Flag: Set if bit 7 of the result is 1. It is up to the 8080
          * programmer to decide whether or not to treat a number with bit-7 set
          * as negative. All the 8080 does is detect that bit-7 is set in the
-         * result of some operation and sets the Sign flag accordingly. It
+         * result of some operation and sets the sign flag accordingly. It
          * doesn't care what the number actually is.
          */
         result & (1 << 7) ? this.set_flag(i8080.FlagType.Sign) : this.clear_flag(i8080.FlagType.Sign)
