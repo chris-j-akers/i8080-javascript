@@ -15,8 +15,11 @@ import arithmetic_tests.aci.aci_tests as aci_tests
 import arithmetic_tests.adi.adi_tests as adi_tests
 import load_tests.load_tests as load_tests
 import logical_tests.ana.ana_tests as ana_tests
+import logical_tests.ani.ani_tests as ani_tests
 import logical_tests.xra.xra_tests as xra_tests
+import logical_tests.xri.xri_tests as xri_tests
 import logical_tests.ora.ora_tests as ora_tests
+import logical_tests.ori.ori_tests as ori_tests
 import store_tests.stax.stax_tests as stax_tests
 
 

@@ -1,6 +1,6 @@
 const Source = require('../../i8080');
 describe('STAX B', () => {
-	test('Store Accumulator in address found in registers D,C', () => {
+	test('Store Accumulator in address found in registers B,C', () => {
 		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		c.cpu.mvi_reg('A', 0xFF);
@@ -14,7 +14,7 @@ describe('STAX B', () => {
 		}
 		});
 		
-	test('Store Accumulator in address found in registers D,C', () => {
+	test('Store Accumulator in address found in registers D,E', () => {
 		const max_mem_addr = 255;
 		const c = new Source.Computer();
 		c.cpu.mvi_reg('A', 0xFF);

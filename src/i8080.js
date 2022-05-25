@@ -715,6 +715,13 @@ class i8080 {
         this.clock += 7;
     }
 
+    ani(val) {
+        this.registers.A &= val;
+        this.set_flags_on_logical_op();
+
+        this.clock += 4;
+    }
+
     xra_reg(reg) {
         this.registers.A ^= this.registers[reg];
         this.set_flags_on_logical_op();
@@ -729,6 +736,12 @@ class i8080 {
         this.clock += 7;
     }
 
+    xri(val) {
+        this.registers.A ^= val;
+        this.set_flags_on_logical_op();
+        this.clock += 4;
+    }
+
     ora_reg(reg) {
         this.registers.A |= this.registers[reg];
         this.set_flags_on_logical_op();
@@ -741,6 +754,12 @@ class i8080 {
         this.set_flags_on_logical_op();
 
         this.clock += 7;
+    }
+
+    ori(val) {
+        this.registers.A |= val;
+        this.set_flags_on_logical_op()
+        this.clock += 4;
     }
 
 
