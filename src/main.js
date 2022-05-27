@@ -281,4 +281,38 @@ function staxb() {
 
 }
 
-staxb();
+function shld() {
+    const c = new Computer();
+    console.log(c.cpu.__dbg__get_state());
+    c.cpu.mvi_reg('H', 0xAE); // 174
+    c.cpu.mvi_reg('L', 0x29); // 41
+    console.log(`Loading binary value ${__util__word_as_binary(0x10A)}`)
+    c.cpu.shld(0x10A); //266
+    console.log(c.cpu.__dbg__get_state());
+
+    console.log(c.cpu.bus.read(0x10A));
+    console.log(c.cpu.bus.read(0x10B));
+
+    console.log(c);
+
+}
+00100010
+
+00000101
+
+// 2205
+
+function shld2() {
+    const c = new Computer();
+    console.log(c.cpu.__dbg__get_state());
+    c.cpu.mvi_reg('H', 0x02); // 174
+    c.cpu.mvi_reg('L', 0x01); // 41
+    console.log(`Loading binary value ${__util__word_as_binary(0x10A)}`)
+    c.cpu.shld(2205); //266
+    console.log(c.cpu.__dbg__get_state());
+
+
+    console.log(c);
+
+}
+shld2()

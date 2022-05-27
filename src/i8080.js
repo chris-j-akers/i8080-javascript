@@ -777,7 +777,23 @@ class i8080 {
         this.clock += 7;
     }
 
+    /**
+     * Store contents of `H` and `L` registers in memory. Contents of `H`
+     * register are stored at `addr` and contents of `L` register are stored at
+     * the next higher memory address.
+     * @param {number} addr 16-bit memory address of storage location in little-endian format
+     */
+    shld(addr) {
+        const addr_low_byte = addr & 0xFF;
+        const full_addr = (addr << 8) | (addr >> 8) & 0xFFFF;
+        this.bus.write(this.registers.L, full_addr);
+        this.bus.write(this.registers.H, full_addr + 1);
+        this.clock += 16;
+    }
+
 }
+
+
 
 // Enables the use of Jest for unit testing
 if (typeof module !== 'undefined') module.exports = { i8080 : i8080, 
