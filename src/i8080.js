@@ -1,10 +1,5 @@
 'use strict';
 
-const MMU = require('./mmu.js')
-const Bus = require('./bus.js')
-
-
-
 /**
  * An Intel 8080 CPU implemented in software.
  */

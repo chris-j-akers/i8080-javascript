@@ -1,8 +1,5 @@
 'use strict'
 
-const i8080 = require('./i8080.js')
-const MMU = require('./mmu.js')
-
 /**
  * The bus links the CPU and other 'periphials' together. This is usually just
  * memory, but could also be a video display buffer or similar.

@@ -1,7 +1,5 @@
 'use strict'
 
-const Bus = require('./bus.js')
-
 class MMU {
     constructor() {
         this.ram = new Array(2**16);
