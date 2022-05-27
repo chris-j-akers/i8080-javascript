@@ -1,75 +1,8 @@
 'use strict';
 
-class Computer {
-    constructor() {
-        this.cpu = new i8080();
-        this.mmu = new MMU();
-        this.bus = new Bus();
+const MMU = require('./mmu.js')
+const Bus = require('./bus.js')
 
-        // Connect the Bus to the CPU and vice versa
-        this.cpu.connect_bus(this.bus);
-        this.bus.connect_cpu(this.cpu);
-
-        // Connect the bus to the MMU and vice versa
-        this.mmu.connect_bus(this.bus);
-        this.bus.connect_mmu(this.mmu);
-    }
-
-    reset() {
-        this.cpu.reset();
-        this.mmu.reset();
-    }
-}
-
-/**
- * The bus links the CPU and other 'periphials' together. This is usually just
- * memory, but could also be a video display buffer or similar.
- */
-class Bus {
-    constructor() {
-        this.mmu = null;
-        this.cpu = null;
-    }
-
-    connect_mmu(mmu) {
-        this.mmu = mmu;
-    }
-
-    connect_cpu(cpu) {
-        this.cpu = cpu;
-    }
-
-    write(val, addr) {
-        this.mmu.write(val, addr);
-    }
-
-    read(addr) {
-        return this.mmu.read(addr);
-    }
-}
-
-class MMU {
-    constructor() {
-        this.ram = new Array(2**16);
-        this.bus = null;
-    }
-
-    connect_bus(bus) {
-        this.bus = bus;
-    }
-
-    reset() {
-        this.ram = new Array(2**16);
-    }
-
-    write(val, addr) {
-        this.ram[addr] = val;
-    }
-
-    read(addr) {
-        return this.ram[addr];
-    }
-}
 
 
 /**
@@ -793,8 +726,4 @@ class i8080 {
 
 }
 
-
-
-// Enables the use of Jest for unit testing
-if (typeof module !== 'undefined') module.exports = { i8080 : i8080, 
-                                                      Computer : Computer };
+module.exports = i8080;
