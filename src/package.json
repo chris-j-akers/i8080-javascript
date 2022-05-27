@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "description": "",
-  "type": "Commonjs",
+  "type": "commonjs",
   "devDependencies": {
     "@types/jest": "^27.5.1",
     "request": "^2.88.2"
