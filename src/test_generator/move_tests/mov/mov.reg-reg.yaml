@@ -6,11 +6,12 @@ test_suite:
   description: 'MOV Register to Register'
   output_file_name: '/move/mov.reg-reg.test.js'
   header: |
-    const Source = require('../../i8080');
+    const Computer = require('../../computer');
+    const i8080 = require('../../i8080');
   footer: |
     });
   boilerplate: |
-    const c = new Source.Computer();
+    const c = new Computer();
     for (let byte = 0x00; byte <= 0xFF; byte++) {{
       c.cpu.mvi_reg('{reg_source}', byte);
       c.cpu.mov_reg('{reg_destination}', '{reg_source}')

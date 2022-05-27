@@ -1,9 +1,10 @@
-const Source = require('../../i8080');
+const Computer = require('../../computer');
+const i8080 = require('../../i8080');
 describe('ADD Memory', () => {
 	test('No Flags Set', () => {
 		const max_mem_addr = 255;
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		const data = 1;
 		
@@ -26,8 +27,8 @@ describe('ADD Memory', () => {
 		
 	test('Parity and Zero Flag Set', () => {
 		const max_mem_addr = 255;
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		const data = 0;
 		
@@ -50,8 +51,8 @@ describe('ADD Memory', () => {
 		
 	test('Parity Flag Set', () => {
 		const max_mem_addr = 255;
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		const data = 84;
 		
@@ -74,8 +75,8 @@ describe('ADD Memory', () => {
 		
 	test('Aux Carry Flag Set', () => {
 		const max_mem_addr = 255;
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		const data = 15;
 		
@@ -98,8 +99,8 @@ describe('ADD Memory', () => {
 		
 	test('Aux Carry and Sign Flags Set', () => {
 		const max_mem_addr = 255;
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		const data = 127;
 		
@@ -122,8 +123,8 @@ describe('ADD Memory', () => {
 		
 	test('Carry and Aux Carry Flags Set', () => {
 		const max_mem_addr = 255;
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		const data = 255;
 		

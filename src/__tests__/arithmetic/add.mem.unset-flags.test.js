@@ -1,9 +1,10 @@
-const Source = require('../../i8080');
+const Computer = require('../../computer');
+const i8080 = require('../../i8080');
 describe('ADD Memory (Unset All Flags)', () => {
 	test('Unset All Flags', () => {
 		const max_mem_addr = 255;
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		const data = 1;
 		

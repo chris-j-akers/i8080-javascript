@@ -5,11 +5,12 @@ test_suite:
   description: 'LXI Stack Pointer'
   output_file_name: '/load/lxi.stack-pointer.test.js'
   header: |
-    const Source = require('../../i8080');
+    const Computer = require('../../computer');
+    const i8080 = require('../../i8080');
   footer: |
     });
   boilerplate: |
-    const c = new Source.Computer();
+    const c = new Computer();
     const max_value_to_test = {max_value_to_test};
 
     for (let word = 0x0000; word <= max_value_to_test; word++) {{

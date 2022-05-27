@@ -1,9 +1,9 @@
-const Source = require('../../i8080');
+const Computer = require('../../computer');
+const i8080 = require('../../i8080');
 describe('ADC Accumulator', () => {
 	test('No Flags Set (With Carry Unset)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
-		
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		c.cpu.mvi_reg('A',2);
 		
 		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
@@ -21,9 +21,8 @@ describe('ADC Accumulator', () => {
 		});
 		
 	test('Set Parity and Zero Flag (With Carry Unset)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
-		
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		c.cpu.mvi_reg('A',0);
 		
 		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
@@ -41,9 +40,8 @@ describe('ADC Accumulator', () => {
 		});
 		
 	test('Set Parity and Zero Flag (With Carry Unset)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
-		
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		c.cpu.mvi_reg('A',0);
 		
 		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
@@ -61,9 +59,8 @@ describe('ADC Accumulator', () => {
 		});
 		
 	test('Set Parity (With Carry Set)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
-		
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		c.cpu.mvi_reg('A',7);
 		
 		c.cpu.set_flag(FlagType.Carry);
@@ -82,9 +79,8 @@ describe('ADC Accumulator', () => {
 		});
 		
 	test('Set Parity and Aux Carry Flags (With Carry Unset)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
-		
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		c.cpu.mvi_reg('A',9);
 		
 		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
@@ -102,9 +98,8 @@ describe('ADC Accumulator', () => {
 		});
 		
 	test('Set Parity and Aux Carry Flags (With Carry Set)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
-		
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		c.cpu.mvi_reg('A',8);
 		
 		c.cpu.set_flag(FlagType.Carry);
@@ -123,9 +118,8 @@ describe('ADC Accumulator', () => {
 		});
 		
 	test('Set Parity, Aux Carry and Sign Flags (With Carry Unset)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
-		
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		c.cpu.mvi_reg('A',89);
 		
 		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
@@ -143,9 +137,8 @@ describe('ADC Accumulator', () => {
 		});
 		
 	test('Set Parity, Aux Carry and Sign Flags (With Carry Set)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
-		
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		c.cpu.mvi_reg('A',88);
 		
 		c.cpu.set_flag(FlagType.Carry);
@@ -164,9 +157,8 @@ describe('ADC Accumulator', () => {
 		});
 		
 	test('Set Carry, Parity and Sign Flags (With Carry Unset)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
-		
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		c.cpu.mvi_reg('A',241);
 		
 		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
@@ -184,9 +176,8 @@ describe('ADC Accumulator', () => {
 		});
 		
 	test('Set Carry, Parity and Sign Flags (With Carry Set)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
-		
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		c.cpu.mvi_reg('A',240);
 		
 		c.cpu.set_flag(FlagType.Carry);

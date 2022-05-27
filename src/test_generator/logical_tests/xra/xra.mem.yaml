@@ -5,12 +5,13 @@ test_suite:
   description: 'XRA Memory'
   output_file_name: '/logical/xra.mem.test.js'
   header: |
-    const Source = require('../../i8080');
+    const Computer = require('../../computer');
+    const i8080 = require('../../i8080');
   footer: |
     });
   boilerplate: |
-    const c = new Source.Computer();
-    const FlagType = Source.i8080.FlagType;
+    const c = new Computer();
+    const FlagType = i8080.FlagType;
     const max_mem_addr = {max_mem_addr}
 
     const data = {data};

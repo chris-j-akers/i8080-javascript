@@ -1,8 +1,9 @@
-const Source = require('../../i8080');
+const Computer = require('../../computer');
+const i8080 = require('../../i8080');
 describe('XRI', () => {
 	test('Reset Carry Flag', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',20);
 		
@@ -22,8 +23,8 @@ describe('XRI', () => {
 		});
 		
 	test('Set Zero Flag', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',255);
 		
@@ -42,8 +43,8 @@ describe('XRI', () => {
 		});
 		
 	test('Set Sign Flag', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',127);
 		
@@ -62,8 +63,8 @@ describe('XRI', () => {
 		});
 		
 	test('Set Parity Flag', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',85);
 		

@@ -1,8 +1,9 @@
-const Source = require('../../i8080');
+const Computer = require('../../computer');
+const i8080 = require('../../i8080');
 describe('ADD Register (Unset All Flags)', () => {
 	test('Unset All Flags', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
 		  c.cpu.mvi_reg('A', 0);

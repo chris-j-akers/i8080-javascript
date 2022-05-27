@@ -1,8 +1,9 @@
-const Source = require('../../i8080');
+const Computer = require('../../computer');
+const i8080 = require('../../i8080');
 describe('ADC Register', () => {
 	test('No Flags Set (With Carry Unset)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
 		  c.cpu.mvi_reg('A', 0);
@@ -24,8 +25,8 @@ describe('ADC Register', () => {
 		});
 		
 	test('No Flags Set (With Carry Set)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
 		  c.cpu.mvi_reg('A', 0);
@@ -48,8 +49,8 @@ describe('ADC Register', () => {
 		});
 		
 	test('Set Parity and Zero Flags (With Carry Unset)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
 		  c.cpu.mvi_reg('A', 0);
@@ -71,8 +72,8 @@ describe('ADC Register', () => {
 		});
 		
 	test('Set Parity Flag (With Carry Unset)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
 		  c.cpu.mvi_reg('A', 1);
@@ -94,8 +95,8 @@ describe('ADC Register', () => {
 		});
 		
 	test('Set Parity Flag (With Carry Set)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
 		  c.cpu.mvi_reg('A', 1);
@@ -118,8 +119,8 @@ describe('ADC Register', () => {
 		});
 		
 	test('Set Aux Carry Flag (With Carry Unset)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
 		  c.cpu.mvi_reg('A', 1);
@@ -141,8 +142,8 @@ describe('ADC Register', () => {
 		});
 		
 	test('Set Aux Carry Flag (With Carry Set)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
 		  c.cpu.mvi_reg('A', 1);
@@ -165,8 +166,8 @@ describe('ADC Register', () => {
 		});
 		
 	test('Set Aux Carry and Sign Flag (With Carry Unset)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
 		  c.cpu.mvi_reg('A', 1);
@@ -188,8 +189,8 @@ describe('ADC Register', () => {
 		});
 		
 	test('Set Sign Flag (With Carry Set)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
 		  c.cpu.mvi_reg('A', 1);
@@ -212,8 +213,8 @@ describe('ADC Register', () => {
 		});
 		
 	test('Set Carry and Aux Carry Flag (With Carry Unset)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
 		  c.cpu.mvi_reg('A', 20);
@@ -235,8 +236,8 @@ describe('ADC Register', () => {
 		});
 		
 	test('Set Carry and Parity Flag (With Carry Set)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
 		  c.cpu.mvi_reg('A', 1);

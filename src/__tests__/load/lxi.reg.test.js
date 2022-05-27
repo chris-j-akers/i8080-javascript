@@ -1,8 +1,9 @@
-const Source = require('../../i8080');
+const Computer = require('../../computer');
+const i8080 = require('../../i8080');
 describe('LXI Register', () => {
 	test('LXI B,d16', () => {
 		const max_value_to_test = 255;
-		const c = new Source.Computer();
+		const c = new Computer();
 		
 		for (let word = 0x0000; word <= max_value_to_test; word++) {
 		    c.cpu.lxi_b(word);
@@ -13,7 +14,7 @@ describe('LXI Register', () => {
 		
 	test('LXI D,d16', () => {
 		const max_value_to_test = 255;
-		const c = new Source.Computer();
+		const c = new Computer();
 		
 		for (let word = 0x0000; word <= max_value_to_test; word++) {
 		    c.cpu.lxi_d(word);
@@ -24,7 +25,7 @@ describe('LXI Register', () => {
 		
 	test('LXI H,d16', () => {
 		const max_value_to_test = 255;
-		const c = new Source.Computer();
+		const c = new Computer();
 		
 		for (let word = 0x0000; word <= max_value_to_test; word++) {
 		    c.cpu.lxi_h(word);

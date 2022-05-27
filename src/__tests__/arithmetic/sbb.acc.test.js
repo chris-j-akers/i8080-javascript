@@ -1,8 +1,9 @@
-const Source = require('../../i8080');
+const Computer = require('../../computer');
+const i8080 = require('../../i8080');
 describe('SBB Accumulator Flag', () => {
 	test('Zero, AuxCarry, Parity Flags Set with Carry Reset', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',1);
 		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
@@ -19,8 +20,8 @@ describe('SBB Accumulator Flag', () => {
 		});
 		
 	test('Carry, AuxCarry, Sign Flags Set with Carry Set', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',1);
 		c.cpu.set_flag(FlagType.Carry);

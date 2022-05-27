@@ -1,8 +1,9 @@
-const Source = require('../../i8080');
+const Computer = require('../../computer');
+const i8080 = require('../../i8080');
 describe('MVI Memory', () => {
 	test('MVI M', () => {
 		const max_mem_addr = 255;
-		const c = new Source.Computer();
+		const c = new Computer();
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		    c.bus.write(data, mem_addr);

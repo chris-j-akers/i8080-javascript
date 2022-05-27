@@ -1,8 +1,9 @@
-const Source = require('../../i8080');
+const Computer = require('../../computer');
+const i8080 = require('../../i8080');
 describe('SUB Accumulator Flag', () => {
 	test('Zero, AuxCarry, Parity Flags Set', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',1);
 		c.cpu.sub_reg(c.cpu.registers.A);
@@ -17,8 +18,8 @@ describe('SUB Accumulator Flag', () => {
 		});
 		
 	test('Carry, Sign Flags Set', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',255);
 		c.cpu.sub_reg(c.cpu.registers.A);

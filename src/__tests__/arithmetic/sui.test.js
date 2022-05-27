@@ -1,8 +1,9 @@
-const Source = require('../../i8080');
+const Computer = require('../../computer');
+const i8080 = require('../../i8080');
 describe('SUI', () => {
 	test('No Flags Set', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',32);
 		   
@@ -18,8 +19,8 @@ describe('SUI', () => {
 		});
 		
 	test('Parity, Aux Carry and Zero Flag Set', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',1);
 		   
@@ -35,8 +36,8 @@ describe('SUI', () => {
 		});
 		
 	test('Parity Flag Set', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',32);
 		   
@@ -52,8 +53,8 @@ describe('SUI', () => {
 		});
 		
 	test('Aux Carry Flag Set', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',127);
 		   
@@ -69,8 +70,8 @@ describe('SUI', () => {
 		});
 		
 	test('Sign Flag Set', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',255);
 		   
@@ -86,8 +87,8 @@ describe('SUI', () => {
 		});
 		
 	test('Carry and Sign Flags Set', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',5);
 		   

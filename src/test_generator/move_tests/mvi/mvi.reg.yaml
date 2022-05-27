@@ -6,11 +6,12 @@ test_suite:
   description: 'MVI Register'
   output_file_name: '/move/mvi.reg.test.js'
   header: |
-    const Source = require('../../i8080');
+    const Computer = require('../../computer');
+    const i8080 = require('../../i8080');
   footer: |
     });
   boilerplate: |
-    const c = new Source.Computer();
+    const c = new Computer();
     for (let byte = 0x00; byte <= 0xFF; byte++) {{
         c.cpu.mvi_reg('{reg_destination}', byte);
         expect(c.cpu.registers.{reg_destination}).toEqual(byte);

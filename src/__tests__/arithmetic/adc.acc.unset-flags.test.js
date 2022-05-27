@@ -1,8 +1,9 @@
-const Source = require('../../i8080');
+const Computer = require('../../computer');
+const i8080 = require('../../i8080');
 describe('ADC Accumulator (Unset All Flags)', () => {
 	test('Unset All Flags (Carry Bit Unset)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A', 0x01);
 		
@@ -32,8 +33,8 @@ describe('ADC Accumulator (Unset All Flags)', () => {
 		});
 		
 	test('Unset All Flags and Set Parity (Carry Bit Unset)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A', 0x01);
 		

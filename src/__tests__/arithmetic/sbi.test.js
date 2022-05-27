@@ -1,8 +1,9 @@
-const Source = require('../../i8080');
+const Computer = require('../../computer');
+const i8080 = require('../../i8080');
 describe('SBI', () => {
 	test('No Flags Set (Carry Bit Reset)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',32);
 		
@@ -21,8 +22,8 @@ describe('SBI', () => {
 		});
 		
 	test('No Flags Set (Carry Bit Set)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',33);
 		
@@ -42,8 +43,8 @@ describe('SBI', () => {
 		});
 		
 	test('Parity, Aux Carry and Zero Flags Set (Carry Bit Reset)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',1);
 		
@@ -62,8 +63,8 @@ describe('SBI', () => {
 		});
 		
 	test('Parity, Aux Carry and Zero Flags Set (Carry Bit Set)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',3);
 		
@@ -83,8 +84,8 @@ describe('SBI', () => {
 		});
 		
 	test('Parity Flag Set (Carry Bit Reset)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',32);
 		
@@ -103,8 +104,8 @@ describe('SBI', () => {
 		});
 		
 	test('Parity Flag Set (Carry Bit Set)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',32);
 		
@@ -124,8 +125,8 @@ describe('SBI', () => {
 		});
 		
 	test('Aux Carry Set (Carry Bit Reset)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',127);
 		
@@ -144,8 +145,8 @@ describe('SBI', () => {
 		});
 		
 	test('Aux Carry Set (Carry Bit Set)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',127);
 		
@@ -165,8 +166,8 @@ describe('SBI', () => {
 		});
 		
 	test('Aux Carry and Sign Flag Set (Carry Bit Reset)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',255);
 		
@@ -185,8 +186,8 @@ describe('SBI', () => {
 		});
 		
 	test('Aux Carry and Sign Flag Set (Carry Bit Set)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',253);
 		
@@ -206,8 +207,8 @@ describe('SBI', () => {
 		});
 		
 	test('Carry and Sign Flag Set (Carry Bit Reset)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',5);
 		
@@ -226,8 +227,8 @@ describe('SBI', () => {
 		});
 		
 	test('Carry and Sign Flag Set (Carry Bit Set)', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		
 		c.cpu.mvi_reg('A',5);
 		

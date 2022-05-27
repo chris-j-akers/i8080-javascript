@@ -6,12 +6,13 @@ test_suite:
   description: 'MOV Memory to Register'
   output_file_name: '/move/mov.mem-to-reg.test.js'
   header: |
-    const Source = require('../../i8080');
+    const Computer = require('../../computer');
+    const i8080 = require('../../i8080');
   footer: |
     });
   boilerplate: |
     const max_mem_addr = {max_mem_addr};
-    const c = new Source.Computer();
+    const c = new Computer();
     const data = 0xFFFF;
     for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {{
       c.cpu.load_mem_addr(mem_addr, 'H', 'L');

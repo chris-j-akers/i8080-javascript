@@ -1,8 +1,9 @@
-const Source = require('../../i8080');
+const Computer = require('../../computer');
+const i8080 = require('../../i8080');
 describe('ANA Memory', () => {
 	test('Reset Carry Flag', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		const max_mem_addr = 255
 		
 		const data = 100;
@@ -29,8 +30,8 @@ describe('ANA Memory', () => {
 		});
 		
 	test('Set Zero Flag', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		const max_mem_addr = 255
 		
 		const data = 255;
@@ -56,8 +57,8 @@ describe('ANA Memory', () => {
 		});
 		
 	test('Set Sign Flag', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		const max_mem_addr = 255
 		
 		const data = 255;
@@ -83,8 +84,8 @@ describe('ANA Memory', () => {
 		});
 		
 	test('Set Parity Flag', () => {
-		const c = new Source.Computer();
-		const FlagType = Source.i8080.FlagType;
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
 		const max_mem_addr = 255
 		
 		const data = 255;

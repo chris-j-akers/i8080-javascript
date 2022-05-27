@@ -1,8 +1,9 @@
-const Source = require('../../i8080');
+const Computer = require('../../computer');
+const i8080 = require('../../i8080');
 describe('MOV to Register to Memory', () => {
 	test('MOVE M,B', () => {
 		const max_mem_addr = 255;
-		const c = new Source.Computer();
+		const c = new Computer();
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
@@ -15,7 +16,7 @@ describe('MOV to Register to Memory', () => {
 		
 	test('MOVE M,C', () => {
 		const max_mem_addr = 255;
-		const c = new Source.Computer();
+		const c = new Computer();
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
@@ -28,7 +29,7 @@ describe('MOV to Register to Memory', () => {
 		
 	test('MOVE M,D', () => {
 		const max_mem_addr = 255;
-		const c = new Source.Computer();
+		const c = new Computer();
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
@@ -41,7 +42,7 @@ describe('MOV to Register to Memory', () => {
 		
 	test('MOVE M,E', () => {
 		const max_mem_addr = 255;
-		const c = new Source.Computer();
+		const c = new Computer();
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
@@ -54,7 +55,7 @@ describe('MOV to Register to Memory', () => {
 		
 	test('MOVE M,H', () => {
 		const max_mem_addr = 255;
-		const c = new Source.Computer();
+		const c = new Computer();
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
@@ -67,7 +68,7 @@ describe('MOV to Register to Memory', () => {
 		
 	test('MOVE M,L', () => {
 		const max_mem_addr = 255;
-		const c = new Source.Computer();
+		const c = new Computer();
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
@@ -80,7 +81,7 @@ describe('MOV to Register to Memory', () => {
 		
 	test('MOVE M,A', () => {
 		const max_mem_addr = 255;
-		const c = new Source.Computer();
+		const c = new Computer();
 		const data = 0xFFFF;
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		  c.cpu.mvi_reg('H', (mem_addr >> 8) & 0xff);
