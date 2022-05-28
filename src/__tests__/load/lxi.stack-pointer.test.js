@@ -6,7 +6,7 @@ describe('LXI Stack Pointer', () => {
 		const max_value_to_test = 255;
 		
 		for (let word = 0x0000; word <= max_value_to_test; word++) {
-		    c.cpu.lxi_sp(word);
+		    c.cpu.lxi('SP', word);
 		
 		    const word_msb = (word >> 8) & 0x00FF
 		    const word_lsb = word & 0x00FF

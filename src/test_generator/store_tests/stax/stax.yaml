@@ -16,8 +16,8 @@ test_suite:
     c.cpu.mvi_reg('A', 0xFF);
     for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {{
 
-      c.cpu.load_mem_addr(mem_addr, '{register_high_byte}', '{register_low_byte}');
-      c.cpu.{stax_function}();
+      c.cpu.load_mem_addr(mem_addr, '{msb_register}', '{lsb_register}');
+      c.cpu.stax('{msb_register}');
 
       expect(c.bus.read(mem_addr)).toEqual(0xFF);
 
@@ -27,12 +27,10 @@ test_suite:
 
     - test:
       name: Store Accumulator in address found in registers B,C
-      register_high_byte: B
-      register_low_byte: C
-      stax_function: stax_b
+      msb_register: B
+      lsb_register: C
 
     - test:
       name: Store Accumulator in address found in registers D,E
-      register_high_byte: D
-      register_low_byte: E     
-      stax_function: stax_d
+      msb_register: D
+      lsb_register: E     

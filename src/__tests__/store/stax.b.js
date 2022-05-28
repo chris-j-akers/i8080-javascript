@@ -8,7 +8,7 @@ describe('STAX B', () => {
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		
 		  c.cpu.load_mem_addr(mem_addr, 'B', 'C');
-		  c.cpu.stax_b();
+		  c.cpu.stax('B');
 		
 		  expect(c.bus.read(mem_addr)).toEqual(0xFF);
 		
@@ -22,7 +22,7 @@ describe('STAX B', () => {
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
 		
 		  c.cpu.load_mem_addr(mem_addr, 'D', 'E');
-		  c.cpu.stax_d();
+		  c.cpu.stax('D');
 		
 		  expect(c.bus.read(mem_addr)).toEqual(0xFF);
 		

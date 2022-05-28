@@ -126,7 +126,7 @@ class i8080 {
      * @param {character} The register which stores the low-byte of the address
      * @returns A 16-bit memory address.
      */
-    get_mem_addr(reg_highbyte, reg_lowbyte) {
+    read_mem_addr(reg_highbyte, reg_lowbyte) {
         return ((this.registers[reg_highbyte] << 8) | this.registers[reg_lowbyte]) & 0xFFFF;
     }
 
@@ -300,7 +300,7 @@ class i8080 {
     }
 
     add_mem() {
-        const mem_data = this.bus.read(this.get_mem_addr('H','L'));
+        const mem_data = this.bus.read(this.read_mem_addr('H','L'));
         const result = this.registers.A + mem_data;
         this.set_flags_on_arithmetic_op(result, this.registers.A, mem_data);
         this.registers.A = result & 0xFF;
@@ -316,7 +316,7 @@ class i8080 {
     }
 
     adc_mem() {
-        const mem_data = this.bus.read(this.get_mem_addr('H','L'));
+        const mem_data = this.bus.read(this.read_mem_addr('H','L'));
         const carry = (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         const mem_data_with_carry = mem_data + carry;
         const result = this.registers.A + mem_data_with_carry;
@@ -376,7 +376,7 @@ class i8080 {
      *
      */
     sub_mem() {
-        const data = this.bus.read(this.get_mem_addr('H','L'));
+        const data = this.bus.read(this.read_mem_addr('H','L'));
         const data_twos_comp = ~(data)+1;
         const result = this.registers.A + data_twos_comp;
         this.set_flags_on_arithmetic_op(result, this.registers.A, data_twos_comp);
@@ -394,7 +394,7 @@ class i8080 {
     }
 
     sbb_mem() {
-        const data = this.bus.read(this.get_mem_addr('H','L'));
+        const data = this.bus.read(this.read_mem_addr('H','L'));
         const carry = (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         const data_carry = data + carry;
         const data_carry_twos_comp = ~(data_carry)+1;
@@ -471,64 +471,30 @@ class i8080 {
 
 // Condition bits affected: None
 
-    /**
-     * Stores a 16-bit immediate value in register pair B, C. Register B stores
-     * the low-byte of the value and register C stores the high-byte (little
-     * endian).
-     *
-     * @param {number} val 16-bit value to be stored.
-     */
-    lxi_b(val) {
-        this.registers.B = val & 0xFF;
-        this.registers.C = (val >> 8) & 0xFF;
+    lxi(register, val) {
+        const msb = val & 0xFF;
+        const lsb = (val >> 8) & 0xFF;
 
+        switch(register) {
+            case 'B':
+                this.registers.B = msb;
+                this.registers.C = lsb;
+                break;
+            case 'D':
+                this.registers.D = msb;
+                this.registers.E = lsb;
+                break;
+            case 'H':
+                this.registers.H = msb;
+                this.registers.L = lsb;
+            case 'SP':
+                console.log(this.stack_pointer);
+                this.stack_pointer = (msb << 8) | lsb;
+                break;
+        }
         this.clock += 10;
     }
 
-    /**
-     * Stores a 16-bit immediate value in register pair D, E. Register D stores
-     * the low-byte of the value and register E stores the high-byte (little
-     * endian).
-     *
-     * @param {number} val 16-bit value to be stored.
-     */
-    lxi_d(val) {
-        this.registers.D = val & 0xFF;
-        this.registers.E = (val >> 8) & 0xFF;
-
-        this.clock += 10;
-    }
-
-    /**
-     * Stores a 16-bit immediate value in register pair H, L. Register H stores
-     * the low-byte of the value and register L stores the high-byte (little
-     * endian).
-     *
-     * @param {number} val 16-bit value to be stored.
-     */
-    lxi_h(val) {
-        this.registers.H = val & 0xFF;
-        this.registers.L = (val >> 8) & 0xFF;
-
-        this.clock += 10;
-    }
-
-    /**
-     * Loads the Stack Pointer with a 16-bit immediate value. The low-byte of
-     * the value is loaded to the high-byte of the stack pointer and the
-     * high-byte of the value is loaded to the low-byte of the stack pointer.
-     *
-     * @param {number} val 16-bit value to be stored.
-     */
-    lxi_sp(val) {
-        const second_byte = val >> 8 & 0xFF;
-        const third_byte = val & 0xFF;
-
-        this.stack_pointer = 0x0;
-        this.stack_pointer = (third_byte << 8) | second_byte;
-
-        this.clock += 10;
-    }
 
 
 //  ===================================================================================
@@ -591,13 +557,13 @@ class i8080 {
     }
 
     mov_to_mem(reg_source) {
-        const addr = this.get_mem_addr('H', 'L');
+        const addr = this.read_mem_addr('H', 'L');
         this.bus.write(this.registers[reg_source], addr);
         this.clock += 7
     }
 
     mov_from_mem(reg_destination) {
-        const addr = this.get_mem_addr('H', 'L');
+        const addr = this.read_mem_addr('H', 'L');
         this.registers[reg_destination] = this.bus.read(addr);
         this.clock += 7
     }
@@ -612,7 +578,7 @@ class i8080 {
     }
 
     mvi_to_mem(val) {
-        const addr = this.get_mem_addr('H', 'L');
+        const addr = this.read_mem_addr('H', 'L');
         this.bus.write(val, addr);
         this.clock += 7
     }
@@ -637,7 +603,7 @@ class i8080 {
     }
 
     ana_mem() {
-        this.registers.A &= this.bus.read(this.get_mem_addr('H','L'));
+        this.registers.A &= this.bus.read(this.read_mem_addr('H','L'));
         this.set_flags_on_logical_op();
 
         this.clock += 7;
@@ -658,7 +624,7 @@ class i8080 {
     }
 
     xra_mem() {
-        this.registers.A ^= this.bus.read(this.get_mem_addr('H','L'));
+        this.registers.A ^= this.bus.read(this.read_mem_addr('H','L'));
         this.set_flags_on_logical_op();
 
         this.clock += 7;
@@ -678,7 +644,7 @@ class i8080 {
     }
 
     ora_mem() {
-        this.registers.A |= this.bus.read(this.get_mem_addr('H','L'));
+        this.registers.A |= this.bus.read(this.read_mem_addr('H','L'));
         this.set_flags_on_logical_op();
 
         this.clock += 7;
@@ -691,19 +657,27 @@ class i8080 {
     }
 
 
-    // Store Accumulator
-
-    stax_b() {
-        const addr = this.get_mem_addr('B','C');
+    /**
+     * Store the current value in the Accumulator to a location in memory.
+     *
+     * @param {char} register First register of the register pair that holds
+     * the relevant memory address. `B` = `B` &
+     * `C`, `D` = `D` & `E`. 
+     */
+    stax(register) {
+        let addr;
+        switch(register) {
+            case 'B':
+                addr = this.read_mem_addr('B','C');
+                break;
+            case 'D':
+                addr = this.read_mem_addr('D','E');
+                break;
+        }
         this.bus.write(this.registers.A, addr);
         this.clock += 7;
     }
 
-    stax_d() {
-        const addr = this.get_mem_addr('D','E');
-        this.bus.write(this.registers.A, addr);
-        this.clock += 7;
-    }
 
     /**
      * Store contents of `H` and `L` registers in memory. Contents of `H`

@@ -14,9 +14,9 @@ test_suite:
     const c = new Computer();
 
     for (let word = 0x0000; word <= max_value_to_test; word++) {{
-        c.cpu.{opcode_function}(word);
-        expect(c.cpu.registers.{low_byte_register}).toEqual(word & 0x00FF);
-        expect(c.cpu.registers.{high_byte_register}).toEqual((word >> 8) & 0x00FF);
+        c.cpu.lxi('{msb_register}', word);
+        expect(c.cpu.registers.{msb_register}).toEqual(word & 0x00FF);
+        expect(c.cpu.registers.{lsb_register}).toEqual((word >> 8) & 0x00FF);
     }}
     }});
 
@@ -25,20 +25,17 @@ test_suite:
     - test:
       name: LXI B,d16
       comment: 
-      opcode_function: lxi_b
-      low_byte_register: B
-      high_byte_register: C 
+      msb_register: B
+      lsb_register: C
       
     - test:
       name: LXI D,d16
       comment: 
-      opcode_function: lxi_d
-      low_byte_register: D
-      high_byte_register: E    
+      msb_register: D
+      lsb_register: E    
     
     - test:
       name: LXI H,d16
       comment: 
-      opcode_function: lxi_h
-      low_byte_register: H
-      high_byte_register: L
+      msb_register: H
+      lsb_register: L

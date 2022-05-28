@@ -6,7 +6,7 @@ describe('LXI Register', () => {
 		const c = new Computer();
 		
 		for (let word = 0x0000; word <= max_value_to_test; word++) {
-		    c.cpu.lxi_b(word);
+		    c.cpu.lxi('B', word);
 		    expect(c.cpu.registers.B).toEqual(word & 0x00FF);
 		    expect(c.cpu.registers.C).toEqual((word >> 8) & 0x00FF);
 		}
@@ -17,7 +17,7 @@ describe('LXI Register', () => {
 		const c = new Computer();
 		
 		for (let word = 0x0000; word <= max_value_to_test; word++) {
-		    c.cpu.lxi_d(word);
+		    c.cpu.lxi('D', word);
 		    expect(c.cpu.registers.D).toEqual(word & 0x00FF);
 		    expect(c.cpu.registers.E).toEqual((word >> 8) & 0x00FF);
 		}
@@ -28,7 +28,7 @@ describe('LXI Register', () => {
 		const c = new Computer();
 		
 		for (let word = 0x0000; word <= max_value_to_test; word++) {
-		    c.cpu.lxi_h(word);
+		    c.cpu.lxi('H', word);
 		    expect(c.cpu.registers.H).toEqual(word & 0x00FF);
 		    expect(c.cpu.registers.L).toEqual((word >> 8) & 0x00FF);
 		}
