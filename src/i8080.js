@@ -471,9 +471,7 @@ class i8080 {
 
 // Condition bits affected: None
 
-    lxi(register, val) {
-        const msb = val & 0xFF;
-        const lsb = (val >> 8) & 0xFF;
+    lxi(register, msb, lsb) {
 
         switch(register) {
             case 'B':
@@ -488,7 +486,6 @@ class i8080 {
                 this.registers.H = msb;
                 this.registers.L = lsb;
             case 'SP':
-                console.log(this.stack_pointer);
                 this.stack_pointer = (msb << 8) | lsb;
                 break;
         }
@@ -683,13 +680,11 @@ class i8080 {
      * Store contents of `H` and `L` registers in memory. Contents of `H`
      * register are stored at `addr` and contents of `L` register are stored at
      * the next higher memory address.
-     * @param {number} addr 16-bit memory address of storage location in little-endian format
+     * @param {number} operand 16-bit memory address of storage location in little-endian format
      */
     shld(addr) {
-        const addr_low_byte = addr & 0xFF;
-        const full_addr = (addr << 8) | (addr >> 8) & 0xFFFF;
-        this.bus.write(this.registers.L, full_addr);
-        this.bus.write(this.registers.H, full_addr + 1);
+        this.bus.write(this.registers.L, addr);
+        this.bus.write(this.registers.H, addr + 1);
         this.clock += 16;
     }
 
