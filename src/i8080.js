@@ -471,9 +471,9 @@ class i8080 {
 
 // Condition bits affected: None
 
-    lxi(register, msb, lsb) {
+    lxi(reg, msb, lsb) {
 
-        switch(register) {
+        switch(reg) {
             case 'B':
                 this.registers.B = msb;
                 this.registers.C = lsb;
@@ -657,13 +657,13 @@ class i8080 {
     /**
      * Store the current value in the Accumulator to a location in memory.
      *
-     * @param {char} register First register of the register pair that holds
+     * @param {char} reg First register of the register pair that holds
      * the relevant memory address. `B` = `B` &
      * `C`, `D` = `D` & `E`. 
      */
-    stax(register) {
+    stax(reg) {
         let addr;
-        switch(register) {
+        switch(reg) {
             case 'B':
                 addr = this.read_mem_addr('B','C');
                 break;
