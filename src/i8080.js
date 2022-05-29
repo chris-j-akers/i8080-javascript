@@ -103,6 +103,7 @@ class i8080 {
         this.program_counter = 0x0;
         this.flags = 0x2;
         this.clock = 0x0;
+        this.halt = false;
     }
 
     /**
@@ -112,6 +113,10 @@ class i8080 {
      */
     connect_bus(bus) {
         this.bus = bus;
+    }
+
+    set_program_counter(addr) {
+        this.program_counter = addr;
     }
 
     /**
@@ -193,6 +198,80 @@ class i8080 {
         return this.flags & (1 << bit_pos);
     }
 
+    get_next_byte() {
+        const next_byte = this.bus.read(this.program_counter);
+        this.program_counter++;
+        return next_byte;
+    }
+
+    /**
+     *
+     * @returns The next 16-bits of memory from the current program counter
+     * position, then increments the program counter by 2 bytes.
+     */
+    get_next_word() {
+        const lsb = this.bus.read(this.program_counter);
+        this.program_counter++;
+        const msb = this.bus.read(this.program_counter);
+        this.program_counter++;
+        return (msb <<8) | lsb;
+    }
+
+    execute() {
+        const opcode = this.get_next_byte();
+        this.program_counter++;
+
+        switch(opcode) {
+            case 0x80:
+                this.add_reg('B');
+                break;
+            case 0x81:
+                this.add_reg('C');
+                break;
+            case 0x82:
+                this.add_reg('D');
+                break;
+            case 0x83:
+                this.add_reg('E');
+                break;
+            case 0x84:
+                this.add_reg('H');
+                break;
+            case 0x85:
+                this.add_reg('L');
+                break;
+            case 0x86:
+                this.add_mem();
+                break;
+            case 0x87:
+                this.add_reg('A');
+                break;
+            case 0x76:
+                this.halt = true;
+                return;
+            case 0x06:
+                this.mvi_reg('B', this.get_next_byte());
+                break;
+            case 0x16:
+                this.mvi_reg('D', this.get_next_byte());
+                break;
+            case 0x26:
+                this.mvi_reg('H', this.get_next_byte());
+                break;
+            case 0x0E:
+                this.mvi_reg('C', this.get_next_byte());
+                break;
+            case 0x1E:
+                this.mvi_reg('E', this.get_next_byte());
+                break;
+            case 0x2E:
+                this.mvi_reg('L', this.get_next_byte());
+                break;
+            case 0x3E:
+                this.mvi_reg('A', this.get_next_byte());
+                break;
+        }
+    }
 
 //  ===================================================================================
 //  NOP
