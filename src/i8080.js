@@ -363,7 +363,7 @@ class i8080 {
      * subtracted from the Accumulator (B,C,D,E,H,L)
      */
     sub_reg(reg) {
-        const reg_twos_comp = ~(reg) + 1;
+        const reg_twos_comp = ~(this.registers[reg]) + 1;
         const result = (this.registers['A'] + reg_twos_comp);
         this.set_flags_on_arithmetic_op(result, this.registers['A'], reg_twos_comp);
         this.registers['A'] = result & 0xFF;
@@ -412,7 +412,7 @@ class i8080 {
     }
 
     sui(val) {
-        const val_twos_comp = ~(reg) + 1;
+        const val_twos_comp = ~(val) + 1;
         const result = (this.registers['A'] + val_twos_comp);
         this.set_flags_on_arithmetic_op(result, this.registers['A'], reg_twos_comp);
         this.registers['A'] = result & 0xFF;
@@ -791,6 +791,24 @@ class i8080 {
                 break;
             case 0x8F:
                 this.adc_reg('A');
+                break;
+            case 0x90:
+                this.sub_reg('B');
+                break;
+            case 0x91:
+                this.sub_reg('C');
+                break;
+            case 0x92:
+                this.sub_reg('D');
+                break;
+            case 0x93:
+                this.sub_reg('E');
+                break;
+            case 0x94:
+                this.sub_reg('H');
+                break;
+            case 0x95:
+                this.sub_reg('L');
                 break;
             case 0xC6:
                 this.adi(this.get_next_byte());
