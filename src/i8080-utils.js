@@ -33,3 +33,5 @@ function __util__word_as_binary(val) {
     }
     return str.split('').reverse().join('');
 }
+
+export { __util__byte_as_binary, __util__word_as_binary }

@@ -315,4 +315,4 @@ function shld2() {
     console.log(c);
 
 }
-shld2()
+//shld2()

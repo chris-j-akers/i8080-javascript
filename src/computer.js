@@ -1,8 +1,8 @@
 'use strict';
 
-const i8080 = require('./i8080.js')
-const MMU = require('./mmu.js')
-const Bus = require('./bus.js')
+import { i8080 } from './i8080.js';
+import { MMU } from './mmu.js';
+import { Bus } from './bus.js';
 
 class Computer {
     constructor() {
@@ -24,20 +24,19 @@ class Computer {
         this.mmu.reset();
     }
 
-    load_program(addr = 0x0, program) {
+    inject_program(program, at_addr=0x0) {
         for (let i=0; i<program.length; i++) {
-            this.bus.write(addr + i, program[i]);
+            this.bus.write(program[i], at_addr + i);
         }
     }
 
-    execute_program(addr = 0x0) {
-        this.cpu.set_program_counter(addr);
+    execute_program(from_addr=0x0) {
+        this.cpu.set_program_counter(from_addr);
         while(this.cpu.halt === false) {
             this.cpu.execute_instruction();
         }
     }
-
 }
 
-module.exports = Computer;
+export { Computer };
 

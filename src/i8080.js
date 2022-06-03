@@ -1,5 +1,7 @@
 'use strict';
 
+import { __util__byte_as_binary, __util__word_as_binary} from './i8080-utils.js'
+
 /**
  * An Intel 8080 CPU implemented in software.
  */
@@ -195,83 +197,9 @@ class i8080 {
      * @returns `True` or `False`depending on whether the selected flag is set.
      */
     flag_set(bit_pos) {
-        return this.flags & (1 << bit_pos);
+        return (this.flags & (1 << bit_pos)) > 0;
     }
 
-    get_next_byte() {
-        const next_byte = this.bus.read(this.program_counter);
-        this.program_counter++;
-        return next_byte;
-    }
-
-    /**
-     *
-     * @returns The next 16-bits of memory from the current program counter
-     * position, then increments the program counter by 2 bytes.
-     */
-    get_next_word() {
-        const lsb = this.bus.read(this.program_counter);
-        this.program_counter++;
-        const msb = this.bus.read(this.program_counter);
-        this.program_counter++;
-        return (msb <<8) | lsb;
-    }
-
-    execute() {
-        const opcode = this.get_next_byte();
-        this.program_counter++;
-
-        switch(opcode) {
-            case 0x80:
-                this.add_reg('B');
-                break;
-            case 0x81:
-                this.add_reg('C');
-                break;
-            case 0x82:
-                this.add_reg('D');
-                break;
-            case 0x83:
-                this.add_reg('E');
-                break;
-            case 0x84:
-                this.add_reg('H');
-                break;
-            case 0x85:
-                this.add_reg('L');
-                break;
-            case 0x86:
-                this.add_mem();
-                break;
-            case 0x87:
-                this.add_reg('A');
-                break;
-            case 0x76:
-                this.halt = true;
-                return;
-            case 0x06:
-                this.mvi_reg('B', this.get_next_byte());
-                break;
-            case 0x16:
-                this.mvi_reg('D', this.get_next_byte());
-                break;
-            case 0x26:
-                this.mvi_reg('H', this.get_next_byte());
-                break;
-            case 0x0E:
-                this.mvi_reg('C', this.get_next_byte());
-                break;
-            case 0x1E:
-                this.mvi_reg('E', this.get_next_byte());
-                break;
-            case 0x2E:
-                this.mvi_reg('L', this.get_next_byte());
-                break;
-            case 0x3E:
-                this.mvi_reg('A', this.get_next_byte());
-                break;
-        }
-    }
 
 //  ===================================================================================
 //  NOP
@@ -372,25 +300,25 @@ class i8080 {
      * @param {char} reg The name of the register which contains the value to be added.
      */
     add_reg(reg) {
-        const result = this.registers.A + reg;
-        this.set_flags_on_arithmetic_op(result, this.registers.A, reg);
-        this.registers.A = result & 0xFF;
+        const result = this.registers['A'] + this.registers[reg];
+        this.set_flags_on_arithmetic_op(result, this.registers['A'], this.registers[reg]);
+        this.registers['A'] = result & 0xFF;
         this.clock += 4;
     }
 
     add_mem() {
         const mem_data = this.bus.read(this.read_mem_addr('H','L'));
-        const result = this.registers.A + mem_data;
-        this.set_flags_on_arithmetic_op(result, this.registers.A, mem_data);
-        this.registers.A = result & 0xFF;
+        const result = this.registers['A'] + mem_data;
+        this.set_flags_on_arithmetic_op(result, this.registers['A'], mem_data);
+        this.registers['A'] = result & 0xFF;
         this.clock += 7;
     }
 
     adc_reg(reg) {
-        const register_with_carry = reg + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
-        const result = this.registers.A + register_with_carry;
-        this.set_flags_on_arithmetic_op(result, this.registers.A, register_with_carry);
-        this.registers.A = result & 0xFF;
+        const register_with_carry = this.registers[reg] + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
+        const result = this.registers['A'] + register_with_carry;
+        this.set_flags_on_arithmetic_op(result, this.registers['A'], register_with_carry);
+        this.registers['A'] = result & 0xFF;
         this.clock += 4;
     }
 
@@ -398,25 +326,25 @@ class i8080 {
         const mem_data = this.bus.read(this.read_mem_addr('H','L'));
         const carry = (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         const mem_data_with_carry = mem_data + carry;
-        const result = this.registers.A + mem_data_with_carry;
-        this.set_flags_on_arithmetic_op(result, this.registers.A, mem_data_with_carry);
-        this.registers.A = result & 0xFF;
+        const result = this.registers['A'] + mem_data_with_carry;
+        this.set_flags_on_arithmetic_op(result, this.registers['A'], mem_data_with_carry);
+        this.registers['A'] = result & 0xFF;
         this.clock += 7;
     }
 
     adi(val) {
-        const result = this.registers.A + val;
-        this.set_flags_on_arithmetic_op(result, this.registers.A, val);
-        this.registers.A = result & 0xFF;
+        const result = this.registers['A'] + val;
+        this.set_flags_on_arithmetic_op(result, this.registers['A'], val);
+        this.registers['A'] = result & 0xFF;
         this.clock += 4;
     }
 
     aci(val) {
         const carry = (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         const val_with_carry = val + carry;
-        const result = this.registers.A + val_with_carry;
-        this.set_flags_on_arithmetic_op(result, this.registers.A, val_with_carry);
-        this.registers.A = result & 0xFF;
+        const result = this.registers['A'] + val_with_carry;
+        this.set_flags_on_arithmetic_op(result, this.registers['A'], val_with_carry);
+        this.registers['A'] = result & 0xFF;
         this.clock += 4;
     }
 
@@ -436,9 +364,9 @@ class i8080 {
      */
     sub_reg(reg) {
         const reg_twos_comp = ~(reg) + 1;
-        const result = (this.registers.A + reg_twos_comp);
-        this.set_flags_on_arithmetic_op(result, this.registers.A, reg_twos_comp);
-        this.registers.A = result & 0xFF;
+        const result = (this.registers['A'] + reg_twos_comp);
+        this.set_flags_on_arithmetic_op(result, this.registers['A'], reg_twos_comp);
+        this.registers['A'] = result & 0xFF;
         this.clock += 7;
     }
 
@@ -457,18 +385,18 @@ class i8080 {
     sub_mem() {
         const data = this.bus.read(this.read_mem_addr('H','L'));
         const data_twos_comp = ~(data)+1;
-        const result = this.registers.A + data_twos_comp;
-        this.set_flags_on_arithmetic_op(result, this.registers.A, data_twos_comp);
-        this.registers.A = result & 0xFF;
+        const result = this.registers['A'] + data_twos_comp;
+        this.set_flags_on_arithmetic_op(result, this.registers['A'], data_twos_comp);
+        this.registers['A'] = result & 0xFF;
         this.clock += 7;
     }
 
     sbb_reg(reg) {        
         const reg_carry = reg + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         const reg_carry_twos_comp = ~(reg_carry) + 1;
-        const result = (this.registers.A + reg_carry_twos_comp);
-        this.set_flags_on_arithmetic_op(result, this.registers.A, reg_carry_twos_comp);
-        this.registers.A = result & 0xFF;
+        const result = (this.registers['A'] + reg_carry_twos_comp);
+        this.set_flags_on_arithmetic_op(result, this.registers['A'], reg_carry_twos_comp);
+        this.registers['A'] = result & 0xFF;
         this.clock += 7;
     }
 
@@ -477,17 +405,17 @@ class i8080 {
         const carry = (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         const data_carry = data + carry;
         const data_carry_twos_comp = ~(data_carry)+1;
-        const result = this.registers.A + data_carry_twos_comp;
-        this.set_flags_on_arithmetic_op(result, this.registers.A, data_carry_twos_comp);
-        this.registers.A = result & 0xFF;
+        const result = this.registers['A'] + data_carry_twos_comp;
+        this.set_flags_on_arithmetic_op(result, this.registers['A'], data_carry_twos_comp);
+        this.registers['A'] = result & 0xFF;
         this.clock += 7;
     }
 
     sui(val) {
         const val_twos_comp = ~(reg) + 1;
-        const result = (this.registers.A + val_twos_comp);
-        this.set_flags_on_arithmetic_op(result, this.registers.A, reg_twos_comp);
-        this.registers.A = result & 0xFF;
+        const result = (this.registers['A'] + val_twos_comp);
+        this.set_flags_on_arithmetic_op(result, this.registers['A'], reg_twos_comp);
+        this.registers['A'] = result & 0xFF;
         this.clock += 7;        
     }
 
@@ -495,9 +423,9 @@ class i8080 {
         const carry = (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         const val_carry = val + carry;
         const val_carry_twos_comp = ~(val_carry) + 1;
-        const result = this.registers.A + val_carry_twos_comp;
-        this.set_flags_on_arithmetic_op(result, this.registers.A, val_carry_twos_comp);
-        this.registers.A = result & 0xFF;
+        const result = this.registers['A'] + val_carry_twos_comp;
+        this.set_flags_on_arithmetic_op(result, this.registers['A'], val_carry_twos_comp);
+        this.registers['A'] = result & 0xFF;
         this.clock += 4;
     }
 
@@ -604,20 +532,20 @@ class i8080 {
         // This instruction is used when adding decimal numbers. It is the only 
         // instruction whose operation is affected by the Auxiliary Carry bit.
 
-        if ((this.registers.A & 0x0F) > 9 || this.flag_set(i8080.FlagType.AuxillaryCarry)) {
-            const val = this.registers.A += 0x06;
-            this.set_flags_on_arithmetic_op(val, this.registers.A, 0x06);
-            this.registers.A = val & 0xFF;
+        if ((this.registers['A'] & 0x0F) > 9 || this.flag_set(i8080.FlagType.AuxillaryCarry)) {
+            const val = this.registers['A'] += 0x06;
+            this.set_flags_on_arithmetic_op(val, this.registers['A'], 0x06);
+            this.registers['A'] = val & 0xFF;
         }
 
-        if ((this.registers.A & 0xF0) > 0x90 || this.flag_set(i8080.FlagType.Carry)) {
-            const val = this.registers.A += 0x60;
+        if ((this.registers['A'] & 0xF0) > 0x90 || this.flag_set(i8080.FlagType.Carry)) {
+            const val = this.registers['A'] += 0x60;
 
             // According to the documentation, we do not clear the Carry if the test
             // is false, here. We leave it, so calling set_flag() directly instead of
             // set_flags() to stop the reset on the false condition.
             if (val > 255 || val < 0) this.set_flag(i8080.FlagType.Carry);
-            this.registers.A = val & 0xFF;
+            this.registers['A'] = val & 0xFF;
         }
 
         this.clock += 4;
@@ -666,68 +594,68 @@ class i8080 {
     
     set_flags_on_logical_op() {
         this.clear_flag(i8080.FlagType.Carry);
-        this.registers.A === 0 ? this.set_flag(i8080.FlagType.Zero) : this.clear_flag(i8080.FlagType.Zero);
-        this.registers.A & (1 << 7) ? this.set_flag(i8080.FlagType.Sign) : this.clear_flag(i8080.FlagType.Sign)
-        this.parity(this.registers.A) ? this.set_flag(i8080.FlagType.Parity) : this.clear_flag(i8080.FlagType.Parity);
+        this.registers['A'] === 0 ? this.set_flag(i8080.FlagType.Zero) : this.clear_flag(i8080.FlagType.Zero);
+        this.registers['A'] & (1 << 7) ? this.set_flag(i8080.FlagType.Sign) : this.clear_flag(i8080.FlagType.Sign)
+        this.parity(this.registers['A']) ? this.set_flag(i8080.FlagType.Parity) : this.clear_flag(i8080.FlagType.Parity);
     }
 
     ana_reg(reg) {
-        this.registers.A &= this.registers[reg];
+        this.registers['A'] &= this.registers[reg];
         this.set_flags_on_logical_op();
         
         this.clock += 4;
     }
 
     ana_mem() {
-        this.registers.A &= this.bus.read(this.read_mem_addr('H','L'));
+        this.registers['A'] &= this.bus.read(this.read_mem_addr('H','L'));
         this.set_flags_on_logical_op();
 
         this.clock += 7;
     }
 
     ani(val) {
-        this.registers.A &= val;
+        this.registers['A'] &= val;
         this.set_flags_on_logical_op();
 
         this.clock += 4;
     }
 
     xra_reg(reg) {
-        this.registers.A ^= this.registers[reg];
+        this.registers['A'] ^= this.registers[reg];
         this.set_flags_on_logical_op();
 
         this.clock += 4;
     }
 
     xra_mem() {
-        this.registers.A ^= this.bus.read(this.read_mem_addr('H','L'));
+        this.registers['A'] ^= this.bus.read(this.read_mem_addr('H','L'));
         this.set_flags_on_logical_op();
 
         this.clock += 7;
     }
 
     xri(val) {
-        this.registers.A ^= val;
+        this.registers['A'] ^= val;
         this.set_flags_on_logical_op();
         this.clock += 4;
     }
 
     ora_reg(reg) {
-        this.registers.A |= this.registers[reg];
+        this.registers['A'] |= this.registers[reg];
         this.set_flags_on_logical_op();
 
         this.clock += 4;
     }
 
     ora_mem() {
-        this.registers.A |= this.bus.read(this.read_mem_addr('H','L'));
+        this.registers['A'] |= this.bus.read(this.read_mem_addr('H','L'));
         this.set_flags_on_logical_op();
 
         this.clock += 7;
     }
 
     ori(val) {
-        this.registers.A |= val;
+        this.registers['A'] |= val;
         this.set_flags_on_logical_op()
         this.clock += 4;
     }
@@ -750,7 +678,7 @@ class i8080 {
                 addr = this.read_mem_addr('D','E');
                 break;
         }
-        this.bus.write(this.registers.A, addr);
+        this.bus.write(this.registers['A'], addr);
         this.clock += 7;
     }
 
@@ -767,6 +695,113 @@ class i8080 {
         this.clock += 16;
     }
 
+    get_next_byte() {
+        const next_byte = this.bus.read(this.program_counter);
+        this.program_counter++;
+        return next_byte;
+    }
+
+    /**
+     *
+     * @returns The next 16-bits of memory from the current program counter
+     * position, then increments the program counter by 2 bytes.
+     */
+    get_next_word() {
+        const lsb = this.bus.read(this.program_counter);
+        this.program_counter++;
+        const msb = this.bus.read(this.program_counter);
+        this.program_counter++;
+        return (msb <<8) | lsb;
+    }
+
+    execute_instruction() {
+        const opcode = this.get_next_byte();
+        switch(opcode) {
+            case 0x0E:
+                this.mvi_reg('C', this.get_next_byte());
+                break;
+            case 0x1E:
+                this.mvi_reg('E', this.get_next_byte());
+                break;
+            case 0x2E:
+                this.mvi_reg('L', this.get_next_byte());
+                break;
+            case 0x3E:
+                this.mvi_reg('A', this.get_next_byte());
+                break;
+            case 0x06:
+                this.mvi_reg('B', this.get_next_byte());
+                break;
+            case 0x16:
+                this.mvi_reg('D', this.get_next_byte());
+                break;
+            case 0x26:
+                this.mvi_reg('H', this.get_next_byte());
+                break;
+            case 0x36:
+                this.mvi_to_mem(this.get_next_byte());
+                break;
+            case 0x76:
+                this.halt = true;
+                return;
+            case 0x80:
+                this.add_reg('B');
+                break;
+            case 0x81:
+                this.add_reg('C');
+                break;
+            case 0x82:
+                this.add_reg('D');
+                break;
+            case 0x83:
+                this.add_reg('E');
+                break;
+            case 0x84:
+                this.add_reg('H');
+                break;
+            case 0x85:
+                this.add_reg('L');
+                break;
+            case 0x86:
+                this.add_mem();
+                break;
+            case 0x87:
+                this.add_reg('A');
+                break;
+            case 0x88:
+                this.adc_reg('B');
+                break;
+            case 0x89:
+                this.adc_reg('C');
+                break;
+            case 0x8A:
+                this.adc_reg('D');
+                break;
+            case 0x8B:
+                this.adc_reg('E');
+                break;
+            case 0x8C:
+                this.adc_reg('H');
+                break;
+            case 0x8D:
+                this.adc_reg('L');
+                break;
+            case 0x8E:
+                this.adc_mem();
+                break;
+            case 0x8F:
+                this.adc_reg('A');
+                break;
+            case 0xC6:
+                this.adi(this.get_next_byte());
+                break;
+            case 0xCE:
+                this.aci(this.get_next_byte());
+                break;
+        }
+    }
+
+
 }
 
-module.exports = i8080;
+export { i8080 };

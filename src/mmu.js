@@ -23,4 +23,4 @@ class MMU {
     }
 }
 
-module.exports = MMU;
+export { MMU };
