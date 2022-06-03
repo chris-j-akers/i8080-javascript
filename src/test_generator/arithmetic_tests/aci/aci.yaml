@@ -5,27 +5,33 @@ test_suite:
   description: 'ACI'
   output_file_name: '/arithmetic/aci.test.js'
   header: |
-    const Computer = require('../../computer');
-    const i8080 = require('../../i8080');
+    import { Computer } from '../../computer.js'
+    import { i8080 } from '../../i8080.js'
+    import { strict as assert } from 'assert'
   footer: |
     });
   boilerplate: |
     const c = new Computer();
     const FlagType = i8080.FlagType;
 
-    c.cpu.mvi_reg('A',{accumulator});
+    const program = [
+      0x3E,           // Move into accumulator....
+      {accumulator},  // ...this immediate value
+      0xCE,          // ACI to the accumulator...
+      {data},          // ...this immediate value
+      0x76            // Halt
+    ]
 
+    c.inject_program(program);
     {set_carry}
-    
-    c.cpu.aci({data});
+    c.execute_program();
 
-    expect(c.cpu.registers.A).toEqual({expected_result});
-    expect(c.cpu.flag_set(FlagType.Carry)).{carry}();
-    expect(c.cpu.flag_set(FlagType.Parity)).{parity}();
-    expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).{auxillary_carry}();
-    expect(c.cpu.flag_set(FlagType.Zero)).{zero}();
-    expect(c.cpu.flag_set(FlagType.Sign)).{sign}();
-    c.reset();
+    assert.equal(c.cpu.registers.A,{expected_result});
+    assert.equal(c.cpu.flag_set(FlagType.Carry), {carry});
+    assert.equal(c.cpu.flag_set(FlagType.Parity), {parity});
+    assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), {auxillary_carry});
+    assert.equal(c.cpu.flag_set(FlagType.Zero), {zero});
+    assert.equal(c.cpu.flag_set(FlagType.Sign), {sign});
     }});
 
   tests:

@@ -5,39 +5,66 @@ test_suite:
   description: 'ADC Register (Unset All Flags)'
   output_file_name: '/arithmetic/adc.reg.unset-flags.test.js'
   header: |
-    const Computer = require('../../computer');
-    const i8080 = require('../../i8080');
+    import { Computer } from '../../computer.js'
+    import { i8080 } from '../../i8080.js'
+    import { strict as assert } from 'assert'
+
+    /**
+    * An opcode lookup table allows us to programmatically determine which OpCodes
+    * to use, depending on the register being tested. It saves us having to write a
+    * separate test per register. Instead we can loop through each one and run the
+    * same test.
+    */
+    const opcode_lookup = {
+        'B': {MVI: 0x06, ADC: 0x88},
+        'C': {MVI: 0x0E, ADC: 0x89},
+        'D': {MVI: 0x16, ADC: 0x8A},
+        'E': {MVI: 0x1E, ADC: 0x8B},
+        'H': {MVI: 0x26, ADC: 0x8C},
+        'L': {MVI: 0x2E, ADC: 0x8D}
+    };
   footer: |
     });
   boilerplate: |
     const c = new Computer();
     const FlagType = i8080.FlagType;
 
-    for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {{
-      c.cpu.mvi_reg('A', {accumulator});
-      c.cpu.mvi_reg(reg, {data});
+    let program = [
+        0x3E, 
+        {accumulator},  // MOV A, #{accumulator}
+        null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
+        {data},         // MOV [R], {data}
+        null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+        0x76            // HALT
+    ]
+
+    for (let reg of Object.keys(c.cpu.registers).filter((register) => register != 'A')) {{
+      program[2] = opcode_lookup[reg].MVI;
+      program[4] = opcode_lookup[reg].ADC;
 
       c.cpu.set_flag(FlagType.Parity);
       c.cpu.set_flag(FlagType.AuxillaryCarry);
       c.cpu.set_flag(FlagType.Zero);
       c.cpu.set_flag(FlagType.Sign);
 
-      expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
-      expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
-      expect(c.cpu.flag_set(FlagType.Zero)).toBeTruthy();
-      expect(c.cpu.flag_set(FlagType.Sign)).toBeTruthy();
-      
-      {set_carry}
-      c.cpu.adc_reg(c.cpu.registers[reg]);
+      assert.equal(c.cpu.flag_set(FlagType.Parity),true);
+      assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
+      assert.equal(c.cpu.flag_set(FlagType.Zero), true);
+      assert.equal(c.cpu.flag_set(FlagType.Sign), true);
 
-      expect(c.cpu.registers.A).toEqual({expected_result});
-      expect(c.cpu.flag_set(FlagType.Carry)).{carry}();
-      expect(c.cpu.flag_set(FlagType.Parity)).{parity}();
-      expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).{auxillary_carry}();
-      expect(c.cpu.flag_set(FlagType.Zero)).{zero}();
-      expect(c.cpu.flag_set(FlagType.Sign)).{sign}();
+      c.inject_program(program);
+      {set_carry}
+      c.execute_program();
+
+      assert.equal(c.cpu.registers.A, {expected_result});
+      assert.equal(c.cpu.flag_set(FlagType.Carry), {carry});
+      assert.equal(c.cpu.flag_set(FlagType.Parity),{parity});
+      assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), {auxillary_carry});
+      assert.equal(c.cpu.flag_set(FlagType.Zero), {zero});
+      assert.equal(c.cpu.flag_set(FlagType.Sign), {sign});
+
       c.reset();
-    }}
+    }};
     }});
 
   tests:

@@ -27,24 +27,47 @@ import store_tests.shld.shld_tests as shld_tests
 def generate_test(test_suite, working_dir, populate_function):
     output_file = f'{working_dir}{test_suite["output_file_name"]}'
     with open(output_file, 'w') as test_file:
-        test_file.write(test_suite['header'])
+        test_file.write(f'{test_suite["header"]}\n')
         test_file.write(f'describe(\'{test_suite["description"]}\', () => {{\n')
         for test in test_suite['tests']:
-            test_file.write(f'\ttest(\'{test["name"]}\', () => {{\n')
+            test_file.write(f'\tit(\'{test["name"]}\', () => {{\n')
             boilerplate = eval('{function}({p1},{p2})'.format(function=populate_function, p1="test_suite['boilerplate']", p2="test"))
             for line in boilerplate.split('\n'):
                 test_file.write(f'\t\t{line}\n')
         test_file.write(test_suite['footer'])
-    
+
 def main():
-    print(f'searching for YAML config files')
-    for file in Path('./').rglob('*.yaml'):
+    files = ['/home/cakers/Source/i8080-javascript/src/test_generator/arithmetic_tests/add/add.reg.yaml',
+             '/home/cakers/Source/i8080-javascript/src/test_generator/arithmetic_tests/add/add.reg.unset-flags.yaml',
+             '/home/cakers/Source/i8080-javascript/src/test_generator/arithmetic_tests/add/add.mem.yaml',
+             '/home/cakers/Source/i8080-javascript/src/test_generator/arithmetic_tests/add/add.mem.unset-flags.yaml',
+             '/home/cakers/Source/i8080-javascript/src/test_generator/arithmetic_tests/add/add.acc.yaml',
+             '/home/cakers/Source/i8080-javascript/src/test_generator/arithmetic_tests/add/add.acc.unset-flags.yaml',
+             '/home/cakers/Source/i8080-javascript/src/test_generator/arithmetic_tests/adc/adc.reg.yaml',
+             '/home/cakers/Source/i8080-javascript/src/test_generator/arithmetic_tests/adc/adc.reg.unset-flags.yaml',
+             '/home/cakers/Source/i8080-javascript/src/test_generator/arithmetic_tests/adc/adc.mem.yaml',
+             '/home/cakers/Source/i8080-javascript/src/test_generator/arithmetic_tests/adc/adc.mem.unset-flags.yaml',
+             '/home/cakers/Source/i8080-javascript/src/test_generator/arithmetic_tests/adc/adc.acc.unset-flags.yaml',
+             '/home/cakers/Source/i8080-javascript/src/test_generator/arithmetic_tests/adc/adc.acc.yaml',
+             '/home/cakers/Source/i8080-javascript/src/test_generator/arithmetic_tests/adi/adi.yaml',
+             '/home/cakers/Source/i8080-javascript/src/test_generator/arithmetic_tests/aci/aci.yaml']
+    for file in files:
         with open(file) as yaml_file:
             test_suite = yaml.safe_load(yaml_file)['test_suite'];
             if test_suite['enable'] == True:
                 print('generating test suite from: {0}'.format(file))
                 generator_function = test_suite['generator_function']
                 generate_test(test_suite, config.OUTPUT_DIRECTORY, generator_function)
+
+# def main():
+#     print(f'searching for YAML config files')
+#     for file in Path('./').rglob('*.yaml'):
+#         with open(file) as yaml_file:
+#             test_suite = yaml.safe_load(yaml_file)['test_suite'];
+#             if test_suite['enable'] == True:
+#                 print('generating test suite from: {0}'.format(file))
+#                 generator_function = test_suite['generator_function']
+#                 generate_test(test_suite, config.OUTPUT_DIRECTORY, generator_function)
 
 if __name__ == '__main__':
     main()

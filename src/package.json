@@ -1,20 +1,18 @@
 {
   "scripts": {
-    "test": "jest"
+    "test": "mocha '__tests__/arithmetic/aci.*.js'"
   },
   "name": "src",
   "version": "1.0.0",
-  "main": "i8080.js",
   "directories": {
-    "__tests__": "jest"
+    "__tests__": "mocha"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
-  "type": "commonjs",
+  "type": "module",
   "devDependencies": {
-    "@types/jest": "^27.5.1",
-    "request": "^2.88.2"
+    "mocha": "^10.0.0"
   }
 }
