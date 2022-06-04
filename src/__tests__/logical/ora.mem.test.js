@@ -1,112 +1,165 @@
-const Computer = require('../../computer');
-const i8080 = require('../../i8080');
+import { Computer } from '../../computer.js'
+import { i8080 } from '../../i8080.js'
+import { strict as assert } from 'assert'
 
 describe('ORA Memory', () => {
 	it('Reset Carry Flag', () => {
+		const max_mem_addr = 255;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
-		const max_mem_addr = 255
 		
 		const data = 4;
 		
-		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.cpu.load_mem_addr(mem_addr, 'H', 'L');
-		  c.cpu.mvi_to_mem(data);
-		  c.cpu.mvi_reg('A', 5)
+		const program = [
+		  0x3E,                   // MVI into Accumulator
+		  5,          // Immediate value (in test config)
+		  0x26,                   // MOV into H...
+		  null,                   // ...the high-byte of the memory address (ro be inserted)
+		  0x2E,                   // MOV into L...
+		  null,                   // ... the low-byte of the memory address (to be inserted)
+		  0x36,                   // MOV into the memory address...
+		  data,                   // ...the data value
+		  0xB6,                   // ORA data in Memory Location with Accumulator
+		  0x76                    // Halt Program
+		]
 		
+		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
+		  program[3] = (mem_addr >> 8) & 0xFF;
+		  program[5] = mem_addr & 0xFF;
+		
+		  c.inject_program(program);
 		  c.cpu.set_flag(FlagType.Carry);
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		assert.equal(c.cpu.flag_set(FlagType.Carry), true);
 		
+		  c.execute_program();
 		
-		  c.cpu.ora_mem();
+		  assert.equal(c.cpu.registers.A, 5);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Parity),true);
+		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
 		
-		  expect(c.cpu.registers.A).toEqual(5);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
 		  c.reset();
 		  }
 		});
 		
 	it('Set Zero Flag', () => {
+		const max_mem_addr = 255;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
-		const max_mem_addr = 255
 		
 		const data = 0;
 		
-		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.cpu.load_mem_addr(mem_addr, 'H', 'L');
-		  c.cpu.mvi_to_mem(data);
-		  c.cpu.mvi_reg('A', 0)
+		const program = [
+		  0x3E,                   // MVI into Accumulator
+		  0,          // Immediate value (in test config)
+		  0x26,                   // MOV into H...
+		  null,                   // ...the high-byte of the memory address (ro be inserted)
+		  0x2E,                   // MOV into L...
+		  null,                   // ... the low-byte of the memory address (to be inserted)
+		  0x36,                   // MOV into the memory address...
+		  data,                   // ...the data value
+		  0xB6,                   // ORA data in Memory Location with Accumulator
+		  0x76                    // Halt Program
+		]
 		
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
+		  program[3] = (mem_addr >> 8) & 0xFF;
+		  program[5] = mem_addr & 0xFF;
 		
+		  c.inject_program(program);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
 		
-		  c.cpu.ora_mem();
+		  c.execute_program();
 		
-		  expect(c.cpu.registers.A).toEqual(0);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Zero)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
+		  assert.equal(c.cpu.registers.A, 0);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Parity),true);
+		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Zero), true);
+		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
 		  c.reset();
 		  }
 		});
 		
 	it('Set Sign Flag', () => {
+		const max_mem_addr = 255;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
-		const max_mem_addr = 255
 		
 		const data = 255;
 		
-		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.cpu.load_mem_addr(mem_addr, 'H', 'L');
-		  c.cpu.mvi_to_mem(data);
-		  c.cpu.mvi_reg('A', 127)
+		const program = [
+		  0x3E,                   // MVI into Accumulator
+		  127,          // Immediate value (in test config)
+		  0x26,                   // MOV into H...
+		  null,                   // ...the high-byte of the memory address (ro be inserted)
+		  0x2E,                   // MOV into L...
+		  null,                   // ... the low-byte of the memory address (to be inserted)
+		  0x36,                   // MOV into the memory address...
+		  data,                   // ...the data value
+		  0xB6,                   // ORA data in Memory Location with Accumulator
+		  0x76                    // Halt Program
+		]
 		
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
+		  program[3] = (mem_addr >> 8) & 0xFF;
+		  program[5] = mem_addr & 0xFF;
 		
+		  c.inject_program(program);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
 		
-		  c.cpu.ora_mem();
+		  c.execute_program();
 		
-		  expect(c.cpu.registers.A).toEqual(255);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Sign)).toBeTruthy();
+		  assert.equal(c.cpu.registers.A, 255);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Parity),true);
+		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Sign), true);
+		
 		  c.reset();
 		  }
 		});
 		
 	it('Set Parity Flag', () => {
+		const max_mem_addr = 255;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
-		const max_mem_addr = 255
 		
 		const data = 81;
 		
-		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.cpu.load_mem_addr(mem_addr, 'H', 'L');
-		  c.cpu.mvi_to_mem(data);
-		  c.cpu.mvi_reg('A', 68)
+		const program = [
+		  0x3E,                   // MVI into Accumulator
+		  68,          // Immediate value (in test config)
+		  0x26,                   // MOV into H...
+		  null,                   // ...the high-byte of the memory address (ro be inserted)
+		  0x2E,                   // MOV into L...
+		  null,                   // ... the low-byte of the memory address (to be inserted)
+		  0x36,                   // MOV into the memory address...
+		  data,                   // ...the data value
+		  0xB6,                   // ORA data in Memory Location with Accumulator
+		  0x76                    // Halt Program
+		]
 		
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
+		  program[3] = (mem_addr >> 8) & 0xFF;
+		  program[5] = mem_addr & 0xFF;
 		
+		  c.inject_program(program);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
 		
-		  c.cpu.ora_mem();
+		  c.execute_program();
 		
-		  expect(c.cpu.registers.A).toEqual(85);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
+		  assert.equal(c.cpu.registers.A, 85);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Parity),true);
+		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
 		  c.reset();
 		  }
 		});

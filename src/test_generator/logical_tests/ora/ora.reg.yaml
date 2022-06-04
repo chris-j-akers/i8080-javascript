@@ -5,28 +5,50 @@ test_suite:
   description: 'ORA Register'
   output_file_name: '/logical/ora.reg.test.js'
   header: |
-    const Computer = require('../../computer');
-    const i8080 = require('../../i8080');
+    import { Computer } from '../../computer.js'
+    import { i8080 } from '../../i8080.js'
+    import { strict as assert } from 'assert'
+
+    const opcode_lookup = {
+        'B': {MVI: 0x06, ORA: 0xB0},
+        'C': {MVI: 0x0E, ORA: 0xB1},
+        'D': {MVI: 0x16, ORA: 0xB2},
+        'E': {MVI: 0x1E, ORA: 0xB3},
+        'H': {MVI: 0x26, ORA: 0xB4},
+        'L': {MVI: 0x2E, ORA: 0xB5}
+    };
+
   footer: |
     });
   boilerplate: |
     const c = new Computer();
     const FlagType = i8080.FlagType;
 
-    for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {{
-      c.cpu.mvi_reg('A', {accumulator});
-      c.cpu.mvi_reg(reg, {data});
+    let program = [
+        0x3E,                 // MVI into the accumulator...
+        {accumulator},        // ... this immediate value
+        null,                 // MVI into register ...
+        {data},               // ...this immediate value
+        null,                 // ORA value in register  with Accumulator
+        0x76                  // HALT
+      ]
 
+    for (let reg of Object.keys(c.cpu.registers).filter((register) => register != 'A')) {{
+
+      program[2] = opcode_lookup[reg].MVI;
+      program[4] = opcode_lookup[reg].ORA;
+
+      c.inject_program(program);
       {set_carry}
+      c.execute_program();
 
-      c.cpu.ora_reg(reg);
+      assert.equal(c.cpu.registers.A, {expected_result});
+      assert.equal(c.cpu.flag_set(FlagType.Carry), {carry});
+      assert.equal(c.cpu.flag_set(FlagType.Parity),{parity});
+      assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), {auxillary_carry});
+      assert.equal(c.cpu.flag_set(FlagType.Zero), {zero});
+      assert.equal(c.cpu.flag_set(FlagType.Sign), {sign});
 
-      expect(c.cpu.registers.A).toEqual({expected_result});
-      expect(c.cpu.flag_set(FlagType.Carry)).{carry}();
-      expect(c.cpu.flag_set(FlagType.Parity)).{parity}();
-      expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).{auxillary_carry}();
-      expect(c.cpu.flag_set(FlagType.Zero)).{zero}();
-      expect(c.cpu.flag_set(FlagType.Sign)).{sign}();
       c.reset();
       }}
     }});
@@ -64,7 +86,7 @@ test_suite:
       accumulator: 0
       expected_result: 0
       carry: False
-      parity: Truth
+      parity: True
       auxillary_carry: False
       zero: True
       sign: False

@@ -1,27 +1,48 @@
-const Computer = require('../../computer');
-const i8080 = require('../../i8080');
+import { Computer } from '../../computer.js'
+import { i8080 } from '../../i8080.js'
+import { strict as assert } from 'assert'
+
+const opcode_lookup = {
+    'B': {MVI: 0x06, ORA: 0xB0},
+    'C': {MVI: 0x0E, ORA: 0xB1},
+    'D': {MVI: 0x16, ORA: 0xB2},
+    'E': {MVI: 0x1E, ORA: 0xB3},
+    'H': {MVI: 0x26, ORA: 0xB4},
+    'L': {MVI: 0x2E, ORA: 0xB5}
+};
 
 describe('ORA Register', () => {
 	it('Reset Carry Flag', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
-		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.mvi_reg('A', 5);
-		  c.cpu.mvi_reg(reg, 4);
+		let program = [
+		    0x3E,                 // MVI into the accumulator...
+		    5,        // ... this immediate value
+		    null,                 // MVI into register ...
+		    4,               // ...this immediate value
+		    null,                 // ORA value in register  with Accumulator
+		    0x76                  // HALT
+		  ]
 		
+		for (let reg of Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
+		
+		  program[2] = opcode_lookup[reg].MVI;
+		  program[4] = opcode_lookup[reg].ORA;
+		
+		  c.inject_program(program);
 		  c.cpu.set_flag(FlagType.Carry);
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		assert.equal(c.cpu.flag_set(FlagType.Carry), true);
 		
+		  c.execute_program();
 		
-		  c.cpu.ora_reg(reg);
+		  assert.equal(c.cpu.registers.A, 5);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Parity),true);
+		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
 		
-		  expect(c.cpu.registers.A).toEqual(5);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
 		  c.reset();
 		  }
 		});
@@ -30,21 +51,32 @@ describe('ORA Register', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
-		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.mvi_reg('A', 0);
-		  c.cpu.mvi_reg(reg, 0);
+		let program = [
+		    0x3E,                 // MVI into the accumulator...
+		    0,        // ... this immediate value
+		    null,                 // MVI into register ...
+		    0,               // ...this immediate value
+		    null,                 // ORA value in register  with Accumulator
+		    0x76                  // HALT
+		  ]
 		
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		for (let reg of Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
 		
+		  program[2] = opcode_lookup[reg].MVI;
+		  program[4] = opcode_lookup[reg].ORA;
 		
-		  c.cpu.ora_reg(reg);
+		  c.inject_program(program);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
 		
-		  expect(c.cpu.registers.A).toEqual(0);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Zero)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
+		  c.execute_program();
+		
+		  assert.equal(c.cpu.registers.A, 0);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Parity),true);
+		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Zero), true);
+		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
 		  c.reset();
 		  }
 		});
@@ -53,21 +85,32 @@ describe('ORA Register', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
-		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.mvi_reg('A', 127);
-		  c.cpu.mvi_reg(reg, 255);
+		let program = [
+		    0x3E,                 // MVI into the accumulator...
+		    127,        // ... this immediate value
+		    null,                 // MVI into register ...
+		    255,               // ...this immediate value
+		    null,                 // ORA value in register  with Accumulator
+		    0x76                  // HALT
+		  ]
 		
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		for (let reg of Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
 		
+		  program[2] = opcode_lookup[reg].MVI;
+		  program[4] = opcode_lookup[reg].ORA;
 		
-		  c.cpu.ora_reg(reg);
+		  c.inject_program(program);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
 		
-		  expect(c.cpu.registers.A).toEqual(255);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Sign)).toBeTruthy();
+		  c.execute_program();
+		
+		  assert.equal(c.cpu.registers.A, 255);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Parity),true);
+		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Sign), true);
+		
 		  c.reset();
 		  }
 		});
@@ -76,21 +119,32 @@ describe('ORA Register', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
-		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.mvi_reg('A', 68);
-		  c.cpu.mvi_reg(reg, 81);
+		let program = [
+		    0x3E,                 // MVI into the accumulator...
+		    68,        // ... this immediate value
+		    null,                 // MVI into register ...
+		    81,               // ...this immediate value
+		    null,                 // ORA value in register  with Accumulator
+		    0x76                  // HALT
+		  ]
 		
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		for (let reg of Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
 		
+		  program[2] = opcode_lookup[reg].MVI;
+		  program[4] = opcode_lookup[reg].ORA;
 		
-		  c.cpu.ora_reg(reg);
+		  c.inject_program(program);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
 		
-		  expect(c.cpu.registers.A).toEqual(85);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
+		  c.execute_program();
+		
+		  assert.equal(c.cpu.registers.A, 85);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Parity),true);
+		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
 		  c.reset();
 		  }
 		});

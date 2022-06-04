@@ -1070,6 +1070,30 @@ class i8080 {
                 break;
             case 0xA7:
                 this.ana_reg('A');
+                break;  
+            case 0xB0:
+                this.ora_reg('B');
+                break;
+            case 0xB1:
+                this.ora_reg('C');
+                break;
+            case 0xB2:
+                this.ora_reg('D');
+                break;
+            case 0xB3:
+                this.ora_reg('E');
+                break;
+            case 0xB4:
+                this.ora_reg('H');
+                break;
+            case 0xB5:
+                this.ora_reg('L');
+                break;
+            case 0xB6:
+                this.ora_mem();
+                break;
+            case 0xB7:
+                this.ora_reg('A');
                 break;                
             case 0xC6:
                 this.adi(this.get_next_byte());
