@@ -14,7 +14,7 @@ describe('MOV Memory to Register', () => {
 		  null,           // ... the low-byte of the memory address (to be inserted)
 		  0x36,           // MVI to this address...
 		  data,           // ...this immediate value
-		  70,       // MOV from this address in H and L to register        
+		  0x46,       // MOV from this address in H and L to register        
 		  0x76            // HALT
 		]
 		
@@ -42,7 +42,7 @@ describe('MOV Memory to Register', () => {
 		  null,           // ... the low-byte of the memory address (to be inserted)
 		  0x36,           // MVI to this address...
 		  data,           // ...this immediate value
-		  78,       // MOV from this address in H and L to register        
+		  0x4e,       // MOV from this address in H and L to register        
 		  0x76            // HALT
 		]
 		
@@ -70,7 +70,7 @@ describe('MOV Memory to Register', () => {
 		  null,           // ... the low-byte of the memory address (to be inserted)
 		  0x36,           // MVI to this address...
 		  data,           // ...this immediate value
-		  86,       // MOV from this address in H and L to register        
+		  0x56,       // MOV from this address in H and L to register        
 		  0x76            // HALT
 		]
 		
@@ -98,7 +98,7 @@ describe('MOV Memory to Register', () => {
 		  null,           // ... the low-byte of the memory address (to be inserted)
 		  0x36,           // MVI to this address...
 		  data,           // ...this immediate value
-		  94,       // MOV from this address in H and L to register        
+		  0x5e,       // MOV from this address in H and L to register        
 		  0x76            // HALT
 		]
 		
@@ -126,7 +126,7 @@ describe('MOV Memory to Register', () => {
 		  null,           // ... the low-byte of the memory address (to be inserted)
 		  0x36,           // MVI to this address...
 		  data,           // ...this immediate value
-		  102,       // MOV from this address in H and L to register        
+		  0x66,       // MOV from this address in H and L to register        
 		  0x76            // HALT
 		]
 		
@@ -154,7 +154,7 @@ describe('MOV Memory to Register', () => {
 		  null,           // ... the low-byte of the memory address (to be inserted)
 		  0x36,           // MVI to this address...
 		  data,           // ...this immediate value
-		  110,       // MOV from this address in H and L to register        
+		  0x6e,       // MOV from this address in H and L to register        
 		  0x76            // HALT
 		]
 		
@@ -182,7 +182,7 @@ describe('MOV Memory to Register', () => {
 		  null,           // ... the low-byte of the memory address (to be inserted)
 		  0x36,           // MVI to this address...
 		  data,           // ...this immediate value
-		  126,       // MOV from this address in H and L to register        
+		  0x7e,       // MOV from this address in H and L to register        
 		  0x76            // HALT
 		]
 		
