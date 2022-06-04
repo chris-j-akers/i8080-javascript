@@ -4,7 +4,7 @@ const i8080 = require('../../i8080');
 describe('LXI Stack Pointer', () => {
 	it('LXI SP,d16', () => {
 		const c = new Computer();
-		const max_value_to_test = 255;
+		const max_value_to_test = 4095;
 		
 		for (let word = 0x0000; word <= max_value_to_test; word++) {
 		    c.cpu.lxi('SP', word);

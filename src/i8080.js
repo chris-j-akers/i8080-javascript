@@ -735,7 +735,46 @@ class i8080 {
      */
     execute_next_instruction() {
         const opcode = this.get_next_byte();
+        /**
+        * Operations that use 16-bit values construct those values by combining
+        * two bytes. 
+        *
+        * The example, below, shows the LXI B OpCode stored in address 0x00,
+        * followed by two single-byte parameters in addresses 0x01 and 0x02.
+        * These two parameters go to form the 16-bit parameter of the LXI
+        * operation (due to the litte-endian storage mechanism of the 8080, the
+        * lower-byte is stored first and the upper-byte is stored second).
+        *
+        * +---------+------+----------------------------+
+        * | Address | Data |        Description         |
+        * +---------+------+----------------------------+
+        * | 0x00    | 0x01 | Op-Code (LXI B)            |
+        * | 0x01    | 0xB8 | Lower Byte of 16-bit Value |
+        * | 0x02    | 0x88 | Upper Byte of 16-bit Value |
+        * +---------+------+----------------------------+
+
+        * These two variables (lower_byte, upper_byte) are used as temporary
+        * place-holders for these operations, to safely extract the next two
+        * bytes of program data so they can be re-constructed as a 16-bit value.
+        */
+        let lower_byte, upper_byte;
+
         switch(opcode) {
+            case 0x01: 
+                lower_byte = this.get_next_byte();
+                upper_byte = this.get_next_byte();
+                this.lxi('B', upper_byte, lower_byte);
+                break;
+            case 0x11:
+                lower_byte = this.get_next_byte();
+                upper_byte = this.get_next_byte();
+                this.lxi('D', upper_byte, lower_byte);
+                break;
+            case 0x21:
+                lower_byte = this.get_next_byte();
+                upper_byte = this.get_next_byte();
+                this.lxi('H', upper_byte, lower_byte);
+                break;
             case 0x0E:
                 this.mvi_reg('C', this.get_next_byte());
                 break;

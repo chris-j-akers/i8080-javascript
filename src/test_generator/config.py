@@ -9,4 +9,4 @@ OUTPUT_DIRECTORY='../__tests__'
 MAX_MEM_ADDR=0x00FF
 
 # When loading values into memory or registers, set how many values, here (e.g. 0-255/0xFF)
-MAX_VAL_TO_TEST=0x00FF
+MAX_VAL_TO_TEST=0x0FFF
