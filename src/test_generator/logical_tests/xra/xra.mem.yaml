@@ -5,32 +5,46 @@ test_suite:
   description: 'XRA Memory'
   output_file_name: '/logical/xra.mem.test.js'
   header: |
-    const Computer = require('../../computer');
-    const i8080 = require('../../i8080');
+    import { Computer } from '../../computer.js'
+    import { i8080 } from '../../i8080.js'
+    import { strict as assert } from 'assert'
   footer: |
     });
   boilerplate: |
+    const max_mem_addr = {max_mem_addr};
     const c = new Computer();
     const FlagType = i8080.FlagType;
-    const max_mem_addr = {max_mem_addr}
 
     const data = {data};
 
-    for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {{
-      c.cpu.load_mem_addr(mem_addr, 'H', 'L');
-      c.cpu.mvi_to_mem(data);
-      c.cpu.mvi_reg('A', {accumulator})
+    const program = [
+      0x3E,                   // MVI into Accumulator
+      {accumulator},          // Immediate value (in test config)
+      0x26,                   // MOV into H...
+      null,                   // ...the high-byte of the memory address (ro be inserted)
+      0x2E,                   // MOV into L...
+      null,                   // ... the low-byte of the memory address (to be inserted)
+      0x36,                   // MOV into the memory address...
+      data,                   // ...the data value
+      0xAE,                   // XRA data in Memory Location with Accumulator
+      0x76                    // Halt Program
+    ]
 
+    for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {{
+      program[3] = (mem_addr >> 8) & 0xFF;
+      program[5] = mem_addr & 0xFF;
+
+      c.inject_program(program);
       {set_carry}
+      c.execute_program();
 
-      c.cpu.xra_mem();
+      assert.equal(c.cpu.registers.A, {expected_result});
+      assert.equal(c.cpu.flag_set(FlagType.Carry), {carry});
+      assert.equal(c.cpu.flag_set(FlagType.Parity),{parity});
+      assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), {auxillary_carry});
+      assert.equal(c.cpu.flag_set(FlagType.Zero), {zero});
+      assert.equal(c.cpu.flag_set(FlagType.Sign), {sign});
 
-      expect(c.cpu.registers.A).toEqual({expected_result});
-      expect(c.cpu.flag_set(FlagType.Carry)).{carry}();
-      expect(c.cpu.flag_set(FlagType.Parity)).{parity}();
-      expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).{auxillary_carry}();
-      expect(c.cpu.flag_set(FlagType.Zero)).{zero}();
-      expect(c.cpu.flag_set(FlagType.Sign)).{sign}();
       c.reset();
       }}
     }});
@@ -68,7 +82,7 @@ test_suite:
       accumulator: 255
       expected_result: 0
       carry: False
-      parity: Truth
+      parity: True
       auxillary_carry: False
       zero: True
       sign: False

@@ -1071,6 +1071,30 @@ class i8080 {
             case 0xA7:
                 this.ana_reg('A');
                 break;  
+            case 0xA8:
+                this.xra_reg('B');
+                break;
+            case 0xA9:
+                this.xra_reg('C');
+                break;
+            case 0xAA:
+                this.xra_reg('D');
+                break;
+            case 0xAB:
+                this.xra_reg('E');
+                break;
+            case 0xAC:
+                this.xra_reg('H');
+                break;
+            case 0xAD:
+                this.xra_reg('L');
+                break;       
+            case 0xAE:
+                this.xra_mem();
+                break;
+            case 0xAF:
+                this.xra_reg('A');
+                break;              
             case 0xB0:
                 this.ora_reg('B');
                 break;
@@ -1109,6 +1133,12 @@ class i8080 {
                 break;
             case 0xE6:
                 this.ani(this.get_next_byte());
+                break;
+            case 0xEE:
+                this.xri(this.get_next_byte());
+                break;
+            case 0xF6:
+                this.ori(this.get_next_byte());
                 break;
         }
     }

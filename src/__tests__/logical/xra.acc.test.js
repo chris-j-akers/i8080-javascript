@@ -1,46 +1,65 @@
-const Computer = require('../../computer');
-const i8080 = require('../../i8080');
+import { Computer } from '../../computer.js'
+import { i8080 } from '../../i8080.js'
+import { strict as assert } from 'assert'
 
 describe('XRA Accumulator', () => {
 	it('Zero Accumulator', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
-		c.cpu.mvi_reg('A', 4);
+		let program = [
+		    0x3E,                 // MVI into the accumulator...
+		    4,        // ... this immediate value
+		    0xAF,                 // XRA value in register with Accumulator
+		    0x76                  // HALT
+		  ]
 		
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		for (let reg of Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
 		
+		  c.inject_program(program);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
 		
-		c.cpu.ana_reg('A');
+		  c.execute_program();
 		
-		expect(c.cpu.registers.A).toEqual(4);
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
-		expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
-		expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
-		expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
-		c.reset();
+		  assert.equal(c.cpu.registers.A, 0);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Parity),true);
+		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Zero), true);
+		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		  c.reset();
+		  }
 		});
 		
 	it('Zero Accumulator and Reset Carry', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
-		c.cpu.mvi_reg('A', 4);
+		let program = [
+		    0x3E,                 // MVI into the accumulator...
+		    4,        // ... this immediate value
+		    0xAF,                 // XRA value in register with Accumulator
+		    0x76                  // HALT
+		  ]
 		
-		c.cpu.set_flag(FlagType.Carry);
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		for (let reg of Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
 		
+		  c.inject_program(program);
+		  c.cpu.set_flag(FlagType.Carry);
+		assert.equal(c.cpu.flag_set(FlagType.Carry), true);
 		
-		c.cpu.ana_reg('A');
+		  c.execute_program();
 		
-		expect(c.cpu.registers.A).toEqual(4);
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
-		expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
-		expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
-		expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
-		c.reset();
+		  assert.equal(c.cpu.registers.A, 0);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Parity),true);
+		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Zero), true);
+		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		  c.reset();
+		  }
 		});
 		
 });
