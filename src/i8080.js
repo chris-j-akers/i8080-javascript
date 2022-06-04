@@ -561,15 +561,15 @@ class i8080 {
     }
 
     mov_to_mem(reg_source) {
-        const addr = this.read_mem_addr('H', 'L');
-        this.bus.write(this.registers[reg_source], addr);
+        this.bus.write(this.registers[reg_source], this.read_mem_addr('H', 'L'));
         this.clock += 7
     }
 
     mov_from_mem(reg_destination) {
-        const addr = this.read_mem_addr('H', 'L');
-        this.registers[reg_destination] = this.bus.read(addr);
+        this.registers[reg_destination] = this.bus.read(this.read_mem_addr('H', 'L'));
         this.clock += 7
+
+        // const mem_data = this.bus.read(this.read_mem_addr('H','L'));
     }
 
 // +-------------------------------------------------------------------------------------+
@@ -719,7 +719,7 @@ class i8080 {
      * The program counter is incremented automatically, depending on the number
      * of bytes consumed by the instruction.
      *
-     * In the emulation world, this method is officially known as: '*The, Big
+     * In the emulation world, this method is officially known as: '*The Big,
      * Fuck-Off Switch Statement Technique*'. Others have used tables to lookup
      * instructions, but switch works just as well and, although longer, is
      * simple to read.
@@ -770,6 +770,9 @@ class i8080 {
             case 0x45:
                 this.mov_reg('B', 'L');
                 break;
+            case 0x46:
+                this.mov_from_mem('B');
+                break;
             case 0x47:
                 this.mov_reg('B', 'A');
             case 0x48:
@@ -789,6 +792,9 @@ class i8080 {
                 break;
             case 0x4D:
                 this.mov_reg('C', 'L');
+                break;
+            case 0x4E:
+                this.mov_from_mem('C');
                 break;
             case 0x4F:
                 this.mov_reg('C', 'A');
@@ -811,6 +817,9 @@ class i8080 {
             case 0x55:
                 this.mov_reg('D', 'L');
                 break;
+            case 0x56:
+                this.mov_from_mem('D');
+                break;
             case 0x57:
                 this.mov_reg('D', 'A');
                 break;
@@ -831,6 +840,9 @@ class i8080 {
                 break;
             case 0x5D:
                 this.mov_reg('E', 'L');
+                break;
+            case 0x5E:
+                this.mov_from_mem('E');
                 break;
             case 0x5F:
                 this.mov_reg('E', 'A');
@@ -853,6 +865,9 @@ class i8080 {
             case 0x65:
                 this.mov_reg('H', 'L');
                 break;
+            case 0x66:
+                this.mov_from_mem('H');
+                break;
             case 0x67:
                 this.mov_reg('H', 'A');
                 break;
@@ -874,8 +889,32 @@ class i8080 {
             case 0x6D:
                 this.mov_reg('L', 'L');
                 break;
+            case 0x6E:
+                this.mov_from_mem('L');
+                break;
             case 0x6F:
                 this.mov_reg('L', 'A');
+                break;
+            case 0x70:
+                this.mov_to_mem('B');
+                break;
+            case 0x71:
+                this.mov_to_mem('C');
+                break;
+            case 0x72:
+                this.mov_to_mem('D');
+                break;
+            case 0x73:
+                this.mov_to_mem('E');
+                break;
+            case 0x74:
+                this.mov_to_mem('H');
+                break;
+            case 0x75:
+                this.mov_to_mem('L');
+                break;
+            case 0x77:
+                this.mov_to_mem('A');
                 break;
             case 0x78:
                 this.mov_reg('A', 'B');
@@ -894,6 +933,9 @@ class i8080 {
                 break;
             case 0x7D:
                 this.mov_reg('A', 'L');
+                break;
+            case 0x7E:
+                this.mov_from_mem('A');
                 break;
             case 0x7F:
                 this.mov_reg('A', 'A');
