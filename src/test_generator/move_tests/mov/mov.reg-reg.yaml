@@ -6,16 +6,41 @@ test_suite:
   description: 'MOV Register to Register'
   output_file_name: '/move/mov.reg-reg.test.js'
   header: |
-    const Computer = require('../../computer');
-    const i8080 = require('../../i8080');
+    import { Computer } from '../../computer.js'
+    import { i8080 } from '../../i8080.js'
+    import { strict as assert } from 'assert'
+
+    const mvi_opcode_lookup = {
+      B: 0x06,
+      C: 0x0E,
+      D: 0x16,
+      E: 0x1E,
+      H: 0x26,
+      L: 0x2E,
+      A: 0x3E
+    }
+
   footer: |
     });
   boilerplate: |
     const c = new Computer();
+
+    let program = [
+      mvi_opcode_lookup.{reg_source},    // MVI {reg_source} 
+      null,                             // ...with this value (populated in loop, below)
+      {mov_opcode},                     // MOV to register {reg_destination}
+      0x76                              // HALT
+    ]
+
     for (let byte = 0x00; byte <= 0xFF; byte++) {{
-      c.cpu.mvi_reg('{reg_source}', byte);
-      c.cpu.mov_reg('{reg_destination}', '{reg_source}')
-      expect(c.cpu.registers.{reg_destination}).toEqual(byte);
+      program[1] = byte;
+
+      c.inject_program(program);
+      c.execute_program();
+
+      assert.equal(c.cpu.registers.{reg_destination}, byte);
+
+      c.reset();
     }}
     }});
   tests:
@@ -26,36 +51,43 @@ test_suite:
       name: 'MOVE B,B'
       reg_source: 'B'
       reg_destination: 'B'
+      mov_opcode: 0x40
 
     - test:
       name: 'MOVE B,C'
       reg_source: 'C'
       reg_destination: 'B'
+      mov_opcode: 0x41
 
     - test:
       name: 'MOVE B,D'
       reg_source: 'D'
       reg_destination: 'B'
+      mov_opcode: 0x42
 
     - test:
       name: 'MOVE B,E'
       reg_source: 'E'
       reg_destination: 'B'
+      mov_opcode: 0x43
 
     - test:
       name: 'MOVE B,H'
       reg_source: 'H'
       reg_destination: 'B'
+      mov_opcode: 0x44
 
     - test:
       name: 'MOVE B,L'
       reg_source: 'L'
       reg_destination: 'B'
+      mov_opcode: 0x45
     
     - test:
       name: 'MOVE B,A'
       reg_source: 'A'
       reg_destination: 'B'
+      mov_opcode: 0x47
 
 # Move to C register
 
@@ -63,36 +95,43 @@ test_suite:
       name: 'MOVE C,B'
       reg_source: 'B'
       reg_destination: 'C'
+      mov_opcode: 0x48
 
     - test:
       name: 'MOVE C,C'
       reg_source: 'C'
       reg_destination: 'C'
+      mov_opcode: 0x49
 
     - test:
       name: 'MOVE C,D'
       reg_source: 'D'
       reg_destination: 'C'
+      mov_opcode: 0x4A
 
     - test:
       name: 'MOVE C,E'
       reg_source: 'E'
       reg_destination: 'C'
+      mov_opcode: 0x4B
 
     - test:
       name: 'MOVE C,H'
       reg_source: 'H'
       reg_destination: 'C'
+      mov_opcode: 0x4C
 
     - test:
       name: 'MOVE C,L'
       reg_source: 'L'
       reg_destination: 'C'
+      mov_opcode: 0x4D
 
     - test:
       name: 'MOVE C,A'
       reg_source: 'A'
       reg_destination: 'C'
+      mov_opcode: 0x4F
 
 # Move to D register
 
@@ -100,36 +139,43 @@ test_suite:
       name: 'MOVE D,B'
       reg_source: 'B'
       reg_destination: 'D'
+      mov_opcode: 0x50
 
     - test:
       name: 'MOVE D,C'
       reg_source: 'C'
       reg_destination: 'D'
+      mov_opcode: 0x51
 
     - test:
       name: 'MOVE D,D'
       reg_source: 'D'
       reg_destination: 'D'
+      mov_opcode: 0x52
 
     - test:
       name: 'MOVE D,E'
       reg_source: 'E'
       reg_destination: 'D'
+      mov_opcode: 0x53
 
     - test:
       name: 'MOVE D,H'
       reg_source: 'H'
       reg_destination: 'D'
+      mov_opcode: 0x54
 
     - test:
       name: 'MOVE D,L'
       reg_source: 'L'
       reg_destination: 'D'
+      mov_opcode: 0x55
 
     - test:
       name: 'MOVE D,A'
       reg_source: 'A'
       reg_destination: 'D'
+      mov_opcode: 0x57
 
 # Move to E register
 
@@ -137,36 +183,43 @@ test_suite:
       name: 'MOVE E,B'
       reg_source: 'B'
       reg_destination: 'E'
+      mov_opcode: 0x58
 
     - test:
       name: 'MOVE E,C'
       reg_source: 'C'
       reg_destination: 'E'
+      mov_opcode: 0x59
 
     - test:
       name: 'MOVE E,D'
       reg_source: 'D'
       reg_destination: 'E'
+      mov_opcode: 0x5A
 
     - test:
       name: 'MOVE E,E'
       reg_source: 'E'
       reg_destination: 'E'
+      mov_opcode: 0x5B
 
     - test:
       name: 'MOVE E,H'
       reg_source: 'H'
       reg_destination: 'E'
+      mov_opcode: 0x5C
 
     - test:
       name: 'MOVE E,L'
       reg_source: 'L'
       reg_destination: 'E'
+      mov_opcode: 0x5D
 
     - test:
       name: 'MOVE E,A'
       reg_source: 'A'
       reg_destination: 'E'
+      mov_opcode: 0x5F
 
 # Move to H register
 
@@ -174,36 +227,43 @@ test_suite:
       name: 'MOVE H,B'
       reg_source: 'B'
       reg_destination: 'H'
+      mov_opcode: 0x60
 
     - test:
       name: 'MOVE H,C'
       reg_source: 'C'
       reg_destination: 'H'
+      mov_opcode: 0x61
 
     - test:
       name: 'MOVE H,D'
       reg_source: 'D'
       reg_destination: 'H'
+      mov_opcode: 0x62
 
     - test:
       name: 'MOVE H,E'
       reg_source: 'E'
       reg_destination: 'H'
+      mov_opcode: 0x63
 
     - test:
       name: 'MOVE H,H'
       reg_source: 'H'
       reg_destination: 'H'
+      mov_opcode: 0x64
 
     - test:
       name: 'MOVE H,L'
       reg_source: 'L'
       reg_destination: 'H'
+      mov_opcode: 0x65
 
     - test:
       name: 'MOVE H,A'
       reg_source: 'A'
       reg_destination: 'A'
+      mov_opcode: 0x67
       
 # Move to L register
 
@@ -211,36 +271,43 @@ test_suite:
       name: 'MOVE L,B'
       reg_source: 'B'
       reg_destination: 'L'
-
+      mov_opcode: 0x68
+      
     - test:
       name: 'MOVE L,C'
       reg_source: 'C'
       reg_destination: 'L'
+      mov_opcode: 0x69
 
     - test:
       name: 'MOVE L,D'
       reg_source: 'D'
       reg_destination: 'L'
+      mov_opcode: 0x6A
 
     - test:
       name: 'MOVE L,E'
       reg_source: 'E'
       reg_destination: 'L'
+      mov_opcode: 0x6B
 
     - test:
       name: 'MOVE L,H'
       reg_source: 'H'
       reg_destination: 'L'
+      mov_opcode: 0x6C
 
     - test:
       name: 'MOVE L,L'
       reg_source: 'L'
       reg_destination: 'L'
+      mov_opcode: 0x6D
 
     - test:
       name: 'MOVE L,A'
       reg_source: 'A'
       reg_destination: 'A'
+      mov_opcode: 0x6F
 
 # Move to A register (Accumulator)
 
@@ -248,33 +315,40 @@ test_suite:
       name: 'MOVE A,B'
       reg_source: 'B'
       reg_destination: 'A'
+      mov_opcode: 0x78
 
     - test:
       name: 'MOVE A,C'
       reg_source: 'C'
       reg_destination: 'A'
+      mov_opcode: 0x79
 
     - test:
       name: 'MOVE A,D'
       reg_source: 'D'
       reg_destination: 'A'
+      mov_opcode: 0x7A
 
     - test:
       name: 'MOVE A,E'
       reg_source: 'E'
       reg_destination: 'A'
+      mov_opcode: 0x7B
 
     - test:
       name: 'MOVE A,H'
       reg_source: 'H'
       reg_destination: 'A'
+      mov_opcode: 0x7C
 
     - test:
       name: 'MOVE A,L'
       reg_source: 'L'
       reg_destination: 'A'
+      mov_opcode: 0x7D
 
     - test:
       name: 'MOVE A,A'
       reg_source: 'A'
       reg_destination: 'A'
+      mov_opcode: 0x7F
