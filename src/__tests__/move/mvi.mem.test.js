@@ -1,17 +1,31 @@
-const Computer = require('../../computer');
-const i8080 = require('../../i8080');
+import { Computer } from '../../computer.js'
+import { strict as assert } from 'assert'
 
 describe('MVI Memory', () => {
 	it('MVI M', () => {
 		const max_mem_addr = 255;
 		const c = new Computer();
 		const data = 0xFFFF;
-		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		    c.bus.write(data, mem_addr);
-		    c.cpu.load_mem_addr(mem_addr, 'H', 'L');
-		    c.cpu.mvi_to_mem(data);
-		    expect(c.bus.read(mem_addr)).toEqual(data);
-		    c.reset();
+		
+		let program = [
+		  0x26,           // MOV into H...
+		  null,           // ...the high-byte of the memory address (to be inserted)
+		  0x2E,           // MOV into L...
+		  null,           // ... the low-byte of the memory address (to be inserted)
+		  0x36,           // MVI to this address...
+		  data,           // ...this immediate value
+		  0x76,           // HALT
+		]
+		
+		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
+		  program[1] = (mem_addr >> 8) & 0xff;
+		  program[3] = mem_addr & 0xFF;
+		
+		  c.inject_program(program);
+		  c.execute_program();
+		
+		  assert.equal(c.bus.read(mem_addr), data);
+		  c.reset();
 		}
 		});
 		

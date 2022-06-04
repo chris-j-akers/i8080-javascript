@@ -6,15 +6,28 @@ test_suite:
   description: 'MVI Register'
   output_file_name: '/move/mvi.reg.test.js'
   header: |
-    const Computer = require('../../computer');
-    const i8080 = require('../../i8080');
+    import { Computer } from '../../computer.js'
+    import { strict as assert } from 'assert'
   footer: |
     });
   boilerplate: |
     const c = new Computer();
+    
+    let program = [
+      {opcode},         // MVI into Register {reg_destination}...
+      null,             // ...this byte of data (to be populated in loop)
+      0x76              // HALT
+    ]
+
     for (let byte = 0x00; byte <= 0xFF; byte++) {{
-        c.cpu.mvi_reg('{reg_destination}', byte);
-        expect(c.cpu.registers.{reg_destination}).toEqual(byte);
+      program[1] = byte;
+
+      c.inject_program(program);
+      c.execute_program();
+
+      assert.equal(c.cpu.registers.{reg_destination}, byte);
+
+      c.reset();
     }}
     }});
   tests:
@@ -22,27 +35,34 @@ test_suite:
     - test:
       name: 'MVI B'
       reg_destination: 'B'
+      opcode: 0x06
 
     - test:
       name: 'MVI C'
       reg_destination: 'C'
+      opcode: 0x0E
 
     - test:
       name: 'MVI D'
       reg_destination: 'D'
+      opcode: 0x16
 
     - test:
       name: 'MVI E'
       reg_destination: 'E'
+      opcode: 0x1E
 
     - test:
       name: 'MVI H'
       reg_destination: 'H'
+      opcode: 0x26
 
     - test:
       name: 'MVI L'
       reg_destination: 'L'
+      opcode: 0x2E
     
     - test:
       name: 'MVI A'
       reg_destination: 'A'
+      opcode: 0x3E
