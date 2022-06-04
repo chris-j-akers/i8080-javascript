@@ -1,7 +1,8 @@
 const Computer = require('../../computer');
 const i8080 = require('../../i8080');
+
 describe('ANA Accumulator', () => {
-	test('Reset Carry Flag', () => {
+	it('Reset Carry Flag', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -22,7 +23,7 @@ describe('ANA Accumulator', () => {
 		c.reset();
 		});
 		
-	test('Set Zero Flag', () => {
+	it('Set Zero Flag', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -42,7 +43,7 @@ describe('ANA Accumulator', () => {
 		c.reset();
 		});
 		
-	test('Set Sign Flag', () => {
+	it('Set Sign Flag', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -62,7 +63,7 @@ describe('ANA Accumulator', () => {
 		c.reset();
 		});
 		
-	test('Set Parity Flag', () => {
+	it('Set Parity Flag', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		

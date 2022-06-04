@@ -1,7 +1,8 @@
 const Computer = require('../../computer');
 const i8080 = require('../../i8080');
+
 describe('MVI Memory', () => {
-	test('MVI M', () => {
+	it('MVI M', () => {
 		const max_mem_addr = 255;
 		const c = new Computer();
 		const data = 0xFFFF;

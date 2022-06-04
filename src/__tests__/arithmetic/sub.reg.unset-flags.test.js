@@ -1,13 +1,39 @@
-const Computer = require('../../computer');
-const i8080 = require('../../i8080');
+import { Computer } from '../../computer.js'
+import { i8080 } from '../../i8080.js'
+import { strict as assert } from 'assert'
+
+/**
+* An opcode lookup table allows us to programmatically determine which OpCodes
+* to use, depending on the register being tested. It saves us having to write a
+* separate test per register. Instead we can loop through each one and run the
+* same test.
+*/
+const opcode_lookup = {
+    'B': {MVI: 0x06, SUB: 0x90},
+    'C': {MVI: 0x0E, SUB: 0x91},
+    'D': {MVI: 0x16, SUB: 0x92},
+    'E': {MVI: 0x1E, SUB: 0x93},
+    'H': {MVI: 0x26, SUB: 0x94},
+    'L': {MVI: 0x2E, SUB: 0x95}
+};
+
 describe('SUB Register (Unset All Flags)', () => {
-	test('Unset All Flags', () => {
+	it('Unset All Flags', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
-		for (reg in Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
-		  c.cpu.mvi_reg('A', 32);
-		  c.cpu.mvi_reg(reg, 1);
+		let program = [
+		    0x3E, 
+		    32,  // MOV A, #32
+		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
+		    1,         // MOV [R], 1
+		    null,           // Placeholder for relavent SUB opcode (see opcode lookup table)
+		    0x76            // HALT
+		]
+		
+		for (let reg of Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
+		  program[2] = opcode_lookup[reg].MVI;
+		  program[4] = opcode_lookup[reg].SUB;
 		
 		  c.cpu.set_flag(FlagType.Carry);
 		  c.cpu.set_flag(FlagType.Parity);
@@ -15,22 +41,24 @@ describe('SUB Register (Unset All Flags)', () => {
 		  c.cpu.set_flag(FlagType.Zero);
 		  c.cpu.set_flag(FlagType.Sign);
 		
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.Zero)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.Sign)).toBeTruthy();
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), true);
+		  assert.equal(c.cpu.flag_set(FlagType.Parity),true);
+		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
+		  assert.equal(c.cpu.flag_set(FlagType.Zero), true);
+		  assert.equal(c.cpu.flag_set(FlagType.Sign), true);
 		
-		  c.cpu.sub_reg(c.cpu.registers[reg]);
+		  c.inject_program(program);
+		  c.execute_program();
 		
-		  expect(c.cpu.registers.A).toEqual(31);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
+		  assert.equal(c.cpu.registers.A, 31);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Parity),false);
+		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
 		  c.reset();
-		}
+		};
 		});
 		
 });

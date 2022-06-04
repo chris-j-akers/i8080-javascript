@@ -1,7 +1,8 @@
 const Computer = require('../../computer');
 const i8080 = require('../../i8080');
+
 describe('LXI Stack Pointer', () => {
-	test('LXI SP,d16', () => {
+	it('LXI SP,d16', () => {
 		const c = new Computer();
 		const max_value_to_test = 255;
 		

@@ -1,7 +1,8 @@
 const Computer = require('../../computer');
 const i8080 = require('../../i8080');
+
 describe('XRA Accumulator', () => {
-	test('Zero Accumulator', () => {
+	it('Zero Accumulator', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -21,7 +22,7 @@ describe('XRA Accumulator', () => {
 		c.reset();
 		});
 		
-	test('Zero Accumulator and Reset Carry', () => {
+	it('Zero Accumulator and Reset Carry', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		

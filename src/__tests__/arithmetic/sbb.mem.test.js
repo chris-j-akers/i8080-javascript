@@ -1,322 +1,540 @@
-const Computer = require('../../computer');
-const i8080 = require('../../i8080');
+import { Computer } from '../../computer.js'
+import { i8080 } from '../../i8080.js'
+import { strict as assert } from 'assert'
+
 describe('SBB Memory', () => {
-	test('No Flags Set (Carry Bit Reset)', () => {
+	it('No Flags Set (Carry Bit Reset)', () => {
 		const max_mem_addr = 255;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
 		const data = 1;
 		
-		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.cpu.load_mem_addr(mem_addr, 'H', 'L');
-		  c.cpu.mvi_to_mem(data);
-		  c.cpu.mvi_reg('A', 32)
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		const program = [
+		  0x3E, // MVI into Accumulator...
+		  32, // ...this immediate value
+		  0x26, // MOV into H...
+		  null, // ...the high-byte of the memory address of data (to be filled, below)
+		  0x2E, // MOV into L...
+		  null, // ... the low-byte of the memory address of data (to be filled, below)
+		  0x36, // MOV into the memory address...
+		  data, // ...the data
+		  0x9E, // SBB M
+		  0x76  // HALT
+		]
 		
+		/**
+		  * Our little test program already takes up some memory,
+		  * so we start tests after the code.
+		  */
 		
-		  c.cpu.sbb_mem();
+		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
+		  program[3] = (mem_addr >> 8) & 0xFF;
+		  program[5] = mem_addr & 0xFF;
 		
-		  expect(c.cpu.registers.A).toEqual(31);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
+		  c.inject_program(program);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		
+		  c.execute_program();
+		
+		  assert.equal(c.cpu.registers.A,31);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Parity), false);
+		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
 		  c.reset();
-		}
+		  }
 		});
 		
-	test('No Flags Set (Carry Bit Set)', () => {
+	it('No Flags Set (Carry Bit Set)', () => {
 		const max_mem_addr = 255;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
 		const data = 1;
 		
-		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.cpu.load_mem_addr(mem_addr, 'H', 'L');
-		  c.cpu.mvi_to_mem(data);
-		  c.cpu.mvi_reg('A', 33)
+		const program = [
+		  0x3E, // MVI into Accumulator...
+		  33, // ...this immediate value
+		  0x26, // MOV into H...
+		  null, // ...the high-byte of the memory address of data (to be filled, below)
+		  0x2E, // MOV into L...
+		  null, // ... the low-byte of the memory address of data (to be filled, below)
+		  0x36, // MOV into the memory address...
+		  data, // ...the data
+		  0x9E, // SBB M
+		  0x76  // HALT
+		]
+		
+		/**
+		  * Our little test program already takes up some memory,
+		  * so we start tests after the code.
+		  */
+		
+		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
+		  program[3] = (mem_addr >> 8) & 0xFF;
+		  program[5] = mem_addr & 0xFF;
+		
+		  c.inject_program(program);
 		  c.cpu.set_flag(FlagType.Carry);
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		assert.equal(c.cpu.flag_set(FlagType.Carry), true);
 		
+		  c.execute_program();
 		
-		  c.cpu.sbb_mem();
-		
-		  expect(c.cpu.registers.A).toEqual(31);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
+		  assert.equal(c.cpu.registers.A,31);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Parity), false);
+		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
 		  c.reset();
-		}
+		  }
 		});
 		
-	test('Parity, Aux Carry and Zero Flags Set (Carry Bit Reset)', () => {
+	it('Parity, Aux Carry and Zero Flags Set (Carry Bit Reset)', () => {
 		const max_mem_addr = 255;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
 		const data = 1;
 		
-		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.cpu.load_mem_addr(mem_addr, 'H', 'L');
-		  c.cpu.mvi_to_mem(data);
-		  c.cpu.mvi_reg('A', 1)
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		const program = [
+		  0x3E, // MVI into Accumulator...
+		  1, // ...this immediate value
+		  0x26, // MOV into H...
+		  null, // ...the high-byte of the memory address of data (to be filled, below)
+		  0x2E, // MOV into L...
+		  null, // ... the low-byte of the memory address of data (to be filled, below)
+		  0x36, // MOV into the memory address...
+		  data, // ...the data
+		  0x9E, // SBB M
+		  0x76  // HALT
+		]
 		
+		/**
+		  * Our little test program already takes up some memory,
+		  * so we start tests after the code.
+		  */
 		
-		  c.cpu.sbb_mem();
+		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
+		  program[3] = (mem_addr >> 8) & 0xFF;
+		  program[5] = mem_addr & 0xFF;
 		
-		  expect(c.cpu.registers.A).toEqual(0);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.Zero)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
+		  c.inject_program(program);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		
+		  c.execute_program();
+		
+		  assert.equal(c.cpu.registers.A,0);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Parity), true);
+		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
+		  assert.equal(c.cpu.flag_set(FlagType.Zero), true);
+		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
 		  c.reset();
-		}
+		  }
 		});
 		
-	test('Parity, Aux Carry and Zero Flags Set (Carry Bit Set)', () => {
+	it('Parity, Aux Carry and Zero Flags Set (Carry Bit Set)', () => {
 		const max_mem_addr = 255;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
 		const data = 2;
 		
-		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.cpu.load_mem_addr(mem_addr, 'H', 'L');
-		  c.cpu.mvi_to_mem(data);
-		  c.cpu.mvi_reg('A', 3)
+		const program = [
+		  0x3E, // MVI into Accumulator...
+		  3, // ...this immediate value
+		  0x26, // MOV into H...
+		  null, // ...the high-byte of the memory address of data (to be filled, below)
+		  0x2E, // MOV into L...
+		  null, // ... the low-byte of the memory address of data (to be filled, below)
+		  0x36, // MOV into the memory address...
+		  data, // ...the data
+		  0x9E, // SBB M
+		  0x76  // HALT
+		]
+		
+		/**
+		  * Our little test program already takes up some memory,
+		  * so we start tests after the code.
+		  */
+		
+		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
+		  program[3] = (mem_addr >> 8) & 0xFF;
+		  program[5] = mem_addr & 0xFF;
+		
+		  c.inject_program(program);
 		  c.cpu.set_flag(FlagType.Carry);
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		assert.equal(c.cpu.flag_set(FlagType.Carry), true);
 		
+		  c.execute_program();
 		
-		  c.cpu.sbb_mem();
-		
-		  expect(c.cpu.registers.A).toEqual(0);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.Zero)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
+		  assert.equal(c.cpu.registers.A,0);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Parity), true);
+		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
+		  assert.equal(c.cpu.flag_set(FlagType.Zero), true);
+		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
 		  c.reset();
-		}
+		  }
 		});
 		
-	test('Parity Flag Set (Carry Bit Reset)', () => {
+	it('Parity Flag Set (Carry Bit Reset)', () => {
 		const max_mem_addr = 255;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
 		const data = 2;
 		
-		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.cpu.load_mem_addr(mem_addr, 'H', 'L');
-		  c.cpu.mvi_to_mem(data);
-		  c.cpu.mvi_reg('A', 32)
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		const program = [
+		  0x3E, // MVI into Accumulator...
+		  32, // ...this immediate value
+		  0x26, // MOV into H...
+		  null, // ...the high-byte of the memory address of data (to be filled, below)
+		  0x2E, // MOV into L...
+		  null, // ... the low-byte of the memory address of data (to be filled, below)
+		  0x36, // MOV into the memory address...
+		  data, // ...the data
+		  0x9E, // SBB M
+		  0x76  // HALT
+		]
 		
+		/**
+		  * Our little test program already takes up some memory,
+		  * so we start tests after the code.
+		  */
 		
-		  c.cpu.sbb_mem();
+		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
+		  program[3] = (mem_addr >> 8) & 0xFF;
+		  program[5] = mem_addr & 0xFF;
 		
-		  expect(c.cpu.registers.A).toEqual(30);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
+		  c.inject_program(program);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		
+		  c.execute_program();
+		
+		  assert.equal(c.cpu.registers.A,30);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Parity), true);
+		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
 		  c.reset();
-		}
+		  }
 		});
 		
-	test('Parity Flag Set (Carry Bit Set)', () => {
+	it('Parity Flag Set (Carry Bit Set)', () => {
 		const max_mem_addr = 255;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
 		const data = 1;
 		
-		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.cpu.load_mem_addr(mem_addr, 'H', 'L');
-		  c.cpu.mvi_to_mem(data);
-		  c.cpu.mvi_reg('A', 32)
+		const program = [
+		  0x3E, // MVI into Accumulator...
+		  32, // ...this immediate value
+		  0x26, // MOV into H...
+		  null, // ...the high-byte of the memory address of data (to be filled, below)
+		  0x2E, // MOV into L...
+		  null, // ... the low-byte of the memory address of data (to be filled, below)
+		  0x36, // MOV into the memory address...
+		  data, // ...the data
+		  0x9E, // SBB M
+		  0x76  // HALT
+		]
+		
+		/**
+		  * Our little test program already takes up some memory,
+		  * so we start tests after the code.
+		  */
+		
+		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
+		  program[3] = (mem_addr >> 8) & 0xFF;
+		  program[5] = mem_addr & 0xFF;
+		
+		  c.inject_program(program);
 		  c.cpu.set_flag(FlagType.Carry);
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		assert.equal(c.cpu.flag_set(FlagType.Carry), true);
 		
+		  c.execute_program();
 		
-		  c.cpu.sbb_mem();
-		
-		  expect(c.cpu.registers.A).toEqual(30);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
+		  assert.equal(c.cpu.registers.A,30);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Parity), true);
+		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
 		  c.reset();
-		}
+		  }
 		});
 		
-	test('Aux Carry Set (Carry Bit Reset)', () => {
+	it('Aux Carry Set (Carry Bit Reset)', () => {
 		const max_mem_addr = 255;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
 		const data = 3;
 		
-		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.cpu.load_mem_addr(mem_addr, 'H', 'L');
-		  c.cpu.mvi_to_mem(data);
-		  c.cpu.mvi_reg('A', 127)
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		const program = [
+		  0x3E, // MVI into Accumulator...
+		  127, // ...this immediate value
+		  0x26, // MOV into H...
+		  null, // ...the high-byte of the memory address of data (to be filled, below)
+		  0x2E, // MOV into L...
+		  null, // ... the low-byte of the memory address of data (to be filled, below)
+		  0x36, // MOV into the memory address...
+		  data, // ...the data
+		  0x9E, // SBB M
+		  0x76  // HALT
+		]
 		
+		/**
+		  * Our little test program already takes up some memory,
+		  * so we start tests after the code.
+		  */
 		
-		  c.cpu.sbb_mem();
+		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
+		  program[3] = (mem_addr >> 8) & 0xFF;
+		  program[5] = mem_addr & 0xFF;
 		
-		  expect(c.cpu.registers.A).toEqual(124);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
+		  c.inject_program(program);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		
+		  c.execute_program();
+		
+		  assert.equal(c.cpu.registers.A,124);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Parity), false);
+		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
+		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
 		  c.reset();
-		}
+		  }
 		});
 		
-	test('Aux Carry Set (Carry Bit Set)', () => {
+	it('Aux Carry Set (Carry Bit Set)', () => {
 		const max_mem_addr = 255;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
 		const data = 4;
 		
-		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.cpu.load_mem_addr(mem_addr, 'H', 'L');
-		  c.cpu.mvi_to_mem(data);
-		  c.cpu.mvi_reg('A', 127)
+		const program = [
+		  0x3E, // MVI into Accumulator...
+		  127, // ...this immediate value
+		  0x26, // MOV into H...
+		  null, // ...the high-byte of the memory address of data (to be filled, below)
+		  0x2E, // MOV into L...
+		  null, // ... the low-byte of the memory address of data (to be filled, below)
+		  0x36, // MOV into the memory address...
+		  data, // ...the data
+		  0x9E, // SBB M
+		  0x76  // HALT
+		]
+		
+		/**
+		  * Our little test program already takes up some memory,
+		  * so we start tests after the code.
+		  */
+		
+		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
+		  program[3] = (mem_addr >> 8) & 0xFF;
+		  program[5] = mem_addr & 0xFF;
+		
+		  c.inject_program(program);
 		  c.cpu.set_flag(FlagType.Carry);
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		assert.equal(c.cpu.flag_set(FlagType.Carry), true);
 		
+		  c.execute_program();
 		
-		  c.cpu.sbb_mem();
-		
-		  expect(c.cpu.registers.A).toEqual(122);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
+		  assert.equal(c.cpu.registers.A,122);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Parity), false);
+		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
+		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
 		  c.reset();
-		}
+		  }
 		});
 		
-	test('Aux Carry and Sign Flag Set (Carry Bit Reset)', () => {
+	it('Aux Carry and Sign Flag Set (Carry Bit Reset)', () => {
 		const max_mem_addr = 255;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
 		const data = 1;
 		
-		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.cpu.load_mem_addr(mem_addr, 'H', 'L');
-		  c.cpu.mvi_to_mem(data);
-		  c.cpu.mvi_reg('A', 255)
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		const program = [
+		  0x3E, // MVI into Accumulator...
+		  255, // ...this immediate value
+		  0x26, // MOV into H...
+		  null, // ...the high-byte of the memory address of data (to be filled, below)
+		  0x2E, // MOV into L...
+		  null, // ... the low-byte of the memory address of data (to be filled, below)
+		  0x36, // MOV into the memory address...
+		  data, // ...the data
+		  0x9E, // SBB M
+		  0x76  // HALT
+		]
 		
+		/**
+		  * Our little test program already takes up some memory,
+		  * so we start tests after the code.
+		  */
 		
-		  c.cpu.sbb_mem();
+		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
+		  program[3] = (mem_addr >> 8) & 0xFF;
+		  program[5] = mem_addr & 0xFF;
 		
-		  expect(c.cpu.registers.A).toEqual(254);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Sign)).toBeTruthy();
+		  c.inject_program(program);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		
+		  c.execute_program();
+		
+		  assert.equal(c.cpu.registers.A,254);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Parity), false);
+		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
+		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Sign), true);
 		  c.reset();
-		}
+		  }
 		});
 		
-	test('Aux Carry and Sign Flag Set (Carry Bit Set)', () => {
+	it('Aux Carry and Sign Flag Set (Carry Bit Set)', () => {
 		const max_mem_addr = 255;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
 		const data = 3;
 		
-		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.cpu.load_mem_addr(mem_addr, 'H', 'L');
-		  c.cpu.mvi_to_mem(data);
-		  c.cpu.mvi_reg('A', 253)
+		const program = [
+		  0x3E, // MVI into Accumulator...
+		  253, // ...this immediate value
+		  0x26, // MOV into H...
+		  null, // ...the high-byte of the memory address of data (to be filled, below)
+		  0x2E, // MOV into L...
+		  null, // ... the low-byte of the memory address of data (to be filled, below)
+		  0x36, // MOV into the memory address...
+		  data, // ...the data
+		  0x9E, // SBB M
+		  0x76  // HALT
+		]
+		
+		/**
+		  * Our little test program already takes up some memory,
+		  * so we start tests after the code.
+		  */
+		
+		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
+		  program[3] = (mem_addr >> 8) & 0xFF;
+		  program[5] = mem_addr & 0xFF;
+		
+		  c.inject_program(program);
 		  c.cpu.set_flag(FlagType.Carry);
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		assert.equal(c.cpu.flag_set(FlagType.Carry), true);
 		
+		  c.execute_program();
 		
-		  c.cpu.sbb_mem();
-		
-		  expect(c.cpu.registers.A).toEqual(249);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Sign)).toBeTruthy();
+		  assert.equal(c.cpu.registers.A,249);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Parity), true);
+		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
+		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Sign), true);
 		  c.reset();
-		}
+		  }
 		});
 		
-	test('Carry and Sign Flag Set (Carry Bit Reset)', () => {
+	it('Carry and Sign Flag Set (Carry Bit Reset)', () => {
 		const max_mem_addr = 255;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
 		const data = 10;
 		
-		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.cpu.load_mem_addr(mem_addr, 'H', 'L');
-		  c.cpu.mvi_to_mem(data);
-		  c.cpu.mvi_reg('A', 5)
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		const program = [
+		  0x3E, // MVI into Accumulator...
+		  5, // ...this immediate value
+		  0x26, // MOV into H...
+		  null, // ...the high-byte of the memory address of data (to be filled, below)
+		  0x2E, // MOV into L...
+		  null, // ... the low-byte of the memory address of data (to be filled, below)
+		  0x36, // MOV into the memory address...
+		  data, // ...the data
+		  0x9E, // SBB M
+		  0x76  // HALT
+		]
 		
+		/**
+		  * Our little test program already takes up some memory,
+		  * so we start tests after the code.
+		  */
 		
-		  c.cpu.sbb_mem();
+		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
+		  program[3] = (mem_addr >> 8) & 0xFF;
+		  program[5] = mem_addr & 0xFF;
 		
-		  expect(c.cpu.registers.A).toEqual(251);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Sign)).toBeTruthy();
+		  c.inject_program(program);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		
+		  c.execute_program();
+		
+		  assert.equal(c.cpu.registers.A,251);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), true);
+		  assert.equal(c.cpu.flag_set(FlagType.Parity), false);
+		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Sign), true);
 		  c.reset();
-		}
+		  }
 		});
 		
-	test('Carry and Sign Flag Set (Carry Bit Set)', () => {
+	it('Carry and Sign Flag Set (Carry Bit Set)', () => {
 		const max_mem_addr = 255;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
 		const data = 9;
 		
-		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
-		  c.cpu.load_mem_addr(mem_addr, 'H', 'L');
-		  c.cpu.mvi_to_mem(data);
-		  c.cpu.mvi_reg('A', 5)
+		const program = [
+		  0x3E, // MVI into Accumulator...
+		  5, // ...this immediate value
+		  0x26, // MOV into H...
+		  null, // ...the high-byte of the memory address of data (to be filled, below)
+		  0x2E, // MOV into L...
+		  null, // ... the low-byte of the memory address of data (to be filled, below)
+		  0x36, // MOV into the memory address...
+		  data, // ...the data
+		  0x9E, // SBB M
+		  0x76  // HALT
+		]
+		
+		/**
+		  * Our little test program already takes up some memory,
+		  * so we start tests after the code.
+		  */
+		
+		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
+		  program[3] = (mem_addr >> 8) & 0xFF;
+		  program[5] = mem_addr & 0xFF;
+		
+		  c.inject_program(program);
 		  c.cpu.set_flag(FlagType.Carry);
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		assert.equal(c.cpu.flag_set(FlagType.Carry), true);
 		
+		  c.execute_program();
 		
-		  c.cpu.sbb_mem();
-		
-		  expect(c.cpu.registers.A).toEqual(251);
-		  expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
-		  expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
-		  expect(c.cpu.flag_set(FlagType.Sign)).toBeTruthy();
+		  assert.equal(c.cpu.registers.A,251);
+		  assert.equal(c.cpu.flag_set(FlagType.Carry), true);
+		  assert.equal(c.cpu.flag_set(FlagType.Parity), false);
+		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
+		  assert.equal(c.cpu.flag_set(FlagType.Sign), true);
 		  c.reset();
-		}
+		  }
 		});
 		
 });

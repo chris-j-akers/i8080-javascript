@@ -1,7 +1,8 @@
 const Computer = require('../../computer');
 const i8080 = require('../../i8080');
+
 describe('ORA Memory', () => {
-	test('Reset Carry Flag', () => {
+	it('Reset Carry Flag', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		const max_mem_addr = 255
@@ -29,7 +30,7 @@ describe('ORA Memory', () => {
 		  }
 		});
 		
-	test('Set Zero Flag', () => {
+	it('Set Zero Flag', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		const max_mem_addr = 255
@@ -56,7 +57,7 @@ describe('ORA Memory', () => {
 		  }
 		});
 		
-	test('Set Sign Flag', () => {
+	it('Set Sign Flag', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		const max_mem_addr = 255
@@ -83,7 +84,7 @@ describe('ORA Memory', () => {
 		  }
 		});
 		
-	test('Set Parity Flag', () => {
+	it('Set Parity Flag', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		const max_mem_addr = 255

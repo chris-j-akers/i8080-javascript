@@ -1,7 +1,8 @@
 const Computer = require('../../computer');
 const i8080 = require('../../i8080');
+
 describe('LXI Register', () => {
-	test('LXI B,d16', () => {
+	it('LXI B,d16', () => {
 		const max_value_to_test = 255;
 		const c = new Computer();
 		let msb, lsb;
@@ -17,7 +18,7 @@ describe('LXI Register', () => {
 		}
 		});
 		
-	test('LXI D,d16', () => {
+	it('LXI D,d16', () => {
 		const max_value_to_test = 255;
 		const c = new Computer();
 		let msb, lsb;
@@ -33,7 +34,7 @@ describe('LXI Register', () => {
 		}
 		});
 		
-	test('LXI H,d16', () => {
+	it('LXI H,d16', () => {
 		const max_value_to_test = 255;
 		const c = new Computer();
 		let msb, lsb;

@@ -1,7 +1,8 @@
 const Computer = require('../../computer');
 const i8080 = require('../../i8080');
+
 describe('STAX', () => {
-	test('Store Accumulator in address found in registers B,C', () => {
+	it('Store Accumulator in address found in registers B,C', () => {
 		const max_mem_addr = 255;
 		const c = new Computer();
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {
@@ -17,7 +18,7 @@ describe('STAX', () => {
 		}
 		});
 		
-	test('Store Accumulator in address found in registers D,E', () => {
+	it('Store Accumulator in address found in registers D,E', () => {
 		const max_mem_addr = 255;
 		const c = new Computer();
 		for (let mem_addr = 0x00; mem_addr <= max_mem_addr; mem_addr++) {

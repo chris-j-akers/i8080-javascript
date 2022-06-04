@@ -1,7 +1,8 @@
 const Computer = require('../../computer');
 const i8080 = require('../../i8080');
+
 describe('MOV Register to Register', () => {
-	test('MOVE B,B', () => {
+	it('MOVE B,B', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('B', byte);
@@ -10,7 +11,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE B,C', () => {
+	it('MOVE B,C', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('C', byte);
@@ -19,7 +20,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE B,D', () => {
+	it('MOVE B,D', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('D', byte);
@@ -28,7 +29,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE B,E', () => {
+	it('MOVE B,E', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('E', byte);
@@ -37,7 +38,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE B,H', () => {
+	it('MOVE B,H', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('H', byte);
@@ -46,7 +47,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE B,L', () => {
+	it('MOVE B,L', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('L', byte);
@@ -55,7 +56,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE B,A', () => {
+	it('MOVE B,A', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('A', byte);
@@ -64,7 +65,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE C,B', () => {
+	it('MOVE C,B', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('B', byte);
@@ -73,7 +74,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE C,C', () => {
+	it('MOVE C,C', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('C', byte);
@@ -82,7 +83,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE C,D', () => {
+	it('MOVE C,D', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('D', byte);
@@ -91,7 +92,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE C,E', () => {
+	it('MOVE C,E', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('E', byte);
@@ -100,7 +101,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE C,H', () => {
+	it('MOVE C,H', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('H', byte);
@@ -109,7 +110,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE C,L', () => {
+	it('MOVE C,L', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('L', byte);
@@ -118,7 +119,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE C,A', () => {
+	it('MOVE C,A', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('A', byte);
@@ -127,7 +128,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE D,B', () => {
+	it('MOVE D,B', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('B', byte);
@@ -136,7 +137,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE D,C', () => {
+	it('MOVE D,C', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('C', byte);
@@ -145,7 +146,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE D,D', () => {
+	it('MOVE D,D', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('D', byte);
@@ -154,7 +155,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE D,E', () => {
+	it('MOVE D,E', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('E', byte);
@@ -163,7 +164,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE D,H', () => {
+	it('MOVE D,H', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('H', byte);
@@ -172,7 +173,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE D,L', () => {
+	it('MOVE D,L', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('L', byte);
@@ -181,7 +182,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE D,A', () => {
+	it('MOVE D,A', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('A', byte);
@@ -190,7 +191,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE E,B', () => {
+	it('MOVE E,B', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('B', byte);
@@ -199,7 +200,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE E,C', () => {
+	it('MOVE E,C', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('C', byte);
@@ -208,7 +209,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE E,D', () => {
+	it('MOVE E,D', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('D', byte);
@@ -217,7 +218,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE E,E', () => {
+	it('MOVE E,E', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('E', byte);
@@ -226,7 +227,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE E,H', () => {
+	it('MOVE E,H', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('H', byte);
@@ -235,7 +236,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE E,L', () => {
+	it('MOVE E,L', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('L', byte);
@@ -244,7 +245,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE E,A', () => {
+	it('MOVE E,A', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('A', byte);
@@ -253,7 +254,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE H,B', () => {
+	it('MOVE H,B', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('B', byte);
@@ -262,7 +263,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE H,C', () => {
+	it('MOVE H,C', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('C', byte);
@@ -271,7 +272,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE H,D', () => {
+	it('MOVE H,D', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('D', byte);
@@ -280,7 +281,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE H,E', () => {
+	it('MOVE H,E', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('E', byte);
@@ -289,7 +290,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE H,H', () => {
+	it('MOVE H,H', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('H', byte);
@@ -298,7 +299,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE H,L', () => {
+	it('MOVE H,L', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('L', byte);
@@ -307,7 +308,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE H,A', () => {
+	it('MOVE H,A', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('A', byte);
@@ -316,7 +317,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE L,B', () => {
+	it('MOVE L,B', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('B', byte);
@@ -325,7 +326,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE L,C', () => {
+	it('MOVE L,C', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('C', byte);
@@ -334,7 +335,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE L,D', () => {
+	it('MOVE L,D', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('D', byte);
@@ -343,7 +344,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE L,E', () => {
+	it('MOVE L,E', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('E', byte);
@@ -352,7 +353,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE L,H', () => {
+	it('MOVE L,H', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('H', byte);
@@ -361,7 +362,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE L,L', () => {
+	it('MOVE L,L', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('L', byte);
@@ -370,7 +371,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE L,A', () => {
+	it('MOVE L,A', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('A', byte);
@@ -379,7 +380,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE A,B', () => {
+	it('MOVE A,B', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('B', byte);
@@ -388,7 +389,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE A,C', () => {
+	it('MOVE A,C', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('C', byte);
@@ -397,7 +398,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE A,D', () => {
+	it('MOVE A,D', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('D', byte);
@@ -406,7 +407,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE A,E', () => {
+	it('MOVE A,E', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('E', byte);
@@ -415,7 +416,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE A,H', () => {
+	it('MOVE A,H', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('H', byte);
@@ -424,7 +425,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE A,L', () => {
+	it('MOVE A,L', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('L', byte);
@@ -433,7 +434,7 @@ describe('MOV Register to Register', () => {
 		}
 		});
 		
-	test('MOVE A,A', () => {
+	it('MOVE A,A', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		  c.cpu.mvi_reg('A', byte);

@@ -1,7 +1,8 @@
 const Computer = require('../../computer');
 const i8080 = require('../../i8080');
+
 describe('MVI Register', () => {
-	test('MVI B', () => {
+	it('MVI B', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		    c.cpu.mvi_reg('B', byte);
@@ -9,7 +10,7 @@ describe('MVI Register', () => {
 		}
 		});
 		
-	test('MVI C', () => {
+	it('MVI C', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		    c.cpu.mvi_reg('C', byte);
@@ -17,7 +18,7 @@ describe('MVI Register', () => {
 		}
 		});
 		
-	test('MVI D', () => {
+	it('MVI D', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		    c.cpu.mvi_reg('D', byte);
@@ -25,7 +26,7 @@ describe('MVI Register', () => {
 		}
 		});
 		
-	test('MVI E', () => {
+	it('MVI E', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		    c.cpu.mvi_reg('E', byte);
@@ -33,7 +34,7 @@ describe('MVI Register', () => {
 		}
 		});
 		
-	test('MVI H', () => {
+	it('MVI H', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		    c.cpu.mvi_reg('H', byte);
@@ -41,7 +42,7 @@ describe('MVI Register', () => {
 		}
 		});
 		
-	test('MVI L', () => {
+	it('MVI L', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		    c.cpu.mvi_reg('L', byte);
@@ -49,7 +50,7 @@ describe('MVI Register', () => {
 		}
 		});
 		
-	test('MVI A', () => {
+	it('MVI A', () => {
 		const c = new Computer();
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
 		    c.cpu.mvi_reg('A', byte);

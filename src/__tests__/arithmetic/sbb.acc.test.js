@@ -1,40 +1,56 @@
-const Computer = require('../../computer');
-const i8080 = require('../../i8080');
+import { Computer } from '../../computer.js'
+import { i8080 } from '../../i8080.js'
+import { strict as assert } from 'assert'
+
 describe('SBB Accumulator Flag', () => {
-	test('Zero, AuxCarry, Parity Flags Set with Carry Reset', () => {
+	it('Zero, AuxCarry, Parity Flags Set with Carry Reset', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
-		c.cpu.mvi_reg('A',1);
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		const program = [
+		  0x3E,           // MVI into accumulator ...
+		  1,  // ...this immediate value
+		  0x9F,           // SBB A
+		  0x76            // HALT
+		]
 		
-		c.cpu.sbb_reg(c.cpu.registers.A);
+		c.inject_program(program);
+		assert.equal(c.cpu.flag_set(FlagType.Carry), false);
 		
-		expect(c.cpu.registers.A).toEqual(0);
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
-		expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeTruthy();
-		expect(c.cpu.flag_set(FlagType.Zero)).toBeTruthy();
-		expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
+		c.execute_program();
+		
+		assert.equal(c.cpu.registers.A, 0);
+		assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		assert.equal(c.cpu.flag_set(FlagType.Parity),true);
+		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
+		assert.equal(c.cpu.flag_set(FlagType.Zero), true);
+		assert.equal(c.cpu.flag_set(FlagType.Sign), false);
 		c.reset();
 		});
 		
-	test('Carry, AuxCarry, Sign Flags Set with Carry Set', () => {
+	it('Carry, AuxCarry, Sign Flags Set with Carry Set', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
-		c.cpu.mvi_reg('A',1);
+		const program = [
+		  0x3E,           // MVI into accumulator ...
+		  1,  // ...this immediate value
+		  0x9F,           // SBB A
+		  0x76            // HALT
+		]
+		
+		c.inject_program(program);
 		c.cpu.set_flag(FlagType.Carry);
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		assert.equal(c.cpu.flag_set(FlagType.Carry), true);
 		
-		c.cpu.sbb_reg(c.cpu.registers.A);
+		c.execute_program();
 		
-		expect(c.cpu.registers.A).toEqual(255);
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
-		expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
-		expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
-		expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
-		expect(c.cpu.flag_set(FlagType.Sign)).toBeTruthy();
+		assert.equal(c.cpu.registers.A, 255);
+		assert.equal(c.cpu.flag_set(FlagType.Carry), true);
+		assert.equal(c.cpu.flag_set(FlagType.Parity),true);
+		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
+		assert.equal(c.cpu.flag_set(FlagType.Zero), false);
+		assert.equal(c.cpu.flag_set(FlagType.Sign), true);
 		c.reset();
 		});
 		

@@ -392,7 +392,7 @@ class i8080 {
     }
 
     sbb_reg(reg) {        
-        const reg_carry = reg + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
+        const reg_carry = this.registers[reg] + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         const reg_carry_twos_comp = ~(reg_carry) + 1;
         const result = (this.registers['A'] + reg_carry_twos_comp);
         this.set_flags_on_arithmetic_op(result, this.registers['A'], reg_carry_twos_comp);
@@ -414,7 +414,7 @@ class i8080 {
     sui(val) {
         const val_twos_comp = ~(val) + 1;
         const result = (this.registers['A'] + val_twos_comp);
-        this.set_flags_on_arithmetic_op(result, this.registers['A'], reg_twos_comp);
+        this.set_flags_on_arithmetic_op(result, this.registers['A'], val_twos_comp);
         this.registers['A'] = result & 0xFF;
         this.clock += 7;        
     }
@@ -810,11 +810,47 @@ class i8080 {
             case 0x95:
                 this.sub_reg('L');
                 break;
+            case 0x96:
+                this.sub_mem();
+                break;
+            case 0x97:
+                this.sub_reg('A');
+                break;
+            case 0x98:
+                this.sbb_reg('B');
+                break;
+            case 0x99:
+                this.sbb_reg('C');
+                break;
+            case 0x9A:
+                this.sbb_reg('D');
+                break;
+            case 0x9B:
+                this.sbb_reg('E');
+                break;
+            case 0x9C:
+                this.sbb_reg('H');
+                break;
+            case 0x9D:
+                this.sbb_reg('L');
+                break;
+            case 0x9E:
+                this.sbb_mem();
+                break;
+            case 0x9F:
+                this.sbb_reg('A');
+                break;
             case 0xC6:
                 this.adi(this.get_next_byte());
                 break;
             case 0xCE:
                 this.aci(this.get_next_byte());
+                break;
+            case 0xD6:
+                this.sui(this.get_next_byte());
+                break;
+            case 0xDE:
+                this.sbi(this.get_next_byte());
                 break;
         }
     }

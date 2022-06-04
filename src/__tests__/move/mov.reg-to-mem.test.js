@@ -1,7 +1,8 @@
 const Computer = require('../../computer');
 const i8080 = require('../../i8080');
+
 describe('MOV to Register to Memory', () => {
-	test('MOVE M,B', () => {
+	it('MOVE M,B', () => {
 		const max_mem_addr = 255;
 		const c = new Computer();
 		const data = 0xFFFF;
@@ -14,7 +15,7 @@ describe('MOV to Register to Memory', () => {
 		}
 		});
 		
-	test('MOVE M,C', () => {
+	it('MOVE M,C', () => {
 		const max_mem_addr = 255;
 		const c = new Computer();
 		const data = 0xFFFF;
@@ -27,7 +28,7 @@ describe('MOV to Register to Memory', () => {
 		}
 		});
 		
-	test('MOVE M,D', () => {
+	it('MOVE M,D', () => {
 		const max_mem_addr = 255;
 		const c = new Computer();
 		const data = 0xFFFF;
@@ -40,7 +41,7 @@ describe('MOV to Register to Memory', () => {
 		}
 		});
 		
-	test('MOVE M,E', () => {
+	it('MOVE M,E', () => {
 		const max_mem_addr = 255;
 		const c = new Computer();
 		const data = 0xFFFF;
@@ -53,7 +54,7 @@ describe('MOV to Register to Memory', () => {
 		}
 		});
 		
-	test('MOVE M,H', () => {
+	it('MOVE M,H', () => {
 		const max_mem_addr = 255;
 		const c = new Computer();
 		const data = 0xFFFF;
@@ -66,7 +67,7 @@ describe('MOV to Register to Memory', () => {
 		}
 		});
 		
-	test('MOVE M,L', () => {
+	it('MOVE M,L', () => {
 		const max_mem_addr = 255;
 		const c = new Computer();
 		const data = 0xFFFF;
@@ -79,7 +80,7 @@ describe('MOV to Register to Memory', () => {
 		}
 		});
 		
-	test('MOVE M,A', () => {
+	it('MOVE M,A', () => {
 		const max_mem_addr = 255;
 		const c = new Computer();
 		const data = 0xFFFF;
