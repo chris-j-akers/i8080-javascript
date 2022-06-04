@@ -725,7 +725,7 @@ class i8080 {
      * simple to read.
      *
      */
-    execute_instruction() {
+    execute_next_instruction() {
         const opcode = this.get_next_byte();
         switch(opcode) {
             case 0x0E:

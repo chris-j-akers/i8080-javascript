@@ -33,7 +33,7 @@ class Computer {
     execute_program(from_addr=0x0) {
         this.cpu.set_program_counter(from_addr);
         while(this.cpu.halt === false) {
-            this.cpu.execute_instruction();
+            this.cpu.execute_next_instruction();
         }
     }
 }
