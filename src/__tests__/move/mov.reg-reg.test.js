@@ -1,5 +1,4 @@
 import { Computer } from '../../computer.js'
-import { i8080 } from '../../i8080.js'
 import { strict as assert } from 'assert'
 
 const mvi_opcode_lookup = {
