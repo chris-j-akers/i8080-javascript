@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "mocha '__tests__/arithmetic/*.js'"
+    "test": "mocha '__tests__/move/mov.reg-reg.test.js'"
   },
   "name": "src",
   "version": "1.0.0",
