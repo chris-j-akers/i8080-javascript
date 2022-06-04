@@ -714,6 +714,17 @@ class i8080 {
         return (msb <<8) | lsb;
     }
 
+    /**
+     * Get the next opcode from the program counter location, then execute it.
+     * The program counter is incremented automatically, depending on the number
+     * of bytes consumed by the instruction.
+     *
+     * In the emulation world, this method is officially known as: '*The, Big
+     * Fuck-Off Switch Statement Technique*'. Others have used tables to lookup
+     * instructions, but switch works just as well and, although longer, is
+     * simple to read.
+     *
+     */
     execute_instruction() {
         const opcode = this.get_next_byte();
         switch(opcode) {
@@ -740,6 +751,152 @@ class i8080 {
                 break;
             case 0x36:
                 this.mvi_to_mem(this.get_next_byte());
+                break;
+            case 0x40:
+                this.mov_reg('B', 'B');
+                break;
+            case 0x41:
+                this.mov_reg('B', 'C');
+                break;
+            case 0x42:
+                this.mov_reg('B', 'D');
+                break;
+            case 0x43:
+                this.mov_reg('B', 'E');
+                break;
+            case 0x44:
+                this.mov_reg('B', 'H');
+                break;
+            case 0x45:
+                this.mov_reg('B', 'L');
+                break;
+            case 0x47:
+                this.mov_reg('B', 'A');
+            case 0x48:
+                this.mov_reg('C', 'B');
+                break;
+            case 0x49:
+                this.mov_reg('C', 'C');
+                break;
+            case 0x4A:
+                this.mov_reg('C', 'D');
+                break;
+            case 0x4B:
+                this.mov_reg('C', 'E');
+                break;
+            case 0x4C:
+                this.mov_reg('C', 'H');
+                break;
+            case 0x4D:
+                this.mov_reg('C', 'L');
+                break;
+            case 0x4F:
+                this.mov_reg('C', 'A');
+                break;
+            case 0x50:
+                this.mov_reg('D', 'B');
+                break;
+            case 0x51:
+                this.mov_reg('D', 'C');
+                break;
+            case 0x52:
+                this.mov_reg('D', 'D');
+                break;
+            case 0x53:
+                this.mov_reg('D', 'E');
+                break;
+            case 0x54:
+                this.mov_reg('D', 'H');
+                break;
+            case 0x55:
+                this.mov_reg('D', 'L');
+                break;
+            case 0x57:
+                this.mov_reg('D', 'A');
+                break;
+            case 0x58:
+                this.mov_reg('E', 'B');
+                break;
+            case 0x59:
+                this.mov_reg('E', 'C');
+                break;
+            case 0x5A:
+                this.mov_reg('E', 'D');
+                break;
+            case 0x5B:
+                this.mov_reg('E', 'E');
+                break;
+            case 0x5C:
+                this.mov_reg('E', 'H');
+                break;
+            case 0x5D:
+                this.mov_reg('E', 'L');
+                break;
+            case 0x5F:
+                this.mov_reg('E', 'A');
+                break;
+            case 0x60:
+                this.mov_reg('H', 'B');
+                break;
+            case 0x61:
+                this.mov_reg('H', 'C');
+                break;
+            case 0x62:
+                this.mov_reg('H', 'D');
+                break;
+            case 0x63:
+                this.mov_reg('H', 'E');
+                break;
+            case 0x64:
+                this.mov_reg('H', 'H');
+                break;
+            case 0x65:
+                this.mov_reg('H', 'L');
+                break;
+            case 0x67:
+                this.mov_reg('H', 'A');
+                break;
+            case 0x68:
+                this.mov_reg('L', 'B');
+                break;
+            case 0x69:
+                this.mov_reg('L', 'C');
+                break;
+            case 0x6A:
+                this.mov_reg('L', 'D');
+                break;
+            case 0x6B:
+                this.mov_reg('L', 'E');
+                break;
+            case 0x6C:
+                this.mov_reg('L', 'H');
+                break;
+            case 0x6D:
+                this.mov_reg('L', 'L');
+                break;
+            case 0x6F:
+                this.mov_reg('L', 'A');
+                break;
+            case 0x78:
+                this.mov_reg('A', 'B');
+                break;
+            case 0x79:
+                this.mov_reg('A', 'C');
+                break;
+            case 0x7A:
+                this.mov_reg('A', 'D');
+                break;
+            case 0x7B:
+                this.mov_reg('A', 'E');
+                break;
+            case 0x7C:
+                this.mov_reg('A', 'H');
+                break;
+            case 0x7D:
+                this.mov_reg('A', 'L');
+                break;
+            case 0x7F:
+                this.mov_reg('A', 'A');
                 break;
             case 0x76:
                 this.halt = true;
