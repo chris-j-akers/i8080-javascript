@@ -1047,6 +1047,30 @@ class i8080 {
             case 0x9F:
                 this.sbb_reg('A');
                 break;
+            case 0xA0:
+                this.ana_reg('B');
+                break;
+            case 0xA1:
+                this.ana_reg('C');
+                break;
+            case 0xA2:
+                this.ana_reg('D');
+                break;
+            case 0xA3:
+                this.ana_reg('E');
+                break;
+            case 0xA4:
+                this.ana_reg('H');
+                break;
+            case 0xA5:
+                this.ana_reg('L');
+                break;
+            case 0xA6:
+                this.ana_mem();
+                break;
+            case 0xA7:
+                this.ana_reg('A');
+                break;                
             case 0xC6:
                 this.adi(this.get_next_byte());
                 break;
