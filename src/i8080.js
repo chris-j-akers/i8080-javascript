@@ -1083,6 +1083,9 @@ class i8080 {
             case 0xDE:
                 this.sbi(this.get_next_byte());
                 break;
+            case 0xE6:
+                this.ani(this.get_next_byte());
+                break;
         }
     }
 

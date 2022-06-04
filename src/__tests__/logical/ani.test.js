@@ -1,25 +1,33 @@
-const Computer = require('../../computer');
-const i8080 = require('../../i8080');
+import { Computer } from '../../computer.js'
+import { i8080 } from '../../i8080.js'
+import { strict as assert } from 'assert'
 
 describe('ANI', () => {
 	it('Reset Carry Flag', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
-		c.cpu.mvi_reg('A',4);
+		const program = [
+		  0x3E,          // MVI into Accumulator....
+		  4, // ...this value
+		  0xE6,          // ANI with ...
+		  100,        // ...this value
+		  0x76           // HALT
+		]
 		
+		c.inject_program(program);
 		c.cpu.set_flag(FlagType.Carry);
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeTruthy();
+		assert.equal(c.cpu.flag_set(FlagType.Carry), true);
 		
+		c.execute_program();
 		
-		c.cpu.ani(100);
+		assert.equal(c.cpu.registers.A, 4);
+		assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		assert.equal(c.cpu.flag_set(FlagType.Parity),false);
+		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
+		assert.equal(c.cpu.flag_set(FlagType.Zero), false);
+		assert.equal(c.cpu.flag_set(FlagType.Sign), false);
 		
-		expect(c.cpu.registers.A).toEqual(4);
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
-		expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
-		expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
-		expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
 		c.reset();
 		});
 		
@@ -27,19 +35,26 @@ describe('ANI', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
-		c.cpu.mvi_reg('A',0);
+		const program = [
+		  0x3E,          // MVI into Accumulator....
+		  0, // ...this value
+		  0xE6,          // ANI with ...
+		  255,        // ...this value
+		  0x76           // HALT
+		]
 		
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		c.inject_program(program);
+		assert.equal(c.cpu.flag_set(FlagType.Carry), false);
 		
+		c.execute_program();
 		
-		c.cpu.ani(255);
+		assert.equal(c.cpu.registers.A, 0);
+		assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		assert.equal(c.cpu.flag_set(FlagType.Parity),true);
+		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
+		assert.equal(c.cpu.flag_set(FlagType.Zero), true);
+		assert.equal(c.cpu.flag_set(FlagType.Sign), false);
 		
-		expect(c.cpu.registers.A).toEqual(0);
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
-		expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
-		expect(c.cpu.flag_set(FlagType.Zero)).toBeTruthy();
-		expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
 		c.reset();
 		});
 		
@@ -47,19 +62,26 @@ describe('ANI', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
-		c.cpu.mvi_reg('A',128);
+		const program = [
+		  0x3E,          // MVI into Accumulator....
+		  128, // ...this value
+		  0xE6,          // ANI with ...
+		  255,        // ...this value
+		  0x76           // HALT
+		]
 		
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		c.inject_program(program);
+		assert.equal(c.cpu.flag_set(FlagType.Carry), false);
 		
+		c.execute_program();
 		
-		c.cpu.ani(255);
+		assert.equal(c.cpu.registers.A, 128);
+		assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		assert.equal(c.cpu.flag_set(FlagType.Parity),false);
+		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
+		assert.equal(c.cpu.flag_set(FlagType.Zero), false);
+		assert.equal(c.cpu.flag_set(FlagType.Sign), true);
 		
-		expect(c.cpu.registers.A).toEqual(128);
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		expect(c.cpu.flag_set(FlagType.Parity)).toBeFalsy();
-		expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
-		expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
-		expect(c.cpu.flag_set(FlagType.Sign)).toBeTruthy();
 		c.reset();
 		});
 		
@@ -67,19 +89,26 @@ describe('ANI', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
-		c.cpu.mvi_reg('A',5);
+		const program = [
+		  0x3E,          // MVI into Accumulator....
+		  5, // ...this value
+		  0xE6,          // ANI with ...
+		  255,        // ...this value
+		  0x76           // HALT
+		]
 		
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
+		c.inject_program(program);
+		assert.equal(c.cpu.flag_set(FlagType.Carry), false);
 		
+		c.execute_program();
 		
-		c.cpu.ani(255);
+		assert.equal(c.cpu.registers.A, 5);
+		assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		assert.equal(c.cpu.flag_set(FlagType.Parity),true);
+		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
+		assert.equal(c.cpu.flag_set(FlagType.Zero), false);
+		assert.equal(c.cpu.flag_set(FlagType.Sign), false);
 		
-		expect(c.cpu.registers.A).toEqual(5);
-		expect(c.cpu.flag_set(FlagType.Carry)).toBeFalsy();
-		expect(c.cpu.flag_set(FlagType.Parity)).toBeTruthy();
-		expect(c.cpu.flag_set(FlagType.AuxillaryCarry)).toBeFalsy();
-		expect(c.cpu.flag_set(FlagType.Zero)).toBeFalsy();
-		expect(c.cpu.flag_set(FlagType.Sign)).toBeFalsy();
 		c.reset();
 		});
 		
