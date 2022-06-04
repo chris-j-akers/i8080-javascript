@@ -33,7 +33,6 @@ class i8080 {
     }
 
     /**
-     *
      * @returns {string} a formatted string containing the current value of the
      * stack pointer
      */
@@ -42,7 +41,6 @@ class i8080 {
     }
 
     /**
-     *
      * @returns {string} a formatted string containing the current value of the
      * program counter
      */
@@ -51,7 +49,6 @@ class i8080 {
     }
 
     /**
-     *
      * @returns {string} a formatted string containing the current value of the
      * CPU clock
      */
@@ -60,7 +57,6 @@ class i8080 {
     }
 
     /**
-     *
      * @returns {string} a formatted string containing the state of all CPU
      * registers and flags, plus the values of the clock, stack pointer and
      * program counter.
@@ -117,8 +113,20 @@ class i8080 {
         this.bus = bus;
     }
 
-    set_program_counter(addr) {
+    /**
+     * Sets the value of the CPU's internal program_counter. Usually used to set
+     * the address from which to start executing an in-memory program.
+     */
+    set ProgramCounter(addr) {
         this.program_counter = addr;
+    }
+
+    /**
+     * Returns the current value of the CPU's internal program_counter
+     * (16-bit address).
+     */
+    get ProgramCounter() {
+        return this.program_counter & 0xFFFF;
     }
 
     /**
