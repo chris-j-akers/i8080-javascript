@@ -129,6 +129,10 @@ class i8080 {
         return this.program_counter & 0xFFFF;
     }
 
+    get StackPointer() {
+        return this.stack_pointer & 0xFFFF;
+    }
+
     /**
      * Store a 16-bit memory address into a pair of 8-bit registers.
      *
@@ -486,7 +490,10 @@ class i8080 {
 
 // Condition bits affected: None
 
-    lxi(reg, msb, lsb) {
+    lxi(reg, val) {
+
+        const msb = (val >> 8) & 0xFF;
+        const lsb = val & 0xFF;
 
         switch(reg) {
             case 'B':
@@ -501,7 +508,7 @@ class i8080 {
                 this.registers.H = msb;
                 this.registers.L = lsb;
             case 'SP':
-                this.stack_pointer = (msb << 8) | lsb;
+                this.stack_pointer = val;
                 break;
         }
         this.clock += 10;
@@ -668,7 +675,6 @@ class i8080 {
         this.clock += 4;
     }
 
-
     /**
      * Store the current value in the Accumulator to a location in memory.
      *
@@ -703,6 +709,10 @@ class i8080 {
         this.clock += 16;
     }
 
+    /**
+     * @returns The next 8-bits of memory from the current program counter
+     * position, then increments the program counter by 1 byte.
+     */
     get_next_byte() {
         const next_byte = this.bus.read(this.program_counter);
         this.program_counter++;
@@ -710,16 +720,17 @@ class i8080 {
     }
 
     /**
-     *
-     * @returns The next 16-bits of memory from the current program counter
-     * position, then increments the program counter by 2 bytes.
-     */
+    * @returns The next 16-bits of memory from the current program counter
+    * position. The first byte forms the lower-byte of the word and the second
+    * byte forms the upper-byte (little endian). Then increments the program
+    * counter by 2 bytes. 
+    */
     get_next_word() {
-        const lsb = this.bus.read(this.program_counter);
+        const lower_byte = this.bus.read(this.program_counter);
         this.program_counter++;
-        const msb = this.bus.read(this.program_counter);
+        const upper_byte = this.bus.read(this.program_counter);
         this.program_counter++;
-        return (msb <<8) | lsb;
+        return (upper_byte << 8) | lower_byte;
     }
 
     /**
@@ -735,45 +746,15 @@ class i8080 {
      */
     execute_next_instruction() {
         const opcode = this.get_next_byte();
-        /**
-        * Operations that use 16-bit values construct those values by combining
-        * two bytes. 
-        *
-        * The example, below, shows the LXI B OpCode stored in address 0x00,
-        * followed by two single-byte parameters in addresses 0x01 and 0x02.
-        * These two parameters go to form the 16-bit parameter of the LXI
-        * operation (due to the litte-endian storage mechanism of the 8080, the
-        * lower-byte is stored first and the upper-byte is stored second).
-        *
-        * +---------+------+----------------------------+
-        * | Address | Data |        Description         |
-        * +---------+------+----------------------------+
-        * | 0x00    | 0x01 | Op-Code (LXI B)            |
-        * | 0x01    | 0xB8 | Lower Byte of 16-bit Value |
-        * | 0x02    | 0x88 | Upper Byte of 16-bit Value |
-        * +---------+------+----------------------------+
-
-        * These two variables (lower_byte, upper_byte) are used as temporary
-        * place-holders for these operations, to safely extract the next two
-        * bytes of program data so they can be re-constructed as a 16-bit value.
-        */
-        let lower_byte, upper_byte;
-
         switch(opcode) {
             case 0x01: 
-                lower_byte = this.get_next_byte();
-                upper_byte = this.get_next_byte();
-                this.lxi('B', upper_byte, lower_byte);
+                this.lxi('B', this.get_next_word());
                 break;
             case 0x11:
-                lower_byte = this.get_next_byte();
-                upper_byte = this.get_next_byte();
-                this.lxi('D', upper_byte, lower_byte);
+                this.lxi('D', this.get_next_word());
                 break;
             case 0x21:
-                lower_byte = this.get_next_byte();
-                upper_byte = this.get_next_byte();
-                this.lxi('H', upper_byte, lower_byte);
+                this.lxi('H', this.get_next_word());
                 break;
             case 0x0E:
                 this.mvi_reg('C', this.get_next_byte());
@@ -783,6 +764,9 @@ class i8080 {
                 break;
             case 0x2E:
                 this.mvi_reg('L', this.get_next_byte());
+                break;
+            case 0x31:
+                this.lxi('SP', this.get_next_word());
                 break;
             case 0x3E:
                 this.mvi_reg('A', this.get_next_byte());

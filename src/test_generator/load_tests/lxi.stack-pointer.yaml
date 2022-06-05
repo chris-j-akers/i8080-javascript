@@ -5,25 +5,32 @@ test_suite:
   description: 'LXI Stack Pointer'
   output_file_name: '/load/lxi.stack-pointer.test.js'
   header: |
-    const Computer = require('../../computer');
-    const i8080 = require('../../i8080');
+    import { Computer } from '../../computer.js'
+    import { strict as assert } from 'assert'
   footer: |
     });
   boilerplate: |
-    const c = new Computer();
     const max_value_to_test = {max_value_to_test};
+    const c = new Computer();
+
+    let program = [
+      0x31,      // LXI into stack pointer...
+      null,          // ...Lower-byte of 16-bit data (to be populated)
+      null,          // ...Higher-byte of 16-bit data (to be populated)
+      0x76           // HALT
+    ]
 
     for (let word = 0x0000; word <= max_value_to_test; word++) {{
-        c.cpu.lxi('SP', word);
+      program[1] = word & 0xFF;
+      program[2] = (word >> 8) & 0xFF;
 
-        const word_msb = (word >> 8) & 0x00FF
-        const word_lsb = word & 0x00FF
+      c.inject_program(program);
+      c.execute_program();
 
-        const sp_msb = (c.cpu.stack_pointer >> 8) & 0x00FF;
-        const sp_lsb = c.cpu.stack_pointer & 0x00FF;
+      assert.equal(word, c.cpu.StackPointer);
 
-        expect(sp_msb).toEqual(word_lsb);
-        expect(sp_lsb).toEqual(word_msb);
+      c.reset();
+
     }}
     }});
 
