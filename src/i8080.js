@@ -750,8 +750,14 @@ class i8080 {
             case 0x01: 
                 this.lxi('B', this.get_next_word());
                 break;
+            case 0x02:
+                this.stax('B');
+                break;
             case 0x11:
                 this.lxi('D', this.get_next_word());
+                break;
+            case 0x12:
+                this.stax('D');
                 break;
             case 0x21:
                 this.lxi('H', this.get_next_word());
