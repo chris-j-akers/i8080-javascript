@@ -696,17 +696,25 @@ class i8080 {
         this.clock += 7;
     }
 
-
     /**
      * Store contents of `H` and `L` registers in memory. Contents of `H`
      * register are stored at `addr` and contents of `L` register are stored at
      * the next higher memory address.
-     * @param {number} operand 16-bit memory address of storage location.
+     * @param {number} addr 16-bit memory address of storage location.
      */
     shld(addr) {
         this.bus.write(this.registers.L, addr);
         this.bus.write(this.registers.H, addr + 1);
         this.clock += 16;
+    }
+
+    /**
+     * Store contents of the accumulator in memory address, `addr`.
+     * @param {number} addr 16-bit memory address of storage location
+     */
+    sta(addr) {
+        this.bus.write(this.registers.A, addr);
+        this.clock += 13;
     }
 
     /**
@@ -746,6 +754,12 @@ class i8080 {
     execute_next_instruction() {
         const opcode = this.get_next_byte();
         switch(opcode) {
+            case 0x00:
+            case 0x10:
+            case 0x20:
+            case 0x30:
+                this.noop();
+                break;
             case 0x01: 
                 this.lxi('B', this.get_next_word());
                 break;
@@ -775,6 +789,9 @@ class i8080 {
                 break;
             case 0x31:
                 this.lxi('SP', this.get_next_word());
+                break;
+            case 0x32:
+                this.sta(this.get_next_word());
                 break;
             case 0x3E:
                 this.mvi_reg('A', this.get_next_byte());

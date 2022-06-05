@@ -22,6 +22,7 @@ import logical_tests.ora.ora_tests as ora_tests
 import logical_tests.ori.ori_tests as ori_tests
 import store_tests.stax.stax_tests as stax_tests
 import store_tests.shld.shld_tests as shld_tests
+import store_tests.sta.sta_tests as sta_tests
 
 def generate_test(test_suite, working_dir, populate_function):
     output_file = f'{working_dir}{test_suite["output_file_name"]}'
