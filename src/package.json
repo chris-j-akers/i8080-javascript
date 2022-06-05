@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "mocha '__tests__/logical/xri.test.js'"
+    "test": "mocha '__tests__/**/*.js'"
   },
   "name": "src",
   "version": "1.0.0",
