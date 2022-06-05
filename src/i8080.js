@@ -762,6 +762,9 @@ class i8080 {
             case 0x1E:
                 this.mvi_reg('E', this.get_next_byte());
                 break;
+            case 0x22:
+                this.shld(this.get_next_word());
+                break;
             case 0x2E:
                 this.mvi_reg('L', this.get_next_byte());
                 break;
