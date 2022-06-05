@@ -17,7 +17,6 @@ describe('SHLD', () => {
 		  0x76                    // Halt Program
 		]
 		
-		
 		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {  
 		  program[5] = mem_addr & 0xFF;
 		  program[6] = (mem_addr >> 8) & 0xFF;
@@ -26,7 +25,7 @@ describe('SHLD', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.bus.read(mem_addr), 0x71);
-		  assert.equal(c.bus.read(mem_addr + 1), 0xE+1);
+		  assert.equal(c.bus.read(mem_addr + 1), 0xE);
 		
 		  c.reset();
 		}
