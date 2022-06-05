@@ -18,7 +18,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.B,    // MVI B 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x40,                     // MOV to register B
+		  0x40,                         // MOV to register B
 		  0x76                              // HALT
 		]
 		
@@ -29,6 +29,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.B, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -40,7 +42,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.C,    // MVI C 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x41,                     // MOV to register B
+		  0x41,                         // MOV to register B
 		  0x76                              // HALT
 		]
 		
@@ -51,6 +53,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.B, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -62,7 +66,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.D,    // MVI D 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x42,                     // MOV to register B
+		  0x42,                         // MOV to register B
 		  0x76                              // HALT
 		]
 		
@@ -73,6 +77,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.B, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -84,7 +90,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.E,    // MVI E 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x43,                     // MOV to register B
+		  0x43,                         // MOV to register B
 		  0x76                              // HALT
 		]
 		
@@ -95,6 +101,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.B, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -106,7 +114,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.H,    // MVI H 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x44,                     // MOV to register B
+		  0x44,                         // MOV to register B
 		  0x76                              // HALT
 		]
 		
@@ -117,6 +125,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.B, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -128,7 +138,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.L,    // MVI L 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x45,                     // MOV to register B
+		  0x45,                         // MOV to register B
 		  0x76                              // HALT
 		]
 		
@@ -139,6 +149,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.B, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -150,7 +162,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.A,    // MVI A 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x47,                     // MOV to register B
+		  0x47,                         // MOV to register B
 		  0x76                              // HALT
 		]
 		
@@ -162,6 +174,8 @@ describe('MOV Register to Register', () => {
 		
 		  assert.equal(c.cpu.registers.B, byte);
 		
+		  assert.equal(c.cpu.clock, 19);
+		
 		  c.reset();
 		}
 		});
@@ -172,7 +186,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.B,    // MVI B 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x48,                     // MOV to register C
+		  0x48,                         // MOV to register C
 		  0x76                              // HALT
 		]
 		
@@ -183,6 +197,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.C, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -194,7 +210,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.C,    // MVI C 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x49,                     // MOV to register C
+		  0x49,                         // MOV to register C
 		  0x76                              // HALT
 		]
 		
@@ -205,6 +221,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.C, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -216,7 +234,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.D,    // MVI D 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x4a,                     // MOV to register C
+		  0x4a,                         // MOV to register C
 		  0x76                              // HALT
 		]
 		
@@ -227,6 +245,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.C, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -238,7 +258,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.E,    // MVI E 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x4b,                     // MOV to register C
+		  0x4b,                         // MOV to register C
 		  0x76                              // HALT
 		]
 		
@@ -249,6 +269,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.C, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -260,7 +282,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.H,    // MVI H 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x4c,                     // MOV to register C
+		  0x4c,                         // MOV to register C
 		  0x76                              // HALT
 		]
 		
@@ -271,6 +293,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.C, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -282,7 +306,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.L,    // MVI L 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x4d,                     // MOV to register C
+		  0x4d,                         // MOV to register C
 		  0x76                              // HALT
 		]
 		
@@ -293,6 +317,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.C, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -304,7 +330,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.A,    // MVI A 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x4f,                     // MOV to register C
+		  0x4f,                         // MOV to register C
 		  0x76                              // HALT
 		]
 		
@@ -316,6 +342,8 @@ describe('MOV Register to Register', () => {
 		
 		  assert.equal(c.cpu.registers.C, byte);
 		
+		  assert.equal(c.cpu.clock, 19);
+		
 		  c.reset();
 		}
 		});
@@ -326,7 +354,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.B,    // MVI B 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x50,                     // MOV to register D
+		  0x50,                         // MOV to register D
 		  0x76                              // HALT
 		]
 		
@@ -337,6 +365,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.D, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -348,7 +378,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.C,    // MVI C 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x51,                     // MOV to register D
+		  0x51,                         // MOV to register D
 		  0x76                              // HALT
 		]
 		
@@ -359,6 +389,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.D, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -370,7 +402,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.D,    // MVI D 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x52,                     // MOV to register D
+		  0x52,                         // MOV to register D
 		  0x76                              // HALT
 		]
 		
@@ -381,6 +413,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.D, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -392,7 +426,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.E,    // MVI E 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x53,                     // MOV to register D
+		  0x53,                         // MOV to register D
 		  0x76                              // HALT
 		]
 		
@@ -403,6 +437,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.D, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -414,7 +450,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.H,    // MVI H 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x54,                     // MOV to register D
+		  0x54,                         // MOV to register D
 		  0x76                              // HALT
 		]
 		
@@ -425,6 +461,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.D, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -436,7 +474,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.L,    // MVI L 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x55,                     // MOV to register D
+		  0x55,                         // MOV to register D
 		  0x76                              // HALT
 		]
 		
@@ -447,6 +485,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.D, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -458,7 +498,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.A,    // MVI A 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x57,                     // MOV to register D
+		  0x57,                         // MOV to register D
 		  0x76                              // HALT
 		]
 		
@@ -470,6 +510,8 @@ describe('MOV Register to Register', () => {
 		
 		  assert.equal(c.cpu.registers.D, byte);
 		
+		  assert.equal(c.cpu.clock, 19);
+		
 		  c.reset();
 		}
 		});
@@ -480,7 +522,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.B,    // MVI B 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x58,                     // MOV to register E
+		  0x58,                         // MOV to register E
 		  0x76                              // HALT
 		]
 		
@@ -491,6 +533,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.E, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -502,7 +546,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.C,    // MVI C 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x59,                     // MOV to register E
+		  0x59,                         // MOV to register E
 		  0x76                              // HALT
 		]
 		
@@ -513,6 +557,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.E, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -524,7 +570,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.D,    // MVI D 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x5a,                     // MOV to register E
+		  0x5a,                         // MOV to register E
 		  0x76                              // HALT
 		]
 		
@@ -535,6 +581,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.E, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -546,7 +594,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.E,    // MVI E 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x5b,                     // MOV to register E
+		  0x5b,                         // MOV to register E
 		  0x76                              // HALT
 		]
 		
@@ -557,6 +605,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.E, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -568,7 +618,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.H,    // MVI H 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x5c,                     // MOV to register E
+		  0x5c,                         // MOV to register E
 		  0x76                              // HALT
 		]
 		
@@ -579,6 +629,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.E, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -590,7 +642,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.L,    // MVI L 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x5d,                     // MOV to register E
+		  0x5d,                         // MOV to register E
 		  0x76                              // HALT
 		]
 		
@@ -601,6 +653,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.E, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -612,7 +666,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.A,    // MVI A 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x5f,                     // MOV to register E
+		  0x5f,                         // MOV to register E
 		  0x76                              // HALT
 		]
 		
@@ -624,6 +678,8 @@ describe('MOV Register to Register', () => {
 		
 		  assert.equal(c.cpu.registers.E, byte);
 		
+		  assert.equal(c.cpu.clock, 19);
+		
 		  c.reset();
 		}
 		});
@@ -634,7 +690,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.B,    // MVI B 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x60,                     // MOV to register H
+		  0x60,                         // MOV to register H
 		  0x76                              // HALT
 		]
 		
@@ -645,6 +701,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.H, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -656,7 +714,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.C,    // MVI C 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x61,                     // MOV to register H
+		  0x61,                         // MOV to register H
 		  0x76                              // HALT
 		]
 		
@@ -667,6 +725,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.H, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -678,7 +738,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.D,    // MVI D 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x62,                     // MOV to register H
+		  0x62,                         // MOV to register H
 		  0x76                              // HALT
 		]
 		
@@ -689,6 +749,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.H, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -700,7 +762,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.E,    // MVI E 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x63,                     // MOV to register H
+		  0x63,                         // MOV to register H
 		  0x76                              // HALT
 		]
 		
@@ -711,6 +773,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.H, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -722,7 +786,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.H,    // MVI H 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x64,                     // MOV to register H
+		  0x64,                         // MOV to register H
 		  0x76                              // HALT
 		]
 		
@@ -733,6 +797,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.H, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -744,7 +810,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.L,    // MVI L 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x65,                     // MOV to register H
+		  0x65,                         // MOV to register H
 		  0x76                              // HALT
 		]
 		
@@ -756,6 +822,8 @@ describe('MOV Register to Register', () => {
 		
 		  assert.equal(c.cpu.registers.H, byte);
 		
+		  assert.equal(c.cpu.clock, 19);
+		
 		  c.reset();
 		}
 		});
@@ -766,7 +834,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.A,    // MVI A 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x67,                     // MOV to register A
+		  0x67,                         // MOV to register A
 		  0x76                              // HALT
 		]
 		
@@ -777,6 +845,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -788,7 +858,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.B,    // MVI B 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x68,                     // MOV to register L
+		  0x68,                         // MOV to register L
 		  0x76                              // HALT
 		]
 		
@@ -799,6 +869,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.L, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -810,7 +882,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.C,    // MVI C 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x69,                     // MOV to register L
+		  0x69,                         // MOV to register L
 		  0x76                              // HALT
 		]
 		
@@ -821,6 +893,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.L, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -832,7 +906,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.D,    // MVI D 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x6a,                     // MOV to register L
+		  0x6a,                         // MOV to register L
 		  0x76                              // HALT
 		]
 		
@@ -843,6 +917,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.L, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -854,7 +930,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.E,    // MVI E 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x6b,                     // MOV to register L
+		  0x6b,                         // MOV to register L
 		  0x76                              // HALT
 		]
 		
@@ -865,6 +941,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.L, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -876,7 +954,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.H,    // MVI H 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x6c,                     // MOV to register L
+		  0x6c,                         // MOV to register L
 		  0x76                              // HALT
 		]
 		
@@ -887,6 +965,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.L, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -898,7 +978,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.L,    // MVI L 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x6d,                     // MOV to register L
+		  0x6d,                         // MOV to register L
 		  0x76                              // HALT
 		]
 		
@@ -910,6 +990,8 @@ describe('MOV Register to Register', () => {
 		
 		  assert.equal(c.cpu.registers.L, byte);
 		
+		  assert.equal(c.cpu.clock, 19);
+		
 		  c.reset();
 		}
 		});
@@ -920,7 +1002,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.A,    // MVI A 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x6f,                     // MOV to register A
+		  0x6f,                         // MOV to register A
 		  0x76                              // HALT
 		]
 		
@@ -931,6 +1013,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -942,7 +1026,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.B,    // MVI B 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x78,                     // MOV to register A
+		  0x78,                         // MOV to register A
 		  0x76                              // HALT
 		]
 		
@@ -953,6 +1037,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -964,7 +1050,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.C,    // MVI C 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x79,                     // MOV to register A
+		  0x79,                         // MOV to register A
 		  0x76                              // HALT
 		]
 		
@@ -975,6 +1061,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -986,7 +1074,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.D,    // MVI D 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x7a,                     // MOV to register A
+		  0x7a,                         // MOV to register A
 		  0x76                              // HALT
 		]
 		
@@ -997,6 +1085,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -1008,7 +1098,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.E,    // MVI E 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x7b,                     // MOV to register A
+		  0x7b,                         // MOV to register A
 		  0x76                              // HALT
 		]
 		
@@ -1019,6 +1109,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -1030,7 +1122,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.H,    // MVI H 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x7c,                     // MOV to register A
+		  0x7c,                         // MOV to register A
 		  0x76                              // HALT
 		]
 		
@@ -1041,6 +1133,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -1052,7 +1146,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.L,    // MVI L 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x7d,                     // MOV to register A
+		  0x7d,                         // MOV to register A
 		  0x76                              // HALT
 		]
 		
@@ -1063,6 +1157,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}
@@ -1074,7 +1170,7 @@ describe('MOV Register to Register', () => {
 		let program = [
 		  mvi_opcode_lookup.A,    // MVI A 
 		  null,                             // ...with this value (populated in loop, below)
-		  0x7f,                     // MOV to register A
+		  0x7f,                         // MOV to register A
 		  0x76                              // HALT
 		]
 		
@@ -1085,6 +1181,8 @@ describe('MOV Register to Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A, byte);
+		
+		  assert.equal(c.cpu.clock, 19);
 		
 		  c.reset();
 		}

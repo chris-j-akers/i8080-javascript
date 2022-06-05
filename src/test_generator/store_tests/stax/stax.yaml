@@ -25,9 +25,9 @@ test_suite:
     let program = [
       0x3E,           // MVI into accumulator
       0xFF,           // ...this byte
-      null,           // MOV into {high_byte_register}...
+      null,           // MVI into {high_byte_register}...
       null,           // ...the high-byte of the memory address (ro be inserted)
-      null,           // MOV into {low_byte_register}...
+      null,           // MVI into {low_byte_register}...
       null,           // ... the low-byte of the memory address (to be inserted)
       {opcode},       // Store Accumulator into address held in above register pair
       0x76            // HALT
@@ -43,6 +43,7 @@ test_suite:
       c.execute_program();
 
       assert.equal(c.bus.read(mem_addr), 0xFF);
+      assert.equal(c.cpu.clock, 35);
 
       c.reset();
 

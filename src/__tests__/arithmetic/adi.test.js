@@ -24,6 +24,9 @@ describe('ADI', () => {
 		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
 		assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		assert.equal(c.cpu.clock, 21);
+		
 		});
 		
 	it('Set Parity and Zero Flags', () => {
@@ -47,6 +50,9 @@ describe('ADI', () => {
 		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
 		assert.equal(c.cpu.flag_set(FlagType.Zero), true);
 		assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		assert.equal(c.cpu.clock, 21);
+		
 		});
 		
 	it('Set Parity Flag', () => {
@@ -70,6 +76,9 @@ describe('ADI', () => {
 		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
 		assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		assert.equal(c.cpu.clock, 21);
+		
 		});
 		
 	it('Set Parity and Aux Carry Flags', () => {
@@ -93,6 +102,9 @@ describe('ADI', () => {
 		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
 		assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		assert.equal(c.cpu.clock, 21);
+		
 		});
 		
 	it('Set Sign Flag', () => {
@@ -116,6 +128,9 @@ describe('ADI', () => {
 		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
 		assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		assert.equal(c.cpu.flag_set(FlagType.Sign), true);
+		
+		assert.equal(c.cpu.clock, 21);
+		
 		});
 		
 	it('Set Carry Flag', () => {
@@ -139,6 +154,9 @@ describe('ADI', () => {
 		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
 		assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		assert.equal(c.cpu.clock, 21);
+		
 		});
 		
 });

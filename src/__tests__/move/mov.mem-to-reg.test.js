@@ -25,6 +25,8 @@ describe('MOV Memory to Register', () => {
 		  c.inject_program(program);
 		  c.execute_program();
 		
+		  assert.equal(c.cpu.clock, 38);
+		
 		  assert.equal(c.bus.read(mem_addr), c.cpu.registers.B);
 		  c.reset();
 		}
@@ -52,6 +54,8 @@ describe('MOV Memory to Register', () => {
 		
 		  c.inject_program(program);
 		  c.execute_program();
+		
+		  assert.equal(c.cpu.clock, 38);
 		
 		  assert.equal(c.bus.read(mem_addr), c.cpu.registers.C);
 		  c.reset();
@@ -81,6 +85,8 @@ describe('MOV Memory to Register', () => {
 		  c.inject_program(program);
 		  c.execute_program();
 		
+		  assert.equal(c.cpu.clock, 38);
+		
 		  assert.equal(c.bus.read(mem_addr), c.cpu.registers.D);
 		  c.reset();
 		}
@@ -108,6 +114,8 @@ describe('MOV Memory to Register', () => {
 		
 		  c.inject_program(program);
 		  c.execute_program();
+		
+		  assert.equal(c.cpu.clock, 38);
 		
 		  assert.equal(c.bus.read(mem_addr), c.cpu.registers.E);
 		  c.reset();
@@ -137,6 +145,8 @@ describe('MOV Memory to Register', () => {
 		  c.inject_program(program);
 		  c.execute_program();
 		
+		  assert.equal(c.cpu.clock, 38);
+		
 		  assert.equal(c.bus.read(mem_addr), c.cpu.registers.H);
 		  c.reset();
 		}
@@ -165,6 +175,8 @@ describe('MOV Memory to Register', () => {
 		  c.inject_program(program);
 		  c.execute_program();
 		
+		  assert.equal(c.cpu.clock, 38);
+		
 		  assert.equal(c.bus.read(mem_addr), c.cpu.registers.L);
 		  c.reset();
 		}
@@ -192,6 +204,8 @@ describe('MOV Memory to Register', () => {
 		
 		  c.inject_program(program);
 		  c.execute_program();
+		
+		  assert.equal(c.cpu.clock, 38);
 		
 		  assert.equal(c.bus.read(mem_addr), c.cpu.registers.A);
 		  c.reset();

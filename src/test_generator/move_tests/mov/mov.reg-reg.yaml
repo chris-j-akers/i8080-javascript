@@ -27,7 +27,7 @@ test_suite:
     let program = [
       mvi_opcode_lookup.{reg_source},    // MVI {reg_source} 
       null,                             // ...with this value (populated in loop, below)
-      {opcode},                     // MOV to register {reg_destination}
+      {opcode},                         // MOV to register {reg_destination}
       0x76                              // HALT
     ]
 
@@ -38,6 +38,8 @@ test_suite:
       c.execute_program();
 
       assert.equal(c.cpu.registers.{reg_destination}, byte);
+
+      assert.equal(c.cpu.clock, 19);
 
       c.reset();
     }}

@@ -24,6 +24,7 @@ describe('LXI Register', () => {
 		  assert.equal(c.cpu.registers.C, word & 0xFF);
 		  assert.equal(word, (c.cpu.registers.B << 8) | c.cpu.registers.C);
 		  
+		  assert.equal(c.cpu.clock, 17);
 		  c.reset();
 		
 		}
@@ -51,6 +52,7 @@ describe('LXI Register', () => {
 		  assert.equal(c.cpu.registers.E, word & 0xFF);
 		  assert.equal(word, (c.cpu.registers.D << 8) | c.cpu.registers.E);
 		  
+		  assert.equal(c.cpu.clock, 17);
 		  c.reset();
 		
 		}
@@ -78,6 +80,7 @@ describe('LXI Register', () => {
 		  assert.equal(c.cpu.registers.L, word & 0xFF);
 		  assert.equal(word, (c.cpu.registers.H << 8) | c.cpu.registers.L);
 		  
+		  assert.equal(c.cpu.clock, 17);
 		  c.reset();
 		
 		}

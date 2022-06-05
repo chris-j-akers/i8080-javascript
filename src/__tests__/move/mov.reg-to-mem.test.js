@@ -36,6 +36,9 @@ describe('MOV to Register to Memory', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.bus.read(mem_addr), c.cpu.registers.B);
+		
+		  assert.equal(c.cpu.clock, 35);
+		
 		  c.reset();
 		}
 		});
@@ -64,6 +67,9 @@ describe('MOV to Register to Memory', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.bus.read(mem_addr), c.cpu.registers.C);
+		
+		  assert.equal(c.cpu.clock, 35);
+		
 		  c.reset();
 		}
 		});
@@ -92,6 +98,9 @@ describe('MOV to Register to Memory', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.bus.read(mem_addr), c.cpu.registers.D);
+		
+		  assert.equal(c.cpu.clock, 35);
+		
 		  c.reset();
 		}
 		});
@@ -120,6 +129,9 @@ describe('MOV to Register to Memory', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.bus.read(mem_addr), c.cpu.registers.E);
+		
+		  assert.equal(c.cpu.clock, 35);
+		
 		  c.reset();
 		}
 		});
@@ -148,6 +160,9 @@ describe('MOV to Register to Memory', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.bus.read(mem_addr), c.cpu.registers.H);
+		
+		  assert.equal(c.cpu.clock, 35);
+		
 		  c.reset();
 		}
 		});
@@ -176,6 +191,9 @@ describe('MOV to Register to Memory', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.bus.read(mem_addr), c.cpu.registers.L);
+		
+		  assert.equal(c.cpu.clock, 35);
+		
 		  c.reset();
 		}
 		});
@@ -204,6 +222,9 @@ describe('MOV to Register to Memory', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.bus.read(mem_addr), c.cpu.registers.A);
+		
+		  assert.equal(c.cpu.clock, 35);
+		
 		  c.reset();
 		}
 		});

@@ -45,6 +45,8 @@ describe('ADD OpCode Tests (0x80, 0x81, 0x82, 0x83, 0x84, 0x85)', () => {
 		    assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		    assert.equal(c.cpu.flag_set(FlagType.Sign), false);
 		
+		    assert.equal(c.cpu.clock, 25);
+		    
 		    c.reset();
 		};
 		});
@@ -76,6 +78,8 @@ describe('ADD OpCode Tests (0x80, 0x81, 0x82, 0x83, 0x84, 0x85)', () => {
 		    assert.equal(c.cpu.flag_set(FlagType.Zero), true);
 		    assert.equal(c.cpu.flag_set(FlagType.Sign), false);
 		
+		    assert.equal(c.cpu.clock, 25);
+		    
 		    c.reset();
 		};
 		});
@@ -107,6 +111,8 @@ describe('ADD OpCode Tests (0x80, 0x81, 0x82, 0x83, 0x84, 0x85)', () => {
 		    assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		    assert.equal(c.cpu.flag_set(FlagType.Sign), false);
 		
+		    assert.equal(c.cpu.clock, 25);
+		    
 		    c.reset();
 		};
 		});
@@ -138,6 +144,8 @@ describe('ADD OpCode Tests (0x80, 0x81, 0x82, 0x83, 0x84, 0x85)', () => {
 		    assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		    assert.equal(c.cpu.flag_set(FlagType.Sign), false);
 		
+		    assert.equal(c.cpu.clock, 25);
+		    
 		    c.reset();
 		};
 		});
@@ -169,6 +177,8 @@ describe('ADD OpCode Tests (0x80, 0x81, 0x82, 0x83, 0x84, 0x85)', () => {
 		    assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		    assert.equal(c.cpu.flag_set(FlagType.Sign), true);
 		
+		    assert.equal(c.cpu.clock, 25);
+		    
 		    c.reset();
 		};
 		});
@@ -200,6 +210,8 @@ describe('ADD OpCode Tests (0x80, 0x81, 0x82, 0x83, 0x84, 0x85)', () => {
 		    assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		    assert.equal(c.cpu.flag_set(FlagType.Sign), false);
 		
+		    assert.equal(c.cpu.clock, 25);
+		    
 		    c.reset();
 		};
 		});

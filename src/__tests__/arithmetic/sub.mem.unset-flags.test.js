@@ -53,6 +53,9 @@ describe('SUB Memory (Unset All Flags)', () => {
 		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		  
+		  assert.equal(c.cpu.clock, 45);
+		
 		  c.reset();
 		  }
 		});

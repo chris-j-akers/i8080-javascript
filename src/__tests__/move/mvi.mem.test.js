@@ -25,6 +25,8 @@ describe('MVI Memory', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.bus.read(mem_addr), data);
+		
+		  assert.equal(c.cpu.clock, 31);
 		  c.reset();
 		}
 		});

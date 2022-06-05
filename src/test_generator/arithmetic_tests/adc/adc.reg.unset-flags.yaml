@@ -30,11 +30,11 @@ test_suite:
     const FlagType = i8080.FlagType;
 
     let program = [
-        0x3E, 
-        {accumulator},  // MOV A, #{accumulator}
-        null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-        {data},         // MOV [R], {data}
-        null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+        0x3E,           // MVI into accumulator...
+        {accumulator},  // ...data value {accumulator}
+        null,           // MVI into register (to be populated)...
+        {data},         // ...data value {data}
+        null,           // ADD register to accumulator (to be populated)
         0x76            // HALT
     ]
 
@@ -62,6 +62,8 @@ test_suite:
       assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), {auxillary_carry});
       assert.equal(c.cpu.flag_set(FlagType.Zero), {zero});
       assert.equal(c.cpu.flag_set(FlagType.Sign), {sign});
+
+      assert.equal(c.cpu.clock, 25);
 
       c.reset();
     }};

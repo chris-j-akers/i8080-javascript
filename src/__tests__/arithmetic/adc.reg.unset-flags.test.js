@@ -23,11 +23,11 @@ describe('ADC Register (Unset All Flags)', () => {
 		const FlagType = i8080.FlagType;
 		
 		let program = [
-		    0x3E, 
-		    1,  // MOV A, #1
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    1,         // MOV [R], 1
-		    null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator...
+		    1,  // ...data value 1
+		    null,           // MVI into register (to be populated)...
+		    1,         // ...data value 1
+		    null,           // ADD register to accumulator (to be populated)
 		    0x76            // HALT
 		]
 		
@@ -57,6 +57,8 @@ describe('ADC Register (Unset All Flags)', () => {
 		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
 		
+		  assert.equal(c.cpu.clock, 25);
+		
 		  c.reset();
 		};
 		});
@@ -66,11 +68,11 @@ describe('ADC Register (Unset All Flags)', () => {
 		const FlagType = i8080.FlagType;
 		
 		let program = [
-		    0x3E, 
-		    0,  // MOV A, #0
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    1,         // MOV [R], 1
-		    null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator...
+		    0,  // ...data value 0
+		    null,           // MVI into register (to be populated)...
+		    1,         // ...data value 1
+		    null,           // ADD register to accumulator (to be populated)
 		    0x76            // HALT
 		]
 		
@@ -100,6 +102,8 @@ describe('ADC Register (Unset All Flags)', () => {
 		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		  assert.equal(c.cpu.clock, 25);
 		
 		  c.reset();
 		};

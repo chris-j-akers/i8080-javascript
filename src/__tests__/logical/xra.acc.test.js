@@ -28,6 +28,8 @@ describe('XRA Accumulator', () => {
 		  assert.equal(c.cpu.flag_set(FlagType.Zero), true);
 		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
 		
+		  assert.equal(c.cpu.clock, 18);
+		
 		  c.reset();
 		  }
 		});
@@ -57,6 +59,8 @@ describe('XRA Accumulator', () => {
 		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Zero), true);
 		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		  assert.equal(c.cpu.clock, 18);
 		
 		  c.reset();
 		  }

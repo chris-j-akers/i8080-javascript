@@ -33,6 +33,8 @@ test_suite:
       c.inject_program(program);
       c.execute_program();
 
+      assert.equal(c.cpu.clock, 38);
+
       assert.equal(c.bus.read(mem_addr), c.cpu.registers.{reg_destination});
       c.reset();
     }}

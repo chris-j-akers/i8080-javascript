@@ -10,7 +10,7 @@ describe('ORA Accumulator', () => {
 		let program = [
 		    0x3E,                 // MVI into the accumulator...
 		    4,        // ... this immediate value
-		    0xB7,                 // ANA value in register  with Accumulator
+		    0xB7,                 // ORA value in register  with Accumulator
 		    0x76                  // HALT
 		  ]
 		
@@ -29,6 +29,8 @@ describe('ORA Accumulator', () => {
 		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
 		
+		  assert.equal(c.cpu.clock, 18);
+		
 		  c.reset();
 		  }
 		});
@@ -40,7 +42,7 @@ describe('ORA Accumulator', () => {
 		let program = [
 		    0x3E,                 // MVI into the accumulator...
 		    0,        // ... this immediate value
-		    0xB7,                 // ANA value in register  with Accumulator
+		    0xB7,                 // ORA value in register  with Accumulator
 		    0x76                  // HALT
 		  ]
 		
@@ -58,6 +60,8 @@ describe('ORA Accumulator', () => {
 		  assert.equal(c.cpu.flag_set(FlagType.Zero), true);
 		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
 		
+		  assert.equal(c.cpu.clock, 18);
+		
 		  c.reset();
 		  }
 		});
@@ -69,7 +73,7 @@ describe('ORA Accumulator', () => {
 		let program = [
 		    0x3E,                 // MVI into the accumulator...
 		    128,        // ... this immediate value
-		    0xB7,                 // ANA value in register  with Accumulator
+		    0xB7,                 // ORA value in register  with Accumulator
 		    0x76                  // HALT
 		  ]
 		
@@ -87,6 +91,8 @@ describe('ORA Accumulator', () => {
 		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Sign), true);
 		
+		  assert.equal(c.cpu.clock, 18);
+		
 		  c.reset();
 		  }
 		});
@@ -98,7 +104,7 @@ describe('ORA Accumulator', () => {
 		let program = [
 		    0x3E,                 // MVI into the accumulator...
 		    68,        // ... this immediate value
-		    0xB7,                 // ANA value in register  with Accumulator
+		    0xB7,                 // ORA value in register  with Accumulator
 		    0x76                  // HALT
 		  ]
 		
@@ -115,6 +121,8 @@ describe('ORA Accumulator', () => {
 		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		  assert.equal(c.cpu.clock, 18);
 		
 		  c.reset();
 		  }

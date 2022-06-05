@@ -16,9 +16,9 @@ describe('STAX', () => {
 		let program = [
 		  0x3E,           // MVI into accumulator
 		  0xFF,           // ...this byte
-		  null,           // MOV into B...
+		  null,           // MVI into B...
 		  null,           // ...the high-byte of the memory address (ro be inserted)
-		  null,           // MOV into C...
+		  null,           // MVI into C...
 		  null,           // ... the low-byte of the memory address (to be inserted)
 		  2,       // Store Accumulator into address held in above register pair
 		  0x76            // HALT
@@ -34,6 +34,7 @@ describe('STAX', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.bus.read(mem_addr), 0xFF);
+		  assert.equal(c.cpu.clock, 35);
 		
 		  c.reset();
 		
@@ -47,9 +48,9 @@ describe('STAX', () => {
 		let program = [
 		  0x3E,           // MVI into accumulator
 		  0xFF,           // ...this byte
-		  null,           // MOV into D...
+		  null,           // MVI into D...
 		  null,           // ...the high-byte of the memory address (ro be inserted)
-		  null,           // MOV into E...
+		  null,           // MVI into E...
 		  null,           // ... the low-byte of the memory address (to be inserted)
 		  18,       // Store Accumulator into address held in above register pair
 		  0x76            // HALT
@@ -65,6 +66,7 @@ describe('STAX', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.bus.read(mem_addr), 0xFF);
+		  assert.equal(c.cpu.clock, 35);
 		
 		  c.reset();
 		

@@ -26,6 +26,9 @@ describe('SBI', () => {
 		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
 		assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		assert.equal(c.cpu.clock, 21);
+		
 		});
 		
 	it('No Flags Set (Carry Bit Set)', () => {
@@ -52,6 +55,9 @@ describe('SBI', () => {
 		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
 		assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		assert.equal(c.cpu.clock, 21);
+		
 		});
 		
 	it('Parity, Aux Carry and Zero Flags Set (Carry Bit Reset)', () => {
@@ -77,6 +83,9 @@ describe('SBI', () => {
 		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
 		assert.equal(c.cpu.flag_set(FlagType.Zero), true);
 		assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		assert.equal(c.cpu.clock, 21);
+		
 		});
 		
 	it('Parity, Aux Carry and Zero Flags Set (Carry Bit Set)', () => {
@@ -103,6 +112,9 @@ describe('SBI', () => {
 		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
 		assert.equal(c.cpu.flag_set(FlagType.Zero), true);
 		assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		assert.equal(c.cpu.clock, 21);
+		
 		});
 		
 	it('Parity Flag Set (Carry Bit Reset)', () => {
@@ -128,6 +140,9 @@ describe('SBI', () => {
 		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
 		assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		assert.equal(c.cpu.clock, 21);
+		
 		});
 		
 	it('Parity Flag Set (Carry Bit Set)', () => {
@@ -154,6 +169,9 @@ describe('SBI', () => {
 		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
 		assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		assert.equal(c.cpu.clock, 21);
+		
 		});
 		
 	it('Aux Carry Set (Carry Bit Reset)', () => {
@@ -179,6 +197,9 @@ describe('SBI', () => {
 		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
 		assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		assert.equal(c.cpu.clock, 21);
+		
 		});
 		
 	it('Aux Carry Set (Carry Bit Set)', () => {
@@ -205,6 +226,9 @@ describe('SBI', () => {
 		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
 		assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		assert.equal(c.cpu.clock, 21);
+		
 		});
 		
 	it('Aux Carry and Sign Flag Set (Carry Bit Reset)', () => {
@@ -230,6 +254,9 @@ describe('SBI', () => {
 		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
 		assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		assert.equal(c.cpu.flag_set(FlagType.Sign), true);
+		
+		assert.equal(c.cpu.clock, 21);
+		
 		});
 		
 	it('Aux Carry and Sign Flag Set (Carry Bit Set)', () => {
@@ -256,6 +283,9 @@ describe('SBI', () => {
 		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
 		assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		assert.equal(c.cpu.flag_set(FlagType.Sign), true);
+		
+		assert.equal(c.cpu.clock, 21);
+		
 		});
 		
 	it('Carry and Sign Flag Set (Carry Bit Reset)', () => {
@@ -281,6 +311,9 @@ describe('SBI', () => {
 		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
 		assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		assert.equal(c.cpu.flag_set(FlagType.Sign), true);
+		
+		assert.equal(c.cpu.clock, 21);
+		
 		});
 		
 	it('Carry and Sign Flag Set (Carry Bit Set)', () => {
@@ -307,6 +340,9 @@ describe('SBI', () => {
 		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
 		assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		assert.equal(c.cpu.flag_set(FlagType.Sign), true);
+		
+		assert.equal(c.cpu.clock, 21);
+		
 		});
 		
 });

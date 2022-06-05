@@ -22,6 +22,8 @@ describe('LXI Stack Pointer', () => {
 		
 		  assert.equal(word, c.cpu.StackPointer);
 		
+		  assert.equal(c.cpu.clock, 17);
+		
 		  c.reset();
 		
 		}

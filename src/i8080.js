@@ -348,7 +348,7 @@ class i8080 {
         const result = this.registers['A'] + val;
         this.set_flags_on_arithmetic_op(result, this.registers['A'], val);
         this.registers['A'] = result & 0xFF;
-        this.clock += 4;
+        this.clock += 7;
     }
 
     aci(val) {
@@ -357,7 +357,7 @@ class i8080 {
         const result = this.registers['A'] + val_with_carry;
         this.set_flags_on_arithmetic_op(result, this.registers['A'], val_with_carry);
         this.registers['A'] = result & 0xFF;
-        this.clock += 4;
+        this.clock += 7;
     }
 
     
@@ -379,7 +379,7 @@ class i8080 {
         const result = (this.registers['A'] + reg_twos_comp);
         this.set_flags_on_arithmetic_op(result, this.registers['A'], reg_twos_comp);
         this.registers['A'] = result & 0xFF;
-        this.clock += 7;
+        this.clock += 4;
     }
 
     /**
@@ -409,7 +409,7 @@ class i8080 {
         const result = (this.registers['A'] + reg_carry_twos_comp);
         this.set_flags_on_arithmetic_op(result, this.registers['A'], reg_carry_twos_comp);
         this.registers['A'] = result & 0xFF;
-        this.clock += 7;
+        this.clock += 4;
     }
 
     sbb_mem() {
@@ -438,7 +438,7 @@ class i8080 {
         const result = this.registers['A'] + val_carry_twos_comp;
         this.set_flags_on_arithmetic_op(result, this.registers['A'], val_carry_twos_comp);
         this.registers['A'] = result & 0xFF;
-        this.clock += 4;
+        this.clock += 7;
     }
 
 //  ===================================================================================
@@ -599,7 +599,7 @@ class i8080 {
     mvi_to_mem(val) {
         const addr = this.read_mem_addr('H', 'L');
         this.bus.write(val, addr);
-        this.clock += 7
+        this.clock += 10;
     }
 
 //  ===================================================================================
@@ -701,7 +701,7 @@ class i8080 {
      * Store contents of `H` and `L` registers in memory. Contents of `H`
      * register are stored at `addr` and contents of `L` register are stored at
      * the next higher memory address.
-     * @param {number} operand 16-bit memory address of storage location in little-endian format
+     * @param {number} operand 16-bit memory address of storage location.
      */
     shld(addr) {
         this.bus.write(this.registers.L, addr);
@@ -722,8 +722,8 @@ class i8080 {
     /**
     * @returns The next 16-bits of memory from the current program counter
     * position. The first byte forms the lower-byte of the word and the second
-    * byte forms the upper-byte (little endian). Then increments the program
-    * counter by 2 bytes. 
+    * byte forms the upper-byte (little endian). Program
+    * counter is incremented by 2 bytes. 
     */
     get_next_word() {
         const lower_byte = this.bus.read(this.program_counter);
@@ -734,7 +734,7 @@ class i8080 {
     }
 
     /**
-     * Get the next opcode from the program counter location, then execute it.
+     * Get the next opcode from the program counter location then execute it.
      * The program counter is incremented automatically, depending on the number
      * of bytes consumed by the instruction.
      *
@@ -742,7 +742,6 @@ class i8080 {
      * Fuck-Off Switch Statement Technique*'. Others have used tables to lookup
      * instructions, but switch works just as well and, although longer, is
      * simple to read.
-     *
      */
     execute_next_instruction() {
         const opcode = this.get_next_byte();
@@ -815,6 +814,7 @@ class i8080 {
                 break;
             case 0x47:
                 this.mov_reg('B', 'A');
+                break;
             case 0x48:
                 this.mov_reg('C', 'B');
                 break;
@@ -982,6 +982,7 @@ class i8080 {
                 break;
             case 0x76:
                 this.halt = true;
+                this.clock += 7;
                 return;
             case 0x80:
                 this.add_reg('B');

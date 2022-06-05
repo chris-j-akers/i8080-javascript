@@ -48,6 +48,9 @@ test_suite:
       assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), {auxillary_carry});
       assert.equal(c.cpu.flag_set(FlagType.Zero), {zero});
       assert.equal(c.cpu.flag_set(FlagType.Sign), {sign});
+      
+      assert.equal(c.cpu.clock, 45);
+      
       c.reset();
       }}
     }});

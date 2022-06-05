@@ -13,11 +13,11 @@ describe('ADC Memory (Unset All Flags)', () => {
 		const program = [
 		  0x3E,                   // MVI into Accumulator
 		  0,          // Immediate value (in test config)
-		  0x26,                   // MOV into H...
+		  0x26,                   // MVI into H...
 		  null,                   // ...the high-byte of the memory address (ro be inserted)
-		  0x2E,                   // MOV into L...
+		  0x2E,                   // MVI into L...
 		  null,                   // ... the low-byte of the memory address (to be inserted)
-		  0x36,                   // MOV into the memory address...
+		  0x36,                   // MVI into the memory address...
 		  data,                   // ...the data value
 		  0x8E,                   // Add data in Memory Location to Accumulator
 		  0x76                    // Halt Program
@@ -53,6 +53,9 @@ describe('ADC Memory (Unset All Flags)', () => {
 		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		  assert.equal(c.cpu.clock, 45);
+		
 		  c.reset();
 		  }
 		});
@@ -67,11 +70,11 @@ describe('ADC Memory (Unset All Flags)', () => {
 		const program = [
 		  0x3E,                   // MVI into Accumulator
 		  0,          // Immediate value (in test config)
-		  0x26,                   // MOV into H...
+		  0x26,                   // MVI into H...
 		  null,                   // ...the high-byte of the memory address (ro be inserted)
-		  0x2E,                   // MOV into L...
+		  0x2E,                   // MVI into L...
 		  null,                   // ... the low-byte of the memory address (to be inserted)
-		  0x36,                   // MOV into the memory address...
+		  0x36,                   // MVI into the memory address...
 		  data,                   // ...the data value
 		  0x8E,                   // Add data in Memory Location to Accumulator
 		  0x76                    // Halt Program
@@ -108,6 +111,9 @@ describe('ADC Memory (Unset All Flags)', () => {
 		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		  assert.equal(c.cpu.clock, 45);
+		
 		  c.reset();
 		  }
 		});

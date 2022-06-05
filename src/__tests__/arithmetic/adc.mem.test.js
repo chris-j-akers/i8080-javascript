@@ -43,6 +43,9 @@ describe('ADC Memory', () => {
 		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		  assert.equal(c.cpu.clock, 45);
+		
 		  c.reset();
 		  }
 		});
@@ -88,6 +91,9 @@ describe('ADC Memory', () => {
 		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		  assert.equal(c.cpu.clock, 45);
+		
 		  c.reset();
 		  }
 		});
@@ -132,6 +138,9 @@ describe('ADC Memory', () => {
 		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Zero), true);
 		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		  assert.equal(c.cpu.clock, 45);
+		
 		  c.reset();
 		  }
 		});
@@ -176,6 +185,9 @@ describe('ADC Memory', () => {
 		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		  assert.equal(c.cpu.clock, 45);
+		
 		  c.reset();
 		  }
 		});
@@ -221,6 +233,9 @@ describe('ADC Memory', () => {
 		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		  assert.equal(c.cpu.clock, 45);
+		
 		  c.reset();
 		  }
 		});
@@ -265,6 +280,9 @@ describe('ADC Memory', () => {
 		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
 		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		  assert.equal(c.cpu.clock, 45);
+		
 		  c.reset();
 		  }
 		});
@@ -310,6 +328,9 @@ describe('ADC Memory', () => {
 		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
 		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		  assert.equal(c.cpu.clock, 45);
+		
 		  c.reset();
 		  }
 		});
@@ -354,6 +375,9 @@ describe('ADC Memory', () => {
 		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
 		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Sign), true);
+		
+		  assert.equal(c.cpu.clock, 45);
+		
 		  c.reset();
 		  }
 		});
@@ -399,6 +423,9 @@ describe('ADC Memory', () => {
 		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Sign), true);
+		
+		  assert.equal(c.cpu.clock, 45);
+		
 		  c.reset();
 		  }
 		});
@@ -443,6 +470,9 @@ describe('ADC Memory', () => {
 		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
 		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		  assert.equal(c.cpu.clock, 45);
+		
 		  c.reset();
 		  }
 		});
@@ -488,6 +518,9 @@ describe('ADC Memory', () => {
 		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
 		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		
+		  assert.equal(c.cpu.clock, 45);
+		
 		  c.reset();
 		  }
 		});

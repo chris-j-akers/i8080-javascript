@@ -18,7 +18,7 @@ describe('MVI Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.B, byte);
-		
+		  assert.equal(c.cpu.clock, 14);
 		  c.reset();
 		}
 		});
@@ -39,7 +39,7 @@ describe('MVI Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.C, byte);
-		
+		  assert.equal(c.cpu.clock, 14);
 		  c.reset();
 		}
 		});
@@ -60,7 +60,7 @@ describe('MVI Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.D, byte);
-		
+		  assert.equal(c.cpu.clock, 14);
 		  c.reset();
 		}
 		});
@@ -81,7 +81,7 @@ describe('MVI Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.E, byte);
-		
+		  assert.equal(c.cpu.clock, 14);
 		  c.reset();
 		}
 		});
@@ -102,7 +102,7 @@ describe('MVI Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.H, byte);
-		
+		  assert.equal(c.cpu.clock, 14);
 		  c.reset();
 		}
 		});
@@ -123,7 +123,7 @@ describe('MVI Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.L, byte);
-		
+		  assert.equal(c.cpu.clock, 14);
 		  c.reset();
 		}
 		});
@@ -144,7 +144,7 @@ describe('MVI Register', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A, byte);
-		
+		  assert.equal(c.cpu.clock, 14);
 		  c.reset();
 		}
 		});

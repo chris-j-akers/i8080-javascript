@@ -7,9 +7,9 @@ describe('SHLD', () => {
 		const c = new Computer();
 		
 		const program = [
-		  0x26,                   // MOV into H...
+		  0x26,                   // MVI into H...
 		  0xE,                    // ...this data
-		  0x2E,                   // MOV into L...
+		  0x2E,                   // MVI into L...
 		  0x71,                   // ...this data
 		  0x22,                   // SHLD
 		  null,                   // Low-byte of address (to be populated)
@@ -26,6 +26,8 @@ describe('SHLD', () => {
 		
 		  assert.equal(c.bus.read(mem_addr), 0x71);
 		  assert.equal(c.bus.read(mem_addr + 1), 0xE);
+		
+		  assert.equal(c.cpu.clock, 37);
 		
 		  c.reset();
 		}

@@ -31,6 +31,7 @@ test_suite:
       assert.equal(c.cpu.registers.{lsb_register}, word & 0xFF);
       assert.equal(word, (c.cpu.registers.{msb_register} << 8) | c.cpu.registers.{lsb_register});
       
+      assert.equal(c.cpu.clock, 17);
       c.reset();
 
     }}
