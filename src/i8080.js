@@ -225,82 +225,104 @@ class i8080 {
     }
 
     /**
-     * Sets or Clears CPU Flags based on the results of arithmetic operations.
-     * In the case of Aux Carry, only the left-hand side and right-hand side of
-     * the operation is taken into account.
+     * Object used to sets or clears CPU Flags based on the results of various
+     * operations. In the case of Aux Carry, only the left-hand side and
+     * right-hand side of the operation is taken into account.
      *
      * @param {number} result The result of the operation.
      * @param {number} lhs The left-hand side of the operation.
      * @param {number} rhs The right-hand side of the operation.
      *
      */
-    set_flags_on_arithmetic_op(result, lhs, rhs) {
-
-        /**
-         * Carry Flag: Maximum storage size of any value in a 8080 register is
-         * 1-byte (8-bits), so 255. Any higher result than that must mean a
-         * Carry out of the 7th bit occured.
-         */
-        result > 255 || result < 0 ? this.set_flag(i8080.FlagType.Carry) : this.clear_flag(i8080.FlagType.Carry);
-
-        /**
-         * Parity Flag: Set if the number of 1's is even. A very old form of
-         * tame CRC checking
-         */
-        this.parity(result) ? this.set_flag(i8080.FlagType.Parity) : this.clear_flag(i8080.FlagType.Parity);
-
-        /**
-        * Auxillary Carry Flag
-        *
-        * Add the LSB nibbles of each byte together. If the result includes a
-        * bit carried into position 4, then an auxillary (or half) carry will
-        * occur during this operation and the flag must be set.
-        *
-        * In the example below, we can see that adding the two least significant
-        * nibbles of numbers 159 and 165 together results in a 1 being carried
-        * to bit position 4. This means an auxillary carry (or half-carry) will
-        * occur during this add operation and the flag must be set accordingly.
-        *
-        * +---------------+
-        * | 159: 10011111 |
-        * |+--------------|
-        * | 165: 10100101 |
-        * +---------------+
-        *
-        * Take least significant nibbles only, and sum.
-        *
-        * +----------+
-        * | 00001111 |
-        * |+---------|
-        * | 00000101 |
-        * +==========+
-        * | 00010100 |
-        * +----------+
-        *
-        * Result has meant a carry out of bit-3 to bit-4, so we set Aux Carry in
-        * this case.
-        *
-        * */
-        ((lhs & 0x0f) + (rhs & 0x0f)) & (1 << 4) ? this.set_flag(i8080.FlagType.AuxillaryCarry) : this.clear_flag(i8080.FlagType.AuxillaryCarry);
-
-        /**
-         * Zero Flag: Set if the operation result is 0
-         */
-        result === 0 ? this.set_flag(i8080.FlagType.Zero) : this.clear_flag(i8080.FlagType.Zero);
-
-        /**
-         * Sign Flag: Set if bit 7 of the result is 1. It is up to the 8080
-         * programmer to decide whether or not to treat a number with bit-7 set
-         * as negative. All the 8080 does is detect that bit-7 is set in the
-         * result of some operation and sets the sign flag accordingly. It
-         * doesn't care what the number actually is.
-         */
-        result & (1 << 7) ? this.set_flag(i8080.FlagType.Sign) : this.clear_flag(i8080.FlagType.Sign)
+    FlagSetter = {
+        Carry: (result) => {
+            /**
+             * Carry Flag: Maximum storage size of any value in a 8080 register is
+             * 1-byte (8-bits), so 255. Any higher result than that must mean a
+             * Carry out of the 7th bit occured.
+             */
+            result > 255 || result < 0 ? this.set_flag(i8080.FlagType.Carry) : this.clear_flag(i8080.FlagType.Carry);
+        },
+        Parity: (result) => {
+            /**
+             * Parity Flag: Set if the number of 1's is even.
+             */
+            this.parity(result) ? this.set_flag(i8080.FlagType.Parity) : this.clear_flag(i8080.FlagType.Parity);
+        },
+        AuxillaryCarry: (lhs, rhs) => {
+            /**
+            * Auxillary Carry Flag
+            *
+            * Add the LSB nibbles of each byte together. If the result includes a
+            * bit carried into position 4, then an auxillary (or half) carry will
+            * occur during this operation and the flag must be set.
+            *
+            * In the example below, we can see that adding the two least significant
+            * nibbles of numbers 159 and 165 together results in a 1 being carried
+            * to bit position 4. This means an auxillary carry (or half-carry) will
+            * occur during this add operation and the flag must be set accordingly.
+            *
+            * +---------------+
+            * | 159: 10011111 |
+            * |+--------------|
+            * | 165: 10100101 |
+            * +---------------+
+            *
+            * Take least significant nibbles only, and sum.
+            *
+            * +----------+
+            * | 00001111 |
+            * |+---------|
+            * | 00000101 |
+            * +==========+
+            * | 00010100 |
+            * +----------+
+            *
+            * Result has meant a carry out of bit-3 to bit-4, so we set Aux Carry in
+            * this case.
+            *
+            * */
+            ((lhs & 0x0f) + (rhs & 0x0f)) & (1 << 4) ? this.set_flag(i8080.FlagType.AuxillaryCarry) : this.clear_flag(i8080.FlagType.AuxillaryCarry);
+        },
+        Zero: (result) => {
+            /**
+             * Zero Flag: Set if the operation result is 0
+             */
+            result === 0 ? this.set_flag(i8080.FlagType.Zero) : this.clear_flag(i8080.FlagType.Zero);
+        },
+        Sign: (result) => {
+            /**
+             * Sign Flag: Set if bit 7 of the result is 1. It is up to the 8080
+             * programmer to decide whether or not to treat a number with bit-7 set
+             * as negative. All the 8080 does is detect that bit-7 is set in the
+             * result of some operation and sets the sign flag accordingly. It
+             * doesn't care what the number actually is.
+             */
+            result & (1 << 7) ? this.set_flag(i8080.FlagType.Sign) : this.clear_flag(i8080.FlagType.Sign)
+        }
     }
 
+
+ 
 //  ===================================================================================
 //  ADD Arithmetic Operations (ADD,ADC)
 //  ===================================================================================
+
+    /**
+     * Takes care of updating the required flags for each arithmetic
+     * operation (AC, C, P, S, Z for ADD, ADC, ACI, SUB, SBB, SBI).
+     *
+     * @param {number} result The result of the operation
+     * @param {*} lhs The left-hand-side of the operation
+     * @param {*} rhs The right-hand-side of the operation
+     */
+    set_flags_on_arithmetic_op(result, lhs, rhs) {
+        this.FlagSetter.AuxillaryCarry(lhs, rhs);
+        this.FlagSetter.Carry(result);
+        this.FlagSetter.Parity(result);
+        this.FlagSetter.Sign(result);
+        this.FlagSetter.Zero(result);
+    }
 
     /**
      * Add the value stored in register `reg` to the Accumulator.
@@ -313,7 +335,7 @@ class i8080 {
      */
     add_reg(reg) {
         const result = this.registers['A'] + this.registers[reg];
-        this.set_flags_on_arithmetic_op(result, this.registers['A'], this.registers[reg]);
+        this.set_flags_on_arithmetic_op(result, this.registers['A'], this.registers[reg] );
         this.registers['A'] = result & 0xFF;
         this.clock += 4;
     }
@@ -605,6 +627,8 @@ class i8080 {
 //
     
     set_flags_on_logical_op() {
+
+        
         this.clear_flag(i8080.FlagType.Carry);
         this.registers['A'] === 0 ? this.set_flag(i8080.FlagType.Zero) : this.clear_flag(i8080.FlagType.Zero);
         this.registers['A'] & (1 << 7) ? this.set_flag(i8080.FlagType.Sign) : this.clear_flag(i8080.FlagType.Sign)
@@ -744,6 +768,19 @@ class i8080 {
                 break;
         }
         this.clock += 5;
+    }
+
+
+    inr_reg(reg) {
+        const result = this.registers[reg] + 1;
+        this.set_flags_on_arithmetic_op(result, this.registers[reg], 1);
+
+        /**
+         * This is a bit 'hacky', but INR (and DCR) does not set the Carry flag,
+         * so we need to clear it after the above call.
+         */
+        this.clear_flag()
+
     }
 
     /**
