@@ -491,7 +491,6 @@ class i8080 {
 // Condition bits affected: None
 
     lxi(reg, val) {
-
         const msb = (val >> 8) & 0xFF;
         const lsb = val & 0xFF;
 
@@ -513,8 +512,6 @@ class i8080 {
         }
         this.clock += 10;
     }
-
-
 
 //  ===================================================================================
 //  Single Register Operations
@@ -718,6 +715,38 @@ class i8080 {
     }
 
     /**
+     * The 16-bit number held in the specified register pair is incremented by
+     * 1.
+     * @param {char} high_byte_register First register of the pair (B, D,
+     * H)
+     */
+    inx(high_byte_register) {
+        let low_byte_register;
+
+        const _inx = (reg_high, reg_low) => {
+            const word = ((this.registers[reg_high] << 8) | this.registers[reg_low]) + 1;
+            this.registers[reg_high] = (word >> 8) & 0xFF;
+            this.registers[reg_low] = word & 0xFF;
+        }
+
+        switch(high_byte_register) {
+            case 'B':
+                _inx('B', 'C');
+                break;
+            case 'D':
+                _inx('D', 'E');
+                break;
+            case 'H':
+                _inx('H', 'L');
+                break;
+            case 'SP':
+                this.stack_pointer = (this.stack_pointer + 1) & 0xFFFF;
+                break;
+        }
+        this.clock += 5;
+    }
+
+    /**
      * @returns The next 8-bits of memory from the current program counter
      * position, then increments the program counter by 1 byte.
      */
@@ -755,8 +784,12 @@ class i8080 {
         const opcode = this.get_next_byte();
         switch(opcode) {
             case 0x00:
+            case 0x08:
             case 0x10:
+            case 0x18:
             case 0x20:
+            case 0x28:
+            case 0x38:
             case 0x30:
                 this.noop();
                 break;
@@ -766,11 +799,17 @@ class i8080 {
             case 0x02:
                 this.stax('B');
                 break;
+            case 0x03:
+                this.inx('B');
+                break;
             case 0x11:
                 this.lxi('D', this.get_next_word());
                 break;
             case 0x12:
                 this.stax('D');
+                break;
+            case 0x13:
+                this.inx('D');
                 break;
             case 0x21:
                 this.lxi('H', this.get_next_word());
@@ -784,6 +823,9 @@ class i8080 {
             case 0x22:
                 this.shld(this.get_next_word());
                 break;
+            case 0x23:
+                this.inx('H');
+                break;
             case 0x2E:
                 this.mvi_reg('L', this.get_next_byte());
                 break;
@@ -792,6 +834,9 @@ class i8080 {
                 break;
             case 0x32:
                 this.sta(this.get_next_word());
+                break;
+            case 0x33:
+                this.inx('SP');
                 break;
             case 0x3E:
                 this.mvi_reg('A', this.get_next_byte());
