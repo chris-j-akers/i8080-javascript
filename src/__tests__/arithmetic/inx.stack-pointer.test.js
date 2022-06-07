@@ -3,7 +3,7 @@ import { i8080 } from '../../i8080.js'
 import { strict as assert } from 'assert'
 
 describe('INX', () => {
-	it('Increment Stack pointer 5 times from 65533', () => {
+	it('Increment Stack pointer 4 times from 65533', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		

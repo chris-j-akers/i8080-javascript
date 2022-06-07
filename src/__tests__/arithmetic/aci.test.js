@@ -309,7 +309,7 @@ describe('ACI', () => {
 		assert.equal(c.cpu.flag_set(FlagType.Carry), true);
 		assert.equal(c.cpu.flag_set(FlagType.Parity), true);
 		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
-		assert.equal(c.cpu.flag_set(FlagType.Zero), false);
+		assert.equal(c.cpu.flag_set(FlagType.Zero), true);
 		assert.equal(c.cpu.flag_set(FlagType.Sign), false);
 		
 		assert.equal(c.cpu.clock, 21);

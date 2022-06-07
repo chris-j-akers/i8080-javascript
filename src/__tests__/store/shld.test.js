@@ -2,7 +2,7 @@ import { Computer } from '../../computer.js'
 import { strict as assert } from 'assert'
 
 describe('SHLD', () => {
-	it('Store Accumulator in address found in registers B,C', () => {
+	it('Store H & L values in 16-bit address found by combining B, C', () => {
 		const max_mem_addr = 255;
 		const c = new Computer();
 		

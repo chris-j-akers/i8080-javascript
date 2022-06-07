@@ -14,6 +14,7 @@ import arithmetic_tests.sui.sui_tests as sui_tests
 import arithmetic_tests.aci.aci_tests as aci_tests
 import arithmetic_tests.adi.adi_tests as adi_tests
 import arithmetic_tests.inx.inx_tests as inx_tests
+import arithmetic_tests.inr.inr_tests as inr_tests
 import load_tests.load_tests as load_tests
 import logical_tests.ana.ana_tests as ana_tests
 import logical_tests.ani.ani_tests as ani_tests

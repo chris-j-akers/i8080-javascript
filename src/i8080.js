@@ -134,7 +134,7 @@ class i8080 {
     }
 
     /**
-     * Store a 16-bit memory address into a pair of 8-bit registers.
+     * Get a 16-bit memory address stored in a pair of 8-bit registers.
      *
      * Operations that *retrieve* data from memory get the relevant address from
      * one of the register pairs (BC, DE, HL). The first register in the pair
@@ -150,7 +150,7 @@ class i8080 {
     }
 
     /**
-     * Load a 16-bit memory address a pair of 8-bit registers.
+     * Load a 16-bit memory address into a pair of 8-bit registers.
      *
      * Operations that *store* data in memory get the relevant address from one
      * of the register pairs (BC, DE, HL). The first register in the pair stores
@@ -288,7 +288,7 @@ class i8080 {
             /**
              * Zero Flag: Set if the operation result is 0
              */
-             result === 0 ? this.set_flag(i8080.FlagType.Zero) : this.clear_flag(i8080.FlagType.Zero);
+             (result & 0xFF) === 0 ? this.set_flag(i8080.FlagType.Zero) : this.clear_flag(i8080.FlagType.Zero);
         },
         Sign: (result) => {
             /**
@@ -946,6 +946,8 @@ class i8080 {
         this.FlagSetter.Zero(result);
 
         this.registers[reg] = result & 0xFF;
+
+        this.clock += 5;
     }
 
     /**
@@ -955,7 +957,9 @@ class i8080 {
      * Flags affected: P, Z, AC, S.
      */
     inr_m() {
-        const lhs = this.bus.read(this.load_mem_addr('H', 'L'));
+        const addr = this.read_mem_addr('H','L');
+
+        const lhs = this.bus.read(addr);
         const rhs = 1;
         const result = lhs + rhs;
 
@@ -964,8 +968,12 @@ class i8080 {
         this.FlagSetter.Sign(result);
         this.FlagSetter.Zero(result);
 
-        this.bus.write(addr, result & 0xFF);
+        this.bus.write(result & 0xFF, addr);
+
+        this.clock += 10;
     }
+
+
 
     /* ---                                                                --- 
        ---                      PROGRAM EXECUTION                         --- 
@@ -1018,6 +1026,30 @@ class i8080 {
             case 0x38:
             case 0x30:
                 this.noop();
+                break;
+            case 0x04:
+                this.inr_r('B');
+                break;
+            case 0x14:
+                this.inr_r('D');
+                break;
+            case 0x24:
+                this.inr_r('H');
+                break;
+            case 0x34:
+                this.inr_m();
+                break;
+            case 0x0C:
+                this.inr_r('C');
+                break;
+            case 0x1C:
+                this.inr_r('E');
+                break;
+            case 0x2C:
+                this.inr_r('L');
+                break;
+            case 0x3C:
+                this.inr_r('A');
                 break;
             case 0x01: 
                 this.lxi('B', this.get_next_word());

@@ -234,5 +234,5 @@ test_suite:
       carry: True
       parity: True
       auxillary_carry: True
-      zero: False
+      zero: True
       sign: False
