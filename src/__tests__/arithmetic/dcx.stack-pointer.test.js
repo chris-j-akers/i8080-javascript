@@ -1,0 +1,42 @@
+import { Computer } from '../../computer.js'
+import { i8080 } from '../../i8080.js'
+import { strict as assert } from 'assert'
+
+describe('DCX', () => {
+	it('Decrement Stack pointer 5 times from 4', () => {
+		const c = new Computer();
+		const FlagType = i8080.FlagType;
+		
+		const program = [
+		  0x31,       // LXI to set stack-pointer to...
+		  0x04,       // ...this 16-bit number (low-byte)
+		  0x00,       // ...this 16-bit number (high-byte)
+		  0x3B,       // ...decrement stack
+		  0x76,       // HALT
+		]
+		
+		c.inject_program(program);
+		c.execute_program();
+		assert.equal(c.cpu.stack_pointer, 3);
+		
+		c.cpu.halt = false;
+		c.execute_program(0x03);
+		assert.equal(c.cpu.stack_pointer, 2);
+		
+		c.cpu.halt = false;
+		c.execute_program(0x03);
+		assert.equal(c.cpu.stack_pointer, 1);
+		
+		c.cpu.halt = false;
+		c.execute_program(0x03);
+		assert.equal(c.cpu.stack_pointer, 0);
+		
+		c.cpu.halt = false;
+		c.execute_program(0x03);
+		assert.equal(c.cpu.stack_pointer, 65535);
+		
+		assert.equal(c.cpu.clock, 70);
+		
+		});
+		
+});

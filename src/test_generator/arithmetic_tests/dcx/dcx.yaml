@@ -1,0 +1,78 @@
+---
+test_suite:
+  enable: True
+  generator_function: dcx_tests.generate_dcx
+  description: 'DCX'
+  output_file_name: '/arithmetic/dcx.test.js'
+  header: |
+    import { Computer } from '../../computer.js'
+    import { i8080 } from '../../i8080.js'
+    import { strict as assert } from 'assert'
+
+    const mvi_opcode_lookup = {
+      B: 0x06,
+      C: 0x0E,
+      D: 0x16,
+      E: 0x1E,
+      H: 0x26,
+      L: 0x2E,
+      A: 0x3E
+    }
+  footer: |
+    });
+  boilerplate: |
+    const c = new Computer();
+    const FlagType = i8080.FlagType;
+
+    const program = [
+      mvi_opcode_lookup.{register_high_byte},     // Move into {register_high_byte}....
+      0x00,                                       // ...this immediate value
+      mvi_opcode_lookup.{register_low_byte},      // Move into {register_low_byte}....
+      0x04,                                       // ...this immediate value
+      {opcode},
+      0x76                                        // HALT
+    ]
+
+    c.inject_program(program);
+    c.execute_program();
+    assert.equal((c.cpu.registers.{register_high_byte} << 8) | c.cpu.registers.{register_low_byte}, 3);
+
+    c.cpu.halt = false;
+    c.execute_program(0x04);
+    assert.equal((c.cpu.registers.{register_high_byte}  << 8) | c.cpu.registers.{register_low_byte}, 2);
+
+    c.cpu.halt = false;
+    c.execute_program(0x04);
+    assert.equal((c.cpu.registers.{register_high_byte}  << 8) | c.cpu.registers.{register_low_byte}, 1);
+
+    c.cpu.halt = false;
+    c.execute_program(0x04);
+    assert.equal((c.cpu.registers.{register_high_byte}  << 8) | c.cpu.registers.{register_low_byte}, 0);
+
+    c.cpu.halt = false;
+    c.execute_program(0x04);
+    assert.equal((c.cpu.registers.{register_high_byte}  << 8) | c.cpu.registers.{register_low_byte}, 65535);
+    
+    assert.equal(c.cpu.clock, 74);
+
+    }});
+
+  tests:
+
+    - test:
+      name: Decrement 5 times from 4 and confirm B/C register rolls to 65535 when decremented at 0
+      register_high_byte: B
+      register_low_byte: C
+      opcode: 0x0B
+
+    - test:
+      name: Increment 5 times from 65533 and confirm D/E register rolls to 65535 when decremented at 0
+      register_high_byte: D
+      register_low_byte: E
+      opcode: 0x1B
+
+    - test:
+      name: Increment 5 times from 65533 and confirm H/L register rolls to 65535 when decremented at 0
+      register_high_byte: H
+      register_low_byte: L
+      opcode: 0x2B

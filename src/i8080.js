@@ -523,56 +523,26 @@ class i8080 {
         this.clock += 7;
     }
 
-//  ===================================================================================
-//  LXI Operations (16-bit Load)
-//  ===================================================================================
-//
-// The third byte of the instruction (the most significant 8 bits of
-// the 16-bit immediate data) is loaded into the first register of the specified
-// pair, while the second byte of the instruction (the least significant 8 bits of
-// the 16-bit immediate data) is loaded into the second register of the specified
-// pair.
 
-// e.g. For OpCode 0x01 (LX B,D16)
+    /*------------------------------------------------------------------------
+                          16-BIT LOAD IMMEDIATE OPERATIONS                     
+    ------------------------------------------------------------------------*/
 
-// +---------------------+--------------+-------------+
-// | OPCODE (FIRST BYTE) |  SECOND BYTE |  THIRD BYTE |
-// +---------------------+--------------+-------------+
-// | 00000001            | 10101010     | 01010101    |
-// +---------------------+--------------+-------------+
 
-// After execution, register pair B,C will contain the following:
-
-// +------------+-------------+
-// | REGISTER B |  REGISTER C |
-// +------------+-------------+
-// | 01010101   | 10101010    |
-// +------------+-------------+
-
-// If SP is specified as the register pair, the second byte of the
-// instruction replaces the least significant 8 bits of the stack pointer, while
-// the third byte of the instruction replaces the most significant 8 bits of the
-// stack pointer.
-
-// e.g.
-
-// +---------------------+--------------+-------------+
-// | OPCODE (FIRST BYTE) |  SECOND BYTE |  THIRD BYTE |
-// +---------------------+--------------+-------------+
-// | 00110001            | 10101010     | 01010101    |
-// +---------------------+--------------+-------------+
-
-// After execution, Stack Pointer will contain the following:
-
-// +--------------------+
-// | STACK POINTER (SP) |
-// +--------------------+
-// | 0101010110101010  |
-// +--------------------+
-
-// Condition bits affected: None
-
+    
+    /**
+     * Load a 16-bit immediate value into one of the register pairs (BC, DE, HL).
+     * The first-byte is loaded into the first register of the specified pair, while
+     * the second byte is loaded into the second register of the specified pair.
+     *
+     * If the Stack Pointer is specified (SP), then its value is simple overridden
+     *  with `val`.
+     *
+     * @param {char} reg Name of the first register in the pair (BC, DE, HL)
+     * @param {number} val 16-bit immediate value to be stored
+     */
     lxi(reg, val) {
+
         const msb = (val >> 8) & 0xFF;
         const lsb = val & 0xFF;
 
@@ -595,18 +565,18 @@ class i8080 {
         this.clock += 10;
     }
 
-//  ===================================================================================
-//  Single Register Operations
-//  ===================================================================================
+// *   ===================================================================================
+// *   Single Register Operations
+// *   ===================================================================================
 
-// This section describes instructions which operate on a single register or memory 
-// location. If a memory reference is specified, the memory byte addressed by the H
-// and L registers is operated upon. The H register holds the most significant 8 bits 
-// of the address wh ile the L register holds the least significant 8 bits of the 
-// address.
+// *  This section describes instructions which operate on a single register or memory 
+// *  location. If a memory reference is specified, the memory byte addressed by the H
+// *  and L registers is operated upon. The H register holds the most significant 8 bits 
+// *  of the address wh ile the L register holds the least significant 8 bits of the 
+// *  address.
 
     daa() {
-        // The eight-bit hexadecimal number in the accumulator is adjusted to form two 
+        //  The eight-bit hexadecimal number in the accumulator is adjusted to form two 
         // four-bit binary-coded-decimal digits by the following two-step process:
 
         // (1) If the least significant four bits of the accumulator represents a number
@@ -929,6 +899,38 @@ class i8080 {
     }
 
     /**
+     * The 16-bit number stored in the specified register pair (BC, DE, HL) is
+     * decremented by 1 (NOTE: Uses two's complement addition to perform
+     * subtraction).
+     * .
+     * @param {char} high_byte_register First register of the pair (B, D, H)
+     */
+    dcx(high_byte_register) {
+        const _dcx = (reg_high, reg_low) => {
+            const word = ((this.registers[reg_high] << 8) | this.registers[reg_low]) + 0xFFFF;
+            this.registers[reg_high] = (word >> 8) & 0xFF;
+            this.registers[reg_low] = word & 0xFF;
+        }
+
+        switch(high_byte_register) {
+            case 'B':
+                _dcx('B', 'C');
+                break;
+            case 'D':
+                _dcx('D', 'E');
+                break;
+            case 'H':
+                _dcx('H', 'L');
+                break;
+            case 'SP':
+                this.stack_pointer = (this.stack_pointer + 0xFFFF) & 0xFFFF;
+                break;
+        }
+
+        this.clock += 5;
+    }
+
+    /**
      * The named register is incremented by 1.
      * 
      * Flags affected: P, Z, AC, S.
@@ -973,11 +975,43 @@ class i8080 {
         this.clock += 10;
     }
 
+    dcr_r(reg) {
+
+        const lhs = this.registers[reg];
+        const rhs = 0xFF; // Two's Complement of 1
+        const result = lhs + rhs;
+
+        this.FlagSetter.AuxillaryCarry(lhs, rhs);
+        this.FlagSetter.Parity(result);
+        this.FlagSetter.Sign(result);
+        this.FlagSetter.Zero(result);
+
+        this.registers[reg] = result & 0xFF;
+
+        this.clock += 5;
+
+    }
+
+    dcr_m() {
+        const addr = this.read_mem_addr('H','L');
+
+        const lhs = this.bus.read(addr);
+        const rhs = 0xFF; // Two's Complement of 1
+        const result = lhs + rhs;
+
+        this.FlagSetter.AuxillaryCarry(lhs, rhs);
+        this.FlagSetter.Parity(result);
+        this.FlagSetter.Sign(result);
+        this.FlagSetter.Zero(result);
+
+        this.bus.write(result & 0xFF, addr);
+
+        this.clock += 10;
+    }
 
 
-    /* ---                                                                --- 
-       ---                      PROGRAM EXECUTION                         --- 
-       ---                      -----------------                         --- */
+    //                           PROGRAM EXECUTION                            
+    //                           -----------------
 
 
     /**
@@ -1026,6 +1060,42 @@ class i8080 {
             case 0x38:
             case 0x30:
                 this.noop();
+                break;
+            case 0x0B:
+                this.dcx('B');
+                break;
+            case 0x1B:
+                this.dcx('D');
+                break;
+            case 0x2B:
+                this.dcx('H');
+                break;
+            case 0x3B:
+                this.dcx('SP');
+                break;
+            case 0x05:
+                this.dcr_r('B');
+                break;
+            case 0x15:
+                this.dcr_r('D');
+                break;
+            case 0x25:
+                this.dcr_r('H');
+                break;
+            case 0x35:
+                this.dcr_m();
+                break;
+            case 0x0D:
+                this.dcr_r('C');
+                break;
+            case 0x1D:
+                this.dcr_r('E');
+                break;
+            case 0x2D:
+                this.dcr_r('L');
+                break;
+            case 0x3D:
+                this.dcr_r('A');
                 break;
             case 0x04:
                 this.inr_r('B');
