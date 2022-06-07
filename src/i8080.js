@@ -288,7 +288,7 @@ class i8080 {
             /**
              * Zero Flag: Set if the operation result is 0
              */
-            result === 0 ? this.set_flag(i8080.FlagType.Zero) : this.clear_flag(i8080.FlagType.Zero);
+             result === 0 ? this.set_flag(i8080.FlagType.Zero) : this.clear_flag(i8080.FlagType.Zero);
         },
         Sign: (result) => {
             /**
@@ -298,7 +298,7 @@ class i8080 {
              * result of some operation and sets the sign flag accordingly. It
              * doesn't care what the number actually is.
              */
-            result & (1 << 7) ? this.set_flag(i8080.FlagType.Sign) : this.clear_flag(i8080.FlagType.Sign)
+             result & (1 << 7) ? this.set_flag(i8080.FlagType.Sign) : this.clear_flag(i8080.FlagType.Sign)
         }
     }
 
@@ -309,22 +309,6 @@ class i8080 {
 //  ===================================================================================
 
     /**
-     * Takes care of updating the required flags for each arithmetic
-     * operation (AC, C, P, S, Z for ADD, ADC, ACI, SUB, SBB, SBI).
-     *
-     * @param {number} result The result of the operation
-     * @param {*} lhs The left-hand-side of the operation
-     * @param {*} rhs The right-hand-side of the operation
-     */
-    set_flags_on_arithmetic_op(result, lhs, rhs) {
-        this.FlagSetter.AuxillaryCarry(lhs, rhs);
-        this.FlagSetter.Carry(result);
-        this.FlagSetter.Parity(result);
-        this.FlagSetter.Sign(result);
-        this.FlagSetter.Zero(result);
-    }
-
-    /**
      * Add the value stored in register `reg` to the Accumulator.
      * 
      * Flags Affected: C, P, AC, Z, S
@@ -333,51 +317,92 @@ class i8080 {
      * 
      * @param {char} reg The name of the register which contains the value to be added.
      */
-    add_reg(reg) {
-        const result = this.registers['A'] + this.registers[reg];
-        this.set_flags_on_arithmetic_op(result, this.registers['A'], this.registers[reg] );
+    add_r(reg) {
+        const lhs = this.registers['A'];
+        const rhs = this.registers[reg];
+        const result = lhs + rhs;
+
+        this.FlagSetter.Carry(result);
+        this.FlagSetter.Parity(result);
+        this.FlagSetter.AuxillaryCarry(lhs, rhs);
+        this.FlagSetter.Sign(result);
+        this.FlagSetter.Zero(result);
+
         this.registers['A'] = result & 0xFF;
         this.clock += 4;
     }
 
-    add_mem() {
-        const mem_data = this.bus.read(this.read_mem_addr('H','L'));
-        const result = this.registers['A'] + mem_data;
-        this.set_flags_on_arithmetic_op(result, this.registers['A'], mem_data);
+    add_m() {
+        const lhs = this.registers['A'];
+        const rhs = this.bus.read(this.read_mem_addr('H','L'))
+        const result = lhs + rhs;
+
+        this.FlagSetter.Carry(result);
+        this.FlagSetter.Parity(result);
+        this.FlagSetter.AuxillaryCarry(lhs, rhs);
+        this.FlagSetter.Sign(result);
+        this.FlagSetter.Zero(result);
+
         this.registers['A'] = result & 0xFF;
         this.clock += 7;
     }
 
-    adc_reg(reg) {
-        const register_with_carry = this.registers[reg] + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
-        const result = this.registers['A'] + register_with_carry;
-        this.set_flags_on_arithmetic_op(result, this.registers['A'], register_with_carry);
+    adc_r(reg) {
+        const lhs = this.registers['A'];
+        const rhs = this.registers[reg] + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
+        const result = lhs + rhs;
+        
+        this.FlagSetter.Carry(result);
+        this.FlagSetter.Parity(result);
+        this.FlagSetter.AuxillaryCarry(lhs, rhs);
+        this.FlagSetter.Sign(result);
+        this.FlagSetter.Zero(result);
+
         this.registers['A'] = result & 0xFF;
         this.clock += 4;
     }
 
-    adc_mem() {
-        const mem_data = this.bus.read(this.read_mem_addr('H','L'));
-        const carry = (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
-        const mem_data_with_carry = mem_data + carry;
-        const result = this.registers['A'] + mem_data_with_carry;
-        this.set_flags_on_arithmetic_op(result, this.registers['A'], mem_data_with_carry);
+    adc_m() {
+        const lhs = this.registers['A'];
+        const rhs = this.bus.read(this.read_mem_addr('H','L')) + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
+        const result = lhs + rhs;
+
+        this.FlagSetter.Carry(result);
+        this.FlagSetter.Parity(result);
+        this.FlagSetter.AuxillaryCarry(lhs, rhs);
+        this.FlagSetter.Sign(result);
+        this.FlagSetter.Zero(result);
+
         this.registers['A'] = result & 0xFF;
         this.clock += 7;
     }
 
     adi(val) {
-        const result = this.registers['A'] + val;
-        this.set_flags_on_arithmetic_op(result, this.registers['A'], val);
+        const lhs = this.registers['A'] 
+        const rhs = val;
+        const result = lhs + rhs;
+
+        this.FlagSetter.Carry(result);
+        this.FlagSetter.Parity(result);
+        this.FlagSetter.AuxillaryCarry(lhs, rhs);
+        this.FlagSetter.Sign(result);
+        this.FlagSetter.Zero(result);
+
         this.registers['A'] = result & 0xFF;
         this.clock += 7;
     }
 
     aci(val) {
-        const carry = (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
-        const val_with_carry = val + carry;
-        const result = this.registers['A'] + val_with_carry;
-        this.set_flags_on_arithmetic_op(result, this.registers['A'], val_with_carry);
+        const lhs = this.registers['A'];
+        const rhs = val + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0)
+        const result = lhs + rhs;
+
+        this.FlagSetter.Carry(result);
+        this.FlagSetter.Parity(result);
+        this.FlagSetter.AuxillaryCarry(lhs, rhs);
+        this.FlagSetter.Sign(result);
+        this.FlagSetter.Zero(result);
+
         this.registers['A'] = result & 0xFF;
         this.clock += 7;
     }
@@ -396,10 +421,17 @@ class i8080 {
      * @param {character} reg Name of register that contains value to be
      * subtracted from the Accumulator (B,C,D,E,H,L)
      */
-    sub_reg(reg) {
-        const reg_twos_comp = ~(this.registers[reg]) + 1;
-        const result = (this.registers['A'] + reg_twos_comp);
-        this.set_flags_on_arithmetic_op(result, this.registers['A'], reg_twos_comp);
+    sub_r(reg) {
+        const lhs = this.registers['A'];
+        const rhs = ~(this.registers[reg]) + 1;
+        const result = lhs + rhs;
+
+        this.FlagSetter.Carry(result);
+        this.FlagSetter.Parity(result);
+        this.FlagSetter.AuxillaryCarry(lhs, rhs);
+        this.FlagSetter.Sign(result);
+        this.FlagSetter.Zero(result);
+        
         this.registers['A'] = result & 0xFF;
         this.clock += 4;
     }
@@ -416,49 +448,77 @@ class i8080 {
      * will be subtracted from 10, leaving 5 in the Accumulator.
      *
      */
-    sub_mem() {
-        const data = this.bus.read(this.read_mem_addr('H','L'));
-        const data_twos_comp = ~(data)+1;
-        const result = this.registers['A'] + data_twos_comp;
-        this.set_flags_on_arithmetic_op(result, this.registers['A'], data_twos_comp);
+    sub_m() {
+        const lhs = this.registers['A'];
+        const rhs = ~(this.bus.read(this.read_mem_addr('H','L'))) + 1;
+        const result = lhs + rhs;
+
+        this.FlagSetter.Carry(result);
+        this.FlagSetter.Parity(result);
+        this.FlagSetter.AuxillaryCarry(lhs, rhs);
+        this.FlagSetter.Sign(result);
+        this.FlagSetter.Zero(result);
+        
         this.registers['A'] = result & 0xFF;
         this.clock += 7;
     }
 
-    sbb_reg(reg) {        
-        const reg_carry = this.registers[reg] + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
-        const reg_carry_twos_comp = ~(reg_carry) + 1;
-        const result = (this.registers['A'] + reg_carry_twos_comp);
-        this.set_flags_on_arithmetic_op(result, this.registers['A'], reg_carry_twos_comp);
+    sbb_r(reg) {        
+        const lhs = this.registers['A'];
+        const rhs = ~(this.registers[reg] + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0)) + 1;
+        const result = lhs + rhs;
+
+        this.FlagSetter.Carry(result);
+        this.FlagSetter.Parity(result);
+        this.FlagSetter.AuxillaryCarry(lhs, rhs);
+        this.FlagSetter.Sign(result);
+        this.FlagSetter.Zero(result);
+        
         this.registers['A'] = result & 0xFF;
         this.clock += 4;
     }
 
-    sbb_mem() {
-        const data = this.bus.read(this.read_mem_addr('H','L'));
-        const carry = (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
-        const data_carry = data + carry;
-        const data_carry_twos_comp = ~(data_carry)+1;
-        const result = this.registers['A'] + data_carry_twos_comp;
-        this.set_flags_on_arithmetic_op(result, this.registers['A'], data_carry_twos_comp);
+    sbb_m() {
+        const lhs = this.registers['A'];
+        const rhs = ~(this.bus.read(this.read_mem_addr('H','L')) + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0)) + 1;
+        const result = lhs + rhs;
+
+        this.FlagSetter.Carry(result);
+        this.FlagSetter.Parity(result);
+        this.FlagSetter.AuxillaryCarry(lhs, rhs);
+        this.FlagSetter.Sign(result);
+        this.FlagSetter.Zero(result);
+
         this.registers['A'] = result & 0xFF;
         this.clock += 7;
     }
 
     sui(val) {
-        const val_twos_comp = ~(val) + 1;
-        const result = (this.registers['A'] + val_twos_comp);
-        this.set_flags_on_arithmetic_op(result, this.registers['A'], val_twos_comp);
+        const lhs = this.registers['A'];
+        const rhs = ~val + 1
+        const result = lhs + rhs;
+
+        this.FlagSetter.Carry(result);
+        this.FlagSetter.Parity(result);
+        this.FlagSetter.AuxillaryCarry(lhs, rhs);
+        this.FlagSetter.Sign(result);
+        this.FlagSetter.Zero(result);
+
         this.registers['A'] = result & 0xFF;
         this.clock += 7;        
     }
 
     sbi(val) {
-        const carry = (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
-        const val_carry = val + carry;
-        const val_carry_twos_comp = ~(val_carry) + 1;
-        const result = this.registers['A'] + val_carry_twos_comp;
-        this.set_flags_on_arithmetic_op(result, this.registers['A'], val_carry_twos_comp);
+        const lhs = this.registers['A'];
+        const rhs = ~(val + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0)) + 1;
+        const result = lhs + rhs;
+
+        this.FlagSetter.Carry(result);
+        this.FlagSetter.Parity(result);
+        this.FlagSetter.AuxillaryCarry(lhs, rhs);
+        this.FlagSetter.Sign(result);
+        this.FlagSetter.Zero(result);
+
         this.registers['A'] = result & 0xFF;
         this.clock += 7;
     }
@@ -621,52 +681,66 @@ class i8080 {
         this.clock += 10;
     }
 
-//  ===================================================================================
-//  Logical Bit-Wise Operations
-//  ===================================================================================
-//
-    
-    set_flags_on_logical_op() {
 
-        
+    /* ---                                                                --- 
+       ---                 LOGICAL BITWISE OPERATIONS                     --- 
+       ---                 --------------------------                     --- */
+    
+
+    /**
+     * Updates required flags for each *logical* operation (P, S, Z for ANA,
+     * ANI, XRA, XRI, ORA, ORI).
+     *
+     * NOTE: Carry flag is always cleared in accordance with documentation.
+     *
+     */
+    set_flags_on_logical_op() {
         this.clear_flag(i8080.FlagType.Carry);
-        this.registers['A'] === 0 ? this.set_flag(i8080.FlagType.Zero) : this.clear_flag(i8080.FlagType.Zero);
-        this.registers['A'] & (1 << 7) ? this.set_flag(i8080.FlagType.Sign) : this.clear_flag(i8080.FlagType.Sign)
-        this.parity(this.registers['A']) ? this.set_flag(i8080.FlagType.Parity) : this.clear_flag(i8080.FlagType.Parity);
+        this.FlagSetter.Zero(this.registers['A']);
+        this.FlagSetter.Sign(this.registers['A']);
+        this.FlagSetter.Parity(this.registers['A']);
     }
 
+    /**
+     * Logically AND the contents of a register with the contents of the
+     * Accumulator, leaving the result in the Accumulator.
+     *
+     * @param {char} reg The register to use.
+     */
     ana_reg(reg) {
         this.registers['A'] &= this.registers[reg];
         this.set_flags_on_logical_op();
-        
         this.clock += 4;
     }
 
+    /**
+     * Logically AND the contents of a memory location with the contents of the
+     * Accumulator, leaving the result in the Accumulator.
+     *
+     * The address of the memory location is stored in the `H` and `L`
+     * registers.
+     */
     ana_mem() {
         this.registers['A'] &= this.bus.read(this.read_mem_addr('H','L'));
         this.set_flags_on_logical_op();
-
         this.clock += 7;
     }
 
     ani(val) {
         this.registers['A'] &= val;
         this.set_flags_on_logical_op();
-
         this.clock += 4;
     }
 
     xra_reg(reg) {
         this.registers['A'] ^= this.registers[reg];
         this.set_flags_on_logical_op();
-
         this.clock += 4;
     }
 
     xra_mem() {
         this.registers['A'] ^= this.bus.read(this.read_mem_addr('H','L'));
         this.set_flags_on_logical_op();
-
         this.clock += 7;
     }
 
@@ -679,14 +753,12 @@ class i8080 {
     ora_reg(reg) {
         this.registers['A'] |= this.registers[reg];
         this.set_flags_on_logical_op();
-
         this.clock += 4;
     }
 
     ora_mem() {
         this.registers['A'] |= this.bus.read(this.read_mem_addr('H','L'));
         this.set_flags_on_logical_op();
-
         this.clock += 7;
     }
 
@@ -745,8 +817,6 @@ class i8080 {
      * H)
      */
     inx(high_byte_register) {
-        let low_byte_register;
-
         const _inx = (reg_high, reg_low) => {
             const word = ((this.registers[reg_high] << 8) | this.registers[reg_low]) + 1;
             this.registers[reg_high] = (word >> 8) & 0xFF;
@@ -767,20 +837,36 @@ class i8080 {
                 this.stack_pointer = (this.stack_pointer + 1) & 0xFFFF;
                 break;
         }
+
         this.clock += 5;
     }
 
+    /**
+     * Updates required flags for each *incremental* or *decremental* operation
+     * (AC, P, S, Z for INR, DCR.
+     *
+     * @param {number} result The result of the operation 
+     * @param {*} lhs The left-hand-side of the operation (used for AC check)
+     * @param {*} rhs The right-hand-side of the operation (used for AC check)
+     */
+    set_flags_on_incremental_op(result, lhs, rhs) {
+        this.FlagSetter.AuxillaryCarry(lhs, rhs);
+        this.FlagSetter.Parity(result);
+        this.FlagSetter.Sign(result);
+        this.FlagSetter.Zero(result);
+    }
 
     inr_reg(reg) {
         const result = this.registers[reg] + 1;
-        this.set_flags_on_arithmetic_op(result, this.registers[reg], 1);
+        this.set_flags_on_incremental_op(result, this.registers[reg], 1);
+        this.registers[reg] = result;
+    }
 
-        /**
-         * This is a bit 'hacky', but INR (and DCR) does not set the Carry flag,
-         * so we need to clear it after the above call.
-         */
-        this.clear_flag()
-
+    inr_mem() {
+        const val = this.bus.read(this.load_mem_addr('H', 'L'));
+        const result = val + 1;
+        this.set_flags_on_incremental_op(result, val, 1);
+        this.bus.write(addr, result);
     }
 
     /**
@@ -1084,100 +1170,100 @@ class i8080 {
                 this.clock += 7;
                 return;
             case 0x80:
-                this.add_reg('B');
+                this.add_r('B');
                 break;
             case 0x81:
-                this.add_reg('C');
+                this.add_r('C');
                 break;
             case 0x82:
-                this.add_reg('D');
+                this.add_r('D');
                 break;
             case 0x83:
-                this.add_reg('E');
+                this.add_r('E');
                 break;
             case 0x84:
-                this.add_reg('H');
+                this.add_r('H');
                 break;
             case 0x85:
-                this.add_reg('L');
+                this.add_r('L');
                 break;
             case 0x86:
-                this.add_mem();
+                this.add_m();
                 break;
             case 0x87:
-                this.add_reg('A');
+                this.add_r('A');
                 break;
             case 0x88:
-                this.adc_reg('B');
+                this.adc_r('B');
                 break;
             case 0x89:
-                this.adc_reg('C');
+                this.adc_r('C');
                 break;
             case 0x8A:
-                this.adc_reg('D');
+                this.adc_r('D');
                 break;
             case 0x8B:
-                this.adc_reg('E');
+                this.adc_r('E');
                 break;
             case 0x8C:
-                this.adc_reg('H');
+                this.adc_r('H');
                 break;
             case 0x8D:
-                this.adc_reg('L');
+                this.adc_r('L');
                 break;
             case 0x8E:
-                this.adc_mem();
+                this.adc_m();
                 break;
             case 0x8F:
-                this.adc_reg('A');
+                this.adc_r('A');
                 break;
             case 0x90:
-                this.sub_reg('B');
+                this.sub_r('B');
                 break;
             case 0x91:
-                this.sub_reg('C');
+                this.sub_r('C');
                 break;
             case 0x92:
-                this.sub_reg('D');
+                this.sub_r('D');
                 break;
             case 0x93:
-                this.sub_reg('E');
+                this.sub_r('E');
                 break;
             case 0x94:
-                this.sub_reg('H');
+                this.sub_r('H');
                 break;
             case 0x95:
-                this.sub_reg('L');
+                this.sub_r('L');
                 break;
             case 0x96:
-                this.sub_mem();
+                this.sub_m();
                 break;
             case 0x97:
-                this.sub_reg('A');
+                this.sub_r('A');
                 break;
             case 0x98:
-                this.sbb_reg('B');
+                this.sbb_r('B');
                 break;
             case 0x99:
-                this.sbb_reg('C');
+                this.sbb_r('C');
                 break;
             case 0x9A:
-                this.sbb_reg('D');
+                this.sbb_r('D');
                 break;
             case 0x9B:
-                this.sbb_reg('E');
+                this.sbb_r('E');
                 break;
             case 0x9C:
-                this.sbb_reg('H');
+                this.sbb_r('H');
                 break;
             case 0x9D:
-                this.sbb_reg('L');
+                this.sbb_r('L');
                 break;
             case 0x9E:
-                this.sbb_mem();
+                this.sbb_m();
                 break;
             case 0x9F:
-                this.sbb_reg('A');
+                this.sbb_r('A');
                 break;
             case 0xA0:
                 this.ana_reg('B');
