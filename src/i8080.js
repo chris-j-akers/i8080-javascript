@@ -898,10 +898,10 @@ class i8080 {
     }
 
     /**
-     * The 16-bit number held in the specified register pair is incremented by
-     * 1.
-     * @param {char} high_byte_register First register of the pair (B, D,
-     * H)
+     * The 16-bit number stored in the specified register pair (BC, DE, HL) is
+     * incremented by 1.
+     * .
+     * @param {char} high_byte_register First register of the pair (B, D, H)
      */
     inx(high_byte_register) {
         const _inx = (reg_high, reg_low) => {
@@ -929,32 +929,48 @@ class i8080 {
     }
 
     /**
-     * Updates required flags for each *incremental* or *decremental* operation
-     * (AC, P, S, Z for INR, DCR.
-     *
-     * @param {number} result The result of the operation 
-     * @param {*} lhs The left-hand-side of the operation (used for AC check)
-     * @param {*} rhs The right-hand-side of the operation (used for AC check)
+     * The named register is incremented by 1.
+     * 
+     * Flags affected: P, Z, AC, S.
+     * 
+     * @param {char} reg Name of the register to incremement.
      */
-    set_flags_on_incremental_op(result, lhs, rhs) {
+    inr_r(reg) {
+        const lhs = this.registers[reg];
+        const rhs = 1;
+        const result = lhs + rhs;
+
         this.FlagSetter.AuxillaryCarry(lhs, rhs);
         this.FlagSetter.Parity(result);
         this.FlagSetter.Sign(result);
         this.FlagSetter.Zero(result);
+
+        this.registers[reg] = result & 0xFF;
     }
 
-    inr_reg(reg) {
-        const result = this.registers[reg] + 1;
-        this.set_flags_on_incremental_op(result, this.registers[reg], 1);
-        this.registers[reg] = result;
+    /**
+     * The memory location specified by the address in register pair HL is
+     * incremented by 1.
+     *
+     * Flags affected: P, Z, AC, S.
+     */
+    inr_m() {
+        const lhs = this.bus.read(this.load_mem_addr('H', 'L'));
+        const rhs = 1;
+        const result = lhs + rhs;
+
+        this.FlagSetter.AuxillaryCarry(lhs, rhs);
+        this.FlagSetter.Parity(result);
+        this.FlagSetter.Sign(result);
+        this.FlagSetter.Zero(result);
+
+        this.bus.write(addr, result & 0xFF);
     }
 
-    inr_mem() {
-        const val = this.bus.read(this.load_mem_addr('H', 'L'));
-        const result = val + 1;
-        this.set_flags_on_incremental_op(result, val, 1);
-        this.bus.write(addr, result);
-    }
+    /* ---                                                                --- 
+       ---                      PROGRAM EXECUTION                         --- 
+       ---                      -----------------                         --- */
+
 
     /**
      * @returns The next 8-bits of memory from the current program counter
