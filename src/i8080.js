@@ -726,6 +726,12 @@ class i8080 {
         this.clock += 7;
     }
 
+    /**
+     * Logically AND an immediate value with the contents of the Accumulator,
+     * leaving the result in the Accumulator.
+     *
+     * @param {number} val Immediate value to use.
+     */
     ani(val) {
         const lhs = this.registers['A'];
         const rhs = val;
@@ -741,6 +747,12 @@ class i8080 {
         this.clock += 4;
     }
 
+    /**
+     * EXCLUSIVE OR contents of the Accumulator with the contents of a register,
+     * leaving the result in the Accumulator.
+     *
+     * @param {char} reg Register to use.
+     */
     xra_r(reg) {
         const lhs = this.registers['A'];
         const rhs = this.registers[reg];
@@ -755,6 +767,11 @@ class i8080 {
         this.clock += 4;
     }
 
+    /**
+     * EXCLUSIVE OR contents of the accumulator with the contents of a memory
+     * location. The 16-bit address of the memory location is stored in
+     * register-pair HL.
+     */
     xra_m() {
         const lhs = this.registers['A'];
         const rhs = this.bus.read(this.read_mem_addr('H', 'L'));
