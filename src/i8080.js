@@ -927,7 +927,10 @@ class i8080 {
      */
     dcx(high_byte_register) {
         const _dcx = (reg_high, reg_low) => {
+
+            // 0xFFFF = 16-bit two's complement of 1.
             const word = ((this.registers[reg_high] << 8) | this.registers[reg_low]) + 0xFFFF;
+
             this.registers[reg_high] = (word >> 8) & 0xFF;
             this.registers[reg_low] = word & 0xFF;
         }
@@ -1005,7 +1008,10 @@ class i8080 {
     dcr_r(reg) {
 
         const lhs = this.registers[reg];
-        const rhs = 0xFF; // Two's Complement of 1
+
+        // 0xFF is the 8-bit two's complement of 1.
+        const rhs = 0xFF; 
+        
         const result = lhs + rhs;
 
         this.FlagSetter.AuxillaryCarry(lhs, rhs);
@@ -1029,7 +1035,10 @@ class i8080 {
         const addr = this.read_mem_addr('H','L');
 
         const lhs = this.bus.read(addr);
-        const rhs = 0xFF; // Two's Complement of 1
+
+        // 0xFF is the 8-bit two's complement of 1.
+        const rhs = 0xFF; 
+        
         const result = lhs + rhs;
 
         this.FlagSetter.AuxillaryCarry(lhs, rhs);
