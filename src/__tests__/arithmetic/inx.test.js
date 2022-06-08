@@ -38,7 +38,7 @@ describe('INX', () => {
 		  0xFF,                                       // ...this immediate value
 		  mvi_opcode_lookup.C,      // Move into C....
 		  0xFD,                                       // ...this immediate value
-		  3,
+		  0x3,
 		  0x76                                        // HALT
 		]
 		
@@ -71,7 +71,7 @@ describe('INX', () => {
 		  0xFF,                                       // ...this immediate value
 		  mvi_opcode_lookup.E,      // Move into E....
 		  0xFD,                                       // ...this immediate value
-		  19,
+		  0x13,
 		  0x76                                        // HALT
 		]
 		
@@ -104,7 +104,7 @@ describe('INX', () => {
 		  0xFF,                                       // ...this immediate value
 		  mvi_opcode_lookup.L,      // Move into L....
 		  0xFD,                                       // ...this immediate value
-		  35,
+		  0x23,
 		  0x76                                        // HALT
 		]
 		

@@ -867,6 +867,10 @@ class i8080 {
         this.clock += 13;
     }
 
+
+    //                     INCREMENT AND DECREMENT OPERATIONS
+
+    
     /**
      * The 16-bit number stored in the specified register pair (BC, DE, HL) is
      * incremented by 1.
@@ -900,8 +904,7 @@ class i8080 {
 
     /**
      * The 16-bit number stored in the specified register pair (BC, DE, HL) is
-     * decremented by 1 (NOTE: Uses two's complement addition to perform
-     * subtraction).
+     * decremented by 1 (uses two's complement addition).
      * .
      * @param {char} high_byte_register First register of the pair (B, D, H)
      */
@@ -975,6 +978,13 @@ class i8080 {
         this.clock += 10;
     }
 
+    /**
+     * The named register is decremented by 1 (uses two's complement addition).
+     * 
+     * Flags affected: P, Z, AC, S.
+     * 
+     * @param {char} reg Name of the register to decrement.
+     */
     dcr_r(reg) {
 
         const lhs = this.registers[reg];
@@ -992,6 +1002,12 @@ class i8080 {
 
     }
 
+    /**
+     * The memory location specified by the address in register pair HL is
+     * decremented by 1 (uses two's complement addition).
+     *
+     * Flags affected: P, Z, AC, S.
+     */
     dcr_m() {
         const addr = this.read_mem_addr('H','L');
 
@@ -1010,8 +1026,58 @@ class i8080 {
     }
 
 
-    //                           PROGRAM EXECUTION                            
-    //                           -----------------
+    //                       ACCUMULATOR ROTATE OPERATIONS        
+
+    /**
+     * Rotate Accumulator Left.
+     *
+     * The Carry bit is set to the MSB of the accumulator, the accumulator value
+     * is shifted once left and the MSB bit is copied back to the LSB of the
+     * Accumulator.
+     */
+    rlc() {
+
+        this.clear_flag(i8080.FlagType.Carry);
+
+        if (1 << 7 & this.registers.A) {
+            this.set_flag(i8080.FlagType.Carry);
+        }
+
+        this.registers['A'] <<= 1;
+
+        if (this.flag_set(i8080.FlagType.Carry)) {
+            this.registers['A'] |= 1;
+        }
+
+        this.registers['A'] &= 0xFF;
+
+    }
+
+    /**
+     * Rotate Accumulator Right.
+     *
+     * The Carry bit is set to the LSB of the accumulator, the accumulator is
+     * shifted once right and the LSB bit is copied back to the MSB of the
+     * accumulator.
+     */
+    rrc() {
+        this.clear_flag(i8080.FlagType.Carry);
+
+        if (1 & this.registers.A) {
+            this.set_flag(i8080.FlagType.Carry);
+        }
+
+        this.registers['A'] >>= 1;
+
+        if (this.flag_set(i8080.FlagType.Carry)) {
+            this.registers['A'] |= (1 << 7);
+        }
+
+        this.registers['A'] &= 0xFF;
+    }
+
+
+    //                             PROGRAM EXECUTION  
 
 
     /**
