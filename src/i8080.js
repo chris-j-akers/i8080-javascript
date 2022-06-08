@@ -1062,21 +1062,12 @@ class i8080 {
      * Accumulator.
      */
     rlc() {
-
         this.clear_flag(i8080.FlagType.Carry);
-
-        if (1 << 7 & this.registers.A) {
-            this.set_flag(i8080.FlagType.Carry);
-        }
-
+        this.flags |= (this.registers['A'] >> 7) & 0x01;
         this.registers['A'] <<= 1;
-
-        if (this.flag_set(i8080.FlagType.Carry)) {
-            this.registers['A'] |= 1;
-        }
-
+        this.registers['A'] |= (this.flags & 0x01);
         this.registers['A'] &= 0xFF;
-
+        this.clock += 4;
     }
 
     /**
@@ -1088,18 +1079,11 @@ class i8080 {
      */
     rrc() {
         this.clear_flag(i8080.FlagType.Carry);
-
-        if (1 & this.registers.A) {
-            this.set_flag(i8080.FlagType.Carry);
-        }
-
+        this.flags |= this.registers['A'] & 0x01;
         this.registers['A'] >>= 1;
-
-        if (this.flag_set(i8080.FlagType.Carry)) {
-            this.registers['A'] |= (1 << 7);
-        }
-
+        this.registers['A'] |= (this.flags << 7) & 0x80;
         this.registers['A'] &= 0xFF;
+        this.clock += 4;
     }
 
 
@@ -1152,6 +1136,12 @@ class i8080 {
             case 0x38:
             case 0x30:
                 this.noop();
+                break;
+            case 0x07:
+                this.rlc();
+                break;
+            case 0x0F:
+                this.rrc();
                 break;
             case 0x0B:
                 this.dcx('B');
