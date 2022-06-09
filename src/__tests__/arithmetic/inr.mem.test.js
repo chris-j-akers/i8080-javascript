@@ -4,7 +4,7 @@ import { strict as assert } from 'assert'
 
 describe('INR Memory', () => {
 	it('Set no flags', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -52,7 +52,7 @@ describe('INR Memory', () => {
 		});
 		
 	it('Rollover from 255 (Set Parity, AC and Zero flags)', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -100,7 +100,7 @@ describe('INR Memory', () => {
 		});
 		
 	it('Set Parity Flag', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -148,7 +148,7 @@ describe('INR Memory', () => {
 		});
 		
 	it('Set Sign Flag', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		

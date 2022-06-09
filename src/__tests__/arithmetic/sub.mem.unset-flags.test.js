@@ -4,7 +4,7 @@ import { strict as assert } from 'assert'
 
 describe('SUB Memory (Unset All Flags)', () => {
 	it('Unset All Flags', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		

@@ -13,7 +13,7 @@ const mvi_opcode_lookup = {
 
 describe('MOV to Register to Memory', () => {
 	it('MOVE M,B', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const data = 0xFFFF;
 		
@@ -44,7 +44,7 @@ describe('MOV to Register to Memory', () => {
 		});
 		
 	it('MOVE M,C', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const data = 0xFFFF;
 		
@@ -75,7 +75,7 @@ describe('MOV to Register to Memory', () => {
 		});
 		
 	it('MOVE M,D', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const data = 0xFFFF;
 		
@@ -106,7 +106,7 @@ describe('MOV to Register to Memory', () => {
 		});
 		
 	it('MOVE M,E', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const data = 0xFFFF;
 		
@@ -137,7 +137,7 @@ describe('MOV to Register to Memory', () => {
 		});
 		
 	it('MOVE M,H', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const data = 0xFFFF;
 		
@@ -168,7 +168,7 @@ describe('MOV to Register to Memory', () => {
 		});
 		
 	it('MOVE M,L', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const data = 0xFFFF;
 		
@@ -199,7 +199,7 @@ describe('MOV to Register to Memory', () => {
 		});
 		
 	it('MOVE M,A', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const data = 0xFFFF;
 		

@@ -50,7 +50,7 @@ describe('DCX', () => {
 		
 		});
 		
-	it('Increment 5 times from 65533 and confirm D/E register rolls to 65535 when decremented at 0', () => {
+	it('Decrement 5 times from 65533 and confirm D/E register rolls to 65535 when decremented at 0', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -87,7 +87,7 @@ describe('DCX', () => {
 		
 		});
 		
-	it('Increment 5 times from 65533 and confirm H/L register rolls to 65535 when decremented at 0', () => {
+	it('Decrement 5 times from 65533 and confirm H/L register rolls to 65535 when decremented at 0', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		

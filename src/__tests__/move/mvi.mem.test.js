@@ -3,7 +3,7 @@ import { strict as assert } from 'assert'
 
 describe('MVI Memory', () => {
 	it('MVI M', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const data = 0xFFFF;
 		

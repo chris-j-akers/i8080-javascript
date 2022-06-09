@@ -3,7 +3,7 @@ import { strict as assert } from 'assert'
 
 describe('LXI Stack Pointer', () => {
 	it('LXI SP,d16', () => {
-		const max_value_to_test = 4095;
+		const max_value_to_test = 255;
 		const c = new Computer();
 		
 		let program = [

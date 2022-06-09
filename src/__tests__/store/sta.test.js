@@ -3,7 +3,7 @@ import { strict as assert } from 'assert'
 
 describe('STA', () => {
 	it('Store Accumulator in address provided as param', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		
 		let program = [

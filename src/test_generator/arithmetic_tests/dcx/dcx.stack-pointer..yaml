@@ -50,6 +50,6 @@ test_suite:
   tests:
 
     - test:
-      name: Decrement Stack pointer 5 times from 4
+      name: Decrement Stack pointer 5 times from 4 and ensure it rolls to 65535 when decremented at 0.
 
 

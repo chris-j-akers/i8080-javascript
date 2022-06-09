@@ -66,13 +66,13 @@ test_suite:
       opcode: 0x0B
 
     - test:
-      name: Increment 5 times from 65533 and confirm D/E register rolls to 65535 when decremented at 0
+      name: Decrement 5 times from 65533 and confirm D/E register rolls to 65535 when decremented at 0
       register_high_byte: D
       register_low_byte: E
       opcode: 0x1B
 
     - test:
-      name: Increment 5 times from 65533 and confirm H/L register rolls to 65535 when decremented at 0
+      name: Decrement 5 times from 65533 and confirm H/L register rolls to 65535 when decremented at 0
       register_high_byte: H
       register_low_byte: L
       opcode: 0x2B

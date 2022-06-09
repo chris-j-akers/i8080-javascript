@@ -3,7 +3,7 @@ import { strict as assert } from 'assert'
 
 describe('MOV Memory to Register', () => {
 	it('MOVE B,M', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const data = 0xFFFF;
 		
@@ -33,7 +33,7 @@ describe('MOV Memory to Register', () => {
 		});
 		
 	it('MOVE C,M', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const data = 0xFFFF;
 		
@@ -63,7 +63,7 @@ describe('MOV Memory to Register', () => {
 		});
 		
 	it('MOVE D,M', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const data = 0xFFFF;
 		
@@ -93,7 +93,7 @@ describe('MOV Memory to Register', () => {
 		});
 		
 	it('MOVE E,M', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const data = 0xFFFF;
 		
@@ -123,7 +123,7 @@ describe('MOV Memory to Register', () => {
 		});
 		
 	it('MOVE H,M', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const data = 0xFFFF;
 		
@@ -153,7 +153,7 @@ describe('MOV Memory to Register', () => {
 		});
 		
 	it('MOVE L,M', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const data = 0xFFFF;
 		
@@ -183,7 +183,7 @@ describe('MOV Memory to Register', () => {
 		});
 		
 	it('MOVE A,M', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const data = 0xFFFF;
 		

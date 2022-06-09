@@ -4,7 +4,7 @@ import { strict as assert } from 'assert'
 
 describe('ADD Memory', () => {
 	it('No Flags Set', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -49,7 +49,7 @@ describe('ADD Memory', () => {
 		});
 		
 	it('Parity and Zero Flag Set', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -94,7 +94,7 @@ describe('ADD Memory', () => {
 		});
 		
 	it('Parity Flag Set', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -139,7 +139,7 @@ describe('ADD Memory', () => {
 		});
 		
 	it('Aux Carry Flag Set', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -184,7 +184,7 @@ describe('ADD Memory', () => {
 		});
 		
 	it('Aux Carry and Sign Flags Set', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -229,7 +229,7 @@ describe('ADD Memory', () => {
 		});
 		
 	it('Carry and Aux Carry Flags Set', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		

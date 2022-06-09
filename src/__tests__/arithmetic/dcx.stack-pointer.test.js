@@ -3,7 +3,7 @@ import { i8080 } from '../../i8080.js'
 import { strict as assert } from 'assert'
 
 describe('DCX', () => {
-	it('Decrement Stack pointer 5 times from 4', () => {
+	it('Decrement Stack pointer 5 times from 4 and ensure it rolls to 65535 when decremented at 0.', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		

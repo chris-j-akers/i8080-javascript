@@ -4,7 +4,7 @@ import { strict as assert } from 'assert'
 
 describe('ADC Memory (Unset All Flags)', () => {
 	it('Unset All Flags (With Carry Unset)', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -61,7 +61,7 @@ describe('ADC Memory (Unset All Flags)', () => {
 		});
 		
 	it('Unset All Flags (With Carry Set)', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		

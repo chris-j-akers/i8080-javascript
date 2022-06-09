@@ -3,7 +3,7 @@ import { strict as assert } from 'assert'
 
 describe('LXI Register', () => {
 	it('LXI B,d16', () => {
-		const max_value_to_test = 4095;
+		const max_value_to_test = 255;
 		const c = new Computer();
 		
 		let program = [
@@ -31,7 +31,7 @@ describe('LXI Register', () => {
 		});
 		
 	it('LXI D,d16', () => {
-		const max_value_to_test = 4095;
+		const max_value_to_test = 255;
 		const c = new Computer();
 		
 		let program = [
@@ -59,7 +59,7 @@ describe('LXI Register', () => {
 		});
 		
 	it('LXI H,d16', () => {
-		const max_value_to_test = 4095;
+		const max_value_to_test = 255;
 		const c = new Computer();
 		
 		let program = [

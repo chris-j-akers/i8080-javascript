@@ -4,7 +4,7 @@ import { strict as assert } from 'assert'
 
 describe('XRA Memory', () => {
 	it('Reset Carry Flag', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -47,7 +47,7 @@ describe('XRA Memory', () => {
 		});
 		
 	it('Set Zero Flag', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -89,7 +89,7 @@ describe('XRA Memory', () => {
 		});
 		
 	it('Set Sign Flag', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -131,7 +131,7 @@ describe('XRA Memory', () => {
 		});
 		
 	it('Set Parity Flag', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		

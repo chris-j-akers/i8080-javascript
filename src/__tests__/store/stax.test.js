@@ -10,7 +10,7 @@ const mvi_opcode_lookup = {
 
 describe('STAX', () => {
 	it('Store Accumulator in address found in registers B,C', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		
 		let program = [
@@ -42,7 +42,7 @@ describe('STAX', () => {
 		});
 		
 	it('Store Accumulator in address found in registers D,E', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		
 		let program = [

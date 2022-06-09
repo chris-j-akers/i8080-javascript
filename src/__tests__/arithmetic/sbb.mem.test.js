@@ -4,7 +4,7 @@ import { strict as assert } from 'assert'
 
 describe('SBB Memory', () => {
 	it('No Flags Set (Carry Bit Reset)', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -51,7 +51,7 @@ describe('SBB Memory', () => {
 		});
 		
 	it('No Flags Set (Carry Bit Set)', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -99,7 +99,7 @@ describe('SBB Memory', () => {
 		});
 		
 	it('Parity, Aux Carry and Zero Flags Set (Carry Bit Reset)', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -146,7 +146,7 @@ describe('SBB Memory', () => {
 		});
 		
 	it('Parity, Aux Carry and Zero Flags Set (Carry Bit Set)', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -194,7 +194,7 @@ describe('SBB Memory', () => {
 		});
 		
 	it('Parity Flag Set (Carry Bit Reset)', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -241,7 +241,7 @@ describe('SBB Memory', () => {
 		});
 		
 	it('Parity Flag Set (Carry Bit Set)', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -289,7 +289,7 @@ describe('SBB Memory', () => {
 		});
 		
 	it('Aux Carry Set (Carry Bit Reset)', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -336,7 +336,7 @@ describe('SBB Memory', () => {
 		});
 		
 	it('Aux Carry Set (Carry Bit Set)', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -384,7 +384,7 @@ describe('SBB Memory', () => {
 		});
 		
 	it('Aux Carry and Sign Flag Set (Carry Bit Reset)', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -431,7 +431,7 @@ describe('SBB Memory', () => {
 		});
 		
 	it('Aux Carry and Sign Flag Set (Carry Bit Set)', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -479,7 +479,7 @@ describe('SBB Memory', () => {
 		});
 		
 	it('Carry and Sign Flag Set (Carry Bit Reset)', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
@@ -526,7 +526,7 @@ describe('SBB Memory', () => {
 		});
 		
 	it('Carry and Sign Flag Set (Carry Bit Set)', () => {
-		const max_mem_addr = 255;
+		const max_mem_addr = 4095;
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		
