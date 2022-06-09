@@ -1,0 +1,74 @@
+# Tests moving data from Memory locations to Register using MOV OpCode
+---
+test_suite:
+  enable: True
+  generator_function: rar_tests.generate_rar
+  description: 'RAR'
+  output_file_name: '/rotate/rar.test.js'
+  header: |
+    import { Computer } from '../../computer.js'
+    import { i8080 } from '../../i8080.js'
+    import { strict as assert } from 'assert'
+
+  footer: |
+    });
+  boilerplate: |
+    const c = new Computer();
+    const FlagType = i8080.FlagType;
+
+    let program = [
+      0x3E,           // MVI into accumulator
+      {data},         // ...this byte
+      0x1F,           // RAL
+      0x76,           // HALT
+    ]
+
+      {set_carry}
+
+      c.inject_program(program);
+      c.execute_program();
+
+      assert.equal(c.cpu.flag_set(FlagType.Carry), {carry});
+      assert.equal(c.cpu.registers['A'], {expected_result})
+
+      assert.equal(c.cpu.flag_set(FlagType.Parity), false);
+      assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
+      assert.equal(c.cpu.flag_set(FlagType.Zero), false);
+      assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+
+      assert.equal(c.cpu.clock, 18);
+
+      c.reset();
+
+    }});
+    
+  tests:
+
+    - test:
+      name: Bit 1 set, Carry not set
+      set_carry: false
+      data: 1
+      carry: True
+      expected_result: 0
+
+    - test:
+      name: Bit 1 not set, Carry not set 
+      set_carry: false
+      data: 2
+      carry: False
+      expected_result: 1
+
+    - test:
+      name: Bit 1 set, carry set 
+      set_carry: true
+      data: 1
+      carry: True
+      expected_result: 128
+
+    - test:
+      name: Bit 1 not set, Carry set 
+      set_carry: true
+      data: 2
+      carry: False
+      expected_result: 129
+    
