@@ -213,17 +213,6 @@ class i8080 {
     }
 
 
-//  ===================================================================================
-//  NOP
-//  ===================================================================================
-
-    /**
-     * Do nowt but take up clock ticks.
-     */
-    noop() {
-        this.clock += 4;
-    }
-
     /**
      * Object used to set or clears CPU Flags based on the results of various
      * operations. In the case of Aux Carry, only the left-hand side and
@@ -236,7 +225,7 @@ class i8080 {
      */
     FlagSetter = {
         Carry: (result) => {
-            /**
+            /*
              * Carry Flag: Maximum storage size of any value in a 8080 register is
              * 1-byte (8-bits), so 255. Any higher result than that must mean a
              * Carry out of the 7th bit occured.
@@ -244,54 +233,54 @@ class i8080 {
             result > 255 || result < 0 ? this.set_flag(i8080.FlagType.Carry) : this.clear_flag(i8080.FlagType.Carry);
         },
         Parity: (result) => {
-            /**
+            /*
              * Parity Flag: Set if the number of 1's is even.
              */
             this.parity(result) ? this.set_flag(i8080.FlagType.Parity) : this.clear_flag(i8080.FlagType.Parity);
         },
         AuxillaryCarry: (lhs, rhs) => {
-            /**
-            * Auxillary Carry Flag
-            *
-            * Add the LSB nibbles of each byte together. If the result includes a
-            * bit carried into position 4, then an auxillary (or half) carry will
-            * occur during this operation and the flag must be set.
-            *
-            * In the example below, we can see that adding the two least significant
-            * nibbles of numbers 159 and 165 together results in a 1 being carried
-            * to bit position 4. This means an auxillary carry (or half-carry) will
-            * occur during this add operation and the flag must be set accordingly.
-            *
-            * +---------------+
-            * | 159: 10011111 |
-            * |+--------------|
-            * | 165: 10100101 |
-            * +---------------+
-            *
-            * Take least significant nibbles only, and sum.
-            *
-            * +----------+
-            * | 00001111 |
-            * |+---------|
-            * | 00000101 |
-            * +==========+
-            * | 00010100 |
-            * +----------+
-            *
-            * Result has meant a carry out of bit-3 to bit-4, so we set Aux Carry in
-            * this case.
-            *
-            * */
+        /*
+        * Auxillary Carry Flag
+        *
+        * Add the LSB nibbles of each byte together. If the result includes a
+        * bit carried into position 4, then an auxillary (or half) carry will
+        * occur during this operation and the flag must be set.
+        *
+        * In the example below, we can see that adding the two least significant
+        * nibbles of numbers 159 and 165 together results in a 1 being carried
+        * to bit position 4. This means an auxillary carry (or half-carry) will
+        * occur during this add operation and the flag must be set accordingly.
+        *
+        * +---------------+
+        * | 159: 10011111 |
+        * |+--------------|
+        * | 165: 10100101 |
+        * +---------------+
+        *
+        * Take least significant nibbles only, and sum.
+        *
+        * +----------+
+        * | 00001111 |
+        * |+---------|
+        * | 00000101 |
+        * +==========+
+        * | 00010100 |
+        * +----------+
+        *
+        * Result has meant a carry out of bit-3 to bit-4, so we set Aux Carry in
+        * this case.
+        *
+        */
             ((lhs & 0x0f) + (rhs & 0x0f)) & (1 << 4) ? this.set_flag(i8080.FlagType.AuxillaryCarry) : this.clear_flag(i8080.FlagType.AuxillaryCarry);
         },
         Zero: (result) => {
-            /**
+            /*
              * Zero Flag: Set if the operation result is 0
              */
              (result & 0xFF) === 0 ? this.set_flag(i8080.FlagType.Zero) : this.clear_flag(i8080.FlagType.Zero);
         },
         Sign: (result) => {
-            /**
+            /*
              * Sign Flag: Set if bit 7 of the result is 1. It is up to the 8080
              * programmer to decide whether or not to treat a number with bit-7 set
              * as negative. All the 8080 does is detect that bit-7 is set in the
@@ -303,17 +292,29 @@ class i8080 {
     }
 
 
+    /*--------------------------------------------------------------------------
+                                          NOP
+    --------------------------------------------------------------------------*/
+   
+   
+    /**
+     * Do nowt but take up clock ticks.
+     */
+     noop() {
+        this.clock += 4;
+    }
+
  
-//  ===================================================================================
-//  ADD Arithmetic Operations (ADD,ADC)
-//  ===================================================================================
+    /*--------------------------------------------------------------------------
+                               Arithmetic Operations
+    --------------------------------------------------------------------------*/
 
     /**
      * Add the value stored in register `reg` to the Accumulator.
      * 
      * Flags Affected: C, P, AC, Z, S
      * 
-     * Covers Mnemonics: ADD
+     * Covers Mnemonics: ADD B, ADD C, ADD D, ADD E ADD H, ADD L
      * 
      * @param {char} reg The name of the register which contains the value to be added.
      */
@@ -1052,8 +1053,11 @@ class i8080 {
     }
 
 
-    //                       ACCUMULATOR ROTATE OPERATIONS        
-
+    /*--------------------------------------------------------------------------
+                            ACCUMULATOR ROTATE OPERATIONS        
+    --------------------------------------------------------------------------*/
+   
+   
     /**
      * Rotate Accumulator Left.
      *
@@ -1086,9 +1090,33 @@ class i8080 {
         this.clock += 4;
     }
 
+    /**
+     * Rotate Accumulator Left Through Carry.
+     *
+     * The accumulator is rotated left once with the carry bit being appended to
+     * as the LSB and replaced with the MSB.
+     */
+    ral() {
+        const carry_bit = this.flag_set(i8080.FlagType.Carry) ? 1 : 0;
+        this.registers['A'] & 0x80 ? this.set_flag(i8080.Carry) : this.clear_flag(i8080.Carry);
+        this.registers['A'] <<= 1;
+        this.registers['A'] |= carry_bit & 0x01;
+        this.registers['A'] &= 0xFF;
+        this.clock += 4;
+    }
 
-    //                             PROGRAM EXECUTION  
+    rar() {
+        const carry_bit = this.flag_set(i8080.FlagType.Carry) ? 1 : 0;
+        this.registers['A'] & 0x01 ? this.set_flag(i8080.Carry) : this.clear_flag(i8080.Carry);
+        this.registers['A'] >>= 1;
+        this.registers['A'] |= (carry_bit << 7) & 0x80;
+        this.registers['A'] &= 0xFF;
+        this.clock += 4;
+    }
 
+    /*--------------------------------------------------------------------------
+                                  PROGRAM EXECUTION  
+    --------------------------------------------------------------------------*/
 
     /**
      * @returns The next 8-bits of memory from the current program counter
@@ -1136,6 +1164,12 @@ class i8080 {
             case 0x38:
             case 0x30:
                 this.noop();
+                break;
+            case 0x17:
+                this.ral();
+                break;
+            case 0x1F:
+                this.rar();
                 break;
             case 0x07:
                 this.rlc();
