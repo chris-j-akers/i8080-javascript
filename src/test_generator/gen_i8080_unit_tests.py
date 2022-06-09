@@ -29,6 +29,7 @@ import store_tests.shld.shld_tests as shld_tests
 import store_tests.sta.sta_tests as sta_tests
 import rotate_tests.rlc.rlc_tests as rlc_tests
 import rotate_tests.rrc.rrc_tests as rrc_tests
+import rotate_tests.ral.ral_tests as ral_tests
 
 
 def generate_test(test_suite, working_dir, populate_function):
