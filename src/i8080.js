@@ -1133,6 +1133,17 @@ class i8080 {
         this.clock += 4;
     }
 
+    // SINGLE REGISTER OPERATIONS
+
+    /** 
+     * Complement Accumulator
+    */
+    cma() {
+        this.registers['A'] = ~(this.registers['A']) & 0xFF;
+        this.registers['A'] & 0xFF;
+        this.clock += 4;
+    }
+
 
     /*--------------------------------------------------------------------------
                                   PROGRAM EXECUTION  
@@ -1184,6 +1195,9 @@ class i8080 {
             case 0x38:
             case 0x30:
                 this.noop();
+                break;
+            case 0x2F:
+                this.cma();
                 break;
             case 0x37:
                 this.stc();
