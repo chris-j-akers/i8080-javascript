@@ -1012,7 +1012,6 @@ class i8080 {
 
         // 0xFF is the 8-bit two's complement of 1.
         const rhs = 0xFF; 
-        
         const result = lhs + rhs;
 
         this.FlagSetter.AuxillaryCarry(lhs, rhs);
@@ -1034,7 +1033,6 @@ class i8080 {
      */
     dcr_m() {
         const addr = this.read_mem_addr('H','L');
-
         const lhs = this.bus.read(addr);
 
         // 0xFF is the 8-bit two's complement of 1.
@@ -1056,7 +1054,6 @@ class i8080 {
     /*--------------------------------------------------------------------------
                             ACCUMULATOR ROTATE OPERATIONS        
     --------------------------------------------------------------------------*/
-   
    
     /**
      * Rotate Accumulator Left.
@@ -1114,6 +1111,29 @@ class i8080 {
         this.clock += 4;
     }
 
+
+    /*--------------------------------------------------------------------------
+                                  CARRY BIT OPERATIONS    
+    --------------------------------------------------------------------------*/
+
+
+    /**
+     * The Carry flag is set to 1.
+     */
+    stc() {
+        this.set_flag(i8080.FlagType.Carry);
+        this.clock += 4;
+    }
+
+    /**
+     * Toggle Carry bit: If 1, set to 0 and if 0, set to 1.
+     */
+    cmc() {
+        this.flag_set(i8080.Carry) ? this.clear_flag(i8080.Carry) : this.set_flag(i8080.Carry);
+        this.clock += 4;
+    }
+
+
     /*--------------------------------------------------------------------------
                                   PROGRAM EXECUTION  
     --------------------------------------------------------------------------*/
@@ -1164,6 +1184,12 @@ class i8080 {
             case 0x38:
             case 0x30:
                 this.noop();
+                break;
+            case 0x37:
+                this.stc();
+                break;
+            case 0x3F:
+                this.cmc();
                 break;
             case 0x17:
                 this.ral();
