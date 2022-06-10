@@ -145,7 +145,7 @@ class i8080 {
      * @param {character} The register which stores the low-byte of the address
      * @returns A 16-bit memory address.
      */
-    read_mem_addr(reg_highbyte, reg_lowbyte) {
+    load_mem_addr(reg_highbyte, reg_lowbyte) {
         return ((this.registers[reg_highbyte] << 8) | this.registers[reg_lowbyte]) & 0xFFFF;
     }
 
@@ -162,7 +162,7 @@ class i8080 {
      * @param {character} reg_lowbyte  The register which will store the
      * low-byte of the address
      */
-    load_mem_addr(addr, reg_highbyte, reg_lowbyte) {
+    store_mem_addr(addr, reg_highbyte, reg_lowbyte) {
         this.mvi_r(reg_highbyte,(addr >> 8) & 0xff);
         this.mvi_r(reg_lowbyte,addr & 0xff);
     }
@@ -335,7 +335,7 @@ class i8080 {
 
     add_m() {
         const lhs = this.registers['A'];
-        const rhs = this.bus.read(this.read_mem_addr('H','L'))
+        const rhs = this.bus.read(this.load_mem_addr('H','L'))
         const result = lhs + rhs;
 
         this.FlagSetter.Carry(result);
@@ -365,7 +365,7 @@ class i8080 {
 
     adc_m() {
         const lhs = this.registers['A'];
-        const rhs = this.bus.read(this.read_mem_addr('H','L')) + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
+        const rhs = this.bus.read(this.load_mem_addr('H','L')) + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         const result = lhs + rhs;
 
         this.FlagSetter.Carry(result);
@@ -451,7 +451,7 @@ class i8080 {
      */
     sub_m() {
         const lhs = this.registers['A'];
-        const rhs = ~(this.bus.read(this.read_mem_addr('H','L'))) + 1;
+        const rhs = ~(this.bus.read(this.load_mem_addr('H','L'))) + 1;
         const result = lhs + rhs;
 
         this.FlagSetter.Carry(result);
@@ -481,7 +481,7 @@ class i8080 {
 
     sbb_m() {
         const lhs = this.registers['A'];
-        const rhs = ~(this.bus.read(this.read_mem_addr('H','L')) + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0)) + 1;
+        const rhs = ~(this.bus.read(this.load_mem_addr('H','L')) + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0)) + 1;
         const result = lhs + rhs;
 
         this.FlagSetter.Carry(result);
@@ -639,7 +639,7 @@ class i8080 {
      * @param {char} reg_source The name of the source register (A,B,C,D,E,H,L)
      */
     mov_t_m(reg_source) {
-        this.bus.write(this.registers[reg_source], this.read_mem_addr('H', 'L'));
+        this.bus.write(this.registers[reg_source], this.load_mem_addr('H', 'L'));
         this.clock += 7
     }
 
@@ -651,7 +651,7 @@ class i8080 {
      * (A,B,C,D,E,H,L)
      */
     mov_f_m(reg_destination) {
-        this.registers[reg_destination] = this.bus.read(this.read_mem_addr('H', 'L'));
+        this.registers[reg_destination] = this.bus.read(this.load_mem_addr('H', 'L'));
         this.clock += 7
     }
 
@@ -674,7 +674,7 @@ class i8080 {
      * @param {number} val The 8-bit immediate value to store
      */
     mvi_t_m(val) {
-        const addr = this.read_mem_addr('H', 'L');
+        const addr = this.load_mem_addr('H', 'L');
         this.bus.write(val, addr);
         this.clock += 10;
     }
@@ -714,7 +714,7 @@ class i8080 {
      */
     ana_m() {
         const lhs = this.registers['A'];
-        const rhs = this.bus.read(this.read_mem_addr('H','L'));
+        const rhs = this.bus.read(this.load_mem_addr('H','L'));
         const result = lhs & rhs;
 
         this.clear_flag(i8080.FlagType.Carry);
@@ -775,7 +775,7 @@ class i8080 {
      */
     xra_m() {
         const lhs = this.registers['A'];
-        const rhs = this.bus.read(this.read_mem_addr('H', 'L'));
+        const rhs = this.bus.read(this.load_mem_addr('H', 'L'));
         const result = lhs ^ rhs;
 
         this.clear_flag(i8080.FlagType.Carry);
@@ -817,7 +817,7 @@ class i8080 {
 
     ora_m() {
         const lhs = this.registers['A'];
-        const rhs = this.bus.read(this.read_mem_addr('H','L'));
+        const rhs = this.bus.read(this.load_mem_addr('H','L'));
         const result = lhs | rhs;
 
         this.clear_flag(i8080.FlagType.Carry);
@@ -854,10 +854,10 @@ class i8080 {
         let addr;
         switch(reg) {
             case 'B':
-                addr = this.read_mem_addr('B','C');
+                addr = this.load_mem_addr('B','C');
                 break;
             case 'D':
-                addr = this.read_mem_addr('D','E');
+                addr = this.load_mem_addr('D','E');
                 break;
         }
         this.bus.write(this.registers['A'], addr);
@@ -983,7 +983,7 @@ class i8080 {
      * Flags affected: P, Z, AC, S.
      */
     inr_m() {
-        const addr = this.read_mem_addr('H','L');
+        const addr = this.load_mem_addr('H','L');
 
         const lhs = this.bus.read(addr);
         const rhs = 1;
@@ -1032,7 +1032,7 @@ class i8080 {
      * Flags affected: P, Z, AC, S.
      */
     dcr_m() {
-        const addr = this.read_mem_addr('H','L');
+        const addr = this.load_mem_addr('H','L');
         const lhs = this.bus.read(addr);
 
         // 0xFF is the 8-bit two's complement of 1.
