@@ -25,7 +25,7 @@ describe('LHLD', () => {
 		
 		  // Test
 		
-		  0x4A,                   // LHLD - Finally, the actuall test!
+		  0x2A,                   // LHLD - Finally, the actual test!
 		  null,                   // Low byte of mem addr
 		  null,                   // High byte of mem addr
 		  0x76                    // HALT

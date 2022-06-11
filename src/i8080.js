@@ -1258,7 +1258,7 @@ class i8080 {
             case 0x3A:
                 this.lda(this.get_next_word());
                 break;
-            case 0x4A:
+            case 0x2A:
                 this.lhld(this.get_next_word());
                 break;
             case 0x0A:
