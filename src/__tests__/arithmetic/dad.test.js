@@ -60,7 +60,7 @@ describe('DAD', () => {
 		};
 		});
 		
-	it('Carry unset and set', () => {
+	it('Carry unset and set (result rolls to 0 when too large)', () => {
 		const c = new Computer();
 		const FlagType = i8080.FlagType;
 		

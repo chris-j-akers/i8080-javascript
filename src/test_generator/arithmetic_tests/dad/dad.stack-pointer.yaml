@@ -1,0 +1,82 @@
+---
+test_suite:
+  enable: True
+  generator_function: dad_tests.generate_dad_sp
+  description: 'DAD SP'
+  output_file_name: '/arithmetic/dad.stack-pointer.test.js'
+  header: |
+    import { Computer } from '../../computer.js'
+    import { i8080 } from '../../i8080.js'
+    import { strict as assert } from 'assert'
+
+    const opcode_lookup = {
+    'B': {MVI: 0x06, DAD: 0x09},
+    'C': {MVI: 0x0E, NOP: 0x00},
+    'D': {MVI: 0x16, DAD: 0x19},
+    'E': {MVI: 0x1E, NOP: 0x00},
+    'H': {MVI: 0x26, DAD: 0x29},
+    'L': {MVI: 0x2E, NOP: 0x00}
+    };
+
+  footer: |
+    });
+  boilerplate: |
+    const c = new Computer();
+    const FlagType = i8080.FlagType;
+
+    let program = [
+      0x26,          // MVI into H...
+      {h_reg},       // ... this data
+      0x2E,          // MVI into L...
+      {l_reg},       // ...this data
+      0x39,          // Call relevant DAD command
+      0x76           // HALT
+    ]
+
+      c.inject_program(program);
+      c.cpu.stack_pointer = {stack_pointer};
+      c.execute_program();
+
+      assert.equal((c.cpu.registers['H'] << 8 | c.cpu.registers['L']) & 0xFFFF, {expected_result})
+      assert.equal(c.cpu.flag_set(FlagType.Carry), {carry})
+
+      assert.equal(c.cpu.flag_set(FlagType.Parity),false);
+      assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
+      assert.equal(c.cpu.flag_set(FlagType.Zero), false);
+      assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+
+      assert.equal(c.cpu.clock, 31);
+      
+      c.reset();
+    }});
+
+  tests:
+
+    - test:
+      name: Carry unset and not set
+      set_carry: false
+      h_reg: 117
+      l_reg: 48
+      stack_pointer: 30000
+      expected_result: 60000
+      carry: false
+
+    - test:
+      name: Carry unset and set
+      set_carry: false
+      h_reg: 255
+      l_reg: 255
+      stack_pointer: 1
+      expected_result: 0
+      carry: true
+
+    - test:
+      name: Carry set then unset
+      set_carry: true
+      h_reg: 64
+      l_reg: 1
+      stack_pointer: 16385
+      expected_result: 32770
+      carry: false
+
+

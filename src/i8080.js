@@ -1154,7 +1154,7 @@ class i8080 {
             this.registers['H'] = (result >> 8) & 0xFF;
             this.registers['L'] = result & 0xFF;
         }
-        
+
         switch(high_byte_register) {
             case 'B':
                 _dad('B', 'C');
@@ -1164,6 +1164,13 @@ class i8080 {
                 break;
             case 'H':
                 _dad('H', 'L');
+                break;
+            case 'SP':
+                let result = ((this.registers['H'] << 8) | this.registers['L']) + this.stack_pointer;
+                (result > 0xFFFF | result < 0) ? this.set_flag(i8080.FlagType.Carry) : this.clear_flag(i8080.FlagType.Carry);
+                result &= 0xFFFF;
+                this.registers['H'] = (result >> 8) & 0xFF;
+                this.registers['L'] = result & 0xFF;
                 break;
         }
 
@@ -1230,6 +1237,9 @@ class i8080 {
                 break;
             case 0x29:
                 this.dad('H');
+                break;
+            case 0x39:
+                this.dad('SP');
                 break;
             case 0x2F:
                 this.cma();
