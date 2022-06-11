@@ -916,7 +916,6 @@ class i8080 {
                 this.stack_pointer = (this.stack_pointer + 1) & 0xFFFF;
                 break;
         }
-
         this.clock += 5;
     }
 
@@ -928,14 +927,11 @@ class i8080 {
      */
     dcx(high_byte_register) {
         const _dcx = (reg_high, reg_low) => {
-
             // 0xFFFF = 16-bit two's complement of 1.
             const word = ((this.registers[reg_high] << 8) | this.registers[reg_low]) + 0xFFFF;
-
             this.registers[reg_high] = (word >> 8) & 0xFF;
             this.registers[reg_low] = word & 0xFF;
         }
-
         switch(high_byte_register) {
             case 'B':
                 _dcx('B', 'C');
@@ -950,6 +946,8 @@ class i8080 {
                 this.stack_pointer = (this.stack_pointer + 0xFFFF) & 0xFFFF;
                 break;
         }
+
+
 
         this.clock += 5;
     }
@@ -1145,37 +1143,43 @@ class i8080 {
     }
 
     dad(high_byte_register) {
-        const _dad = (high_byte_register, low_byte_register) =>{
-            const h_and_l = (this.registers['H'] << 8) | this.registers['L'] & 0xFFFF;
-            const register_pair = (this.registers[high_byte_register] << 8) | this.registers[low_byte_register] & 0xFFFF;
-            let result = h_and_l + register_pair;
-            (result > 0xFFFF | result < 0) ? this.set_flag(i8080.FlagType.Carry) : this.clear_flag(i8080.FlagType.Carry);
-            result &= 0xFFFF;
-            this.registers['H'] = (result >> 8) & 0xFF;
-            this.registers['L'] = result & 0xFF;
-        }
-
+        let register_pair_val;
         switch(high_byte_register) {
             case 'B':
-                _dad('B', 'C');
+                register_pair_val = (this.registers['B'] << 8) | this.registers['C'] & 0xFFFF;
                 break;
             case 'D':
-                _dad('D', 'E');
+                register_pair_val = (this.registers['D'] << 8) | this.registers['E'] & 0xFFFF;
                 break;
             case 'H':
-                _dad('H', 'L');
+                register_pair_val = (this.registers['H'] << 8) | this.registers['L'] & 0xFFFF;
                 break;
             case 'SP':
-                let result = ((this.registers['H'] << 8) | this.registers['L']) + this.stack_pointer;
-                (result > 0xFFFF | result < 0) ? this.set_flag(i8080.FlagType.Carry) : this.clear_flag(i8080.FlagType.Carry);
-                result &= 0xFFFF;
-                this.registers['H'] = (result >> 8) & 0xFF;
-                this.registers['L'] = result & 0xFF;
+                register_pair_val = this.stack_pointer
                 break;
         }
-
+        const h_and_l_val = (this.registers['H'] << 8) | this.registers['L'] & 0xFFFF;
+        let result = h_and_l_val + register_pair_val;
+        (result > 0xFFFF | result < 0) ? this.set_flag(i8080.FlagType.Carry) : this.clear_flag(i8080.FlagType.Carry);
+        result &= 0xFFFF;
+        this.registers['H'] = (result >> 8) & 0xFF;
+        this.registers['L'] = result & 0xFF;
         this.clock += 10;
+    }
 
+    ldax(high_byte_register) {
+        let low_byte_register;
+        switch(high_byte_register) {
+            case 'B':
+                low_byte_register = 'C';
+                break;
+            case 'D':
+                low_byte_register = 'E'
+                break;
+        }
+        const data = this.bus.read(this.registers[high_byte_register] << 8 | this.registers[low_byte_register] & 0xFF);
+        this.registers['A'] = data;
+        this.clock += 7;
     }
 
     /*--------------------------------------------------------------------------
@@ -1228,6 +1232,12 @@ class i8080 {
             case 0x38:
             case 0x30:
                 this.noop();
+                break;
+            case 0x0A:
+                this.ldax('B');
+                break;
+            case 0x1A:
+                this.ldax('D');
                 break;
             case 0x09:
                 this.dad('B');

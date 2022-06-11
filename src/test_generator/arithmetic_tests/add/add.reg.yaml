@@ -9,12 +9,6 @@ test_suite:
     import { i8080 } from '../../i8080.js'
     import { strict as assert } from 'assert'
 
-    /**
-    * An opcode lookup table allows us to programmatically determine which OpCodes
-    * to use, depending on the register being tested. It saves us having to write a
-    * separate test per register. Instead we can loop through each one and run the
-    * same test.
-    */
     const opcode_lookup = {
         'B': {MVI: 0x06, ADD: 0x80},
         'C': {MVI: 0x0E, ADD: 0x81},

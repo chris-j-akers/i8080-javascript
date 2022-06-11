@@ -1,7 +1,7 @@
 ---
 test_suite:
   enable: True
-  generator_function: load_tests.generate_lxi_sp
+  generator_function: lxi_tests.generate_lxi_sp
   description: 'LXI Stack Pointer'
   output_file_name: '/load/lxi.stack-pointer.test.js'
   header: |

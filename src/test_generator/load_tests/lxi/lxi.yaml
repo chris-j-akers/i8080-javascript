@@ -1,7 +1,7 @@
 ---
 test_suite:
   enable: True
-  generator_function: load_tests.generate_lxi
+  generator_function: lxi_tests.generate_lxi
   description: 'LXI Register'
   output_file_name: '/load/lxi.reg.test.js'
   header: |
