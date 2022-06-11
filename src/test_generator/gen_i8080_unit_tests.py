@@ -17,6 +17,7 @@ import arithmetic_tests.inx.inx_tests as inx_tests
 import arithmetic_tests.inr.inr_tests as inr_tests
 import arithmetic_tests.dcr.dcr_tests as dcr_tests
 import arithmetic_tests.dcx.dcx_tests as dcx_tests
+import arithmetic_tests.dad.dad_tests as dad_tests
 import load_tests.load_tests as load_tests
 import logical_tests.ana.ana_tests as ana_tests
 import logical_tests.ani.ani_tests as ani_tests
@@ -34,6 +35,7 @@ import rotate_tests.rar.rar_tests as rar_tests
 import carry_bit_tests.cmc.cmc_tests as cmc_tests
 import carry_bit_tests.stc.stc_tests as stc_tests
 import complement_tests.cma.cma_tests as cma_tests
+import arithmetic_tests.dad.dad_tests as dad_tests
 
 
 def generate_test(test_suite, working_dir, populate_function):

@@ -1144,6 +1144,32 @@ class i8080 {
         this.clock += 4;
     }
 
+    dad(high_byte_register) {
+        const _dad = (high_byte_register, low_byte_register) =>{
+            const h_and_l = (this.registers['H'] << 8) | this.registers['L'] & 0xFFFF;
+            const register_pair = (this.registers[high_byte_register] << 8) | this.registers[low_byte_register] & 0xFFFF;
+            let result = h_and_l + register_pair;
+            (result > 0xFFFF | result < 0) ? this.set_flag(i8080.FlagType.Carry) : this.clear_flag(i8080.FlagType.Carry);
+            result &= 0xFFFF;
+            this.registers['H'] = (result >> 8) & 0xFF;
+            this.registers['L'] = result & 0xFF;
+        }
+        
+        switch(high_byte_register) {
+            case 'B':
+                _dad('B', 'C');
+                break;
+            case 'D':
+                _dad('D', 'E');
+                break;
+            case 'H':
+                _dad('H', 'L');
+                break;
+        }
+
+        this.clock += 10;
+
+    }
 
     /*--------------------------------------------------------------------------
                                   PROGRAM EXECUTION  
@@ -1195,6 +1221,15 @@ class i8080 {
             case 0x38:
             case 0x30:
                 this.noop();
+                break;
+            case 0x09:
+                this.dad('B');
+                break;
+            case 0x19:
+                this.dad('D');
+                break;
+            case 0x29:
+                this.dad('H');
                 break;
             case 0x2F:
                 this.cma();
