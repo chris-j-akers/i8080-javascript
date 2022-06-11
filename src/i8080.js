@@ -898,6 +898,15 @@ class i8080 {
         this.clock += 13;
     }
 
+    /**
+     * Load into accumulator byte from memory location
+     * 
+     * @param {number} val Address of data to load into Accumulator
+     */
+    lda(addr) {
+        this.registers['A'] = this.bus.read(addr);
+        this.clock += 13;
+    }
 
     //                     INCREMENT AND DECREMENT OPERATIONS
 
@@ -1245,6 +1254,9 @@ class i8080 {
             case 0x38:
             case 0x30:
                 this.noop();
+                break;
+            case 0x3A:
+                this.lda(this.get_next_word());
                 break;
             case 0x4A:
                 this.lhld(this.get_next_word());

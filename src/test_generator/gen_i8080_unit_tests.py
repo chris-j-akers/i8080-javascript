@@ -21,6 +21,7 @@ import arithmetic_tests.dad.dad_tests as dad_tests
 import load_tests.lxi.lxi_tests as lxi_tests
 import load_tests.ldax.ldax_tests as ldax_tests
 import load_tests.lhld.lhld_tests as lhld_tests
+import load_tests.lda.lda_tests as lda_tests
 import logical_tests.ana.ana_tests as ana_tests
 import logical_tests.ani.ani_tests as ani_tests
 import logical_tests.xra.xra_tests as xra_tests
