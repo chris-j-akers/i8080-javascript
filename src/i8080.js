@@ -877,6 +877,19 @@ class i8080 {
     }
 
     /**
+     * The byte at the memory address replaces the con- tents of the L register.
+     * The byte at the next higher memory address replaces the contents of the H
+     * register.
+     *
+     * @param {number} addr Memory address of data.
+     */
+    lhld(addr) {
+        this.registers['L'] = this.bus.read(addr);
+        this.registers['H'] = this.bus.read(addr+1);
+        this.clock += 16;
+    }
+
+    /**
      * Store contents of the accumulator in memory address, `addr`.
      * @param {number} addr 16-bit memory address of storage location
      */
@@ -1232,6 +1245,9 @@ class i8080 {
             case 0x38:
             case 0x30:
                 this.noop();
+                break;
+            case 0x4A:
+                this.lhld(this.get_next_word());
                 break;
             case 0x0A:
                 this.ldax('B');
