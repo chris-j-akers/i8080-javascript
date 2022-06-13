@@ -317,7 +317,7 @@ class i8080 {
 
  
     /*------------------------------------------------------------------------
-                        ADD ARITHMETIC OPERATIONS                        
+                            ADD ARITHMETIC OPERATIONS                         
     ------------------------------------------------------------------------*/
 
 
@@ -330,7 +330,7 @@ class i8080 {
      * @param {number} raw_result Result of operation (before being &'d to
      * 8-bit)
      */
-    set_flags_on_arithmetic_op(lhs, rhs, raw_result) {
+    __set_flags_on_arithmetic_op(lhs, rhs, raw_result) {
         this.FlagSetter.Carry(raw_result);
         this.FlagSetter.Parity(raw_result);
         this.FlagSetter.AuxillaryCarry(lhs, rhs);
@@ -350,9 +350,9 @@ class i8080 {
      * @param {number} carry Carry-bit (defaults to 0, if absent)
      * @returns {number} Result of the operation
      */
-    add(lhs, rhs, carry = 0) {
+    __add(lhs, rhs, carry = 0) {
         const raw_result = lhs + (rhs + carry);
-        this.set_flags_on_arithmetic_op(lhs, rhs + carry, raw_result);
+        this.__set_flags_on_arithmetic_op(lhs, rhs + carry, raw_result);
         return raw_result & 0xFF;
     }
 
@@ -363,7 +363,7 @@ class i8080 {
      * to be added.
      */
     ADD_R(register) {
-        this.registers['A'] = this.add(this.registers['A'], this.registers[register]);
+        this.registers['A'] = this.__add(this.registers['A'], this.registers[register]);
         this.clock += 4;
     }
 
@@ -372,7 +372,7 @@ class i8080 {
      * `L` to the Accumulator.
      */
     ADD_M() {
-        this.registers['A'] = this.add(this.registers['A'], this.bus.read(this.get_mem_addr('H','L')));
+        this.registers['A'] = this.__add(this.registers['A'], this.bus.read(this.get_mem_addr('H','L')));
         this.clock += 7;
     }
 
@@ -384,7 +384,7 @@ class i8080 {
      * to be added.
      */
     ADC_R(register) {
-        this.registers['A'] = this.add(this.registers['A'], this.registers[register], this.flag_set(i8080.FlagType.Carry) ? 1 : 0 );
+        this.registers['A'] = this.__add(this.registers['A'], this.registers[register], this.flag_set(i8080.FlagType.Carry) ? 1 : 0 );
         this.clock += 4;
     }
 
@@ -393,7 +393,7 @@ class i8080 {
      * `L` to the Accumulator, including the Carry bit, if set.
      */
     ADC_M() {
-        this.registers['A'] = this.add(this.registers['A'], this.bus.read(this.get_mem_addr('H','L')), this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
+        this.registers['A'] = this.__add(this.registers['A'], this.bus.read(this.get_mem_addr('H','L')), this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         this.clock += 7;
     }
 
@@ -403,7 +403,7 @@ class i8080 {
      * @param {number} val The immediate value to add.
      */
     ADI(val) {
-        this.registers['A'] = this.add(this.registers['A'], val);
+        this.registers['A'] = this.__add(this.registers['A'], val);
         this.clock += 7;
     }
 
@@ -414,7 +414,7 @@ class i8080 {
      * @param {number} val The immediate value to add.
      */
     ACI(val) {
-        this.registers['A'] = this.add(this.registers['A'], val, this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
+        this.registers['A'] = this.__add(this.registers['A'], val, this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         this.clock += 7;
     }
 
@@ -438,8 +438,8 @@ class i8080 {
      * 0)
      * @returns 
      */
-    sub(lhs, rhs, carry = 0) {
-        return this.add(lhs, ~(rhs + carry) + 1);
+    __sub(lhs, rhs, carry = 0) {
+        return this.__add(lhs, ~(rhs + carry) + 1);
     }
 
     /**
@@ -456,7 +456,7 @@ class i8080 {
      * subtracted from the Accumulator (B,C,D,E,H,L)
      */
     SUB_R(register) {
-        this.registers['A'] = this.sub(this.registers['A'], this.registers[register]);
+        this.registers['A'] = this.__sub(this.registers['A'], this.registers[register]);
         this.clock += 4;
     }
 
@@ -473,7 +473,7 @@ class i8080 {
      *
      */
     SUB_M() {      
-        this.registers['A'] = this.sub(this.registers['A'], this.bus.read(this.get_mem_addr('H','L')));
+        this.registers['A'] = this.__sub(this.registers['A'], this.bus.read(this.get_mem_addr('H','L')));
         this.clock += 7;
     }
 
@@ -485,7 +485,7 @@ class i8080 {
      * subtract.
      */
     SBB_R(register) {               
-        this.registers['A'] = this.sub(this.registers['A'], this.registers[register], this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
+        this.registers['A'] = this.__sub(this.registers['A'], this.registers[register], this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         this.clock += 4;
     }
 
@@ -495,7 +495,7 @@ class i8080 {
      * Accumulator.
      */
     SBB_M() {
-        this.registers['A'] = this.sub(this.registers['A'], this.bus.read(this.get_mem_addr('H','L')), this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
+        this.registers['A'] = this.__sub(this.registers['A'], this.bus.read(this.get_mem_addr('H','L')), this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         this.clock += 7;
     }
 
@@ -505,7 +505,7 @@ class i8080 {
      * @param {number} val Immediate value to subtract
      */
     SUI(val) {
-        this.registers['A'] = this.sub(this.registers['A'], val);
+        this.registers['A'] = this.__sub(this.registers['A'], val);
         this.clock += 7;        
     }
 
@@ -515,7 +515,36 @@ class i8080 {
      * @param {number} val Immediate value to subtract
      */
     SBI(val) {
-        this.registers['A'] = this.sub(this.registers['A'], val, this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
+        this.registers['A'] = this.__sub(this.registers['A'], val, this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
+        this.clock += 7;
+    }
+
+
+    /*------------------------------------------------------------------------
+                                COMPARE OPERATIONS                            
+    ------------------------------------------------------------------------*/
+
+
+    /**
+     * Compares value in Accumulator with value in `register`. 
+     *
+     * Performs a subtract operation and sets flags accordingly, but does not
+     * record the result anywhere.
+     */
+    CMP_R(register) {
+        const result = this.__sub(this.registers['A'], this.registers[register]);
+        this.clock += 4;
+    }
+
+    /**
+     * Compares value in Accumulator with value at the memory address stored in
+     * register's H and L.
+     *
+     * Performs a subtract operation and sets flags accordingly, but does not
+     * record the result anywhere.
+     */
+    CMP_M() {
+        const result = this.__sub(this.registers['A'], this.bus.read(this.get_mem_addr('H','L')));
         this.clock += 7;
     }
 
@@ -593,7 +622,7 @@ class i8080 {
 
         if ((this.registers['A'] & 0x0F) > 9 || this.flag_set(i8080.FlagType.AuxillaryCarry)) {
             const val = this.registers['A'] += 0x06;
-            this.set_flags_on_arithmetic_op(val, this.registers['A'], 0x06);
+            this.__set_flags_on_arithmetic_op(val, this.registers['A'], 0x06);
             this.registers['A'] = val & 0xFF;
         }
 
@@ -610,9 +639,11 @@ class i8080 {
         this.clock += 4;
     }
 
-    /* ---                                                                --- 
-       ---                        MOVE OPERATIONS                         --- 
-       ---                        ---------------                         --- */
+
+    /*------------------------------------------------------------------------
+                                MOV(E) OPERATIONS                             
+    ------------------------------------------------------------------------*/
+
 
     /**
      * Move (Copy) value from one register to another.
@@ -674,9 +705,10 @@ class i8080 {
     }
 
 
-    /* ---                                                                --- 
-       ---                 LOGICAL BITWISE OPERATIONS                     --- 
-       ---                 --------------------------                     --- */
+    /*------------------------------------------------------------------------
+                            LOGICAL BITWISE OPERATIONS                        
+    ------------------------------------------------------------------------*/
+
     
     set_flags_on_logical_op(raw_result) {
         this.clear_flag(i8080.FlagType.Carry);
@@ -785,7 +817,7 @@ class i8080 {
      * the relevant memory address. `B` = `B` &
      * `C`, `D` = `D` & `E`. 
      */
-    stax(reg) {
+    STAX(reg) {
         let addr;
         switch(reg) {
             case 'B':
@@ -805,7 +837,7 @@ class i8080 {
      * the next higher memory address.
      * @param {number} addr 16-bit memory address of storage location.
      */
-    shld(addr) {
+    SHLD(addr) {
         this.bus.write(this.registers.L, addr);
         this.bus.write(this.registers.H, addr + 1);
         this.clock += 16;
@@ -818,7 +850,7 @@ class i8080 {
      *
      * @param {number} addr Memory address of data.
      */
-    lhld(addr) {
+    LHLD(addr) {
         this.registers['L'] = this.bus.read(addr);
         this.registers['H'] = this.bus.read(addr+1);
         this.clock += 16;
@@ -828,7 +860,7 @@ class i8080 {
      * Store contents of the accumulator in memory address, `addr`.
      * @param {number} addr 16-bit memory address of storage location
      */
-    sta(addr) {
+    STA(addr) {
         this.bus.write(this.registers.A, addr);
         this.clock += 13;
     }
@@ -838,12 +870,15 @@ class i8080 {
      * 
      * @param {number} val Address of data to load into Accumulator
      */
-    lda(addr) {
+    LSA(addr) {
         this.registers['A'] = this.bus.read(addr);
         this.clock += 13;
     }
 
-    //                     INCREMENT AND DECREMENT OPERATIONS
+
+    /*------------------------------------------------------------------------
+                        INCREMENT AND DECREMENT OPERATIONS                    
+    ------------------------------------------------------------------------*/
 
     
     /**
@@ -852,7 +887,7 @@ class i8080 {
      * .
      * @param {char} high_byte_register First register of the pair (B, D, H)
      */
-    inx(high_byte_register) {
+    INX(high_byte_register) {
         const _inx = (high_byte_register, low_byte_register) => {
             const word = ((this.registers[high_byte_register] << 8) | this.registers[low_byte_register]) + 1;
             this.registers[high_byte_register] = (word >> 8) & 0xFF;
@@ -881,7 +916,7 @@ class i8080 {
      * .
      * @param {char} high_byte_register First register of the pair (B, D, H)
      */
-    dcx(high_byte_register) {
+    DCX(high_byte_register) {
         const _dcx = (high_byte_register, low_byte_register) => {
             const word = ((this.registers[high_byte_register] << 8) | this.registers[low_byte_register]) + 0xFFFF;
             this.registers[high_byte_register] = (word >> 8) & 0xFF;
@@ -911,7 +946,7 @@ class i8080 {
      * 
      * @param {char} reg Name of the register to incremement.
      */
-    inr_r(reg) {
+    INR_R(reg) {
         const lhs = this.registers[reg];
         const rhs = 1;
         const result = lhs + rhs;
@@ -932,7 +967,7 @@ class i8080 {
      *
      * Flags affected: P, Z, AC, S.
      */
-    inr_m() {
+    INR_M() {
         const addr = this.get_mem_addr('H','L');
 
         const lhs = this.bus.read(addr);
@@ -956,7 +991,7 @@ class i8080 {
      * 
      * @param {char} reg Name of the register to decrement.
      */
-    dcr_r(reg) {
+    DCR_R(reg) {
 
         const lhs = this.registers[reg];
 
@@ -981,7 +1016,7 @@ class i8080 {
      *
      * Flags affected: P, Z, AC, S.
      */
-    dcr_m() {
+    DCR_M() {
         const addr = this.get_mem_addr('H','L');
         const lhs = this.bus.read(addr);
 
@@ -1012,7 +1047,7 @@ class i8080 {
      * is shifted once left and the MSB bit is copied back to the LSB of the
      * Accumulator.
      */
-    rlc() {
+    RLC() {
         this.clear_flag(i8080.FlagType.Carry);
         this.flags |= (this.registers['A'] >> 7) & 0x01;
         this.registers['A'] <<= 1;
@@ -1028,7 +1063,7 @@ class i8080 {
      * shifted once right and the LSB bit is copied back to the MSB of the
      * accumulator.
      */
-    rrc() {
+    RRC() {
         this.clear_flag(i8080.FlagType.Carry);
         this.flags |= this.registers['A'] & 0x01;
         this.registers['A'] >>= 1;
@@ -1043,7 +1078,7 @@ class i8080 {
      * The accumulator is rotated left once with the carry bit being appended to
      * as the LSB and replaced with the MSB.
      */
-    ral() {
+    RAL() {
         const carry_bit = this.flag_set(i8080.FlagType.Carry) ? 1 : 0;
         this.registers['A'] & 0x80 ? this.set_flag(i8080.Carry) : this.clear_flag(i8080.Carry);
         this.registers['A'] <<= 1;
@@ -1052,7 +1087,7 @@ class i8080 {
         this.clock += 4;
     }
 
-    rar() {
+    RAR() {
         const carry_bit = this.flag_set(i8080.FlagType.Carry) ? 1 : 0;
         this.registers['A'] & 0x01 ? this.set_flag(i8080.Carry) : this.clear_flag(i8080.Carry);
         this.registers['A'] >>= 1;
@@ -1070,7 +1105,7 @@ class i8080 {
     /**
      * The Carry flag is set to 1.
      */
-    stc() {
+    STC() {
         this.set_flag(i8080.FlagType.Carry);
         this.clock += 4;
     }
@@ -1078,7 +1113,7 @@ class i8080 {
     /**
      * Toggle Carry bit: If 1, set to 0 and if 0, set to 1.
      */
-    cmc() {
+    CMC() {
         this.flag_set(i8080.Carry) ? this.clear_flag(i8080.Carry) : this.set_flag(i8080.Carry);
         this.clock += 4;
     }
@@ -1088,13 +1123,13 @@ class i8080 {
     /** 
      * Complement Accumulator
     */
-    cma() {
+    CMA() {
         this.registers['A'] = ~(this.registers['A']) & 0xFF;
         this.registers['A'] & 0xFF;
         this.clock += 4;
     }
 
-    dad(high_byte_register) {
+    DAD(high_byte_register) {
         let register_pair_val;
         switch(high_byte_register) {
             case 'B':
@@ -1119,7 +1154,7 @@ class i8080 {
         this.clock += 10;
     }
 
-    ldax(high_byte_register) {
+    LDAX(high_byte_register) {
         let low_byte_register;
         switch(high_byte_register) {
             case 'B':
@@ -1186,127 +1221,127 @@ class i8080 {
                 this.noop();
                 break;
             case 0x3A:
-                this.lda(this.get_next_word());
+                this.LSA(this.get_next_word());
                 break;
             case 0x2A:
-                this.lhld(this.get_next_word());
+                this.LHLD(this.get_next_word());
                 break;
             case 0x0A:
-                this.ldax('B');
+                this.LDAX('B');
                 break;
             case 0x1A:
-                this.ldax('D');
+                this.LDAX('D');
                 break;
             case 0x09:
-                this.dad('B');
+                this.DAD('B');
                 break;
             case 0x19:
-                this.dad('D');
+                this.DAD('D');
                 break;
             case 0x29:
-                this.dad('H');
+                this.DAD('H');
                 break;
             case 0x39:
-                this.dad('SP');
+                this.DAD('SP');
                 break;
             case 0x2F:
-                this.cma();
+                this.CMA();
                 break;
             case 0x37:
-                this.stc();
+                this.STC();
                 break;
             case 0x3F:
-                this.cmc();
+                this.CMC();
                 break;
             case 0x17:
-                this.ral();
+                this.RAL();
                 break;
             case 0x1F:
-                this.rar();
+                this.RAR();
                 break;
             case 0x07:
-                this.rlc();
+                this.RLC();
                 break;
             case 0x0F:
-                this.rrc();
+                this.RRC();
                 break;
             case 0x0B:
-                this.dcx('B');
+                this.DCX('B');
                 break;
             case 0x1B:
-                this.dcx('D');
+                this.DCX('D');
                 break;
             case 0x2B:
-                this.dcx('H');
+                this.DCX('H');
                 break;
             case 0x3B:
-                this.dcx('SP');
+                this.DCX('SP');
                 break;
             case 0x05:
-                this.dcr_r('B');
+                this.DCR_R('B');
                 break;
             case 0x15:
-                this.dcr_r('D');
+                this.DCR_R('D');
                 break;
             case 0x25:
-                this.dcr_r('H');
+                this.DCR_R('H');
                 break;
             case 0x35:
-                this.dcr_m();
+                this.DCR_M();
                 break;
             case 0x0D:
-                this.dcr_r('C');
+                this.DCR_R('C');
                 break;
             case 0x1D:
-                this.dcr_r('E');
+                this.DCR_R('E');
                 break;
             case 0x2D:
-                this.dcr_r('L');
+                this.DCR_R('L');
                 break;
             case 0x3D:
-                this.dcr_r('A');
+                this.DCR_R('A');
                 break;
             case 0x04:
-                this.inr_r('B');
+                this.INR_R('B');
                 break;
             case 0x14:
-                this.inr_r('D');
+                this.INR_R('D');
                 break;
             case 0x24:
-                this.inr_r('H');
+                this.INR_R('H');
                 break;
             case 0x34:
-                this.inr_m();
+                this.INR_M();
                 break;
             case 0x0C:
-                this.inr_r('C');
+                this.INR_R('C');
                 break;
             case 0x1C:
-                this.inr_r('E');
+                this.INR_R('E');
                 break;
             case 0x2C:
-                this.inr_r('L');
+                this.INR_R('L');
                 break;
             case 0x3C:
-                this.inr_r('A');
+                this.INR_R('A');
                 break;
             case 0x01: 
                 this.LXI('B', this.get_next_word());
                 break;
             case 0x02:
-                this.stax('B');
+                this.STAX('B');
                 break;
             case 0x03:
-                this.inx('B');
+                this.INX('B');
                 break;
             case 0x11:
                 this.LXI('D', this.get_next_word());
                 break;
             case 0x12:
-                this.stax('D');
+                this.STAX('D');
                 break;
             case 0x13:
-                this.inx('D');
+                this.INX('D');
                 break;
             case 0x21:
                 this.LXI('H', this.get_next_word());
@@ -1318,10 +1353,10 @@ class i8080 {
                 this.MVI_R('E', this.get_next_byte());
                 break;
             case 0x22:
-                this.shld(this.get_next_word());
+                this.SHLD(this.get_next_word());
                 break;
             case 0x23:
-                this.inx('H');
+                this.INX('H');
                 break;
             case 0x2E:
                 this.MVI_R('L', this.get_next_byte());
@@ -1330,10 +1365,10 @@ class i8080 {
                 this.LXI('SP', this.get_next_word());
                 break;
             case 0x32:
-                this.sta(this.get_next_word());
+                this.STA(this.get_next_word());
                 break;
             case 0x33:
-                this.inx('SP');
+                this.INX('SP');
                 break;
             case 0x3E:
                 this.MVI_R('A', this.get_next_byte());
