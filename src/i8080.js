@@ -163,8 +163,8 @@ class i8080 {
      * low-byte of the address
      */
     store_mem_addr(addr, reg_highbyte, reg_lowbyte) {
-        this.mvi_r(reg_highbyte,(addr >> 8) & 0xff);
-        this.mvi_r(reg_lowbyte,addr & 0xff);
+        this.MVI_R(reg_highbyte,(addr >> 8) & 0xff);
+        this.MVI_R(reg_lowbyte,addr & 0xff);
     }
 
 
@@ -318,8 +318,12 @@ class i8080 {
     }
 
     /**
-     * Perform ADD operation and set flags accordingly.
-     * 
+     * Perform an ADD operation and set flags accordingly. NOTE: This method is
+     * also used by the `sub()` method to carry-out subtraction using two's
+     * complement. When called by the `sub()` method, the `carry` parameter is
+     * always passed as 0 because it is folded into the two's complement
+     * calculation of the `rhs` before `add()` is called.
+     *
      * @param {number} lhs Left-hand side of operation
      * @param {number} rhs Right-hand side of operation
      * @param {number} carry Carry-bit (defaults to 0, if absent)
@@ -370,6 +374,10 @@ class i8080 {
         this.clock += 7;
     }
 
+    sub(lhs, rhs, carry = 0) {
+        return this.add(lhs, ~(rhs + carry) + 1);
+    }
+
     /**
      *  Subtract value held in register `reg` from the current value in the
      *  Accumulator. Result is loaded to the Accumulator.
@@ -380,21 +388,11 @@ class i8080 {
      * 
      * Flags affected: C, P, AC, Z, S
      *
-     * @param {character} reg Name of register that contains value to be
+     * @param {character} register Name of register that contains value to be
      * subtracted from the Accumulator (B,C,D,E,H,L)
      */
-    sub_r(reg) {
-        const lhs = this.registers['A'];
-        const rhs = ~(this.registers[reg]) + 1;
-        const result = lhs + rhs;
-
-        this.FlagSetter.Carry(result);
-        this.FlagSetter.Parity(result);
-        this.FlagSetter.AuxillaryCarry(lhs, rhs);
-        this.FlagSetter.Sign(result);
-        this.FlagSetter.Zero(result);
-        
-        this.registers['A'] = result & 0xFF;
+    SUB_R(register) {
+        this.registers['A'] = this.sub(this.registers['A'], this.registers[register]);
         this.clock += 4;
     }
 
@@ -410,78 +408,28 @@ class i8080 {
      * will be subtracted from 10, leaving 5 in the Accumulator.
      *
      */
-    sub_m() {
-        const lhs = this.registers['A'];
-        const rhs = ~(this.bus.read(this.get_mem_addr('H','L'))) + 1;
-        const result = lhs + rhs;
-
-        this.FlagSetter.Carry(result);
-        this.FlagSetter.Parity(result);
-        this.FlagSetter.AuxillaryCarry(lhs, rhs);
-        this.FlagSetter.Sign(result);
-        this.FlagSetter.Zero(result);
-        
-        this.registers['A'] = result & 0xFF;
+    SUB_M() {      
+        this.registers['A'] = this.sub(this.registers['A'], this.bus.read(this.get_mem_addr('H','L')));
         this.clock += 7;
     }
 
-    sbb_r(reg) {        
-        const lhs = this.registers['A'];
-        const rhs = ~(this.registers[reg] + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0)) + 1;
-        const result = lhs + rhs;
-
-        this.FlagSetter.Carry(result);
-        this.FlagSetter.Parity(result);
-        this.FlagSetter.AuxillaryCarry(lhs, rhs);
-        this.FlagSetter.Sign(result);
-        this.FlagSetter.Zero(result);
-        
-        this.registers['A'] = result & 0xFF;
+    SBB_R(reg) {               
+        this.registers['A'] = this.sub(this.registers['A'], this.registers[reg], this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         this.clock += 4;
     }
 
-    sbb_m() {
-        const lhs = this.registers['A'];
-        const rhs = ~(this.bus.read(this.get_mem_addr('H','L')) + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0)) + 1;
-        const result = lhs + rhs;
-
-        this.FlagSetter.Carry(result);
-        this.FlagSetter.Parity(result);
-        this.FlagSetter.AuxillaryCarry(lhs, rhs);
-        this.FlagSetter.Sign(result);
-        this.FlagSetter.Zero(result);
-
-        this.registers['A'] = result & 0xFF;
+    SBB_M() {
+        this.registers['A'] = this.sub(this.registers['A'], this.bus.read(this.get_mem_addr('H','L')), this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         this.clock += 7;
     }
 
-    sui(val) {
-        const lhs = this.registers['A'];
-        const rhs = ~val + 1
-        const result = lhs + rhs;
-
-        this.FlagSetter.Carry(result);
-        this.FlagSetter.Parity(result);
-        this.FlagSetter.AuxillaryCarry(lhs, rhs);
-        this.FlagSetter.Sign(result);
-        this.FlagSetter.Zero(result);
-
-        this.registers['A'] = result & 0xFF;
+    SUI(val) {
+        this.registers['A'] = this.sub(this.registers['A'], val);
         this.clock += 7;        
     }
 
-    sbi(val) {
-        const lhs = this.registers['A'];
-        const rhs = ~(val + (this.flag_set(i8080.FlagType.Carry) ? 1 : 0)) + 1;
-        const result = lhs + rhs;
-
-        this.FlagSetter.Carry(result);
-        this.FlagSetter.Parity(result);
-        this.FlagSetter.AuxillaryCarry(lhs, rhs);
-        this.FlagSetter.Sign(result);
-        this.FlagSetter.Zero(result);
-
-        this.registers['A'] = result & 0xFF;
+    SBI(val) {
+        this.registers['A'] = this.sub(this.registers['A'], val, this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         this.clock += 7;
     }
 
@@ -500,15 +448,15 @@ class i8080 {
      * If the Stack Pointer is specified (SP), then its value is simple overridden
      *  with `val`.
      *
-     * @param {char} reg Name of the first register in the pair (BC, DE, HL)
+     * @param {char} register Name of the first register in the pair (BC, DE, HL)
      * @param {number} val 16-bit immediate value to be stored
      */
-    lxi(reg, val) {
+    LXI(register, val) {
 
         const msb = (val >> 8) & 0xFF;
         const lsb = val & 0xFF;
 
-        switch(reg) {
+        switch(register) {
             case 'B':
                 this.registers.B = msb;
                 this.registers.C = lsb;
@@ -537,7 +485,7 @@ class i8080 {
 // *  of the address wh ile the L register holds the least significant 8 bits of the 
 // *  address.
 
-    daa() {
+    DAA() {
         //  The eight-bit hexadecimal number in the accumulator is adjusted to form two 
         // four-bit binary-coded-decimal digits by the following two-step process:
 
@@ -588,7 +536,7 @@ class i8080 {
      * (A,B,C,D,E,H,L)
      * @param {*} reg_source The name of the source register (A,B,C,D,E,H,L)
      */
-    mov_r(reg_destination, reg_source) {
+    MOV_R(reg_destination, reg_source) {
         this.registers[reg_destination] = this.registers[reg_source];
         this.clock += 5
     }
@@ -599,7 +547,7 @@ class i8080 {
      *
      * @param {char} reg_source The name of the source register (A,B,C,D,E,H,L)
      */
-    mov_t_m(reg_source) {
+    MOV_TO_MEM(reg_source) {
         this.bus.write(this.registers[reg_source], this.get_mem_addr('H', 'L'));
         this.clock += 7
     }
@@ -611,7 +559,7 @@ class i8080 {
      * @param {char} reg_destination The name of the destination register
      * (A,B,C,D,E,H,L)
      */
-    mov_f_m(reg_destination) {
+    MOV_FROM_MEM(reg_destination) {
         this.registers[reg_destination] = this.bus.read(this.get_mem_addr('H', 'L'));
         this.clock += 7
     }
@@ -623,7 +571,7 @@ class i8080 {
      * (A,B,C,D,E,H,L)
      * @param {*} val The 8-bit immediate value to store
      */
-    mvi_r(reg_destination, val) {
+    MVI_R(reg_destination, val) {
         this.registers[reg_destination] = (val & 0xFF);
         this.clock += 7
     }
@@ -634,7 +582,7 @@ class i8080 {
      *
      * @param {number} val The 8-bit immediate value to store
      */
-    mvi_t_m(val) {
+    MVI_TO_MEM(val) {
         const addr = this.get_mem_addr('H', 'L');
         this.bus.write(val, addr);
         this.clock += 10;
@@ -645,24 +593,23 @@ class i8080 {
        ---                 LOGICAL BITWISE OPERATIONS                     --- 
        ---                 --------------------------                     --- */
     
-
+    set_flags_on_logical_op(raw_result) {
+        this.clear_flag(i8080.FlagType.Carry);
+        this.FlagSetter.Zero(raw_result & 0xFF);
+        this.FlagSetter.Sign(raw_result);
+        this.FlagSetter.Parity(raw_result);
+    }
+       
     /**
      * Logically AND the contents of a register with the contents of the
      * Accumulator, leaving the result in the Accumulator.
      *
-     * @param {char} reg The register to use.
+     * @param {char} register The register to use.
      */
-    ana_r(reg) {
-        const lhs = this.registers['A'];
-        const rhs = this.registers[reg];
-        const result = lhs & rhs;
-
-        this.clear_flag(i8080.FlagType.Carry);
-        this.FlagSetter.Zero(result);
-        this.FlagSetter.Sign(result);
-        this.FlagSetter.Parity(result);
-
-        this.registers['A'] = result & 0xFF;
+    ANA_R(register) {
+        const raw_result = this.registers['A'] & this.registers[register];
+        this.set_flags_on_logical_op(raw_result);
+        this.registers['A'] = raw_result & 0xFF;
         this.clock += 4;
     }
 
@@ -673,18 +620,10 @@ class i8080 {
      * The address of the memory location is stored in the `H` and `L`
      * registers.
      */
-    ana_m() {
-        const lhs = this.registers['A'];
-        const rhs = this.bus.read(this.get_mem_addr('H','L'));
-        const result = lhs & rhs;
-
-        this.clear_flag(i8080.FlagType.Carry);
-        this.FlagSetter.Zero(result);
-        this.FlagSetter.Sign(result);
-        this.FlagSetter.Parity(result);
-
-        this.registers['A'] = result & 0xFF;
-
+    ANA_M() {
+        const raw_result = this.registers['A'] & this.bus.read(this.get_mem_addr('H','L'));
+        this.set_flags_on_logical_op(raw_result);
+        this.registers['A'] = raw_result & 0xFF;
         this.clock += 7;
     }
 
@@ -694,18 +633,10 @@ class i8080 {
      *
      * @param {number} val Immediate value to use.
      */
-    ani(val) {
-        const lhs = this.registers['A'];
-        const rhs = val;
-        const result = lhs & rhs;
-
-        this.clear_flag(i8080.FlagType.Carry);
-        this.FlagSetter.Zero(result);
-        this.FlagSetter.Sign(result);
-        this.FlagSetter.Parity(result);
-
-        this.registers['A'] = result & 0xFF;
-
+    ANI(val) {
+        const raw_result = this.registers['A'] & val;
+        this.set_flags_on_logical_op(raw_result);
+        this.registers['A'] = raw_result & 0xFF;
         this.clock += 4;
     }
 
@@ -715,17 +646,10 @@ class i8080 {
      *
      * @param {char} reg Register to use.
      */
-    xra_r(reg) {
-        const lhs = this.registers['A'];
-        const rhs = this.registers[reg];
-        const result = lhs ^ rhs;
-
-        this.clear_flag(i8080.FlagType.Carry);
-        this.FlagSetter.Zero(result);
-        this.FlagSetter.Sign(result);
-        this.FlagSetter.Parity(result);
-
-        this.registers['A'] = result & 0xFF;
+    XRA_R(reg) {
+        const raw_result = this.registers['A'] ^ this.registers[reg];
+        this.set_flags_on_logical_op(raw_result);
+        this.registers['A'] = raw_result & 0xFF;
         this.clock += 4;
     }
 
@@ -734,73 +658,38 @@ class i8080 {
      * location. The 16-bit address of the memory location is stored in
      * register-pair HL.
      */
-    xra_m() {
-        const lhs = this.registers['A'];
-        const rhs = this.bus.read(this.get_mem_addr('H', 'L'));
-        const result = lhs ^ rhs;
-
-        this.clear_flag(i8080.FlagType.Carry);
-        this.FlagSetter.Zero(result);
-        this.FlagSetter.Sign(result);
-        this.FlagSetter.Parity(result);
-
-        this.registers['A'] = result & 0xFF;
+    XRA_M() {
+        const raw_result = this.registers['A'] ^ this.bus.read(this.get_mem_addr('H', 'L'));
+        this.set_flags_on_logical_op(raw_result);
+        this.registers['A'] = raw_result & 0xFF;
         this.clock += 7;
     }
 
-    xri(val) {
-        const lhs = this.registers['A'];
-        const rhs = val;
-        const result = lhs ^ rhs;
-
-        this.clear_flag(i8080.FlagType.Carry);
-        this.FlagSetter.Zero(result);
-        this.FlagSetter.Sign(result);
-        this.FlagSetter.Parity(result);
-
-        this.registers['A'] = result & 0xFF;
+    XRI(val) {
+        const raw_result = this.registers['A'] ^ val;
+        this.set_flags_on_logical_op(raw_result);
+        this.registers['A'] = raw_result & 0xFF;
         this.clock += 4;
     }
 
-    ora_r(reg) {
-        const lhs = this.registers['A'];
-        const rhs = this.registers[reg];
-        const result = lhs | rhs;
-
-        this.clear_flag(i8080.FlagType.Carry);
-        this.FlagSetter.Zero(result);
-        this.FlagSetter.Sign(result);
-        this.FlagSetter.Parity(result);
-
-        this.registers['A'] = result & 0xFF;
+    ORA_R(register) {
+        const raw_result = this.registers['A'] | this.registers[register];
+        this.set_flags_on_logical_op(raw_result);
+        this.registers['A'] = raw_result & 0xFF;
         this.clock += 4;
     }
 
-    ora_m() {
-        const lhs = this.registers['A'];
-        const rhs = this.bus.read(this.get_mem_addr('H','L'));
-        const result = lhs | rhs;
-
-        this.clear_flag(i8080.FlagType.Carry);
-        this.FlagSetter.Zero(result);
-        this.FlagSetter.Sign(result);
-        this.FlagSetter.Parity(result);
-
-        this.registers['A'] = result & 0xFF;
+    ORA_M() {
+        const raw_result = this.registers['A'] | this.bus.read(this.get_mem_addr('H','L'));
+        this.set_flags_on_logical_op(raw_result);
+        this.registers['A'] = raw_result & 0xFF;
         this.clock += 7;
     }
 
-    ori(val) {
-        const lhs = this.registers['A'];
-        const rhs = val;
-        const result = lhs | rhs;
-
-        this.clear_flag(i8080.FlagType.Carry);
-        this.FlagSetter.Zero(result);
-        this.FlagSetter.Sign(result);
-        this.FlagSetter.Parity(result);
-
-        this.registers['A'] = result & 0xFF;
+    ORI(val) {
+        const raw_result = this.registers['A'] | val;
+        this.set_flags_on_logical_op(raw_result);
+        this.registers['A'] = raw_result & 0xFF;
         this.clock += 4;
     }
 
@@ -1317,7 +1206,7 @@ class i8080 {
                 this.inr_r('A');
                 break;
             case 0x01: 
-                this.lxi('B', this.get_next_word());
+                this.LXI('B', this.get_next_word());
                 break;
             case 0x02:
                 this.stax('B');
@@ -1326,7 +1215,7 @@ class i8080 {
                 this.inx('B');
                 break;
             case 0x11:
-                this.lxi('D', this.get_next_word());
+                this.LXI('D', this.get_next_word());
                 break;
             case 0x12:
                 this.stax('D');
@@ -1335,13 +1224,13 @@ class i8080 {
                 this.inx('D');
                 break;
             case 0x21:
-                this.lxi('H', this.get_next_word());
+                this.LXI('H', this.get_next_word());
                 break;
             case 0x0E:
-                this.mvi_r('C', this.get_next_byte());
+                this.MVI_R('C', this.get_next_byte());
                 break;
             case 0x1E:
-                this.mvi_r('E', this.get_next_byte());
+                this.MVI_R('E', this.get_next_byte());
                 break;
             case 0x22:
                 this.shld(this.get_next_word());
@@ -1350,10 +1239,10 @@ class i8080 {
                 this.inx('H');
                 break;
             case 0x2E:
-                this.mvi_r('L', this.get_next_byte());
+                this.MVI_R('L', this.get_next_byte());
                 break;
             case 0x31:
-                this.lxi('SP', this.get_next_word());
+                this.LXI('SP', this.get_next_word());
                 break;
             case 0x32:
                 this.sta(this.get_next_word());
@@ -1362,208 +1251,208 @@ class i8080 {
                 this.inx('SP');
                 break;
             case 0x3E:
-                this.mvi_r('A', this.get_next_byte());
+                this.MVI_R('A', this.get_next_byte());
                 break;
             case 0x06:
-                this.mvi_r('B', this.get_next_byte());
+                this.MVI_R('B', this.get_next_byte());
                 break;
             case 0x16:
-                this.mvi_r('D', this.get_next_byte());
+                this.MVI_R('D', this.get_next_byte());
                 break;
             case 0x26:
-                this.mvi_r('H', this.get_next_byte());
+                this.MVI_R('H', this.get_next_byte());
                 break;
             case 0x36:
-                this.mvi_t_m(this.get_next_byte());
+                this.MVI_TO_MEM(this.get_next_byte());
                 break;
             case 0x40:
-                this.mov_r('B', 'B');
+                this.MOV_R('B', 'B');
                 break;
             case 0x41:
-                this.mov_r('B', 'C');
+                this.MOV_R('B', 'C');
                 break;
             case 0x42:
-                this.mov_r('B', 'D');
+                this.MOV_R('B', 'D');
                 break;
             case 0x43:
-                this.mov_r('B', 'E');
+                this.MOV_R('B', 'E');
                 break;
             case 0x44:
-                this.mov_r('B', 'H');
+                this.MOV_R('B', 'H');
                 break;
             case 0x45:
-                this.mov_r('B', 'L');
+                this.MOV_R('B', 'L');
                 break;
             case 0x46:
-                this.mov_f_m('B');
+                this.MOV_FROM_MEM('B');
                 break;
             case 0x47:
-                this.mov_r('B', 'A');
+                this.MOV_R('B', 'A');
                 break;
             case 0x48:
-                this.mov_r('C', 'B');
+                this.MOV_R('C', 'B');
                 break;
             case 0x49:
-                this.mov_r('C', 'C');
+                this.MOV_R('C', 'C');
                 break;
             case 0x4A:
-                this.mov_r('C', 'D');
+                this.MOV_R('C', 'D');
                 break;
             case 0x4B:
-                this.mov_r('C', 'E');
+                this.MOV_R('C', 'E');
                 break;
             case 0x4C:
-                this.mov_r('C', 'H');
+                this.MOV_R('C', 'H');
                 break;
             case 0x4D:
-                this.mov_r('C', 'L');
+                this.MOV_R('C', 'L');
                 break;
             case 0x4E:
-                this.mov_f_m('C');
+                this.MOV_FROM_MEM('C');
                 break;
             case 0x4F:
-                this.mov_r('C', 'A');
+                this.MOV_R('C', 'A');
                 break;
             case 0x50:
-                this.mov_r('D', 'B');
+                this.MOV_R('D', 'B');
                 break;
             case 0x51:
-                this.mov_r('D', 'C');
+                this.MOV_R('D', 'C');
                 break;
             case 0x52:
-                this.mov_r('D', 'D');
+                this.MOV_R('D', 'D');
                 break;
             case 0x53:
-                this.mov_r('D', 'E');
+                this.MOV_R('D', 'E');
                 break;
             case 0x54:
-                this.mov_r('D', 'H');
+                this.MOV_R('D', 'H');
                 break;
             case 0x55:
-                this.mov_r('D', 'L');
+                this.MOV_R('D', 'L');
                 break;
             case 0x56:
-                this.mov_f_m('D');
+                this.MOV_FROM_MEM('D');
                 break;
             case 0x57:
-                this.mov_r('D', 'A');
+                this.MOV_R('D', 'A');
                 break;
             case 0x58:
-                this.mov_r('E', 'B');
+                this.MOV_R('E', 'B');
                 break;
             case 0x59:
-                this.mov_r('E', 'C');
+                this.MOV_R('E', 'C');
                 break;
             case 0x5A:
-                this.mov_r('E', 'D');
+                this.MOV_R('E', 'D');
                 break;
             case 0x5B:
-                this.mov_r('E', 'E');
+                this.MOV_R('E', 'E');
                 break;
             case 0x5C:
-                this.mov_r('E', 'H');
+                this.MOV_R('E', 'H');
                 break;
             case 0x5D:
-                this.mov_r('E', 'L');
+                this.MOV_R('E', 'L');
                 break;
             case 0x5E:
-                this.mov_f_m('E');
+                this.MOV_FROM_MEM('E');
                 break;
             case 0x5F:
-                this.mov_r('E', 'A');
+                this.MOV_R('E', 'A');
                 break;
             case 0x60:
-                this.mov_r('H', 'B');
+                this.MOV_R('H', 'B');
                 break;
             case 0x61:
-                this.mov_r('H', 'C');
+                this.MOV_R('H', 'C');
                 break;
             case 0x62:
-                this.mov_r('H', 'D');
+                this.MOV_R('H', 'D');
                 break;
             case 0x63:
-                this.mov_r('H', 'E');
+                this.MOV_R('H', 'E');
                 break;
             case 0x64:
-                this.mov_r('H', 'H');
+                this.MOV_R('H', 'H');
                 break;
             case 0x65:
-                this.mov_r('H', 'L');
+                this.MOV_R('H', 'L');
                 break;
             case 0x66:
-                this.mov_f_m('H');
+                this.MOV_FROM_MEM('H');
                 break;
             case 0x67:
-                this.mov_r('H', 'A');
+                this.MOV_R('H', 'A');
                 break;
             case 0x68:
-                this.mov_r('L', 'B');
+                this.MOV_R('L', 'B');
                 break;
             case 0x69:
-                this.mov_r('L', 'C');
+                this.MOV_R('L', 'C');
                 break;
             case 0x6A:
-                this.mov_r('L', 'D');
+                this.MOV_R('L', 'D');
                 break;
             case 0x6B:
-                this.mov_r('L', 'E');
+                this.MOV_R('L', 'E');
                 break;
             case 0x6C:
-                this.mov_r('L', 'H');
+                this.MOV_R('L', 'H');
                 break;
             case 0x6D:
-                this.mov_r('L', 'L');
+                this.MOV_R('L', 'L');
                 break;
             case 0x6E:
-                this.mov_f_m('L');
+                this.MOV_FROM_MEM('L');
                 break;
             case 0x6F:
-                this.mov_r('L', 'A');
+                this.MOV_R('L', 'A');
                 break;
             case 0x70:
-                this.mov_t_m('B');
+                this.MOV_TO_MEM('B');
                 break;
             case 0x71:
-                this.mov_t_m('C');
+                this.MOV_TO_MEM('C');
                 break;
             case 0x72:
-                this.mov_t_m('D');
+                this.MOV_TO_MEM('D');
                 break;
             case 0x73:
-                this.mov_t_m('E');
+                this.MOV_TO_MEM('E');
                 break;
             case 0x74:
-                this.mov_t_m('H');
+                this.MOV_TO_MEM('H');
                 break;
             case 0x75:
-                this.mov_t_m('L');
+                this.MOV_TO_MEM('L');
                 break;
             case 0x77:
-                this.mov_t_m('A');
+                this.MOV_TO_MEM('A');
                 break;
             case 0x78:
-                this.mov_r('A', 'B');
+                this.MOV_R('A', 'B');
                 break;
             case 0x79:
-                this.mov_r('A', 'C');
+                this.MOV_R('A', 'C');
                 break;
             case 0x7A:
-                this.mov_r('A', 'D');
+                this.MOV_R('A', 'D');
                 break;
             case 0x7B:
-                this.mov_r('A', 'E');
+                this.MOV_R('A', 'E');
                 break;
             case 0x7C:
-                this.mov_r('A', 'H');
+                this.MOV_R('A', 'H');
                 break;
             case 0x7D:
-                this.mov_r('A', 'L');
+                this.MOV_R('A', 'L');
                 break;
             case 0x7E:
-                this.mov_f_m('A');
+                this.MOV_FROM_MEM('A');
                 break;
             case 0x7F:
-                this.mov_r('A', 'A');
+                this.MOV_R('A', 'A');
                 break;
             case 0x76:
                 this.halt = true;
@@ -1618,124 +1507,124 @@ class i8080 {
                 this.ADC_R('A');
                 break;
             case 0x90:
-                this.sub_r('B');
+                this.SUB_R('B');
                 break;
             case 0x91:
-                this.sub_r('C');
+                this.SUB_R('C');
                 break;
             case 0x92:
-                this.sub_r('D');
+                this.SUB_R('D');
                 break;
             case 0x93:
-                this.sub_r('E');
+                this.SUB_R('E');
                 break;
             case 0x94:
-                this.sub_r('H');
+                this.SUB_R('H');
                 break;
             case 0x95:
-                this.sub_r('L');
+                this.SUB_R('L');
                 break;
             case 0x96:
-                this.sub_m();
+                this.SUB_M();
                 break;
             case 0x97:
-                this.sub_r('A');
+                this.SUB_R('A');
                 break;
             case 0x98:
-                this.sbb_r('B');
+                this.SBB_R('B');
                 break;
             case 0x99:
-                this.sbb_r('C');
+                this.SBB_R('C');
                 break;
             case 0x9A:
-                this.sbb_r('D');
+                this.SBB_R('D');
                 break;
             case 0x9B:
-                this.sbb_r('E');
+                this.SBB_R('E');
                 break;
             case 0x9C:
-                this.sbb_r('H');
+                this.SBB_R('H');
                 break;
             case 0x9D:
-                this.sbb_r('L');
+                this.SBB_R('L');
                 break;
             case 0x9E:
-                this.sbb_m();
+                this.SBB_M();
                 break;
             case 0x9F:
-                this.sbb_r('A');
+                this.SBB_R('A');
                 break;
             case 0xA0:
-                this.ana_r('B');
+                this.ANA_R('B');
                 break;
             case 0xA1:
-                this.ana_r('C');
+                this.ANA_R('C');
                 break;
             case 0xA2:
-                this.ana_r('D');
+                this.ANA_R('D');
                 break;
             case 0xA3:
-                this.ana_r('E');
+                this.ANA_R('E');
                 break;
             case 0xA4:
-                this.ana_r('H');
+                this.ANA_R('H');
                 break;
             case 0xA5:
-                this.ana_r('L');
+                this.ANA_R('L');
                 break;
             case 0xA6:
-                this.ana_m();
+                this.ANA_M();
                 break;
             case 0xA7:
-                this.ana_r('A');
+                this.ANA_R('A');
                 break;  
             case 0xA8:
-                this.xra_r('B');
+                this.XRA_R('B');
                 break;
             case 0xA9:
-                this.xra_r('C');
+                this.XRA_R('C');
                 break;
             case 0xAA:
-                this.xra_r('D');
+                this.XRA_R('D');
                 break;
             case 0xAB:
-                this.xra_r('E');
+                this.XRA_R('E');
                 break;
             case 0xAC:
-                this.xra_r('H');
+                this.XRA_R('H');
                 break;
             case 0xAD:
-                this.xra_r('L');
+                this.XRA_R('L');
                 break;       
             case 0xAE:
-                this.xra_m();
+                this.XRA_M();
                 break;
             case 0xAF:
-                this.xra_r('A');
+                this.XRA_R('A');
                 break;              
             case 0xB0:
-                this.ora_r('B');
+                this.ORA_R('B');
                 break;
             case 0xB1:
-                this.ora_r('C');
+                this.ORA_R('C');
                 break;
             case 0xB2:
-                this.ora_r('D');
+                this.ORA_R('D');
                 break;
             case 0xB3:
-                this.ora_r('E');
+                this.ORA_R('E');
                 break;
             case 0xB4:
-                this.ora_r('H');
+                this.ORA_R('H');
                 break;
             case 0xB5:
-                this.ora_r('L');
+                this.ORA_R('L');
                 break;
             case 0xB6:
-                this.ora_m();
+                this.ORA_M();
                 break;
             case 0xB7:
-                this.ora_r('A');
+                this.ORA_R('A');
                 break;                
             case 0xC6:
                 this.ADI(this.get_next_byte());
@@ -1744,19 +1633,19 @@ class i8080 {
                 this.ACI(this.get_next_byte());
                 break;
             case 0xD6:
-                this.sui(this.get_next_byte());
+                this.SUI(this.get_next_byte());
                 break;
             case 0xDE:
-                this.sbi(this.get_next_byte());
+                this.SBI(this.get_next_byte());
                 break;
             case 0xE6:
-                this.ani(this.get_next_byte());
+                this.ANI(this.get_next_byte());
                 break;
             case 0xEE:
-                this.xri(this.get_next_byte());
+                this.XRI(this.get_next_byte());
                 break;
             case 0xF6:
-                this.ori(this.get_next_byte());
+                this.ORI(this.get_next_byte());
                 break;
         }
     }
