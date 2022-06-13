@@ -950,7 +950,7 @@ class i8080 {
     dcx(high_byte_register) {
         const _dcx = (reg_high, reg_low) => {
             // 0xFFFF = 16-bit two's complement of 1.
-            const word = this.get_mem_addr(reg_high, reg_low);
+            const word = ((this.registers[reg_high] << 8) | this.registers[reg_low]) + 0xFFFF;
             this.registers[reg_high] = (word >> 8) & 0xFF;
             this.registers[reg_low] = word & 0xFF;
         }
