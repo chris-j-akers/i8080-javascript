@@ -7,6 +7,12 @@ import { __util__byte_as_binary, __util__word_as_binary} from './i8080-utils.js'
  */
 class i8080 {
 
+
+    /*------------------------------------------------------------------------
+                            DEBUG & HELPER FUNCTIONS                        
+    ------------------------------------------------------------------------*/
+
+
     /**
      * @returns a formatted string listing each flag and its current value
      */
@@ -65,6 +71,20 @@ class i8080 {
         return `${this.__dbg__get_registers()}\n${this.__dbg__get_flags()}\n${this.__dbg__get_sp()}\n${this.__dbg__get_pc()}\n${this.__dbg__get_clock()}`;
     }
 
+
+    /*------------------------------------------------------------------------
+                    INTERNAL METHODS AND PROPERTIES                     
+    ------------------------------------------------------------------------*/
+
+
+    /**
+     * Constructor for the i8080 object.
+     */
+    constructor() {
+        this.reset();
+        this.bus = null;
+    }
+
     /** 
      * Used when setting or getting bit flags. Means we can use the flag name
      * instead of having to remember the bit position. A sort of enumy type
@@ -80,14 +100,6 @@ class i8080 {
             Zero: 6,
             Sign: 7,
         };
-    }
-
-    /**
-     * Constructor for the i8080 object.
-     */
-    constructor() {
-        this.reset();
-        this.bus = null;
     }
 
     /**
@@ -212,7 +224,6 @@ class i8080 {
         return (this.flags & (1 << bit_pos)) > 0;
     }
 
-
     /**
      * Object used to set or clears CPU Flags based on the results of various
      * operations. In the case of Aux Carry, only the left-hand side and
@@ -239,38 +250,38 @@ class i8080 {
             this.parity(result) ? this.set_flag(i8080.FlagType.Parity) : this.clear_flag(i8080.FlagType.Parity);
         },
         AuxillaryCarry: (lhs, rhs) => {
-        /*
-        * Auxillary Carry Flag
-        *
-        * Add the LSB nibbles of each byte together. If the result includes a
-        * bit carried into position 4, then an auxillary (or half) carry will
-        * occur during this operation and the flag must be set.
-        *
-        * In the example below, we can see that adding the two least significant
-        * nibbles of numbers 159 and 165 together results in a 1 being carried
-        * to bit position 4. This means an auxillary carry (or half-carry) will
-        * occur during this add operation and the flag must be set accordingly.
-        *
-        * +---------------+
-        * | 159: 10011111 |
-        * |+--------------|
-        * | 165: 10100101 |
-        * +---------------+
-        *
-        * Take least significant nibbles only, and sum.
-        *
-        * +----------+
-        * | 00001111 |
-        * |+---------|
-        * | 00000101 |
-        * +==========+
-        * | 00010100 |
-        * +----------+
-        *
-        * Result has meant a carry out of bit-3 to bit-4, so we set Aux Carry in
-        * this case.
-        *
-        */
+            /*
+            * Auxillary Carry Flag
+            *
+            * Add the LSB nibbles of each byte together. If the result includes a
+            * bit carried into position 4, then an auxillary (or half) carry will
+            * occur during this operation and the flag must be set.
+            *
+            * In the example below, we can see that adding the two least significant
+            * nibbles of numbers 159 and 165 together results in a 1 being carried
+            * to bit position 4. This means an auxillary carry (or half-carry) will
+            * occur during this add operation and the flag must be set accordingly.
+            *
+            * +---------------+
+            * | 159: 10011111 |
+            * |+--------------|
+            * | 165: 10100101 |
+            * +---------------+
+            *
+            * Take least significant nibbles only, and sum.
+            *
+            * +----------+
+            * | 00001111 |
+            * |+---------|
+            * | 00000101 |
+            * +==========+
+            * | 00010100 |
+            * +----------+
+            *
+            * Result has meant a carry out of bit-3 to bit-4, so we set Aux Carry in
+            * this case.
+            *
+            */
             ((lhs & 0x0f) + (rhs & 0x0f)) & (1 << 4) ? this.set_flag(i8080.FlagType.AuxillaryCarry) : this.clear_flag(i8080.FlagType.AuxillaryCarry);
         },
         Zero: (result) => {
@@ -292,9 +303,9 @@ class i8080 {
     }
 
 
-    /*--------------------------------------------------------------------------
-                                          NOP
-    --------------------------------------------------------------------------*/
+    /*------------------------------------------------------------------------
+                                    NOP                                   
+    ------------------------------------------------------------------------*/
    
    
     /**
@@ -305,10 +316,20 @@ class i8080 {
     }
 
  
-    /*--------------------------------------------------------------------------
-                               Arithmetic Operations
-    --------------------------------------------------------------------------*/
+    /*------------------------------------------------------------------------
+                        ADD ARITHMETIC OPERATIONS                        
+    ------------------------------------------------------------------------*/
 
+
+    /**
+     * Sets flags accordingly for the results of an ADD/SUB arithmetic
+     * operation.
+     *
+     * @param {number} lhs Left-hand side of expression used in operation
+     * @param {number} rhs Right-hand side of expression used in operation
+     * @param {number} raw_result Result of operation (before being &'d to
+     * 8-bit)
+     */
     set_flags_on_arithmetic_op(lhs, rhs, raw_result) {
         this.FlagSetter.Carry(raw_result);
         this.FlagSetter.Parity(raw_result);
@@ -318,14 +339,14 @@ class i8080 {
     }
 
     /**
-     * Perform an ADD operation and set flags accordingly. NOTE: This method is
-     * also used by the `sub()` method to carry-out subtraction using two's
-     * complement. When called by the `sub()` method, the `carry` parameter is
-     * always passed as 0 because it is folded into the two's complement
-     * calculation of the `rhs` before `add()` is called.
+     * Internal method to perform an ADD operation and set flags accordingly.
+     * NOTE: This method is also used by the `sub()` method to carry-out
+     * subtraction using two's complement. When called by the `sub()` method,
+     * the `carry` parameter is always passed as 0 because it is folded into the
+     * two's complement calculation of the `rhs` before `add()` is called.
      *
-     * @param {number} lhs Left-hand side of operation
-     * @param {number} rhs Right-hand side of operation
+     * @param {number} lhs Left-hand side of expression used in operation
+     * @param {number} rhs Right-hand side of expression used in operation
      * @param {number} carry Carry-bit (defaults to 0, if absent)
      * @returns {number} Result of the operation
      */
@@ -336,44 +357,87 @@ class i8080 {
     }
 
     /**
-     * Add the value stored in register `reg` to the Accumulator.
-     * 
-     * Flags Affected: C, P, AC, Z, S
-     * 
-     * Covers Mnemonics: ADD B, ADD C, ADD D, ADD E ADD H, ADD L
-     * 
-     * @param {char} register The name of the register which contains the value to be added.
+     * Add the value stored in register `register` to the Accumulator.
+     *
+     * @param {char} register The name of the register which contains the value
+     * to be added.
      */
     ADD_R(register) {
         this.registers['A'] = this.add(this.registers['A'], this.registers[register]);
         this.clock += 4;
     }
 
+    /**
+     * Add the value stored in the memory address loaded into register's `H` and
+     * `L` to the Accumulator.
+     */
     ADD_M() {
         this.registers['A'] = this.add(this.registers['A'], this.bus.read(this.get_mem_addr('H','L')));
         this.clock += 7;
     }
 
+    /**
+     * Add the value stored in register `register` to the Accumulator, including
+     * the Carry bit, if set.
+     *
+     * @param {char} register The name of the register which contains the value
+     * to be added.
+     */
     ADC_R(register) {
         this.registers['A'] = this.add(this.registers['A'], this.registers[register], this.flag_set(i8080.FlagType.Carry) ? 1 : 0 );
         this.clock += 4;
     }
 
+    /**
+     * Add the value stored in the memory address loaded into register's `H` and
+     * `L` to the Accumulator, including the Carry bit, if set.
+     */
     ADC_M() {
         this.registers['A'] = this.add(this.registers['A'], this.bus.read(this.get_mem_addr('H','L')), this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         this.clock += 7;
     }
 
+    /**
+     * Add an immediate (8-bit) value to the Accumulator.
+     * 
+     * @param {number} val The immediate value to add.
+     */
     ADI(val) {
         this.registers['A'] = this.add(this.registers['A'], val);
         this.clock += 7;
     }
 
+    /**
+     * Add an immediate (8-bit) value to the Accumulator, including the Carry
+     * bit, if set.
+     *
+     * @param {number} val The immediate value to add.
+     */
     ACI(val) {
         this.registers['A'] = this.add(this.registers['A'], val, this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         this.clock += 7;
     }
 
+
+    /*------------------------------------------------------------------------
+                     SUBTRACT ARITHMETIC OPERATIONS                     
+    ------------------------------------------------------------------------*/
+
+    /**
+     * Internal method used to perform a subtract operation. Note that two's
+     * complement is used to perform all subtraction operations in the 8080, so
+     * this method actually calls the `add` method above, but with the `rhs`
+     * value converted to its two's complement representation. Additionally, as
+     * mentioned in the description of the `add()` method, calls to `add()` from
+     * here always set the `carry` parameter to 0 because the carry bit is
+     * already factored into the two's complement conversion.
+     *
+     * @param {number} lhs Left-hand side of expression used in operation
+     * @param {number} rhs Right-hand side of expression used in operation
+     * @param {number} carry 1 or 0, depending if Carry but is set (default is
+     * 0)
+     * @returns 
+     */
     sub(lhs, rhs, carry = 0) {
         return this.add(lhs, ~(rhs + carry) + 1);
     }
@@ -413,21 +477,43 @@ class i8080 {
         this.clock += 7;
     }
 
-    SBB_R(reg) {               
-        this.registers['A'] = this.sub(this.registers['A'], this.registers[reg], this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
+    /**
+     *  Subtract value held in register `reg`, plus the value of the Carry bit,
+     *  from the current value in the Accumulator.
+     *
+     * @param {char} register Name of the register which holds the value to
+     * subtract.
+     */
+    SBB_R(register) {               
+        this.registers['A'] = this.sub(this.registers['A'], this.registers[register], this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         this.clock += 4;
     }
 
+    /**
+     * Subtract value held in the 16-bit memory address currently loaded into
+     * registers `H` and `L` plus the value of the Carry bit from the
+     * Accumulator.
+     */
     SBB_M() {
         this.registers['A'] = this.sub(this.registers['A'], this.bus.read(this.get_mem_addr('H','L')), this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         this.clock += 7;
     }
 
+    /**
+     * Subtract and immediate 8-bit value from the Accumulator.
+     * 
+     * @param {number} val Immediate value to subtract
+     */
     SUI(val) {
         this.registers['A'] = this.sub(this.registers['A'], val);
         this.clock += 7;        
     }
 
+    /**
+     * Subtract and immediate 8-bit value, including the carry bit from the Accumulator.
+     *
+     * @param {number} val Immediate value to subtract
+     */
     SBI(val) {
         this.registers['A'] = this.sub(this.registers['A'], val, this.flag_set(i8080.FlagType.Carry) ? 1 : 0);
         this.clock += 7;
@@ -437,7 +523,6 @@ class i8080 {
     /*------------------------------------------------------------------------
                           16-BIT LOAD IMMEDIATE OPERATIONS                     
     ------------------------------------------------------------------------*/
-
 
     
     /**
