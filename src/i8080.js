@@ -1236,6 +1236,30 @@ class i8080 {
             case 0x30:
                 this.NOP();
                 break;
+            case 0xB8:
+                this.CMP_R('B');
+                break;
+            case 0xB9:
+                this.CMP_R('C');
+                break;
+            case 0xBA:
+                this.CMP_R('D');
+                break;
+            case 0xBB:
+                this.CMP_R('E');
+                break;
+            case 0xBC:
+                this.CMP_R('H');
+                break;
+            case 0xBD:
+                this.CMP_R('L');
+                break;
+            case 0xBE:
+                this.CMP_M();
+                break;
+            case 0xBF:
+                this.CMP_R('A');
+                break;
             case 0x3A:
                 this.LSA(this._get_next_word());
                 break;
