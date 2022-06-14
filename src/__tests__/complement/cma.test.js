@@ -5,7 +5,8 @@ import { strict as assert } from 'assert'
 describe('CMA', () => {
 	it('0xFF becomes 0x00', () => {
 		const c = new Computer();
-		const FlagType = i8080.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
+		
 		
 		let program = [
 		    0x3E,                 // MVI into the accumulator...
@@ -24,7 +25,8 @@ describe('CMA', () => {
 		
 	it('0x00 becomes 0xFF', () => {
 		const c = new Computer();
-		const FlagType = i8080.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
+		
 		
 		let program = [
 		    0x3E,                 // MVI into the accumulator...

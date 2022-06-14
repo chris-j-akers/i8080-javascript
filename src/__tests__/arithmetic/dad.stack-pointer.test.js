@@ -14,7 +14,8 @@ const opcode_lookup = {
 describe('DAD SP', () => {
 	it('Carry unset and not set', () => {
 		const c = new Computer();
-		const FlagType = i8080.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
+		
 		
 		let program = [
 		  0x26,          // MVI into H...
@@ -30,12 +31,12 @@ describe('DAD SP', () => {
 		  c.execute_program();
 		
 		  assert.equal((c.cpu.registers['H'] << 8 | c.cpu.registers['L']) & 0xFFFF, 60000)
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), false)
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false)
 		
-		  assert.equal(c.cpu.flag_set(FlagType.Parity),false);
-		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
 		  assert.equal(c.cpu.clock, 31);
 		  
@@ -44,7 +45,8 @@ describe('DAD SP', () => {
 		
 	it('Carry unset and set', () => {
 		const c = new Computer();
-		const FlagType = i8080.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
+		
 		
 		let program = [
 		  0x26,          // MVI into H...
@@ -60,12 +62,12 @@ describe('DAD SP', () => {
 		  c.execute_program();
 		
 		  assert.equal((c.cpu.registers['H'] << 8 | c.cpu.registers['L']) & 0xFFFF, 0)
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), true)
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true)
 		
-		  assert.equal(c.cpu.flag_set(FlagType.Parity),false);
-		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
 		  assert.equal(c.cpu.clock, 31);
 		  
@@ -74,7 +76,8 @@ describe('DAD SP', () => {
 		
 	it('Carry set then unset', () => {
 		const c = new Computer();
-		const FlagType = i8080.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
+		
 		
 		let program = [
 		  0x26,          // MVI into H...
@@ -90,12 +93,12 @@ describe('DAD SP', () => {
 		  c.execute_program();
 		
 		  assert.equal((c.cpu.registers['H'] << 8 | c.cpu.registers['L']) & 0xFFFF, 32770)
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), false)
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false)
 		
-		  assert.equal(c.cpu.flag_set(FlagType.Parity),false);
-		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
 		  assert.equal(c.cpu.clock, 31);
 		  

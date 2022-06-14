@@ -6,7 +6,8 @@ describe('ADC Memory', () => {
 	it('No Flags Set (With Carry Unset)', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = i8080.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
+		
 		
 		const data = 1;
 		
@@ -33,16 +34,16 @@ describe('ADC Memory', () => {
 		  program[5] = mem_addr & 0xFF;
 		
 		  c.inject_program(program);
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
 		
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A,1);
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Parity), false);
-		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
 		  assert.equal(c.cpu.clock, 45);
 		
@@ -53,7 +54,8 @@ describe('ADC Memory', () => {
 	it('No Flags Set (With Carry Set)', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = i8080.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
+		
 		
 		const data = 1;
 		
@@ -80,17 +82,17 @@ describe('ADC Memory', () => {
 		  program[5] = mem_addr & 0xFF;
 		
 		  c.inject_program(program);
-		  c.cpu.set_flag(FlagType.Carry);
-		assert.equal(c.cpu.flag_set(FlagType.Carry), true);
+		  c.cpu.FlagManager.SetFlag(FlagType.Carry);
+		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
 		
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A,2);
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Parity), false);
-		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
 		  assert.equal(c.cpu.clock, 45);
 		
@@ -101,7 +103,8 @@ describe('ADC Memory', () => {
 	it('Set Parity and Zero Flags (With Carry Unset)', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = i8080.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
+		
 		
 		const data = 0;
 		
@@ -128,16 +131,16 @@ describe('ADC Memory', () => {
 		  program[5] = mem_addr & 0xFF;
 		
 		  c.inject_program(program);
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
 		
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A,0);
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Parity), true);
-		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Zero), true);
-		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), true);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), true);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
 		  assert.equal(c.cpu.clock, 45);
 		
@@ -148,7 +151,8 @@ describe('ADC Memory', () => {
 	it('Set Parity Flag (With Carry Unset)', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = i8080.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
+		
 		
 		const data = 84;
 		
@@ -175,16 +179,16 @@ describe('ADC Memory', () => {
 		  program[5] = mem_addr & 0xFF;
 		
 		  c.inject_program(program);
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
 		
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A,85);
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Parity), true);
-		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), true);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
 		  assert.equal(c.cpu.clock, 45);
 		
@@ -195,7 +199,8 @@ describe('ADC Memory', () => {
 	it('Set Parity Flag (With Carry Set)', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = i8080.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
+		
 		
 		const data = 83;
 		
@@ -222,17 +227,17 @@ describe('ADC Memory', () => {
 		  program[5] = mem_addr & 0xFF;
 		
 		  c.inject_program(program);
-		  c.cpu.set_flag(FlagType.Carry);
-		assert.equal(c.cpu.flag_set(FlagType.Carry), true);
+		  c.cpu.FlagManager.SetFlag(FlagType.Carry);
+		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
 		
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A,85);
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Parity), true);
-		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), true);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
 		  assert.equal(c.cpu.clock, 45);
 		
@@ -243,7 +248,8 @@ describe('ADC Memory', () => {
 	it('Set Aux Carry Flag (With Carry Unset)', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = i8080.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
+		
 		
 		const data = 15;
 		
@@ -270,16 +276,16 @@ describe('ADC Memory', () => {
 		  program[5] = mem_addr & 0xFF;
 		
 		  c.inject_program(program);
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
 		
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A,16);
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Parity), false);
-		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
-		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
 		  assert.equal(c.cpu.clock, 45);
 		
@@ -290,7 +296,8 @@ describe('ADC Memory', () => {
 	it('Set Aux Carry Flag (With Carry Set)', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = i8080.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
+		
 		
 		const data = 14;
 		
@@ -317,17 +324,17 @@ describe('ADC Memory', () => {
 		  program[5] = mem_addr & 0xFF;
 		
 		  c.inject_program(program);
-		  c.cpu.set_flag(FlagType.Carry);
-		assert.equal(c.cpu.flag_set(FlagType.Carry), true);
+		  c.cpu.FlagManager.SetFlag(FlagType.Carry);
+		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
 		
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A,16);
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Parity), false);
-		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
-		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
 		  assert.equal(c.cpu.clock, 45);
 		
@@ -338,7 +345,8 @@ describe('ADC Memory', () => {
 	it('Set Aux Carry and Sign Flag (With Carry Unset)', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = i8080.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
+		
 		
 		const data = 127;
 		
@@ -365,16 +373,16 @@ describe('ADC Memory', () => {
 		  program[5] = mem_addr & 0xFF;
 		
 		  c.inject_program(program);
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
 		
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A,128);
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Parity), false);
-		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
-		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Sign), true);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), true);
 		
 		  assert.equal(c.cpu.clock, 45);
 		
@@ -385,7 +393,8 @@ describe('ADC Memory', () => {
 	it('Set Sign Flag (With Carry Set)', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = i8080.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
+		
 		
 		const data = 127;
 		
@@ -412,17 +421,17 @@ describe('ADC Memory', () => {
 		  program[5] = mem_addr & 0xFF;
 		
 		  c.inject_program(program);
-		  c.cpu.set_flag(FlagType.Carry);
-		assert.equal(c.cpu.flag_set(FlagType.Carry), true);
+		  c.cpu.FlagManager.SetFlag(FlagType.Carry);
+		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
 		
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A,128);
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Parity), false);
-		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Sign), true);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), true);
 		
 		  assert.equal(c.cpu.clock, 45);
 		
@@ -433,7 +442,8 @@ describe('ADC Memory', () => {
 	it('Set Carry and Aux Carry Flag (With Carry Unset)', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = i8080.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
+		
 		
 		const data = 255;
 		
@@ -460,16 +470,16 @@ describe('ADC Memory', () => {
 		  program[5] = mem_addr & 0xFF;
 		
 		  c.inject_program(program);
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
 		
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A,19);
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), true);
-		  assert.equal(c.cpu.flag_set(FlagType.Parity), false);
-		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
-		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
 		  assert.equal(c.cpu.clock, 45);
 		
@@ -480,7 +490,8 @@ describe('ADC Memory', () => {
 	it('Set Carry and Parity Flag (With Carry Set)', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = i8080.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
+		
 		
 		const data = 255;
 		
@@ -507,17 +518,17 @@ describe('ADC Memory', () => {
 		  program[5] = mem_addr & 0xFF;
 		
 		  c.inject_program(program);
-		  c.cpu.set_flag(FlagType.Carry);
-		assert.equal(c.cpu.flag_set(FlagType.Carry), true);
+		  c.cpu.FlagManager.SetFlag(FlagType.Carry);
+		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
 		
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A,20);
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), true);
-		  assert.equal(c.cpu.flag_set(FlagType.Parity), true);
-		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), true);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
 		  assert.equal(c.cpu.clock, 45);
 		

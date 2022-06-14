@@ -13,7 +13,8 @@ test_suite:
     });
   boilerplate: |
     const c = new Computer();
-    const FlagType = i8080.FlagType;
+    const FlagType = c.cpu.FlagManager.FlagType;
+
 
     const program = [
       0x37,          // Complement Carry
@@ -25,7 +26,7 @@ test_suite:
       c.inject_program(program);
       c.execute_program();
 
-      assert.equal(c.cpu.flag_set(FlagType.Carry), true);
+      assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
       assert.equal(c.cpu.clock, 11);
 
       c.reset();

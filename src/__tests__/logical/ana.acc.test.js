@@ -5,7 +5,8 @@ import { strict as assert } from 'assert'
 describe('ANA Accumulator', () => {
 	it('Reset Carry Flag', () => {
 		const c = new Computer();
-		const FlagType = i8080.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
+		
 		
 		let program = [
 		    0x3E,                 // MVI into the accumulator...
@@ -17,17 +18,17 @@ describe('ANA Accumulator', () => {
 		for (let reg of Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
 		
 		  c.inject_program(program);
-		  c.cpu.set_flag(FlagType.Carry);
-		assert.equal(c.cpu.flag_set(FlagType.Carry), true);
+		  c.cpu.FlagManager.SetFlag(FlagType.Carry);
+		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
 		
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A, 4);
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Parity),false);
-		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
 		  assert.equal(c.cpu.clock, 18);
 		
@@ -37,7 +38,8 @@ describe('ANA Accumulator', () => {
 		
 	it('Set Zero Flag', () => {
 		const c = new Computer();
-		const FlagType = i8080.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
+		
 		
 		let program = [
 		    0x3E,                 // MVI into the accumulator...
@@ -49,16 +51,16 @@ describe('ANA Accumulator', () => {
 		for (let reg of Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
 		
 		  c.inject_program(program);
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
 		
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A, 0);
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Parity),true);
-		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Zero), true);
-		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), true);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
 		  assert.equal(c.cpu.clock, 18);
 		
@@ -68,7 +70,8 @@ describe('ANA Accumulator', () => {
 		
 	it('Set Sign Flag', () => {
 		const c = new Computer();
-		const FlagType = i8080.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
+		
 		
 		let program = [
 		    0x3E,                 // MVI into the accumulator...
@@ -80,16 +83,16 @@ describe('ANA Accumulator', () => {
 		for (let reg of Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
 		
 		  c.inject_program(program);
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
 		
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A, 128);
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Parity),false);
-		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Sign), true);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), true);
 		
 		  assert.equal(c.cpu.clock, 18);
 		
@@ -99,7 +102,8 @@ describe('ANA Accumulator', () => {
 		
 	it('Set Parity Flag', () => {
 		const c = new Computer();
-		const FlagType = i8080.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
+		
 		
 		let program = [
 		    0x3E,                 // MVI into the accumulator...
@@ -111,16 +115,16 @@ describe('ANA Accumulator', () => {
 		for (let reg of Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
 		
 		  c.inject_program(program);
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
 		
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A, 5);
-		  assert.equal(c.cpu.flag_set(FlagType.Carry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Parity),true);
-		  assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Zero), false);
-		  assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
 		  assert.equal(c.cpu.clock, 18);
 		

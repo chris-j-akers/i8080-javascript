@@ -31,7 +31,8 @@ const mvi_opcode_lookup = {
 describe('INX', () => {
 	it('Increment 5 times from 65533 and confirm B/C register rolls over to 0 once 8-bit max limit reached', () => {
 		const c = new Computer();
-		const FlagType = i8080.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
+		
 		
 		const program = [
 		  mvi_opcode_lookup.B,     // Move into B....
@@ -64,7 +65,8 @@ describe('INX', () => {
 		
 	it('Increment 5 times from 65533 and confirm D/E register rolls over to 0 once 8-bit max limit reached', () => {
 		const c = new Computer();
-		const FlagType = i8080.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
+		
 		
 		const program = [
 		  mvi_opcode_lookup.D,     // Move into D....
@@ -97,7 +99,8 @@ describe('INX', () => {
 		
 	it('Increment 5 times from 65533 and confirm H/L register rolls over to 0 once 8-bit max limit reached', () => {
 		const c = new Computer();
-		const FlagType = i8080.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
+		
 		
 		const program = [
 		  mvi_opcode_lookup.H,     // Move into H....

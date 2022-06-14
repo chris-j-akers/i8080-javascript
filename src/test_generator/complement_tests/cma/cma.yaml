@@ -13,7 +13,8 @@ test_suite:
     });
   boilerplate: |
     const c = new Computer();
-    const FlagType = i8080.FlagType;
+    const FlagType = c.cpu.FlagManager.FlagType;
+
 
     let program = [
         0x3E,                 // MVI into the accumulator...

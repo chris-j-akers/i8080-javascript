@@ -5,7 +5,8 @@ import { strict as assert } from 'assert'
 describe('SUB Accumulator Flag', () => {
 	it('Zero, AuxCarry, Parity Flags Set', () => {
 		const c = new Computer();
-		const FlagType = i8080.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
+		
 		
 		const program = [
 		  0x3E,           // MVI into accumulator ...
@@ -18,11 +19,11 @@ describe('SUB Accumulator Flag', () => {
 		c.execute_program();
 		
 		assert.equal(c.cpu.registers.A, 0);
-		assert.equal(c.cpu.flag_set(FlagType.Carry), false);
-		assert.equal(c.cpu.flag_set(FlagType.Parity),true);
-		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
-		assert.equal(c.cpu.flag_set(FlagType.Zero), true);
-		assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
+		assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
+		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), true);
+		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
 		assert.equal(c.cpu.clock, 18);
 		
@@ -32,7 +33,8 @@ describe('SUB Accumulator Flag', () => {
 		
 	it('Carry, Sign Flags Set', () => {
 		const c = new Computer();
-		const FlagType = i8080.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
+		
 		
 		const program = [
 		  0x3E,           // MVI into accumulator ...
@@ -45,11 +47,11 @@ describe('SUB Accumulator Flag', () => {
 		c.execute_program();
 		
 		assert.equal(c.cpu.registers.A, 0);
-		assert.equal(c.cpu.flag_set(FlagType.Carry), false);
-		assert.equal(c.cpu.flag_set(FlagType.Parity),true);
-		assert.equal(c.cpu.flag_set(FlagType.AuxillaryCarry), true);
-		assert.equal(c.cpu.flag_set(FlagType.Zero), true);
-		assert.equal(c.cpu.flag_set(FlagType.Sign), false);
+		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
+		assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
+		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), true);
+		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
 		assert.equal(c.cpu.clock, 18);
 		
