@@ -11,7 +11,7 @@ class Computer {
         this.bus = new Bus();
 
         // Connect the Bus to the CPU and vice versa
-        this.cpu.connect_bus(this.bus);
+        this.cpu.ConnectBus(this.bus);
         this.bus.connect_cpu(this.cpu);
 
         // Connect the bus to the MMU and vice versa
@@ -20,7 +20,7 @@ class Computer {
     }
 
     reset() {
-        this.cpu.reset();
+        this.cpu.Reset();
         this.mmu.reset();
     }
 

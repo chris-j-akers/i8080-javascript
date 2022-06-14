@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('INX', () => {
 	it('Increment Stack pointer 4 times from 65533', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		const program = [

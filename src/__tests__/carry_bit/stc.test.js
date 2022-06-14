@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('STC', () => {
 	it('STC when Carry unset', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		const program = [
@@ -13,13 +13,13 @@ describe('STC', () => {
 		  0x76           // HALT
 		]
 		
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		;
 		
 		  c.inject_program(program);
 		  c.execute_program();
 		
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		  assert.equal(c.cpu.clock, 11);
 		
 		  c.reset();
@@ -27,7 +27,7 @@ describe('STC', () => {
 		
 	it('STC when Carry set', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		const program = [
@@ -35,14 +35,14 @@ describe('STC', () => {
 		  0x76           // HALT
 		]
 		
-		  c.cpu.FlagManager.SetFlag(FlagType.Carry);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
+		  c.cpu._flag_manager.SetFlag(FlagType.Carry);
+		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		;
 		
 		  c.inject_program(program);
 		  c.execute_program();
 		
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		  assert.equal(c.cpu.clock, 11);
 		
 		  c.reset();

@@ -20,7 +20,7 @@ const opcode_lookup = {
 describe('ADC Register', () => {
 	it('No Flags Set (With Carry Unset)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -37,16 +37,16 @@ describe('ADC Register', () => {
 		    program[4] = opcode_lookup[reg].ADC;
 		
 		    c.inject_program(program);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
 		    c.execute_program();
 		
 		    assert.equal(c.cpu.registers.A, 1);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
 		    assert.equal(c.cpu.clock, 25);
 		
@@ -56,7 +56,7 @@ describe('ADC Register', () => {
 		
 	it('No Flags Set (With Carry Set)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -73,17 +73,17 @@ describe('ADC Register', () => {
 		    program[4] = opcode_lookup[reg].ADC;
 		
 		    c.inject_program(program);
-		    c.cpu.FlagManager.SetFlag(FlagType.Carry);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
+		    c.cpu._flag_manager.SetFlag(FlagType.Carry);
+		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
 		    c.execute_program();
 		
 		    assert.equal(c.cpu.registers.A, 2);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
 		    assert.equal(c.cpu.clock, 25);
 		
@@ -93,7 +93,7 @@ describe('ADC Register', () => {
 		
 	it('Set Parity and Zero Flags (With Carry Unset)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -110,16 +110,16 @@ describe('ADC Register', () => {
 		    program[4] = opcode_lookup[reg].ADC;
 		
 		    c.inject_program(program);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
 		    c.execute_program();
 		
 		    assert.equal(c.cpu.registers.A, 0);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
 		    assert.equal(c.cpu.clock, 25);
 		
@@ -129,7 +129,7 @@ describe('ADC Register', () => {
 		
 	it('Set Parity Flag (With Carry Unset)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -146,16 +146,16 @@ describe('ADC Register', () => {
 		    program[4] = opcode_lookup[reg].ADC;
 		
 		    c.inject_program(program);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
 		    c.execute_program();
 		
 		    assert.equal(c.cpu.registers.A, 85);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
 		    assert.equal(c.cpu.clock, 25);
 		
@@ -165,7 +165,7 @@ describe('ADC Register', () => {
 		
 	it('Set Parity Flag (With Carry Set)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -182,17 +182,17 @@ describe('ADC Register', () => {
 		    program[4] = opcode_lookup[reg].ADC;
 		
 		    c.inject_program(program);
-		    c.cpu.FlagManager.SetFlag(FlagType.Carry);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
+		    c.cpu._flag_manager.SetFlag(FlagType.Carry);
+		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
 		    c.execute_program();
 		
 		    assert.equal(c.cpu.registers.A, 85);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
 		    assert.equal(c.cpu.clock, 25);
 		
@@ -202,7 +202,7 @@ describe('ADC Register', () => {
 		
 	it('Set Aux Carry Flag (With Carry Unset)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -219,16 +219,16 @@ describe('ADC Register', () => {
 		    program[4] = opcode_lookup[reg].ADC;
 		
 		    c.inject_program(program);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
 		    c.execute_program();
 		
 		    assert.equal(c.cpu.registers.A, 16);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
 		    assert.equal(c.cpu.clock, 25);
 		
@@ -238,7 +238,7 @@ describe('ADC Register', () => {
 		
 	it('Set Aux Carry Flag (With Carry Set)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -255,17 +255,17 @@ describe('ADC Register', () => {
 		    program[4] = opcode_lookup[reg].ADC;
 		
 		    c.inject_program(program);
-		    c.cpu.FlagManager.SetFlag(FlagType.Carry);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
+		    c.cpu._flag_manager.SetFlag(FlagType.Carry);
+		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
 		    c.execute_program();
 		
 		    assert.equal(c.cpu.registers.A, 16);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
 		    assert.equal(c.cpu.clock, 25);
 		
@@ -275,7 +275,7 @@ describe('ADC Register', () => {
 		
 	it('Set Aux Carry and Sign Flag (With Carry Unset)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -292,16 +292,16 @@ describe('ADC Register', () => {
 		    program[4] = opcode_lookup[reg].ADC;
 		
 		    c.inject_program(program);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
 		    c.execute_program();
 		
 		    assert.equal(c.cpu.registers.A, 128);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		
 		    assert.equal(c.cpu.clock, 25);
 		
@@ -311,7 +311,7 @@ describe('ADC Register', () => {
 		
 	it('Set Sign Flag (With Carry Set)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -328,17 +328,17 @@ describe('ADC Register', () => {
 		    program[4] = opcode_lookup[reg].ADC;
 		
 		    c.inject_program(program);
-		    c.cpu.FlagManager.SetFlag(FlagType.Carry);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
+		    c.cpu._flag_manager.SetFlag(FlagType.Carry);
+		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
 		    c.execute_program();
 		
 		    assert.equal(c.cpu.registers.A, 128);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		
 		    assert.equal(c.cpu.clock, 25);
 		
@@ -348,7 +348,7 @@ describe('ADC Register', () => {
 		
 	it('Set Carry and Aux Carry Flag (With Carry Unset)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -365,16 +365,16 @@ describe('ADC Register', () => {
 		    program[4] = opcode_lookup[reg].ADC;
 		
 		    c.inject_program(program);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
 		    c.execute_program();
 		
 		    assert.equal(c.cpu.registers.A, 19);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
 		    assert.equal(c.cpu.clock, 25);
 		
@@ -384,7 +384,7 @@ describe('ADC Register', () => {
 		
 	it('Set Carry and Parity Flag (With Carry Set)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -401,17 +401,17 @@ describe('ADC Register', () => {
 		    program[4] = opcode_lookup[reg].ADC;
 		
 		    c.inject_program(program);
-		    c.cpu.FlagManager.SetFlag(FlagType.Carry);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
+		    c.cpu._flag_manager.SetFlag(FlagType.Carry);
+		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
 		    c.execute_program();
 		
 		    assert.equal(c.cpu.registers.A, 0);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
 		    assert.equal(c.cpu.clock, 25);
 		

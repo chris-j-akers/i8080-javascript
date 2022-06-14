@@ -15,7 +15,7 @@ const mvi_opcode_lookup = {
 describe('DCX', () => {
 	it('Decrement 5 times from 4 and confirm B/C register rolls to 65535 when decremented at 0', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		const program = [
@@ -53,7 +53,7 @@ describe('DCX', () => {
 		
 	it('Decrement 5 times from 65533 and confirm D/E register rolls to 65535 when decremented at 0', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		const program = [
@@ -91,7 +91,7 @@ describe('DCX', () => {
 		
 	it('Decrement 5 times from 65533 and confirm H/L register rolls to 65535 when decremented at 0', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		const program = [

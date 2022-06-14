@@ -20,7 +20,7 @@ const opcode_lookup = {
 describe('SBB Register', () => {
 	it('No Flags Set (Carry Bit Reset)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -37,16 +37,16 @@ describe('SBB Register', () => {
 		    program[4] = opcode_lookup[reg].SBB;
 		
 		    c.inject_program(program);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
 		    c.execute_program();
 		
 		    assert.equal(c.cpu.registers.A, 31);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
 		    assert.equal(c.cpu.clock, 25);
 		
@@ -56,7 +56,7 @@ describe('SBB Register', () => {
 		
 	it('No Flags Set (Carry Bit Set)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -73,17 +73,17 @@ describe('SBB Register', () => {
 		    program[4] = opcode_lookup[reg].SBB;
 		
 		    c.inject_program(program);
-		    c.cpu.FlagManager.SetFlag(FlagType.Carry);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
+		    c.cpu._flag_manager.SetFlag(FlagType.Carry);
+		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
 		    c.execute_program();
 		
 		    assert.equal(c.cpu.registers.A, 31);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
 		    assert.equal(c.cpu.clock, 25);
 		
@@ -93,7 +93,7 @@ describe('SBB Register', () => {
 		
 	it('Parity, Aux Carry and Zero Flags Set (Carry Bit Reset)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -110,16 +110,16 @@ describe('SBB Register', () => {
 		    program[4] = opcode_lookup[reg].SBB;
 		
 		    c.inject_program(program);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
 		    c.execute_program();
 		
 		    assert.equal(c.cpu.registers.A, 0);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
 		    assert.equal(c.cpu.clock, 25);
 		
@@ -129,7 +129,7 @@ describe('SBB Register', () => {
 		
 	it('Parity, Aux Carry and Zero Flags Set (Carry Bit Set)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -146,17 +146,17 @@ describe('SBB Register', () => {
 		    program[4] = opcode_lookup[reg].SBB;
 		
 		    c.inject_program(program);
-		    c.cpu.FlagManager.SetFlag(FlagType.Carry);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
+		    c.cpu._flag_manager.SetFlag(FlagType.Carry);
+		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
 		    c.execute_program();
 		
 		    assert.equal(c.cpu.registers.A, 0);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
 		    assert.equal(c.cpu.clock, 25);
 		
@@ -166,7 +166,7 @@ describe('SBB Register', () => {
 		
 	it('arity Flag Set (Carry Bit Reset)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -183,16 +183,16 @@ describe('SBB Register', () => {
 		    program[4] = opcode_lookup[reg].SBB;
 		
 		    c.inject_program(program);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
 		    c.execute_program();
 		
 		    assert.equal(c.cpu.registers.A, 30);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
 		    assert.equal(c.cpu.clock, 25);
 		
@@ -202,7 +202,7 @@ describe('SBB Register', () => {
 		
 	it('Parity Flag Set (Carry Bit Set)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -219,17 +219,17 @@ describe('SBB Register', () => {
 		    program[4] = opcode_lookup[reg].SBB;
 		
 		    c.inject_program(program);
-		    c.cpu.FlagManager.SetFlag(FlagType.Carry);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
+		    c.cpu._flag_manager.SetFlag(FlagType.Carry);
+		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
 		    c.execute_program();
 		
 		    assert.equal(c.cpu.registers.A, 30);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
 		    assert.equal(c.cpu.clock, 25);
 		
@@ -239,7 +239,7 @@ describe('SBB Register', () => {
 		
 	it('Aux Carry Set (Carry Bit Reset)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -256,16 +256,16 @@ describe('SBB Register', () => {
 		    program[4] = opcode_lookup[reg].SBB;
 		
 		    c.inject_program(program);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
 		    c.execute_program();
 		
 		    assert.equal(c.cpu.registers.A, 124);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
 		    assert.equal(c.cpu.clock, 25);
 		
@@ -275,7 +275,7 @@ describe('SBB Register', () => {
 		
 	it('Aux Carry Set (Carry Bit Set)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -292,17 +292,17 @@ describe('SBB Register', () => {
 		    program[4] = opcode_lookup[reg].SBB;
 		
 		    c.inject_program(program);
-		    c.cpu.FlagManager.SetFlag(FlagType.Carry);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
+		    c.cpu._flag_manager.SetFlag(FlagType.Carry);
+		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
 		    c.execute_program();
 		
 		    assert.equal(c.cpu.registers.A, 122);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
 		    assert.equal(c.cpu.clock, 25);
 		
@@ -312,7 +312,7 @@ describe('SBB Register', () => {
 		
 	it('Aux Carry and Sign Flag Set (Carry Bit Reset)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -329,16 +329,16 @@ describe('SBB Register', () => {
 		    program[4] = opcode_lookup[reg].SBB;
 		
 		    c.inject_program(program);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
 		    c.execute_program();
 		
 		    assert.equal(c.cpu.registers.A, 254);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		
 		    assert.equal(c.cpu.clock, 25);
 		
@@ -348,7 +348,7 @@ describe('SBB Register', () => {
 		
 	it('Aux Carry and Sign Flag Set (Carry Bit Set)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -365,17 +365,17 @@ describe('SBB Register', () => {
 		    program[4] = opcode_lookup[reg].SBB;
 		
 		    c.inject_program(program);
-		    c.cpu.FlagManager.SetFlag(FlagType.Carry);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
+		    c.cpu._flag_manager.SetFlag(FlagType.Carry);
+		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
 		    c.execute_program();
 		
 		    assert.equal(c.cpu.registers.A, 249);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		
 		    assert.equal(c.cpu.clock, 25);
 		
@@ -385,7 +385,7 @@ describe('SBB Register', () => {
 		
 	it('Carry and Sign Flag Set (Carry Bit Reset)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -402,16 +402,16 @@ describe('SBB Register', () => {
 		    program[4] = opcode_lookup[reg].SBB;
 		
 		    c.inject_program(program);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
 		    c.execute_program();
 		
 		    assert.equal(c.cpu.registers.A, 251);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		
 		    assert.equal(c.cpu.clock, 25);
 		
@@ -421,7 +421,7 @@ describe('SBB Register', () => {
 		
 	it('Carry and Sign Flag Set (Carry Bit Set)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -438,17 +438,17 @@ describe('SBB Register', () => {
 		    program[4] = opcode_lookup[reg].SBB;
 		
 		    c.inject_program(program);
-		    c.cpu.FlagManager.SetFlag(FlagType.Carry);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
+		    c.cpu._flag_manager.SetFlag(FlagType.Carry);
+		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
 		    c.execute_program();
 		
 		    assert.equal(c.cpu.registers.A, 251);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		
 		    assert.equal(c.cpu.clock, 25);
 		

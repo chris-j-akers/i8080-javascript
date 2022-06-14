@@ -14,7 +14,7 @@ const opcode_lookup = {
 describe('XRA Register', () => {
 	it('Reset Carry Flag', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -32,17 +32,17 @@ describe('XRA Register', () => {
 		  program[4] = opcode_lookup[reg].XRA;
 		
 		  c.inject_program(program);
-		  c.cpu.FlagManager.SetFlag(FlagType.Carry);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
+		  c.cpu._flag_manager.SetFlag(FlagType.Carry);
+		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A, 4);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
 		  assert.equal(c.cpu.clock, 25);
 		
@@ -52,7 +52,7 @@ describe('XRA Register', () => {
 		
 	it('Set Zero Flag', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -70,16 +70,16 @@ describe('XRA Register', () => {
 		  program[4] = opcode_lookup[reg].XRA;
 		
 		  c.inject_program(program);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A, 0);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), true);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),true);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
 		  assert.equal(c.cpu.clock, 25);
 		
@@ -89,7 +89,7 @@ describe('XRA Register', () => {
 		
 	it('Set Sign Flag', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -107,16 +107,16 @@ describe('XRA Register', () => {
 		  program[4] = opcode_lookup[reg].XRA;
 		
 		  c.inject_program(program);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A, 128);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), true);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		
 		  assert.equal(c.cpu.clock, 25);
 		
@@ -126,7 +126,7 @@ describe('XRA Register', () => {
 		
 	it('Set Parity Flag', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -144,16 +144,16 @@ describe('XRA Register', () => {
 		  program[4] = opcode_lookup[reg].XRA;
 		
 		  c.inject_program(program);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A, 5);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),true);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
 		  assert.equal(c.cpu.clock, 25);
 		

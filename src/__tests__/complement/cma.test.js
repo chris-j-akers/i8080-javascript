@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('CMA', () => {
 	it('0xFF becomes 0x00', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [
@@ -25,7 +25,7 @@ describe('CMA', () => {
 		
 	it('0x00 becomes 0xFF', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		let program = [

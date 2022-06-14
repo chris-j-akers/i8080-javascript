@@ -6,7 +6,7 @@ describe('SUB Memory', () => {
 	it('No Flags Set', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		const data = 1;
@@ -37,11 +37,11 @@ describe('SUB Memory', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A,31);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		  
 		  assert.equal(c.cpu.clock, 45);
 		  
@@ -52,7 +52,7 @@ describe('SUB Memory', () => {
 	it('Parity, Aux Carry and Zero Flags Set', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		const data = 1;
@@ -83,11 +83,11 @@ describe('SUB Memory', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A,0);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), true);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), true);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), true);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), true);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		  
 		  assert.equal(c.cpu.clock, 45);
 		  
@@ -98,7 +98,7 @@ describe('SUB Memory', () => {
 	it('Parity Flag Set', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		const data = 2;
@@ -129,11 +129,11 @@ describe('SUB Memory', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A,30);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), true);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), true);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		  
 		  assert.equal(c.cpu.clock, 45);
 		  
@@ -144,7 +144,7 @@ describe('SUB Memory', () => {
 	it('Aux Carry Flag Set', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		const data = 3;
@@ -175,11 +175,11 @@ describe('SUB Memory', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A,124);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), true);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		  
 		  assert.equal(c.cpu.clock, 45);
 		  
@@ -190,7 +190,7 @@ describe('SUB Memory', () => {
 	it('Sign Flag Set', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		const data = 1;
@@ -221,11 +221,11 @@ describe('SUB Memory', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A,254);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), true);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), true);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		  
 		  assert.equal(c.cpu.clock, 45);
 		  
@@ -236,7 +236,7 @@ describe('SUB Memory', () => {
 	it('Carry Flag Set', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		const data = 10;
@@ -267,11 +267,11 @@ describe('SUB Memory', () => {
 		  c.execute_program();
 		
 		  assert.equal(c.cpu.registers.A,251);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), true);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		  
 		  assert.equal(c.cpu.clock, 45);
 		  

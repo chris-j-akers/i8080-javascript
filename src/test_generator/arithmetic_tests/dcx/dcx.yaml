@@ -22,7 +22,7 @@ test_suite:
     });
   boilerplate: |
     const c = new Computer();
-    const FlagType = c.cpu.FlagManager.FlagType;
+    const FlagType = c.cpu._flag_manager.FlagType;
 
 
     const program = [

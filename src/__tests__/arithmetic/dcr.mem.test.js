@@ -6,7 +6,7 @@ describe('DCR Memory', () => {
 	it('No Flags Set', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		const data = 32;
@@ -27,19 +27,19 @@ describe('DCR Memory', () => {
 		  program[1] = (mem_addr >> 8) & 0xFF;
 		  program[3] = mem_addr & 0xFF;
 		
-		  carry_set = c.cpu.FlagManager.IsSet(FlagType.Carry);
+		  carry_set = c.cpu._flag_manager.IsSet(FlagType.Carry);
 		
 		  c.inject_program(program);
 		  c.execute_program();
 		
 		  // Here, we're just checking the carry flag hasn't been touched.
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), carry_set);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), carry_set);
 		
 		  assert.equal(c.bus.read(mem_addr),31);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		  
 		  assert.equal(c.cpu.clock, 41);
 		  
@@ -50,7 +50,7 @@ describe('DCR Memory', () => {
 	it('Parity, Aux Carry and Zero Flags Set', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		const data = 1;
@@ -71,19 +71,19 @@ describe('DCR Memory', () => {
 		  program[1] = (mem_addr >> 8) & 0xFF;
 		  program[3] = mem_addr & 0xFF;
 		
-		  carry_set = c.cpu.FlagManager.IsSet(FlagType.Carry);
+		  carry_set = c.cpu._flag_manager.IsSet(FlagType.Carry);
 		
 		  c.inject_program(program);
 		  c.execute_program();
 		
 		  // Here, we're just checking the carry flag hasn't been touched.
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), carry_set);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), carry_set);
 		
 		  assert.equal(c.bus.read(mem_addr),0);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), true);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), true);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), true);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), true);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		  
 		  assert.equal(c.cpu.clock, 41);
 		  
@@ -94,7 +94,7 @@ describe('DCR Memory', () => {
 	it('Parity and Auxillary Carry Flag Set', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		const data = 66;
@@ -115,19 +115,19 @@ describe('DCR Memory', () => {
 		  program[1] = (mem_addr >> 8) & 0xFF;
 		  program[3] = mem_addr & 0xFF;
 		
-		  carry_set = c.cpu.FlagManager.IsSet(FlagType.Carry);
+		  carry_set = c.cpu._flag_manager.IsSet(FlagType.Carry);
 		
 		  c.inject_program(program);
 		  c.execute_program();
 		
 		  // Here, we're just checking the carry flag hasn't been touched.
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), carry_set);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), carry_set);
 		
 		  assert.equal(c.bus.read(mem_addr),65);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), true);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), true);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), true);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		  
 		  assert.equal(c.cpu.clock, 41);
 		  
@@ -138,7 +138,7 @@ describe('DCR Memory', () => {
 	it('Aux Carry Flag Set', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		const data = 125;
@@ -159,19 +159,19 @@ describe('DCR Memory', () => {
 		  program[1] = (mem_addr >> 8) & 0xFF;
 		  program[3] = mem_addr & 0xFF;
 		
-		  carry_set = c.cpu.FlagManager.IsSet(FlagType.Carry);
+		  carry_set = c.cpu._flag_manager.IsSet(FlagType.Carry);
 		
 		  c.inject_program(program);
 		  c.execute_program();
 		
 		  // Here, we're just checking the carry flag hasn't been touched.
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), carry_set);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), carry_set);
 		
 		  assert.equal(c.bus.read(mem_addr),124);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), true);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		  
 		  assert.equal(c.cpu.clock, 41);
 		  
@@ -182,7 +182,7 @@ describe('DCR Memory', () => {
 	it('Sign Flag Set', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		
 		const data = 255;
@@ -203,19 +203,19 @@ describe('DCR Memory', () => {
 		  program[1] = (mem_addr >> 8) & 0xFF;
 		  program[3] = mem_addr & 0xFF;
 		
-		  carry_set = c.cpu.FlagManager.IsSet(FlagType.Carry);
+		  carry_set = c.cpu._flag_manager.IsSet(FlagType.Carry);
 		
 		  c.inject_program(program);
 		  c.execute_program();
 		
 		  // Here, we're just checking the carry flag hasn't been touched.
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), carry_set);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), carry_set);
 		
 		  assert.equal(c.bus.read(mem_addr),254);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), true);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), true);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		  
 		  assert.equal(c.cpu.clock, 41);
 		  
