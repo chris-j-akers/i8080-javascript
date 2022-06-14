@@ -1,0 +1,86 @@
+# Tests moving data from Memory locations to Register using MOV OpCode
+---
+test_suite:
+  enable: True
+  generator_function: pop_tests.generate_pop
+  description: 'POP (R)'
+  output_file_name: '/stack/pop.reg.test.js'
+  header: |
+    import { Computer } from '../../computer.js'
+    import { i8080 } from '../../i8080.js'
+    import { strict as assert } from 'assert'
+
+    const opcode_lookup = {
+        'B': {MVI: 0x06, PUSH: 0xC5, POP: 0xC1},
+        'C': {MVI: 0x0E, NOP: 0x00, NOP: 0x00},
+        'D': {MVI: 0x16, PUSH: 0xD5, POP: 0xD1},
+        'E': {MVI: 0x1E, NOP: 0x00, NOP: 0x00},
+        'H': {MVI: 0x26, PUSH: 0xE5, POP: 0xE1},
+        'L': {MVI: 0x2E, NOP: 0x00, NOP: 0x00}
+    };
+  footer: |
+    });
+  boilerplate: |
+    const c = new Computer();
+    const FlagType = c.cpu._flag_manager.FlagType;
+
+    let program = [
+        0x31,                                             // LXI into Stack pointer
+        0xFF,                                             // ...This low-byte and ...
+        0xFF,                                             // ...This high-byte (top of memory)
+        opcode_lookup['{register_high}'].MVI,             // MVI into first register...
+        0x8F,                                             // ...This byte
+        opcode_lookup['{register_low}'].MVI,              // MVI into second register...
+        0x9D,                                             // ...this byte
+        opcode_lookup['{register_high}'].PUSH,            // PUSH
+        opcode_lookup['{register_high}'].MVI,             // MVI into first register...
+        0x00,                                             // 0
+        opcode_lookup['{register_low}'].MVI,              // MVI into second register...
+        0x00,                                             // 0
+        0x76,                                             // HALT
+
+        // Part 2 (POP)
+
+        opcode_lookup['{register_high}'].POP,
+        0x76,
+
+      ]
+
+        c.InjectProgram(program);
+        c.ExecuteProgram();
+
+        assert.equal(c.cpu.registers['{register_high}'], 0);
+        assert.equal(c.cpu.registers['{register_low}'], 0);
+
+        assert.equal(c.bus.Read(0xFFFF-1), 0x8F);
+        assert.equal(c.bus.Read(0xFFFF-2), 0x9D);
+        assert.equal(c.cpu.stack_pointer, 0xFFFF-2);
+
+        c.cpu.halt = false;
+        c.ExecuteProgram(13);
+
+        assert.equal(c.cpu.registers['{register_high}'], 0x8f);
+        assert.equal(c.cpu.registers['{register_low}'], 0x9D);
+
+        assert.equal(c.cpu.Clock, 73);  
+
+        c.Reset();
+    }});
+  tests:
+
+    - test: 
+      name: Pop data into B & C from the Stack
+      register_high: B
+      register_low: C
+
+    - test: 
+      name: Pop data into D & E from the Stack
+      register_high: D
+      register_low: E
+
+    - test: 
+      name: Pop data into H & L from the Stack
+      register_high: H
+      register_low: L
+
+  

@@ -39,7 +39,8 @@ import carry_bit_tests.cmc.cmc_tests as cmc_tests
 import carry_bit_tests.stc.stc_tests as stc_tests
 import complement_tests.cma.cma_tests as cma_tests
 import compare_tests.cmp.cmp_tests as cmp_tests
-
+import stack_tests.push.push_tests as push_tests
+import stack_tests.pop.pop_tests as pop_tests
 
 
 def generate_test(test_suite, working_dir, populate_function):

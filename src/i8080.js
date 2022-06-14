@@ -151,7 +151,7 @@ class i8080 {
      * @param {character} The register which stores the low-byte of the address
      * @returns A 16-bit memory address.
      */
-    _get_mem_addr(reg_highbyte, reg_lowbyte) {
+    _get_register_pair_word(reg_highbyte, reg_lowbyte) {
         return ((this.registers[reg_highbyte] << 8) | this.registers[reg_lowbyte]) & 0xFFFF;
     }
 
@@ -168,7 +168,7 @@ class i8080 {
      * @param {character} reg_lowbyte  The register which will store the
      * low-byte of the address
      */
-    _store_mem_addr(addr, reg_highbyte, reg_lowbyte) {
+    _store_word_in_register_pair(addr, reg_highbyte, reg_lowbyte) {
         this.MVI_R(reg_highbyte,(addr >> 8) & 0xff);
         this.MVI_R(reg_lowbyte,addr & 0xff);
     }
@@ -388,7 +388,7 @@ class i8080 {
      * `L` to the Accumulator.
      */
     ADD_M() {
-        this.registers['A'] = this._add(this.registers['A'], this.bus.Read(this._get_mem_addr('H','L')));
+        this.registers['A'] = this._add(this.registers['A'], this.bus.Read(this._get_register_pair_word('H','L')));
         this.clock += 7;
     }
 
@@ -409,7 +409,7 @@ class i8080 {
      * `L` to the Accumulator, including the Carry bit, if set.
      */
     ADC_M() {
-        this.registers['A'] = this._add(this.registers['A'], this.bus.Read(this._get_mem_addr('H','L')), this._flag_manager.IsSet(this._flag_manager.FlagType.Carry) ? 1 : 0);
+        this.registers['A'] = this._add(this.registers['A'], this.bus.Read(this._get_register_pair_word('H','L')), this._flag_manager.IsSet(this._flag_manager.FlagType.Carry) ? 1 : 0);
         this.clock += 7;
     }
 
@@ -489,7 +489,7 @@ class i8080 {
      *
      */
     SUB_M() {      
-        this.registers['A'] = this.__sub(this.registers['A'], this.bus.Read(this._get_mem_addr('H','L')));
+        this.registers['A'] = this.__sub(this.registers['A'], this.bus.Read(this._get_register_pair_word('H','L')));
         this.clock += 7;
     }
 
@@ -511,7 +511,7 @@ class i8080 {
      * Accumulator.
      */
     SBB_M() {
-        this.registers['A'] = this.__sub(this.registers['A'], this.bus.Read(this._get_mem_addr('H','L')), this._flag_manager.IsSet(this._flag_manager.FlagType.Carry) ? 1 : 0);
+        this.registers['A'] = this.__sub(this.registers['A'], this.bus.Read(this._get_register_pair_word('H','L')), this._flag_manager.IsSet(this._flag_manager.FlagType.Carry) ? 1 : 0);
         this.clock += 7;
     }
 
@@ -560,8 +560,68 @@ class i8080 {
      * record the result anywhere.
      */
     CMP_M() {
-        const result = this.__sub(this.registers['A'], this.bus.Read(this._get_mem_addr('H','L')));
+        const result = this.__sub(this.registers['A'], this.bus.Read(this._get_register_pair_word('H','L')));
         this.clock += 7;
+    }
+
+
+    /*------------------------------------------------------------------------
+                         STACK POINTER INSTRUCTIONS                        
+    ------------------------------------------------------------------------*/
+
+
+    PUSH(high_byte_register) {
+        let low_byte_register;
+        switch(high_byte_register) {
+            case 'B':
+                low_byte_register = 'C';
+                break;
+            case 'D':
+                low_byte_register = 'E';
+                break;
+            case 'H':
+                low_byte_register = 'L';
+                break;
+            case 'PSW':
+                this.stack_pointer--;
+                this.bus.Write(this.registers['A'], this.stack_pointer);
+                this.stack_pointer--;
+                this.bus.Write(this.flags, this.stack_pointer);
+                this.clock += 11;
+                return;
+        }
+        this.stack_pointer--;
+        this.bus.Write(this.registers[high_byte_register], this.stack_pointer);
+        this.stack_pointer--;
+        this.bus.Write(this.registers[low_byte_register], this.stack_pointer);
+        this.clock += 11;
+    }
+
+    POP(high_byte_register) {
+        let low_byte_register;
+        switch(high_byte_register) {
+            case 'B':
+                low_byte_register = 'C';
+                break;
+            case 'D':
+                low_byte_register = 'E';
+                break;
+            case 'H':
+                low_byte_register = 'L';
+                break;
+            case 'PSW':
+                this.flags = this.bus.Read(this.stack_pointer);
+                this.stack_pointer++;
+                this.registers['A'] = this.bus.Read(this.stack_pointer);
+                this.stack_pointer++;
+                this.clock += 10;
+                return;
+        }
+        this.registers[low_byte_register] = this.bus.Read(this.stack_pointer);
+        this.stack_pointer++;
+        this.registers[high_byte_register] = this.bus.Read(this.stack_pointer);
+        this.stack_pointer++;
+        this.clock += 10;
     }
 
 
@@ -680,7 +740,7 @@ class i8080 {
      * @param {char} reg_source The name of the source register (A,B,C,D,E,H,L)
      */
     MOV_TO_MEM(reg_source) {
-        this.bus.Write(this.registers[reg_source], this._get_mem_addr('H', 'L'));
+        this.bus.Write(this.registers[reg_source], this._get_register_pair_word('H', 'L'));
         this.clock += 7
     }
 
@@ -692,7 +752,7 @@ class i8080 {
      * (A,B,C,D,E,H,L)
      */
     MOV_FROM_MEM(reg_destination) {
-        this.registers[reg_destination] = this.bus.Read(this._get_mem_addr('H', 'L'));
+        this.registers[reg_destination] = this.bus.Read(this._get_register_pair_word('H', 'L'));
         this.clock += 7
     }
 
@@ -715,7 +775,7 @@ class i8080 {
      * @param {number} val The 8-bit immediate value to store
      */
     MVI_TO_MEM(val) {
-        const addr = this._get_mem_addr('H', 'L');
+        const addr = this._get_register_pair_word('H', 'L');
         this.bus.Write(val, addr);
         this.clock += 10;
     }
@@ -754,7 +814,7 @@ class i8080 {
      * registers.
      */
     ANA_M() {
-        const raw_result = this.registers['A'] & this.bus.Read(this._get_mem_addr('H','L'));
+        const raw_result = this.registers['A'] & this.bus.Read(this._get_register_pair_word('H','L'));
         this._set_flags_on_logical_op(raw_result);
         this.registers['A'] = raw_result & 0xFF;
         this.clock += 7;
@@ -792,7 +852,7 @@ class i8080 {
      * register-pair HL.
      */
     XRA_M() {
-        const raw_result = this.registers['A'] ^ this.bus.Read(this._get_mem_addr('H', 'L'));
+        const raw_result = this.registers['A'] ^ this.bus.Read(this._get_register_pair_word('H', 'L'));
         this._set_flags_on_logical_op(raw_result);
         this.registers['A'] = raw_result & 0xFF;
         this.clock += 7;
@@ -813,7 +873,7 @@ class i8080 {
     }
 
     ORA_M() {
-        const raw_result = this.registers['A'] | this.bus.Read(this._get_mem_addr('H','L'));
+        const raw_result = this.registers['A'] | this.bus.Read(this._get_register_pair_word('H','L'));
         this._set_flags_on_logical_op(raw_result);
         this.registers['A'] = raw_result & 0xFF;
         this.clock += 7;
@@ -837,10 +897,10 @@ class i8080 {
         let addr;
         switch(reg) {
             case 'B':
-                addr = this._get_mem_addr('B','C');
+                addr = this._get_register_pair_word('B','C');
                 break;
             case 'D':
-                addr = this._get_mem_addr('D','E');
+                addr = this._get_register_pair_word('D','E');
                 break;
         }
         this.bus.Write(this.registers['A'], addr);
@@ -984,7 +1044,7 @@ class i8080 {
      * Flags affected: P, Z, AC, S.
      */
     INR_M() {
-        const addr = this._get_mem_addr('H','L');
+        const addr = this._get_register_pair_word('H','L');
 
         const lhs = this.bus.Read(addr);
         const rhs = 1;
@@ -1033,7 +1093,7 @@ class i8080 {
      * Flags affected: P, Z, AC, S.
      */
     DCR_M() {
-        const addr = this._get_mem_addr('H','L');
+        const addr = this._get_register_pair_word('H','L');
         const lhs = this.bus.Read(addr);
 
         // 0xFF is the 8-bit two's complement of 1.
@@ -1235,6 +1295,27 @@ class i8080 {
             case 0x38:
             case 0x30:
                 this.NOP();
+                break;
+            case 0xC1:
+                this.POP('B');
+                break;
+            case 0xD1:
+                this.POP('D');
+                break;
+            case 0xE1:
+                this.POP('H');
+                break;
+            case 0xC5:
+                this.PUSH('B');
+                break;
+            case 0xD5:
+                this.PUSH('D');
+                break;
+            case 0xE5:
+                this.PUSH('H');
+                break;
+            case 0xF5:
+                this.PUSH('PSW');
                 break;
             case 0xB8:
                 this.CMP_R('B');
