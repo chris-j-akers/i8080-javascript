@@ -16,8 +16,8 @@ describe('ADI', () => {
 		  0x76            // Halt
 		]
 		
-		c.inject_program(program);
-		c.execute_program();
+		c.InjectProgram(program);
+		c.ExecuteProgram();
 		
 		assert.equal(c.cpu.registers.A,1);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -26,7 +26,7 @@ describe('ADI', () => {
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c.cpu.clock, 21);
+		assert.equal(c.cpu.Clock, 21);
 		
 		});
 		
@@ -43,8 +43,8 @@ describe('ADI', () => {
 		  0x76            // Halt
 		]
 		
-		c.inject_program(program);
-		c.execute_program();
+		c.InjectProgram(program);
+		c.ExecuteProgram();
 		
 		assert.equal(c.cpu.registers.A,0);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -53,7 +53,7 @@ describe('ADI', () => {
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c.cpu.clock, 21);
+		assert.equal(c.cpu.Clock, 21);
 		
 		});
 		
@@ -70,8 +70,8 @@ describe('ADI', () => {
 		  0x76            // Halt
 		]
 		
-		c.inject_program(program);
-		c.execute_program();
+		c.InjectProgram(program);
+		c.ExecuteProgram();
 		
 		assert.equal(c.cpu.registers.A,85);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -80,7 +80,7 @@ describe('ADI', () => {
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c.cpu.clock, 21);
+		assert.equal(c.cpu.Clock, 21);
 		
 		});
 		
@@ -97,8 +97,8 @@ describe('ADI', () => {
 		  0x76            // Halt
 		]
 		
-		c.inject_program(program);
-		c.execute_program();
+		c.InjectProgram(program);
+		c.ExecuteProgram();
 		
 		assert.equal(c.cpu.registers.A,30);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -107,7 +107,7 @@ describe('ADI', () => {
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c.cpu.clock, 21);
+		assert.equal(c.cpu.Clock, 21);
 		
 		});
 		
@@ -124,8 +124,8 @@ describe('ADI', () => {
 		  0x76            // Halt
 		]
 		
-		c.inject_program(program);
-		c.execute_program();
+		c.InjectProgram(program);
+		c.ExecuteProgram();
 		
 		assert.equal(c.cpu.registers.A,176);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -134,7 +134,7 @@ describe('ADI', () => {
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		
-		assert.equal(c.cpu.clock, 21);
+		assert.equal(c.cpu.Clock, 21);
 		
 		});
 		
@@ -151,8 +151,8 @@ describe('ADI', () => {
 		  0x76            // Halt
 		]
 		
-		c.inject_program(program);
-		c.execute_program();
+		c.InjectProgram(program);
+		c.ExecuteProgram();
 		
 		assert.equal(c.cpu.registers.A,2);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
@@ -161,7 +161,7 @@ describe('ADI', () => {
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c.cpu.clock, 21);
+		assert.equal(c.cpu.Clock, 21);
 		
 		});
 		

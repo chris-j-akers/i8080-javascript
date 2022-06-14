@@ -48,8 +48,8 @@ describe('ADD OpCode Tests (0x80, 0x81, 0x82, 0x83, 0x84, 0x85) With Unset All F
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A, 1);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -58,9 +58,9 @@ describe('ADD OpCode Tests (0x80, 0x81, 0x82, 0x83, 0x84, 0x85) With Unset All F
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c.cpu.clock, 25);
+		  assert.equal(c.cpu.Clock, 25);
 		
-		  c.reset();
+		  c.Reset();
 		}
 		});
 		

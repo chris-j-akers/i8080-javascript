@@ -17,14 +17,14 @@ describe('CMC', () => {
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
-		  assert.equal(c.cpu.clock, 11);
+		  assert.equal(c.cpu.Clock, 11);
 		
-		  c.reset();
+		  c.Reset();
 		});
 		
 	it('CMC when carry unset (should become set)', () => {
@@ -40,14 +40,14 @@ describe('CMC', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
-		  assert.equal(c.cpu.clock, 11);
+		  assert.equal(c.cpu.Clock, 11);
 		
-		  c.reset();
+		  c.Reset();
 		});
 		
 });

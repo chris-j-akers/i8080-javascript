@@ -21,15 +21,15 @@ describe('SHLD', () => {
 		  program[5] = mem_addr & 0xFF;
 		  program[6] = (mem_addr >> 8) & 0xFF;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
-		  assert.equal(c.bus.read(mem_addr), 0x71);
-		  assert.equal(c.bus.read(mem_addr + 1), 0xE);
+		  assert.equal(c.bus.Read(mem_addr), 0x71);
+		  assert.equal(c.bus.Read(mem_addr + 1), 0xE);
 		
-		  assert.equal(c.cpu.clock, 37);
+		  assert.equal(c.cpu.Clock, 37);
 		
-		  c.reset();
+		  c.Reset();
 		}
 		});
 		

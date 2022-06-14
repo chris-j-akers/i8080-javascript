@@ -24,15 +24,15 @@ test_suite:
       program[1] = word & 0xFF;
       program[2] = (word >> 8) & 0xFF;
 
-      c.inject_program(program);
-      c.execute_program();
+      c.InjectProgram(program);
+      c.ExecuteProgram();
 
       assert.equal(c.cpu.registers.{msb_register}, (word >> 8) & 0xFF);
       assert.equal(c.cpu.registers.{lsb_register}, word & 0xFF);
       assert.equal(word, (c.cpu.registers.{msb_register} << 8) | c.cpu.registers.{lsb_register});
       
-      assert.equal(c.cpu.clock, 17);
-      c.reset();
+      assert.equal(c.cpu.Clock, 17);
+      c.Reset();
 
     }}
     }});

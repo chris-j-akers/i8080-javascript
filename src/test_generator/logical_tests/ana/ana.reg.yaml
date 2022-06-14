@@ -39,9 +39,9 @@ test_suite:
       program[2] = opcode_lookup[reg].MVI;
       program[4] = opcode_lookup[reg].ANA;
 
-      c.inject_program(program);
+      c.InjectProgram(program);
       {set_carry}
-      c.execute_program();
+      c.ExecuteProgram();
 
       assert.equal(c.cpu.registers.A, {expected_result});
       assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), {carry});
@@ -50,9 +50,9 @@ test_suite:
       assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), {zero});
       assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), {sign});
 
-      assert.equal(c.cpu.clock, 25);
+      assert.equal(c.cpu.Clock, 25);
 
-      c.reset();
+      c.Reset();
       }}
     }});
 

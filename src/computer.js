@@ -12,25 +12,25 @@ class Computer {
 
         // Connect the Bus to the CPU and vice versa
         this.cpu.ConnectBus(this.bus);
-        this.bus.connect_cpu(this.cpu);
+        this.bus.ConnectCPU(this.cpu);
 
         // Connect the bus to the MMU and vice versa
-        this.mmu.connect_bus(this.bus);
-        this.bus.connect_mmu(this.mmu);
+        this.mmu.ConnectBus(this.bus);
+        this.bus.ConnectMMU(this.mmu);
     }
 
-    reset() {
+    Reset() {
         this.cpu.Reset();
-        this.mmu.reset();
+        this.mmu.Reset();
     }
 
-    inject_program(program, at_addr=0x0) {
+    InjectProgram(program, at_addr=0x0) {
         for (let i=0; i<program.length; i++) {
-            this.bus.write(program[i], at_addr + i);
+            this.bus.Write(program[i], at_addr + i);
         }
     }
 
-    execute_program(from_addr=0x0) {
+    ExecuteProgram(from_addr=0x0) {
         this.cpu.ProgramCounter = from_addr;
         while(this.cpu.halt === false) {
             this.cpu.execute_next_instruction();

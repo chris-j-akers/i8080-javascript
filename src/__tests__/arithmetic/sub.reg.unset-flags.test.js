@@ -48,8 +48,8 @@ describe('SUB Register (Unset All Flags)', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A, 31);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -58,9 +58,9 @@ describe('SUB Register (Unset All Flags)', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c.cpu.clock, 25);
+		  assert.equal(c.cpu.Clock, 25);
 		
-		  c.reset();
+		  c.Reset();
 		};
 		});
 		

@@ -34,27 +34,27 @@ test_suite:
       0x76                                        // HALT
     ]
 
-    c.inject_program(program);
-    c.execute_program();
+    c.InjectProgram(program);
+    c.ExecuteProgram();
     assert.equal((c.cpu.registers.{register_high_byte} << 8) | c.cpu.registers.{register_low_byte}, 3);
 
     c.cpu.halt = false;
-    c.execute_program(0x04);
+    c.ExecuteProgram(0x04);
     assert.equal((c.cpu.registers.{register_high_byte}  << 8) | c.cpu.registers.{register_low_byte}, 2);
 
     c.cpu.halt = false;
-    c.execute_program(0x04);
+    c.ExecuteProgram(0x04);
     assert.equal((c.cpu.registers.{register_high_byte}  << 8) | c.cpu.registers.{register_low_byte}, 1);
 
     c.cpu.halt = false;
-    c.execute_program(0x04);
+    c.ExecuteProgram(0x04);
     assert.equal((c.cpu.registers.{register_high_byte}  << 8) | c.cpu.registers.{register_low_byte}, 0);
 
     c.cpu.halt = false;
-    c.execute_program(0x04);
+    c.ExecuteProgram(0x04);
     assert.equal((c.cpu.registers.{register_high_byte}  << 8) | c.cpu.registers.{register_low_byte}, 65535);
     
-    assert.equal(c.cpu.clock, 74);
+    assert.equal(c.cpu.Clock, 74);
 
     }});
 

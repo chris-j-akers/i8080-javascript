@@ -40,9 +40,9 @@ test_suite:
       program[3] = (mem_addr >> 8) & 0xFF;
       program[5] = mem_addr & 0xFF;
 
-      c.inject_program(program);
+      c.InjectProgram(program);
       {set_carry}
-      c.execute_program();
+      c.ExecuteProgram();
 
       assert.equal(c.cpu.registers.A,{expected_result});
       assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), {carry});
@@ -51,9 +51,9 @@ test_suite:
       assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), {zero});
       assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), {sign});
 
-      assert.equal(c.cpu.clock, 45);
+      assert.equal(c.cpu.Clock, 45);
 
-      c.reset();
+      c.Reset();
       }}
     }});
 

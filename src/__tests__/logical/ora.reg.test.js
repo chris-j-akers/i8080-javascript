@@ -31,11 +31,11 @@ describe('ORA Register', () => {
 		  program[2] = opcode_lookup[reg].MVI;
 		  program[4] = opcode_lookup[reg].ORA;
 		
-		  c.inject_program(program);
+		  c.InjectProgram(program);
 		  c.cpu._flag_manager.SetFlag(FlagType.Carry);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
-		  c.execute_program();
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A, 5);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -44,9 +44,9 @@ describe('ORA Register', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c.cpu.clock, 25);
+		  assert.equal(c.cpu.Clock, 25);
 		
-		  c.reset();
+		  c.Reset();
 		  }
 		});
 		
@@ -69,10 +69,10 @@ describe('ORA Register', () => {
 		  program[2] = opcode_lookup[reg].MVI;
 		  program[4] = opcode_lookup[reg].ORA;
 		
-		  c.inject_program(program);
+		  c.InjectProgram(program);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
-		  c.execute_program();
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A, 0);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -81,9 +81,9 @@ describe('ORA Register', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c.cpu.clock, 25);
+		  assert.equal(c.cpu.Clock, 25);
 		
-		  c.reset();
+		  c.Reset();
 		  }
 		});
 		
@@ -106,10 +106,10 @@ describe('ORA Register', () => {
 		  program[2] = opcode_lookup[reg].MVI;
 		  program[4] = opcode_lookup[reg].ORA;
 		
-		  c.inject_program(program);
+		  c.InjectProgram(program);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
-		  c.execute_program();
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A, 255);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -118,9 +118,9 @@ describe('ORA Register', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		
-		  assert.equal(c.cpu.clock, 25);
+		  assert.equal(c.cpu.Clock, 25);
 		
-		  c.reset();
+		  c.Reset();
 		  }
 		});
 		
@@ -143,10 +143,10 @@ describe('ORA Register', () => {
 		  program[2] = opcode_lookup[reg].MVI;
 		  program[4] = opcode_lookup[reg].ORA;
 		
-		  c.inject_program(program);
+		  c.InjectProgram(program);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
-		  c.execute_program();
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A, 85);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -155,9 +155,9 @@ describe('ORA Register', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c.cpu.clock, 25);
+		  assert.equal(c.cpu.Clock, 25);
 		
-		  c.reset();
+		  c.Reset();
 		  }
 		});
 		

@@ -22,13 +22,13 @@ describe('MOV Memory to Register', () => {
 		  program[1] = (mem_addr >> 8) & 0xff;
 		  program[3] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.clock, 38);
+		  assert.equal(c.cpu.Clock, 38);
 		
-		  assert.equal(c.bus.read(mem_addr), c.cpu.registers.B);
-		  c.reset();
+		  assert.equal(c.bus.Read(mem_addr), c.cpu.registers.B);
+		  c.Reset();
 		}
 		});
 		
@@ -52,13 +52,13 @@ describe('MOV Memory to Register', () => {
 		  program[1] = (mem_addr >> 8) & 0xff;
 		  program[3] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.clock, 38);
+		  assert.equal(c.cpu.Clock, 38);
 		
-		  assert.equal(c.bus.read(mem_addr), c.cpu.registers.C);
-		  c.reset();
+		  assert.equal(c.bus.Read(mem_addr), c.cpu.registers.C);
+		  c.Reset();
 		}
 		});
 		
@@ -82,13 +82,13 @@ describe('MOV Memory to Register', () => {
 		  program[1] = (mem_addr >> 8) & 0xff;
 		  program[3] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.clock, 38);
+		  assert.equal(c.cpu.Clock, 38);
 		
-		  assert.equal(c.bus.read(mem_addr), c.cpu.registers.D);
-		  c.reset();
+		  assert.equal(c.bus.Read(mem_addr), c.cpu.registers.D);
+		  c.Reset();
 		}
 		});
 		
@@ -112,13 +112,13 @@ describe('MOV Memory to Register', () => {
 		  program[1] = (mem_addr >> 8) & 0xff;
 		  program[3] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.clock, 38);
+		  assert.equal(c.cpu.Clock, 38);
 		
-		  assert.equal(c.bus.read(mem_addr), c.cpu.registers.E);
-		  c.reset();
+		  assert.equal(c.bus.Read(mem_addr), c.cpu.registers.E);
+		  c.Reset();
 		}
 		});
 		
@@ -142,13 +142,13 @@ describe('MOV Memory to Register', () => {
 		  program[1] = (mem_addr >> 8) & 0xff;
 		  program[3] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.clock, 38);
+		  assert.equal(c.cpu.Clock, 38);
 		
-		  assert.equal(c.bus.read(mem_addr), c.cpu.registers.H);
-		  c.reset();
+		  assert.equal(c.bus.Read(mem_addr), c.cpu.registers.H);
+		  c.Reset();
 		}
 		});
 		
@@ -172,13 +172,13 @@ describe('MOV Memory to Register', () => {
 		  program[1] = (mem_addr >> 8) & 0xff;
 		  program[3] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.clock, 38);
+		  assert.equal(c.cpu.Clock, 38);
 		
-		  assert.equal(c.bus.read(mem_addr), c.cpu.registers.L);
-		  c.reset();
+		  assert.equal(c.bus.Read(mem_addr), c.cpu.registers.L);
+		  c.Reset();
 		}
 		});
 		
@@ -202,13 +202,13 @@ describe('MOV Memory to Register', () => {
 		  program[1] = (mem_addr >> 8) & 0xff;
 		  program[3] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.clock, 38);
+		  assert.equal(c.cpu.Clock, 38);
 		
-		  assert.equal(c.bus.read(mem_addr), c.cpu.registers.A);
-		  c.reset();
+		  assert.equal(c.bus.Read(mem_addr), c.cpu.registers.A);
+		  c.Reset();
 		}
 		});
 		

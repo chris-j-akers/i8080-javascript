@@ -33,8 +33,8 @@ describe('ADD Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A,1);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -43,9 +43,9 @@ describe('ADD Memory', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		  
-		  assert.equal(c.cpu.clock, 45);
+		  assert.equal(c.cpu.Clock, 45);
 		  
-		  c.reset();
+		  c.Reset();
 		  }
 		});
 		
@@ -79,8 +79,8 @@ describe('ADD Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A,0);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -89,9 +89,9 @@ describe('ADD Memory', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		  
-		  assert.equal(c.cpu.clock, 45);
+		  assert.equal(c.cpu.Clock, 45);
 		  
-		  c.reset();
+		  c.Reset();
 		  }
 		});
 		
@@ -125,8 +125,8 @@ describe('ADD Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A,85);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -135,9 +135,9 @@ describe('ADD Memory', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		  
-		  assert.equal(c.cpu.clock, 45);
+		  assert.equal(c.cpu.Clock, 45);
 		  
-		  c.reset();
+		  c.Reset();
 		  }
 		});
 		
@@ -171,8 +171,8 @@ describe('ADD Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A,16);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -181,9 +181,9 @@ describe('ADD Memory', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		  
-		  assert.equal(c.cpu.clock, 45);
+		  assert.equal(c.cpu.Clock, 45);
 		  
-		  c.reset();
+		  c.Reset();
 		  }
 		});
 		
@@ -217,8 +217,8 @@ describe('ADD Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A,128);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -227,9 +227,9 @@ describe('ADD Memory', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		  
-		  assert.equal(c.cpu.clock, 45);
+		  assert.equal(c.cpu.Clock, 45);
 		  
-		  c.reset();
+		  c.Reset();
 		  }
 		});
 		
@@ -263,8 +263,8 @@ describe('ADD Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A,19);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
@@ -273,9 +273,9 @@ describe('ADD Memory', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		  
-		  assert.equal(c.cpu.clock, 45);
+		  assert.equal(c.cpu.Clock, 45);
 		  
-		  c.reset();
+		  c.Reset();
 		  }
 		});
 		

@@ -15,10 +15,10 @@ describe('ADC Accumulator', () => {
 		  0x76            // Halt
 		]
 		
-		c.inject_program(program);
+		c.InjectProgram(program);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
-		c.execute_program();
+		c.ExecuteProgram();
 		
 		assert.equal(c.cpu.registers.A, 4);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -27,9 +27,9 @@ describe('ADC Accumulator', () => {
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c.cpu.clock, 18);
+		assert.equal(c.cpu.Clock, 18);
 		
-		c.reset();
+		c.Reset();
 		});
 		
 	it('Set Parity and Zero Flag (With Carry Unset)', () => {
@@ -44,10 +44,10 @@ describe('ADC Accumulator', () => {
 		  0x76            // Halt
 		]
 		
-		c.inject_program(program);
+		c.InjectProgram(program);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
-		c.execute_program();
+		c.ExecuteProgram();
 		
 		assert.equal(c.cpu.registers.A, 0);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -56,9 +56,9 @@ describe('ADC Accumulator', () => {
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c.cpu.clock, 18);
+		assert.equal(c.cpu.Clock, 18);
 		
-		c.reset();
+		c.Reset();
 		});
 		
 	it('Set Parity and Zero Flag (With Carry Unset)', () => {
@@ -73,10 +73,10 @@ describe('ADC Accumulator', () => {
 		  0x76            // Halt
 		]
 		
-		c.inject_program(program);
+		c.InjectProgram(program);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
-		c.execute_program();
+		c.ExecuteProgram();
 		
 		assert.equal(c.cpu.registers.A, 0);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -85,9 +85,9 @@ describe('ADC Accumulator', () => {
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c.cpu.clock, 18);
+		assert.equal(c.cpu.Clock, 18);
 		
-		c.reset();
+		c.Reset();
 		});
 		
 	it('Set Parity (With Carry Set)', () => {
@@ -102,11 +102,11 @@ describe('ADC Accumulator', () => {
 		  0x76            // Halt
 		]
 		
-		c.inject_program(program);
+		c.InjectProgram(program);
 		c.cpu._flag_manager.SetFlag(FlagType.Carry);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
-		c.execute_program();
+		c.ExecuteProgram();
 		
 		assert.equal(c.cpu.registers.A, 15);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -115,9 +115,9 @@ describe('ADC Accumulator', () => {
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c.cpu.clock, 18);
+		assert.equal(c.cpu.Clock, 18);
 		
-		c.reset();
+		c.Reset();
 		});
 		
 	it('Set Parity and Aux Carry Flags (With Carry Unset)', () => {
@@ -132,10 +132,10 @@ describe('ADC Accumulator', () => {
 		  0x76            // Halt
 		]
 		
-		c.inject_program(program);
+		c.InjectProgram(program);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
-		c.execute_program();
+		c.ExecuteProgram();
 		
 		assert.equal(c.cpu.registers.A, 18);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -144,9 +144,9 @@ describe('ADC Accumulator', () => {
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c.cpu.clock, 18);
+		assert.equal(c.cpu.Clock, 18);
 		
-		c.reset();
+		c.Reset();
 		});
 		
 	it('Set Parity and Aux Carry Flags (With Carry Set)', () => {
@@ -161,11 +161,11 @@ describe('ADC Accumulator', () => {
 		  0x76            // Halt
 		]
 		
-		c.inject_program(program);
+		c.InjectProgram(program);
 		c.cpu._flag_manager.SetFlag(FlagType.Carry);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
-		c.execute_program();
+		c.ExecuteProgram();
 		
 		assert.equal(c.cpu.registers.A, 17);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -174,9 +174,9 @@ describe('ADC Accumulator', () => {
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c.cpu.clock, 18);
+		assert.equal(c.cpu.Clock, 18);
 		
-		c.reset();
+		c.Reset();
 		});
 		
 	it('Set Parity, Aux Carry and Sign Flags (With Carry Unset)', () => {
@@ -191,10 +191,10 @@ describe('ADC Accumulator', () => {
 		  0x76            // Halt
 		]
 		
-		c.inject_program(program);
+		c.InjectProgram(program);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
-		c.execute_program();
+		c.ExecuteProgram();
 		
 		assert.equal(c.cpu.registers.A, 178);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -203,9 +203,9 @@ describe('ADC Accumulator', () => {
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		
-		assert.equal(c.cpu.clock, 18);
+		assert.equal(c.cpu.Clock, 18);
 		
-		c.reset();
+		c.Reset();
 		});
 		
 	it('Set Parity, Aux Carry and Sign Flags (With Carry Set)', () => {
@@ -220,11 +220,11 @@ describe('ADC Accumulator', () => {
 		  0x76            // Halt
 		]
 		
-		c.inject_program(program);
+		c.InjectProgram(program);
 		c.cpu._flag_manager.SetFlag(FlagType.Carry);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
-		c.execute_program();
+		c.ExecuteProgram();
 		
 		assert.equal(c.cpu.registers.A, 177);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -233,9 +233,9 @@ describe('ADC Accumulator', () => {
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		
-		assert.equal(c.cpu.clock, 18);
+		assert.equal(c.cpu.Clock, 18);
 		
-		c.reset();
+		c.Reset();
 		});
 		
 	it('Set Carry, Parity and Sign Flags (With Carry Unset)', () => {
@@ -250,10 +250,10 @@ describe('ADC Accumulator', () => {
 		  0x76            // Halt
 		]
 		
-		c.inject_program(program);
+		c.InjectProgram(program);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
-		c.execute_program();
+		c.ExecuteProgram();
 		
 		assert.equal(c.cpu.registers.A, 226);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
@@ -262,9 +262,9 @@ describe('ADC Accumulator', () => {
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		
-		assert.equal(c.cpu.clock, 18);
+		assert.equal(c.cpu.Clock, 18);
 		
-		c.reset();
+		c.Reset();
 		});
 		
 	it('Set Carry, Parity and Sign Flags (With Carry Set)', () => {
@@ -279,11 +279,11 @@ describe('ADC Accumulator', () => {
 		  0x76            // Halt
 		]
 		
-		c.inject_program(program);
+		c.InjectProgram(program);
 		c.cpu._flag_manager.SetFlag(FlagType.Carry);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
-		c.execute_program();
+		c.ExecuteProgram();
 		
 		assert.equal(c.cpu.registers.A, 225);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
@@ -292,9 +292,9 @@ describe('ADC Accumulator', () => {
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		
-		assert.equal(c.cpu.clock, 18);
+		assert.equal(c.cpu.Clock, 18);
 		
-		c.reset();
+		c.Reset();
 		});
 		
 });

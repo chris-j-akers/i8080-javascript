@@ -26,9 +26,9 @@ describe('DAD SP', () => {
 		  0x76           // HALT
 		]
 		
-		  c.inject_program(program);
+		  c.InjectProgram(program);
 		  c.cpu.stack_pointer = 30000;
-		  c.execute_program();
+		  c.ExecuteProgram();
 		
 		  assert.equal((c.cpu.registers['H'] << 8 | c.cpu.registers['L']) & 0xFFFF, 60000)
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false)
@@ -38,9 +38,9 @@ describe('DAD SP', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c.cpu.clock, 31);
+		  assert.equal(c.cpu.Clock, 31);
 		  
-		  c.reset();
+		  c.Reset();
 		});
 		
 	it('Carry unset and set', () => {
@@ -57,9 +57,9 @@ describe('DAD SP', () => {
 		  0x76           // HALT
 		]
 		
-		  c.inject_program(program);
+		  c.InjectProgram(program);
 		  c.cpu.stack_pointer = 1;
-		  c.execute_program();
+		  c.ExecuteProgram();
 		
 		  assert.equal((c.cpu.registers['H'] << 8 | c.cpu.registers['L']) & 0xFFFF, 0)
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true)
@@ -69,9 +69,9 @@ describe('DAD SP', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c.cpu.clock, 31);
+		  assert.equal(c.cpu.Clock, 31);
 		  
-		  c.reset();
+		  c.Reset();
 		});
 		
 	it('Carry set then unset', () => {
@@ -88,9 +88,9 @@ describe('DAD SP', () => {
 		  0x76           // HALT
 		]
 		
-		  c.inject_program(program);
+		  c.InjectProgram(program);
 		  c.cpu.stack_pointer = 16385;
-		  c.execute_program();
+		  c.ExecuteProgram();
 		
 		  assert.equal((c.cpu.registers['H'] << 8 | c.cpu.registers['L']) & 0xFFFF, 32770)
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false)
@@ -100,9 +100,9 @@ describe('DAD SP', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c.cpu.clock, 31);
+		  assert.equal(c.cpu.Clock, 31);
 		  
-		  c.reset();
+		  c.Reset();
 		});
 		
 });

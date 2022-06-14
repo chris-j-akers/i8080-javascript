@@ -16,27 +16,27 @@ describe('DCX', () => {
 		  0x76,       // HALT
 		]
 		
-		c.inject_program(program);
-		c.execute_program();
+		c.InjectProgram(program);
+		c.ExecuteProgram();
 		assert.equal(c.cpu.stack_pointer, 3);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x03);
+		c.ExecuteProgram(0x03);
 		assert.equal(c.cpu.stack_pointer, 2);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x03);
+		c.ExecuteProgram(0x03);
 		assert.equal(c.cpu.stack_pointer, 1);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x03);
+		c.ExecuteProgram(0x03);
 		assert.equal(c.cpu.stack_pointer, 0);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x03);
+		c.ExecuteProgram(0x03);
 		assert.equal(c.cpu.stack_pointer, 65535);
 		
-		assert.equal(c.cpu.clock, 70);
+		assert.equal(c.cpu.Clock, 70);
 		
 		});
 		

@@ -45,12 +45,12 @@ describe('LDAX', () => {
 		  program[9] = mem_addr & 0xFF;
 		  program[10] = opcode_lookup['B'].LDAX;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
-		  assert.equal(c.bus.read(mem_addr), c.cpu.registers['A']);
-		  assert.equal(c.cpu.clock, 52)
-		  c.reset();
+		  assert.equal(c.bus.Read(mem_addr), c.cpu.registers['A']);
+		  assert.equal(c.cpu.Clock, 52)
+		  c.Reset();
 		}
 		});
 		
@@ -90,12 +90,12 @@ describe('LDAX', () => {
 		  program[9] = mem_addr & 0xFF;
 		  program[10] = opcode_lookup['D'].LDAX;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
-		  assert.equal(c.bus.read(mem_addr), c.cpu.registers['A']);
-		  assert.equal(c.cpu.clock, 52)
-		  c.reset();
+		  assert.equal(c.bus.Read(mem_addr), c.cpu.registers['A']);
+		  assert.equal(c.cpu.Clock, 52)
+		  c.Reset();
 		}
 		});
 		

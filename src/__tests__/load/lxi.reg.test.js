@@ -17,15 +17,15 @@ describe('LXI Register', () => {
 		  program[1] = word & 0xFF;
 		  program[2] = (word >> 8) & 0xFF;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.B, (word >> 8) & 0xFF);
 		  assert.equal(c.cpu.registers.C, word & 0xFF);
 		  assert.equal(word, (c.cpu.registers.B << 8) | c.cpu.registers.C);
 		  
-		  assert.equal(c.cpu.clock, 17);
-		  c.reset();
+		  assert.equal(c.cpu.Clock, 17);
+		  c.Reset();
 		
 		}
 		});
@@ -45,15 +45,15 @@ describe('LXI Register', () => {
 		  program[1] = word & 0xFF;
 		  program[2] = (word >> 8) & 0xFF;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.D, (word >> 8) & 0xFF);
 		  assert.equal(c.cpu.registers.E, word & 0xFF);
 		  assert.equal(word, (c.cpu.registers.D << 8) | c.cpu.registers.E);
 		  
-		  assert.equal(c.cpu.clock, 17);
-		  c.reset();
+		  assert.equal(c.cpu.Clock, 17);
+		  c.Reset();
 		
 		}
 		});
@@ -73,15 +73,15 @@ describe('LXI Register', () => {
 		  program[1] = word & 0xFF;
 		  program[2] = (word >> 8) & 0xFF;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.H, (word >> 8) & 0xFF);
 		  assert.equal(c.cpu.registers.L, word & 0xFF);
 		  assert.equal(word, (c.cpu.registers.H << 8) | c.cpu.registers.L);
 		  
-		  assert.equal(c.cpu.clock, 17);
-		  c.reset();
+		  assert.equal(c.cpu.Clock, 17);
+		  c.Reset();
 		
 		}
 		});

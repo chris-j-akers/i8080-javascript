@@ -10,20 +10,20 @@
         this.cpu = null;
     }
 
-    connect_mmu(mmu) {
+    ConnectMMU(mmu) {
         this.mmu = mmu;
     }
 
-    connect_cpu(cpu) {
+    ConnectCPU(cpu) {
         this.cpu = cpu;
     }
 
-    write(val, addr) {
-        this.mmu.write(val, addr);
+    Write(val, addr) {
+        this.mmu.Write(val, addr);
     }
 
-    read(addr) {
-        return this.mmu.read(addr);
+    Read(addr) {
+        return this.mmu.Read(addr);
     }
 }
 

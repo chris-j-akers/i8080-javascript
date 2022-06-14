@@ -19,13 +19,13 @@ describe('STA', () => {
 		  program[3] = mem_addr & 0xFF;
 		  program[4] = (mem_addr >> 8) & 0xff;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.bus.read(mem_addr), 0xFF);
+		  assert.equal(c.cpu.bus.Read(mem_addr), 0xFF);
 		
-		  assert.equal(c.cpu.clock, 27);
-		  c.reset();
+		  assert.equal(c.cpu.Clock, 27);
+		  c.Reset();
 		
 		}
 		});

@@ -45,8 +45,8 @@ describe('SUB Memory (Unset All Flags)', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A,31);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -55,9 +55,9 @@ describe('SUB Memory (Unset All Flags)', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		  
-		  assert.equal(c.cpu.clock, 45);
+		  assert.equal(c.cpu.Clock, 45);
 		
-		  c.reset();
+		  c.Reset();
 		  }
 		});
 		

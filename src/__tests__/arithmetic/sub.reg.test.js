@@ -36,8 +36,8 @@ describe('SUB Register', () => {
 		    program[2] = opcode_lookup[reg].MVI;
 		    program[4] = opcode_lookup[reg].SUB;
 		
-		    c.inject_program(program);
-		    c.execute_program();
+		    c.InjectProgram(program);
+		    c.ExecuteProgram();
 		
 		    assert.equal(c.cpu.registers.A, 31);
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -46,9 +46,9 @@ describe('SUB Register', () => {
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		    assert.equal(c.cpu.clock, 25);
+		    assert.equal(c.cpu.Clock, 25);
 		
-		    c.reset();
+		    c.Reset();
 		};
 		});
 		
@@ -70,8 +70,8 @@ describe('SUB Register', () => {
 		    program[2] = opcode_lookup[reg].MVI;
 		    program[4] = opcode_lookup[reg].SUB;
 		
-		    c.inject_program(program);
-		    c.execute_program();
+		    c.InjectProgram(program);
+		    c.ExecuteProgram();
 		
 		    assert.equal(c.cpu.registers.A, 0);
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -80,9 +80,9 @@ describe('SUB Register', () => {
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		    assert.equal(c.cpu.clock, 25);
+		    assert.equal(c.cpu.Clock, 25);
 		
-		    c.reset();
+		    c.Reset();
 		};
 		});
 		
@@ -104,8 +104,8 @@ describe('SUB Register', () => {
 		    program[2] = opcode_lookup[reg].MVI;
 		    program[4] = opcode_lookup[reg].SUB;
 		
-		    c.inject_program(program);
-		    c.execute_program();
+		    c.InjectProgram(program);
+		    c.ExecuteProgram();
 		
 		    assert.equal(c.cpu.registers.A, 30);
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -114,9 +114,9 @@ describe('SUB Register', () => {
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		    assert.equal(c.cpu.clock, 25);
+		    assert.equal(c.cpu.Clock, 25);
 		
-		    c.reset();
+		    c.Reset();
 		};
 		});
 		
@@ -138,8 +138,8 @@ describe('SUB Register', () => {
 		    program[2] = opcode_lookup[reg].MVI;
 		    program[4] = opcode_lookup[reg].SUB;
 		
-		    c.inject_program(program);
-		    c.execute_program();
+		    c.InjectProgram(program);
+		    c.ExecuteProgram();
 		
 		    assert.equal(c.cpu.registers.A, 124);
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -148,9 +148,9 @@ describe('SUB Register', () => {
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		    assert.equal(c.cpu.clock, 25);
+		    assert.equal(c.cpu.Clock, 25);
 		
-		    c.reset();
+		    c.Reset();
 		};
 		});
 		
@@ -172,8 +172,8 @@ describe('SUB Register', () => {
 		    program[2] = opcode_lookup[reg].MVI;
 		    program[4] = opcode_lookup[reg].SUB;
 		
-		    c.inject_program(program);
-		    c.execute_program();
+		    c.InjectProgram(program);
+		    c.ExecuteProgram();
 		
 		    assert.equal(c.cpu.registers.A, 254);
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -182,9 +182,9 @@ describe('SUB Register', () => {
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		
-		    assert.equal(c.cpu.clock, 25);
+		    assert.equal(c.cpu.Clock, 25);
 		
-		    c.reset();
+		    c.Reset();
 		};
 		});
 		
@@ -206,8 +206,8 @@ describe('SUB Register', () => {
 		    program[2] = opcode_lookup[reg].MVI;
 		    program[4] = opcode_lookup[reg].SUB;
 		
-		    c.inject_program(program);
-		    c.execute_program();
+		    c.InjectProgram(program);
+		    c.ExecuteProgram();
 		
 		    assert.equal(c.cpu.registers.A, 251);
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
@@ -216,9 +216,9 @@ describe('SUB Register', () => {
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		
-		    assert.equal(c.cpu.clock, 25);
+		    assert.equal(c.cpu.Clock, 25);
 		
-		    c.reset();
+		    c.Reset();
 		};
 		});
 		

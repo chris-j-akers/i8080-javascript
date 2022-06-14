@@ -16,23 +16,23 @@ describe('INX', () => {
 		  0x76,       // HALT
 		]
 		
-		c.inject_program(program);
-		c.execute_program();
+		c.InjectProgram(program);
+		c.ExecuteProgram();
 		assert.equal(c.cpu.stack_pointer, 65534);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x03);
+		c.ExecuteProgram(0x03);
 		assert.equal(c.cpu.stack_pointer, 65535);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x03);
+		c.ExecuteProgram(0x03);
 		assert.equal(c.cpu.stack_pointer, 0);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x03);
+		c.ExecuteProgram(0x03);
 		assert.equal(c.cpu.stack_pointer, 1);
 		
-		assert.equal(c.cpu.clock, 58);
+		assert.equal(c.cpu.Clock, 58);
 		
 		});
 		

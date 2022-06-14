@@ -33,10 +33,10 @@ describe('SBB Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
+		  c.InjectProgram(program);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
-		  c.execute_program();
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A,31);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -45,9 +45,9 @@ describe('SBB Memory', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		  
-		  assert.equal(c.cpu.clock, 45);
+		  assert.equal(c.cpu.Clock, 45);
 		  
-		  c.reset();
+		  c.Reset();
 		  }
 		});
 		
@@ -81,11 +81,11 @@ describe('SBB Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
+		  c.InjectProgram(program);
 		  c.cpu._flag_manager.SetFlag(FlagType.Carry);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
-		  c.execute_program();
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A,31);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -94,9 +94,9 @@ describe('SBB Memory', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		  
-		  assert.equal(c.cpu.clock, 45);
+		  assert.equal(c.cpu.Clock, 45);
 		  
-		  c.reset();
+		  c.Reset();
 		  }
 		});
 		
@@ -130,10 +130,10 @@ describe('SBB Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
+		  c.InjectProgram(program);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
-		  c.execute_program();
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A,0);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -142,9 +142,9 @@ describe('SBB Memory', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		  
-		  assert.equal(c.cpu.clock, 45);
+		  assert.equal(c.cpu.Clock, 45);
 		  
-		  c.reset();
+		  c.Reset();
 		  }
 		});
 		
@@ -178,11 +178,11 @@ describe('SBB Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
+		  c.InjectProgram(program);
 		  c.cpu._flag_manager.SetFlag(FlagType.Carry);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
-		  c.execute_program();
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A,0);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -191,9 +191,9 @@ describe('SBB Memory', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		  
-		  assert.equal(c.cpu.clock, 45);
+		  assert.equal(c.cpu.Clock, 45);
 		  
-		  c.reset();
+		  c.Reset();
 		  }
 		});
 		
@@ -227,10 +227,10 @@ describe('SBB Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
+		  c.InjectProgram(program);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
-		  c.execute_program();
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A,30);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -239,9 +239,9 @@ describe('SBB Memory', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		  
-		  assert.equal(c.cpu.clock, 45);
+		  assert.equal(c.cpu.Clock, 45);
 		  
-		  c.reset();
+		  c.Reset();
 		  }
 		});
 		
@@ -275,11 +275,11 @@ describe('SBB Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
+		  c.InjectProgram(program);
 		  c.cpu._flag_manager.SetFlag(FlagType.Carry);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
-		  c.execute_program();
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A,30);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -288,9 +288,9 @@ describe('SBB Memory', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		  
-		  assert.equal(c.cpu.clock, 45);
+		  assert.equal(c.cpu.Clock, 45);
 		  
-		  c.reset();
+		  c.Reset();
 		  }
 		});
 		
@@ -324,10 +324,10 @@ describe('SBB Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
+		  c.InjectProgram(program);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
-		  c.execute_program();
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A,124);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -336,9 +336,9 @@ describe('SBB Memory', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		  
-		  assert.equal(c.cpu.clock, 45);
+		  assert.equal(c.cpu.Clock, 45);
 		  
-		  c.reset();
+		  c.Reset();
 		  }
 		});
 		
@@ -372,11 +372,11 @@ describe('SBB Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
+		  c.InjectProgram(program);
 		  c.cpu._flag_manager.SetFlag(FlagType.Carry);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
-		  c.execute_program();
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A,122);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -385,9 +385,9 @@ describe('SBB Memory', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		  
-		  assert.equal(c.cpu.clock, 45);
+		  assert.equal(c.cpu.Clock, 45);
 		  
-		  c.reset();
+		  c.Reset();
 		  }
 		});
 		
@@ -421,10 +421,10 @@ describe('SBB Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
+		  c.InjectProgram(program);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
-		  c.execute_program();
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A,254);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -433,9 +433,9 @@ describe('SBB Memory', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		  
-		  assert.equal(c.cpu.clock, 45);
+		  assert.equal(c.cpu.Clock, 45);
 		  
-		  c.reset();
+		  c.Reset();
 		  }
 		});
 		
@@ -469,11 +469,11 @@ describe('SBB Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
+		  c.InjectProgram(program);
 		  c.cpu._flag_manager.SetFlag(FlagType.Carry);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
-		  c.execute_program();
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A,249);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -482,9 +482,9 @@ describe('SBB Memory', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		  
-		  assert.equal(c.cpu.clock, 45);
+		  assert.equal(c.cpu.Clock, 45);
 		  
-		  c.reset();
+		  c.Reset();
 		  }
 		});
 		
@@ -518,10 +518,10 @@ describe('SBB Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
+		  c.InjectProgram(program);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
-		  c.execute_program();
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A,251);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
@@ -530,9 +530,9 @@ describe('SBB Memory', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		  
-		  assert.equal(c.cpu.clock, 45);
+		  assert.equal(c.cpu.Clock, 45);
 		  
-		  c.reset();
+		  c.Reset();
 		  }
 		});
 		
@@ -566,11 +566,11 @@ describe('SBB Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
+		  c.InjectProgram(program);
 		  c.cpu._flag_manager.SetFlag(FlagType.Carry);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
-		  c.execute_program();
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A,251);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
@@ -579,9 +579,9 @@ describe('SBB Memory', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		  
-		  assert.equal(c.cpu.clock, 45);
+		  assert.equal(c.cpu.Clock, 45);
 		  
-		  c.reset();
+		  c.Reset();
 		  }
 		});
 		

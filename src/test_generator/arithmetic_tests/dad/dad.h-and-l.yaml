@@ -34,8 +34,8 @@ test_suite:
       0x76           // HALT
     ]
 
-      c.inject_program(program);
-      c.execute_program();
+      c.InjectProgram(program);
+      c.ExecuteProgram();
 
       assert.equal((c.cpu.registers['H'] << 8 | c.cpu.registers['L']) & 0xFFFF, {expected_result})
       assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), {carry})
@@ -45,9 +45,9 @@ test_suite:
       assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
       assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 
-      assert.equal(c.cpu.clock, 31);
+      assert.equal(c.cpu.Clock, 31);
       
-      c.reset();
+      c.Reset();
     }});
 
   tests:

@@ -17,14 +17,14 @@ describe('LXI Stack Pointer', () => {
 		  program[1] = word & 0xFF;
 		  program[2] = (word >> 8) & 0xFF;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
 		  assert.equal(word, c.cpu.StackPointer);
 		
-		  assert.equal(c.cpu.clock, 17);
+		  assert.equal(c.cpu.Clock, 17);
 		
-		  c.reset();
+		  c.Reset();
 		
 		}
 		});

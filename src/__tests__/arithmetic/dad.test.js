@@ -44,8 +44,8 @@ describe('DAD', () => {
 		  program[2] = opcode_lookup[low_reg].MVI;
 		  program[8] = opcode_lookup[high_reg].DAD;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
 		  assert.equal((c.cpu.registers['H'] << 8 | c.cpu.registers['L']) & 0xFFFF, 54554)
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false)
@@ -55,9 +55,9 @@ describe('DAD', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c.cpu.clock, 45);
+		  assert.equal(c.cpu.Clock, 45);
 		  
-		  c.reset();
+		  c.Reset();
 		};
 		});
 		
@@ -95,8 +95,8 @@ describe('DAD', () => {
 		  program[2] = opcode_lookup[low_reg].MVI;
 		  program[8] = opcode_lookup[high_reg].DAD;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
 		  assert.equal((c.cpu.registers['H'] << 8 | c.cpu.registers['L']) & 0xFFFF, 0)
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true)
@@ -106,9 +106,9 @@ describe('DAD', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c.cpu.clock, 45);
+		  assert.equal(c.cpu.Clock, 45);
 		  
-		  c.reset();
+		  c.Reset();
 		};
 		});
 		
@@ -146,8 +146,8 @@ describe('DAD', () => {
 		  program[2] = opcode_lookup[low_reg].MVI;
 		  program[8] = opcode_lookup[high_reg].DAD;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
 		  assert.equal((c.cpu.registers['H'] << 8 | c.cpu.registers['L']) & 0xFFFF, 43690)
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false)
@@ -157,9 +157,9 @@ describe('DAD', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c.cpu.clock, 45);
+		  assert.equal(c.cpu.Clock, 45);
 		  
-		  c.reset();
+		  c.Reset();
 		};
 		});
 		

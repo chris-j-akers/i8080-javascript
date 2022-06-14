@@ -6,7 +6,7 @@
   * In the main test `program`, each test starts at 65533, then calls INX
   * once to increment. This leaves us to check we got 65534. To further
   * increment this value we cheat a bit. The `HALT` flag on the CPU is
-  * manually switched to false and the call to `execute_program()` is made
+  * manually switched to false and the call to `ExecuteProgram()` is made
   * again, but this time, with a `from_addr` of 0x04 (the INX OpCode). This
   * way we get to check the first increment worked but then run 4 more of
   * them.
@@ -43,23 +43,23 @@ describe('INX', () => {
 		  0x76                                        // HALT
 		]
 		
-		c.inject_program(program);
-		c.execute_program();
+		c.InjectProgram(program);
+		c.ExecuteProgram();
 		assert.equal((c.cpu.registers.B << 8) | c.cpu.registers.C, 65534);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x04);
+		c.ExecuteProgram(0x04);
 		assert.equal((c.cpu.registers.B  << 8) | c.cpu.registers.C, 65535);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x04);
+		c.ExecuteProgram(0x04);
 		assert.equal((c.cpu.registers.B  << 8) | c.cpu.registers.C, 0);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x04);
+		c.ExecuteProgram(0x04);
 		assert.equal((c.cpu.registers.B  << 8) | c.cpu.registers.C, 1);
 		
-		assert.equal(c.cpu.clock, 62);
+		assert.equal(c.cpu.Clock, 62);
 		
 		});
 		
@@ -77,23 +77,23 @@ describe('INX', () => {
 		  0x76                                        // HALT
 		]
 		
-		c.inject_program(program);
-		c.execute_program();
+		c.InjectProgram(program);
+		c.ExecuteProgram();
 		assert.equal((c.cpu.registers.D << 8) | c.cpu.registers.E, 65534);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x04);
+		c.ExecuteProgram(0x04);
 		assert.equal((c.cpu.registers.D  << 8) | c.cpu.registers.E, 65535);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x04);
+		c.ExecuteProgram(0x04);
 		assert.equal((c.cpu.registers.D  << 8) | c.cpu.registers.E, 0);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x04);
+		c.ExecuteProgram(0x04);
 		assert.equal((c.cpu.registers.D  << 8) | c.cpu.registers.E, 1);
 		
-		assert.equal(c.cpu.clock, 62);
+		assert.equal(c.cpu.Clock, 62);
 		
 		});
 		
@@ -111,23 +111,23 @@ describe('INX', () => {
 		  0x76                                        // HALT
 		]
 		
-		c.inject_program(program);
-		c.execute_program();
+		c.InjectProgram(program);
+		c.ExecuteProgram();
 		assert.equal((c.cpu.registers.H << 8) | c.cpu.registers.L, 65534);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x04);
+		c.ExecuteProgram(0x04);
 		assert.equal((c.cpu.registers.H  << 8) | c.cpu.registers.L, 65535);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x04);
+		c.ExecuteProgram(0x04);
 		assert.equal((c.cpu.registers.H  << 8) | c.cpu.registers.L, 0);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x04);
+		c.ExecuteProgram(0x04);
 		assert.equal((c.cpu.registers.H  << 8) | c.cpu.registers.L, 1);
 		
-		assert.equal(c.cpu.clock, 62);
+		assert.equal(c.cpu.Clock, 62);
 		
 		});
 		

@@ -30,13 +30,13 @@ describe('STAX', () => {
 		  program[4] = mvi_opcode_lookup.C
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
-		  assert.equal(c.bus.read(mem_addr), 0xFF);
-		  assert.equal(c.cpu.clock, 35);
+		  assert.equal(c.bus.Read(mem_addr), 0xFF);
+		  assert.equal(c.cpu.Clock, 35);
 		
-		  c.reset();
+		  c.Reset();
 		
 		}
 		});
@@ -62,13 +62,13 @@ describe('STAX', () => {
 		  program[4] = mvi_opcode_lookup.E
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
-		  assert.equal(c.bus.read(mem_addr), 0xFF);
-		  assert.equal(c.cpu.clock, 35);
+		  assert.equal(c.bus.Read(mem_addr), 0xFF);
+		  assert.equal(c.cpu.Clock, 35);
 		
-		  c.reset();
+		  c.Reset();
 		
 		}
 		});

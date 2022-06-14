@@ -27,27 +27,27 @@ describe('DCX', () => {
 		  0x76                                        // HALT
 		]
 		
-		c.inject_program(program);
-		c.execute_program();
+		c.InjectProgram(program);
+		c.ExecuteProgram();
 		assert.equal((c.cpu.registers.B << 8) | c.cpu.registers.C, 3);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x04);
+		c.ExecuteProgram(0x04);
 		assert.equal((c.cpu.registers.B  << 8) | c.cpu.registers.C, 2);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x04);
+		c.ExecuteProgram(0x04);
 		assert.equal((c.cpu.registers.B  << 8) | c.cpu.registers.C, 1);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x04);
+		c.ExecuteProgram(0x04);
 		assert.equal((c.cpu.registers.B  << 8) | c.cpu.registers.C, 0);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x04);
+		c.ExecuteProgram(0x04);
 		assert.equal((c.cpu.registers.B  << 8) | c.cpu.registers.C, 65535);
 		
-		assert.equal(c.cpu.clock, 74);
+		assert.equal(c.cpu.Clock, 74);
 		
 		});
 		
@@ -65,27 +65,27 @@ describe('DCX', () => {
 		  0x76                                        // HALT
 		]
 		
-		c.inject_program(program);
-		c.execute_program();
+		c.InjectProgram(program);
+		c.ExecuteProgram();
 		assert.equal((c.cpu.registers.D << 8) | c.cpu.registers.E, 3);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x04);
+		c.ExecuteProgram(0x04);
 		assert.equal((c.cpu.registers.D  << 8) | c.cpu.registers.E, 2);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x04);
+		c.ExecuteProgram(0x04);
 		assert.equal((c.cpu.registers.D  << 8) | c.cpu.registers.E, 1);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x04);
+		c.ExecuteProgram(0x04);
 		assert.equal((c.cpu.registers.D  << 8) | c.cpu.registers.E, 0);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x04);
+		c.ExecuteProgram(0x04);
 		assert.equal((c.cpu.registers.D  << 8) | c.cpu.registers.E, 65535);
 		
-		assert.equal(c.cpu.clock, 74);
+		assert.equal(c.cpu.Clock, 74);
 		
 		});
 		
@@ -103,27 +103,27 @@ describe('DCX', () => {
 		  0x76                                        // HALT
 		]
 		
-		c.inject_program(program);
-		c.execute_program();
+		c.InjectProgram(program);
+		c.ExecuteProgram();
 		assert.equal((c.cpu.registers.H << 8) | c.cpu.registers.L, 3);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x04);
+		c.ExecuteProgram(0x04);
 		assert.equal((c.cpu.registers.H  << 8) | c.cpu.registers.L, 2);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x04);
+		c.ExecuteProgram(0x04);
 		assert.equal((c.cpu.registers.H  << 8) | c.cpu.registers.L, 1);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x04);
+		c.ExecuteProgram(0x04);
 		assert.equal((c.cpu.registers.H  << 8) | c.cpu.registers.L, 0);
 		
 		c.cpu.halt = false;
-		c.execute_program(0x04);
+		c.ExecuteProgram(0x04);
 		assert.equal((c.cpu.registers.H  << 8) | c.cpu.registers.L, 65535);
 		
-		assert.equal(c.cpu.clock, 74);
+		assert.equal(c.cpu.Clock, 74);
 		
 		});
 		

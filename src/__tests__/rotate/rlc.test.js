@@ -15,8 +15,8 @@ describe('RLC', () => {
 		  0x76,           // HALT
 		]
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		  assert.equal(c.cpu.registers['A'], 229)
@@ -26,9 +26,9 @@ describe('RLC', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c.cpu.clock, 18);
+		  assert.equal(c.cpu.Clock, 18);
 		
-		  c.reset();
+		  c.Reset();
 		
 		});
 		
@@ -44,8 +44,8 @@ describe('RLC', () => {
 		  0x76,           // HALT
 		]
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		  assert.equal(c.cpu.registers['A'], 30)
@@ -55,9 +55,9 @@ describe('RLC', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c.cpu.clock, 18);
+		  assert.equal(c.cpu.Clock, 18);
 		
-		  c.reset();
+		  c.Reset();
 		
 		});
 		

@@ -17,10 +17,10 @@ describe('XRA Accumulator', () => {
 		
 		for (let reg of Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
 		
-		  c.inject_program(program);
+		  c.InjectProgram(program);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
-		  c.execute_program();
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A, 0);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -29,9 +29,9 @@ describe('XRA Accumulator', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c.cpu.clock, 18);
+		  assert.equal(c.cpu.Clock, 18);
 		
-		  c.reset();
+		  c.Reset();
 		  }
 		});
 		
@@ -49,11 +49,11 @@ describe('XRA Accumulator', () => {
 		
 		for (let reg of Object.keys(c.cpu.registers).filter((register) => register != 'A')) {
 		
-		  c.inject_program(program);
+		  c.InjectProgram(program);
 		  c.cpu._flag_manager.SetFlag(FlagType.Carry);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
-		  c.execute_program();
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu.registers.A, 0);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -62,9 +62,9 @@ describe('XRA Accumulator', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c.cpu.clock, 18);
+		  assert.equal(c.cpu.Clock, 18);
 		
-		  c.reset();
+		  c.Reset();
 		  }
 		});
 		

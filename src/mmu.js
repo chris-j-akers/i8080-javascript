@@ -6,19 +6,19 @@ class MMU {
         this.bus = null;
     }
 
-    connect_bus(bus) {
+    ConnectBus(bus) {
         this.bus = bus;
     }
 
-    reset() {
+    Reset() {
         this.ram = new Array(2**16);
     }
 
-    write(val, addr) {
+    Write(val, addr) {
         this.ram[addr] = val;
     }
 
-    read(addr) {
+    Read(addr) {
         return this.ram[addr];
     }
 }

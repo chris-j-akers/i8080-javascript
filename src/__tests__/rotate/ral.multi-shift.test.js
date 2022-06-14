@@ -15,8 +15,8 @@ describe('RAL (Multishift)', () => {
 		  0x76,           // HALT
 		]
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		  assert.equal(c.cpu.registers['A'], 84)
@@ -27,7 +27,7 @@ describe('RAL (Multishift)', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
 		  c.cpu.halt = false;
-		  c.execute_program(0x02);
+		  c.ExecuteProgram(0x02);
 		
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		  assert.equal(c.cpu.registers['A'], 169)
@@ -38,7 +38,7 @@ describe('RAL (Multishift)', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
 		  c.cpu.halt = false;
-		  c.execute_program(0x02);
+		  c.ExecuteProgram(0x02);
 		
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		  assert.equal(c.cpu.registers['A'], 82)
@@ -48,9 +48,9 @@ describe('RAL (Multishift)', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c.cpu.clock, 40);
+		  assert.equal(c.cpu.Clock, 40);
 		
-		  c.reset();
+		  c.Reset();
 		
 		});
 		

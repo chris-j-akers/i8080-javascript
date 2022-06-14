@@ -46,8 +46,8 @@ test_suite:
       program[13] = mem_addr & 0xFF;
       program[14] = (mem_addr >> 8) & 0xFF;
 
-      c.inject_program(program);
-      c.execute_program();
+      c.InjectProgram(program);
+      c.ExecuteProgram();
 
       // Program pauses at this point so we can check we zero'd H & L
       assert.equal(c.cpu.registers['H'], 0);
@@ -55,14 +55,14 @@ test_suite:
 
       // Continue program from byte 12 (the LHLD test)
       c.cpu.halt = false; 
-      c.execute_program(12);
+      c.ExecuteProgram(12);
 
       assert.equal(c.cpu.registers['H'], 0xE);
       assert.equal(c.cpu.registers['L'], 0x71);
 
-      assert.equal(c.cpu.clock, 74);
+      assert.equal(c.cpu.Clock, 74);
 
-      c.reset();
+      c.Reset();
     }}
     }});
   tests:

@@ -15,10 +15,10 @@ describe('SBB Accumulator Flag', () => {
 		  0x76            // HALT
 		]
 		
-		c.inject_program(program);
+		c.InjectProgram(program);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
-		c.execute_program();
+		c.ExecuteProgram();
 		
 		assert.equal(c.cpu.registers.A, 0);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -27,9 +27,9 @@ describe('SBB Accumulator Flag', () => {
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c.cpu.clock, 18);
+		assert.equal(c.cpu.Clock, 18);
 		
-		c.reset();
+		c.Reset();
 		});
 		
 	it('Carry, AuxCarry, Sign Flags Set with Carry Set', () => {
@@ -44,11 +44,11 @@ describe('SBB Accumulator Flag', () => {
 		  0x76            // HALT
 		]
 		
-		c.inject_program(program);
+		c.InjectProgram(program);
 		c.cpu._flag_manager.SetFlag(FlagType.Carry);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
-		c.execute_program();
+		c.ExecuteProgram();
 		
 		assert.equal(c.cpu.registers.A, 255);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
@@ -57,9 +57,9 @@ describe('SBB Accumulator Flag', () => {
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		
-		assert.equal(c.cpu.clock, 18);
+		assert.equal(c.cpu.Clock, 18);
 		
-		c.reset();
+		c.Reset();
 		});
 		
 });

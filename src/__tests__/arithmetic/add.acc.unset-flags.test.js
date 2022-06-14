@@ -27,8 +27,8 @@ describe('ADD Accumulator (Unset All Flags)', () => {
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		
-		c.inject_program(program);
-		c.execute_program();
+		c.InjectProgram(program);
+		c.ExecuteProgram();
 		
 		assert.equal(c.cpu.registers.A, 2);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
@@ -37,10 +37,10 @@ describe('ADD Accumulator (Unset All Flags)', () => {
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c.cpu.clock, 18);
+		assert.equal(c.cpu.Clock, 18);
 		
 		
-		c.reset();
+		c.Reset();
 		});
 		
 });

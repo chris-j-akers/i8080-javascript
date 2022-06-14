@@ -37,8 +37,8 @@ describe('DCR Register', () => {
 		
 		    carry_set = c.cpu._flag_manager.IsSet(FlagType.Carry);
 		
-		    c.inject_program(program);
-		    c.execute_program();
+		    c.InjectProgram(program);
+		    c.ExecuteProgram();
 		
 		    // Here, we're just checking the carry flag hasn't been touched.
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), carry_set);
@@ -49,9 +49,9 @@ describe('DCR Register', () => {
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		    assert.equal(c.cpu.clock, 19);
+		    assert.equal(c.cpu.Clock, 19);
 		    
-		    c.reset();
+		    c.Reset();
 		};
 		});
 		
@@ -74,8 +74,8 @@ describe('DCR Register', () => {
 		
 		    carry_set = c.cpu._flag_manager.IsSet(FlagType.Carry);
 		
-		    c.inject_program(program);
-		    c.execute_program();
+		    c.InjectProgram(program);
+		    c.ExecuteProgram();
 		
 		    // Here, we're just checking the carry flag hasn't been touched.
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), carry_set);
@@ -86,9 +86,9 @@ describe('DCR Register', () => {
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		    assert.equal(c.cpu.clock, 19);
+		    assert.equal(c.cpu.Clock, 19);
 		    
-		    c.reset();
+		    c.Reset();
 		};
 		});
 		
@@ -111,8 +111,8 @@ describe('DCR Register', () => {
 		
 		    carry_set = c.cpu._flag_manager.IsSet(FlagType.Carry);
 		
-		    c.inject_program(program);
-		    c.execute_program();
+		    c.InjectProgram(program);
+		    c.ExecuteProgram();
 		
 		    // Here, we're just checking the carry flag hasn't been touched.
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), carry_set);
@@ -123,9 +123,9 @@ describe('DCR Register', () => {
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		    assert.equal(c.cpu.clock, 19);
+		    assert.equal(c.cpu.Clock, 19);
 		    
-		    c.reset();
+		    c.Reset();
 		};
 		});
 		
@@ -148,8 +148,8 @@ describe('DCR Register', () => {
 		
 		    carry_set = c.cpu._flag_manager.IsSet(FlagType.Carry);
 		
-		    c.inject_program(program);
-		    c.execute_program();
+		    c.InjectProgram(program);
+		    c.ExecuteProgram();
 		
 		    // Here, we're just checking the carry flag hasn't been touched.
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), carry_set);
@@ -160,9 +160,9 @@ describe('DCR Register', () => {
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		    assert.equal(c.cpu.clock, 19);
+		    assert.equal(c.cpu.Clock, 19);
 		    
-		    c.reset();
+		    c.Reset();
 		};
 		});
 		
@@ -185,8 +185,8 @@ describe('DCR Register', () => {
 		
 		    carry_set = c.cpu._flag_manager.IsSet(FlagType.Carry);
 		
-		    c.inject_program(program);
-		    c.execute_program();
+		    c.InjectProgram(program);
+		    c.ExecuteProgram();
 		
 		    // Here, we're just checking the carry flag hasn't been touched.
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), carry_set);
@@ -197,9 +197,9 @@ describe('DCR Register', () => {
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		
-		    assert.equal(c.cpu.clock, 19);
+		    assert.equal(c.cpu.Clock, 19);
 		    
-		    c.reset();
+		    c.Reset();
 		};
 		});
 		

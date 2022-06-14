@@ -18,8 +18,8 @@ describe('RAR', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		  assert.equal(c.cpu.registers['A'], 0)
@@ -29,9 +29,9 @@ describe('RAR', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c.cpu.clock, 18);
+		  assert.equal(c.cpu.Clock, 18);
 		
-		  c.reset();
+		  c.Reset();
 		
 		});
 		
@@ -50,8 +50,8 @@ describe('RAR', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		  assert.equal(c.cpu.registers['A'], 1)
@@ -61,9 +61,9 @@ describe('RAR', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c.cpu.clock, 18);
+		  assert.equal(c.cpu.Clock, 18);
 		
-		  c.reset();
+		  c.Reset();
 		
 		});
 		
@@ -83,8 +83,8 @@ describe('RAR', () => {
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		  assert.equal(c.cpu.registers['A'], 128)
@@ -94,9 +94,9 @@ describe('RAR', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c.cpu.clock, 18);
+		  assert.equal(c.cpu.Clock, 18);
 		
-		  c.reset();
+		  c.Reset();
 		
 		});
 		
@@ -116,8 +116,8 @@ describe('RAR', () => {
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		
 		
-		  c.inject_program(program);
-		  c.execute_program();
+		  c.InjectProgram(program);
+		  c.ExecuteProgram();
 		
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		  assert.equal(c.cpu.registers['A'], 129)
@@ -127,9 +127,9 @@ describe('RAR', () => {
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c.cpu.clock, 18);
+		  assert.equal(c.cpu.Clock, 18);
 		
-		  c.reset();
+		  c.Reset();
 		
 		});
 		

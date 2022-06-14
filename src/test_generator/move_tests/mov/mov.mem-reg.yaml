@@ -30,13 +30,13 @@ test_suite:
       program[1] = (mem_addr >> 8) & 0xff;
       program[3] = mem_addr & 0xFF;
 
-      c.inject_program(program);
-      c.execute_program();
+      c.InjectProgram(program);
+      c.ExecuteProgram();
 
-      assert.equal(c.cpu.clock, 38);
+      assert.equal(c.cpu.Clock, 38);
 
-      assert.equal(c.bus.read(mem_addr), c.cpu.registers.{reg_destination});
-      c.reset();
+      assert.equal(c.bus.Read(mem_addr), c.cpu.registers.{reg_destination});
+      c.Reset();
     }}
     }});
 

@@ -15,11 +15,11 @@ describe('CMA', () => {
 		    0x76                  // HALT
 		  ]
 		
-		c.inject_program(program);
-		c.execute_program();
+		c.InjectProgram(program);
+		c.ExecuteProgram();
 		
 		assert.equal(c.cpu.registers['A'], 0);
-		assert.equal(c.cpu.clock, 18);
+		assert.equal(c.cpu.Clock, 18);
 		
 		});
 		
@@ -35,11 +35,11 @@ describe('CMA', () => {
 		    0x76                  // HALT
 		  ]
 		
-		c.inject_program(program);
-		c.execute_program();
+		c.InjectProgram(program);
+		c.ExecuteProgram();
 		
 		assert.equal(c.cpu.registers['A'], 255);
-		assert.equal(c.cpu.clock, 18);
+		assert.equal(c.cpu.Clock, 18);
 		
 		});
 		
