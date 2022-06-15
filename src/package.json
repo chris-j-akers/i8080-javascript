@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "mocha '__tests__/stack/*.test.js' --timeout 180000"
+    "test": "mocha '__tests__/**/*.test.js' --timeout 180000"
   },
   "name": "src",
   "version": "1.0.0",
