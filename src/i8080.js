@@ -570,26 +570,7 @@ class i8080 {
     ------------------------------------------------------------------------*/
 
 
-    PUSH(high_byte_register) {
-        let low_byte_register;
-        switch(high_byte_register) {
-            case 'B':
-                low_byte_register = 'C';
-                break;
-            case 'D':
-                low_byte_register = 'E';
-                break;
-            case 'H':
-                low_byte_register = 'L';
-                break;
-            case 'PSW':
-                this.stack_pointer--;
-                this.bus.Write(this.registers['A'], this.stack_pointer);
-                this.stack_pointer--;
-                this.bus.Write(this.flags, this.stack_pointer);
-                this.clock += 11;
-                return;
-        }
+    PUSH(high_byte_register, low_byte_register) {
         this.stack_pointer--;
         this.bus.Write(this.registers[high_byte_register], this.stack_pointer);
         this.stack_pointer--;
@@ -597,29 +578,26 @@ class i8080 {
         this.clock += 11;
     }
 
-    POP(high_byte_register) {
-        let low_byte_register;
-        switch(high_byte_register) {
-            case 'B':
-                low_byte_register = 'C';
-                break;
-            case 'D':
-                low_byte_register = 'E';
-                break;
-            case 'H':
-                low_byte_register = 'L';
-                break;
-            case 'PSW':
-                this.flags = this.bus.Read(this.stack_pointer);
-                this.stack_pointer++;
-                this.registers['A'] = this.bus.Read(this.stack_pointer);
-                this.stack_pointer++;
-                this.clock += 10;
-                return;
-        }
+    PUSH_PSW() {
+        this.stack_pointer--;
+        this.bus.Write(this.registers['A'], this.stack_pointer);
+        this.stack_pointer--;
+        this.bus.Write(this.flags, this.stack_pointer);
+        this.clock += 11;
+    }
+    
+    POP(high_byte_register, low_byte_register) {
         this.registers[low_byte_register] = this.bus.Read(this.stack_pointer);
         this.stack_pointer++;
         this.registers[high_byte_register] = this.bus.Read(this.stack_pointer);
+        this.stack_pointer++;
+        this.clock += 10;
+    }
+    
+    POP_PSW() {
+        this.flags = this.bus.Read(this.stack_pointer);
+        this.stack_pointer++;
+        this.registers['A'] = this.bus.Read(this.stack_pointer);
         this.stack_pointer++;
         this.clock += 10;
     }
@@ -1261,25 +1239,25 @@ class i8080 {
                 this.NOP();
                 break;
             case 0xC1:
-                this.POP('B');
+                this.POP_R('B', 'C');
                 break;
             case 0xD1:
-                this.POP('D');
+                this.POP_R('D', 'E');
                 break;
             case 0xE1:
-                this.POP('H');
+                this.POP_R('H', 'L');
                 break;
             case 0xC5:
-                this.PUSH('B');
+                this.PUSH_R('B', 'C');
                 break;
             case 0xD5:
-                this.PUSH('D');
+                this.PUSH_R('D', 'E');
                 break;
             case 0xE5:
-                this.PUSH('H');
+                this.PUSH_R('H', 'L');
                 break;
             case 0xF5:
-                this.PUSH('PSW');
+                this.PUSH_PSW();
                 break;
             case 0xB8:
                 this.CMP_R('B');
