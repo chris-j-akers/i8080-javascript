@@ -963,26 +963,15 @@ class i8080 {
      * .
      * @param {char} high_byte_register First register of the pair (B, D, H)
      */
-    INX(high_byte_register) {
-        const _inx = (high_byte_register, low_byte_register) => {
-            const word = ((this.registers[high_byte_register] << 8) | this.registers[low_byte_register]) + 1;
-            this.registers[high_byte_register] = (word >> 8) & 0xFF;
-            this.registers[low_byte_register] = word & 0xFF;
-        }
-        switch(high_byte_register) {
-            case 'B':
-                _inx('B', 'C');
-                break;
-            case 'D':
-                _inx('D', 'E');
-                break;
-            case 'H':
-                _inx('H', 'L');
-                break;
-            case 'SP':
-                this.stack_pointer = (this.stack_pointer + 1) & 0xFFFF;
-                break;
-        }
+    INX_R(high_byte_register, low_byte_register) {
+        const word = ((this.registers[high_byte_register] << 8) | this.registers[low_byte_register]) + 1;
+        this.registers[high_byte_register] = (word >> 8) & 0xFF;
+        this.registers[low_byte_register] = word & 0xFF;        
+        this.clock += 5;
+    }
+    
+    INX_SP() {
+        this.stack_pointer = (this.stack_pointer + 0xFFFF) & 0xFFFF;
         this.clock += 5;
     }
 
@@ -991,30 +980,20 @@ class i8080 {
      * decremented by 1 (uses two's complement addition).
      * .
      * @param {char} high_byte_register First register of the pair (B, D, H)
+     * @param {char} low_byte_register Second register of the pair (C, E, L)
      */
-    DCX(high_byte_register) {
-        const _dcx = (high_byte_register, low_byte_register) => {
-            const word = ((this.registers[high_byte_register] << 8) | this.registers[low_byte_register]) + 0xFFFF;
-            this.registers[high_byte_register] = (word >> 8) & 0xFF;
-            this.registers[low_byte_register] = word & 0xFF;
-        }
-        switch(high_byte_register) {
-            case 'B':
-                _dcx('B', 'C');
-                break;
-            case 'D':
-                _dcx('D', 'E');
-                break;
-            case 'H':
-                _dcx('H', 'L');
-                break;
-            case 'SP':
-                this.stack_pointer = (this.stack_pointer + 0xFFFF) & 0xFFFF;
-                break;
-        }
+    DCX_R(high_byte_register, low_byte_register) {
+        const word = ((this.registers[high_byte_register] << 8) | this.registers[low_byte_register]) + 0xFFFF;
+        this.registers[high_byte_register] = (word >> 8) & 0xFF;
+        this.registers[low_byte_register] = word & 0xFF;        
         this.clock += 5;
     }
 
+    DCX_SP() {
+        this.stack_pointer = (this.stack_pointer + 0xFFFF) & 0xFFFF;
+        this.clock += 5;
+    }
+    
     /**
      * The named register is incremented by 1.
      * 
@@ -1387,16 +1366,16 @@ class i8080 {
                 this.RRC();
                 break;
             case 0x0B:
-                this.DCX('B');
+                this.DCX_R('B', 'C');
                 break;
             case 0x1B:
-                this.DCX('D');
+                this.DCX_R('D', 'E');
                 break;
             case 0x2B:
-                this.DCX('H');
+                this.DCX_R('H', 'L');
                 break;
             case 0x3B:
-                this.DCX('SP');
+                this.DCX_SP();
                 break;
             case 0x05:
                 this.DCR_R('B');
@@ -1453,7 +1432,7 @@ class i8080 {
                 this.STAX('B');
                 break;
             case 0x03:
-                this.INX('B');
+                this.INX_R('B', 'C');
                 break;
             case 0x11:
                 this.LXI('D', this._get_next_word());
@@ -1462,7 +1441,7 @@ class i8080 {
                 this.STAX('D');
                 break;
             case 0x13:
-                this.INX('D');
+                this.INX_R('D', 'E');
                 break;
             case 0x21:
                 this.LXI('H', this._get_next_word());
@@ -1477,7 +1456,7 @@ class i8080 {
                 this.SHLD(this._get_next_word());
                 break;
             case 0x23:
-                this.INX('H');
+                this.INX_R('H', 'L');
                 break;
             case 0x2E:
                 this.MVI_R('L', this._get_next_byte());
@@ -1489,7 +1468,7 @@ class i8080 {
                 this.STA(this._get_next_word());
                 break;
             case 0x33:
-                this.INX('SP');
+                this.INX_SP();
                 break;
             case 0x3E:
                 this.MVI_R('A', this._get_next_byte());
