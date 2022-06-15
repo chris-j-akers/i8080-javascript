@@ -635,34 +635,21 @@ class i8080 {
      * The first-byte is loaded into the first register of the specified pair, while
      * the second byte is loaded into the second register of the specified pair.
      *
-     * If the Stack Pointer is specified (SP), then its value is simple overridden
-     *  with `val`.
-     *
-     * @param {char} register Name of the first register in the pair (BC, DE, HL)
+     * @param {char} high_byte_register Name of the first register in the pair (B, D, H)
+     * @param {char} low_byte_register Name of the second register in the pair (C, E, L)
      * @param {number} val 16-bit immediate value to be stored
      */
-    LXI(register, val) {
-        const msb = (val >> 8) & 0xFF;
-        const lsb = val & 0xFF;
-
-        switch(register) {
-            case 'B':
-                this.registers.B = msb;
-                this.registers.C = lsb;
-                break;
-            case 'D':
-                this.registers.D = msb;
-                this.registers.E = lsb;
-                break;
-            case 'H':
-                this.registers.H = msb;
-                this.registers.L = lsb;
-            case 'SP':
-                this.stack_pointer = val;
-                break;
-        }
-
+    LXI_R(high_byte_register, low_byte_register, val) {
+        this.registers[high_byte_register] = (val >> 8) & 0xFF;
+        this.registers[low_byte_register] = val & 0xFF;
         this.clock += 10;
+    }
+    
+    /**
+     * Load a 16-bit immediate value into the stack pointer.
+     */
+    LXI_SP(val) {
+        this.stack_pointer = val & 0xFFFF;
     }
 
 // *   ===================================================================================
@@ -962,6 +949,9 @@ class i8080 {
         this.clock += 5;
     }
     
+    /**
+     * The stack pointer is incremented by 1.
+     */
     INX_SP() {
         this.stack_pointer = (this.stack_pointer + 0xFFFF) & 0xFFFF;
         this.clock += 5;
@@ -970,7 +960,7 @@ class i8080 {
     /**
      * The 16-bit number stored in the specified register pair (BC, DE, HL) is
      * decremented by 1 (uses two's complement addition).
-     * .
+     * 
      * @param {char} high_byte_register First register of the pair (B, D, H)
      * @param {char} low_byte_register Second register of the pair (C, E, L)
      */
@@ -981,6 +971,9 @@ class i8080 {
         this.clock += 5;
     }
 
+    /**
+    * The stack pointer is decremented by 1 (uses two's complement)
+    */
     DCX_SP() {
         this.stack_pointer = (this.stack_pointer + 0xFFFF) & 0xFFFF;
         this.clock += 5;
@@ -1039,7 +1032,6 @@ class i8080 {
      * @param {char} reg Name of the register to decrement.
      */
     DCR_R(reg) {
-
         const lhs = this.registers[reg];
 
         // 0xFF is the 8-bit two's complement of 1.
@@ -1418,7 +1410,7 @@ class i8080 {
                 this.INR_R('A');
                 break;
             case 0x01: 
-                this.LXI('B', this._get_next_word());
+                this.LXI_R('B', 'C', this._get_next_word());
                 break;
             case 0x02:
                 this.STAX('B', 'C');
@@ -1427,7 +1419,7 @@ class i8080 {
                 this.INX_R('B', 'C');
                 break;
             case 0x11:
-                this.LXI('D', this._get_next_word());
+                this.LXI_R('D', 'E', this._get_next_word());
                 break;
             case 0x12:
                 this.STAX('D', 'E');
@@ -1436,7 +1428,7 @@ class i8080 {
                 this.INX_R('D', 'E');
                 break;
             case 0x21:
-                this.LXI('H', this._get_next_word());
+                this.LXI_R('H', 'L', this._get_next_word());
                 break;
             case 0x0E:
                 this.MVI_R('C', this._get_next_byte());
@@ -1454,7 +1446,7 @@ class i8080 {
                 this.MVI_R('L', this._get_next_byte());
                 break;
             case 0x31:
-                this.LXI('SP', this._get_next_word());
+                this.LXI_SP(this._get_next_word());
                 break;
             case 0x32:
                 this.STA(this._get_next_word());
