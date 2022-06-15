@@ -570,7 +570,7 @@ class i8080 {
     ------------------------------------------------------------------------*/
 
 
-    PUSH(high_byte_register, low_byte_register) {
+    PUSH_R(high_byte_register, low_byte_register) {
         this.stack_pointer--;
         this.bus.Write(this.registers[high_byte_register], this.stack_pointer);
         this.stack_pointer--;
@@ -586,7 +586,7 @@ class i8080 {
         this.clock += 11;
     }
     
-    POP(high_byte_register, low_byte_register) {
+    POP_R(high_byte_register, low_byte_register) {
         this.registers[low_byte_register] = this.bus.Read(this.stack_pointer);
         this.stack_pointer++;
         this.registers[high_byte_register] = this.bus.Read(this.stack_pointer);
