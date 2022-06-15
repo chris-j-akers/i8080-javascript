@@ -66,6 +66,7 @@ test_suite:
 
         c.Reset();
     }});
+    
   tests:
 
     - test: 
