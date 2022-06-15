@@ -932,7 +932,7 @@ class i8080 {
      * The stack pointer is incremented by 1.
      */
     INX_SP() {
-        this.stack_pointer = (this.stack_pointer + 0xFFFF) & 0xFFFF;
+        this.stack_pointer = (this.stack_pointer + 1) & 0xFFFF;
         this.clock += 5;
     }
 
@@ -957,6 +957,13 @@ class i8080 {
         this.stack_pointer = (this.stack_pointer + 0xFFFF) & 0xFFFF;
         this.clock += 5;
     }
+
+    _set_flags_on_inc_dec_op(lhs, rhs, raw_result) {
+        this._flag_manager.CheckAndSet.AuxillaryCarry(lhs, rhs);
+        this._flag_manager.CheckAndSet.Parity(raw_result);
+        this._flag_manager.CheckAndSet.Sign(raw_result);
+        this._flag_manager.CheckAndSet.Zero(raw_result);
+    }
     
     /**
      * The named register is incremented by 1.
@@ -968,15 +975,9 @@ class i8080 {
     INR_R(reg) {
         const lhs = this.registers[reg];
         const rhs = 1;
-        const result = lhs + rhs;
-
-        this._flag_manager.CheckAndSet.AuxillaryCarry(lhs, rhs);
-        this._flag_manager.CheckAndSet.Parity(result);
-        this._flag_manager.CheckAndSet.Sign(result);
-        this._flag_manager.CheckAndSet.Zero(result);
-
-        this.registers[reg] = result & 0xFF;
-
+        const raw_result = lhs + rhs;
+        this._set_flags_on_inc_dec_op(lhs, rhs, raw_result);
+        this.registers[reg] = raw_result & 0xFF;
         this.clock += 5;
     }
 
@@ -991,15 +992,9 @@ class i8080 {
 
         const lhs = this.bus.Read(addr);
         const rhs = 1;
-        const result = lhs + rhs;
-
-        this._flag_manager.CheckAndSet.AuxillaryCarry(lhs, rhs);
-        this._flag_manager.CheckAndSet.Parity(result);
-        this._flag_manager.CheckAndSet.Sign(result);
-        this._flag_manager.CheckAndSet.Zero(result);
-
-        this.bus.Write(result & 0xFF, addr);
-
+        const raw_result = lhs + rhs;
+        this._set_flags_on_inc_dec_op(lhs, rhs, raw_result);
+        this.bus.Write(raw_result & 0xFF, addr);
         this.clock += 10;
     }
 
@@ -1012,18 +1007,11 @@ class i8080 {
      */
     DCR_R(reg) {
         const lhs = this.registers[reg];
-
         // 0xFF is the 8-bit two's complement of 1.
         const rhs = 0xFF; 
-        const result = lhs + rhs;
-
-        this._flag_manager.CheckAndSet.AuxillaryCarry(lhs, rhs);
-        this._flag_manager.CheckAndSet.Parity(result);
-        this._flag_manager.CheckAndSet.Sign(result);
-        this._flag_manager.CheckAndSet.Zero(result);
-
-        this.registers[reg] = result & 0xFF;
-
+        const raw_result = lhs + rhs;
+        this._set_flags_on_inc_dec_op(lhs, rhs, raw_result);
+        this.registers[reg] = raw_result & 0xFF;
         this.clock += 5;
 
     }
@@ -1037,19 +1025,11 @@ class i8080 {
     DCR_M() {
         const addr = this._get_register_pair_word('H','L');
         const lhs = this.bus.Read(addr);
-
         // 0xFF is the 8-bit two's complement of 1.
         const rhs = 0xFF; 
-        
-        const result = lhs + rhs;
-
-        this._flag_manager.CheckAndSet.AuxillaryCarry(lhs, rhs);
-        this._flag_manager.CheckAndSet.Parity(result);
-        this._flag_manager.CheckAndSet.Sign(result);
-        this._flag_manager.CheckAndSet.Zero(result);
-
-        this.bus.Write(result & 0xFF, addr);
-
+        const raw_result = lhs + rhs;
+        this._set_flags_on_inc_dec_op(lhs, rhs, raw_result);
+        this.bus.Write(raw_result & 0xFF, addr);
         this.clock += 10;
     }
 
