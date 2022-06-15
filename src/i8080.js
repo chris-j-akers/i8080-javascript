@@ -893,16 +893,8 @@ class i8080 {
      * the relevant memory address. `B` = `B` &
      * `C`, `D` = `D` & `E`. 
      */
-    STAX(reg) {
-        let addr;
-        switch(reg) {
-            case 'B':
-                addr = this._get_register_pair_word('B','C');
-                break;
-            case 'D':
-                addr = this._get_register_pair_word('D','E');
-                break;
-        }
+    STAX(high_byte_register, low_byte_register) {
+        const addr = this._get_register_pair_word(high_byte_register, low_byte_register);
         this.bus.Write(this.registers['A'], addr);
         this.clock += 7;
     }
@@ -1429,7 +1421,7 @@ class i8080 {
                 this.LXI('B', this._get_next_word());
                 break;
             case 0x02:
-                this.STAX('B');
+                this.STAX('B', 'C');
                 break;
             case 0x03:
                 this.INX_R('B', 'C');
@@ -1438,7 +1430,7 @@ class i8080 {
                 this.LXI('D', this._get_next_word());
                 break;
             case 0x12:
-                this.STAX('D');
+                this.STAX('D', 'E');
                 break;
             case 0x13:
                 this.INX_R('D', 'E');
