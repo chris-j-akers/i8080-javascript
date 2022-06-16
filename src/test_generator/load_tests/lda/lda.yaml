@@ -21,17 +21,17 @@ test_suite:
       // Prep - Load data into memory location, first
       
       0x26,         // MVI into H register...
-      null,         // Mem addr high-byte
+      null,         // ...addr high-byte
       0x2E,         // MVI into L register...
-      null,         // Mem addr low-byte
+      null,         // ...addr low-byte
       0x36,         // MVI into memory location...
       data,         // ...the data.
       
       // Now the test
 
       0x3A,         // LDA...
-      null,         // Low-byte of address
-      null,         // High-byte of address
+      null,         // ...low-byte of address
+      null,         // ...high-byte of address
       0x76,         // HALT
     ]
 
