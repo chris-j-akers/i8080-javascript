@@ -23,6 +23,8 @@ test_suite:
         0x3E,                                             // MVI into accumulator
         0xFF,                                             // ...This byte
         0xF5,                                             // PUSH PSW
+        0x3E,                                             // MVI into the accumulator... 
+        0x00,                                             // ...Zero
         0x76,                                             // HALT
         0x3E
     ]
@@ -35,20 +37,22 @@ test_suite:
 
     c.InjectProgram(program);
     c.ExecuteProgram();
-
-    // SET ALL FLAGS TO 0
-    // ASSIGN FLAGS TO MEMORY
-    // CHECK FLAGS ARE SET
-    // CHECK 0xFF IS IN EXPECTED MEMORY LOCATION
-
+    
+    // No Op-Code for this, so set it here
+    c.cpu.flags = 0x0;
+    
+    assert.equal(c.cpu.flags, 0);
+    assert.equal(c.cpu.registers['A'], 0);
+    
+    c.cpu.flags = c.bus.Read(this.stack_pointer++);
+    
+    assert.equal(c.bus.Read(this.stack_pointer, 0xFF);
     assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), {carry});
     assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), {parity});
     assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), {auxillary_carry});
     assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), {zero});
     assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), {sign});
-
-    assert.equal(c.bus.Read(0xFFFF-1), 0xFF);
-    assert.equal(c.cpu.stack_pointer, 0xFFFF-2);
+    
     assert.equal(c.cpu.Clock, 35);
 
     c.Reset();
