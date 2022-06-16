@@ -11,7 +11,34 @@ class i8080 {
     /*------------------------------------------------------------------------
                             DEBUG & HELPER FUNCTIONS                        
     ------------------------------------------------------------------------*/
+    
+     
+    __dbg__byte_to_binary_str(val) {
+        var str = '';
+        for (let i = 0; i<8; i++) {
+            if (val & (1 << i)) {
+                str += '1';
+            } 
+            else {
+                str += '0';
+            }
+        }
+        return str.split('').reverse().join('');
+        }
 
+
+    __dbg__word_to_binary_str(val) {
+        var str = '';
+        for (let i = 0; i<16; i++) {
+            if (val & (1 << i)) {
+                str += '1';
+            } 
+            else {
+                str += '0';
+            }
+        }
+        return str.split('').reverse().join('');
+    }
 
     /**
      * @returns a formatted string listing each flag and its current value
