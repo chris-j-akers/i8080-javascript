@@ -42,12 +42,6 @@ test_suite:
 
     - test:
       name: Zero, AuxCarry, Parity Flags Set with Carry Reset
-      comment: |
-        // +-----------------------+-------+-----------------------+-------+
-        // |      Accumulator      | Carry |      Expected         | Flags |
-        // +-----------------------+-------+-----------------------+-------+
-        // | 001 | 0x01 | 00000001 |     0 | 000 | 0x00 | 00000000 | Z     |
-        // +-----------------------+-------+-----------------------+-------+
       accumulator: 1
       set_carry: False
       expected_result: 0

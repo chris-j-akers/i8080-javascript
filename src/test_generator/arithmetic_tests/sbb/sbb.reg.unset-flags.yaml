@@ -29,13 +29,12 @@ test_suite:
     const c = new Computer();
     const FlagType = c.cpu._flag_manager.FlagType;
 
-
     let program = [
-        0x3E, 
-        {accumulator},  // MOV A, #{accumulator}
-        null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-        {data},         // MOV [R], {data}
-        null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+        0x3E,           // MVI into accumulator...
+        {accumulator},  // ...this data
+        null,           // MVI into register (opcode added, below)
+        {data},         // ...this data
+        null,           // SBB register (opcode added, below)
         0x76            // HALT
     ]
 

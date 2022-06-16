@@ -16,11 +16,11 @@ test_suite:
 
 
     const program = [
-      0x3E,           // Move into accumulator....
-      {accumulator},  // ...this immediate value
-      0xCE,          // ACI to the accumulator...
-      {data},          // ...this immediate value
-      0x76            // Halt
+      0x3E,                   // Move into accumulator....
+      {accumulator},          // ...this immediate value
+      0xCE,                   // ACI to the accumulator...
+      {data},                 // ...this immediate value
+      0x76                    // Halt
     ]
 
     c.InjectProgram(program);

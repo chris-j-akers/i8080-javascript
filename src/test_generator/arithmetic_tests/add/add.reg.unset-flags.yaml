@@ -31,11 +31,11 @@ test_suite:
 
 
     let program = [
-        0x3E, 
-        {accumulator},  // MOV A, #{accumulator}
-        null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-        {data},         // MOV [R], {data}
-        null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+        0x3E,           // MVI into accumulator...
+        {accumulator},  // ...this immediate value
+        null,           // MVI into Register (opcode inserted, below)...
+        {data},         // ...this data
+        null,           // ADD (opcode inserted, below)
         0x76            // HALT
     ]
 

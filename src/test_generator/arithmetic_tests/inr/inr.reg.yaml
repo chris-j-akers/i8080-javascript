@@ -29,11 +29,10 @@ test_suite:
     const c = new Computer();
     const FlagType = c.cpu._flag_manager.FlagType;
 
-
     let program = [
-        null,
-        {data},
-        null,
+        null,           // MVI into register (opcode added, below)...
+        {data},         // ...this data
+        null,           // INR on register (opcode added, below)
         0x76            // HALT
     ]
 

@@ -26,11 +26,11 @@ test_suite:
 
 
     const program = [
-      mvi_opcode_lookup.{register_high_byte},     // Move into {register_high_byte}....
+      mvi_opcode_lookup.{register_high_byte},     // MVI into {register_high_byte}....
       0x00,                                       // ...this immediate value
-      mvi_opcode_lookup.{register_low_byte},      // Move into {register_low_byte}....
+      mvi_opcode_lookup.{register_low_byte},      // MVI into {register_low_byte}....
       0x04,                                       // ...this immediate value
-      {opcode},
+      {opcode},                                   // DCX Register
       0x76                                        // HALT
     ]
 
