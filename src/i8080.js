@@ -5,11 +5,7 @@
  */
 class i8080 {
 
-
-    /*------------------------------------------------------------------------
-                            DEBUG & HELPER FUNCTIONS                        
-    ------------------------------------------------------------------------*/
-    
+    // DEBUG AND HELPER FUNCTIONS
      
     __dbg__byte_to_binary_str(val) {
         let str = '';
@@ -96,11 +92,7 @@ class i8080 {
         return `${this.__dbg__get_registers()}\n${this.__dbg__get_flags()}\n${this.__dbg__get_sp()}\n${this.__dbg__get_pc()}\n${this.__dbg__get_clock()}`;
     }
 
-
-    /*------------------------------------------------------------------------
-                    INTERNAL METHODS AND PROPERTIES                     
-    ------------------------------------------------------------------------*/
-
+    // INTERNAL METHODS AND PROPERTIES
 
     /**
      * Constructor for the i8080 object.
@@ -339,12 +331,8 @@ class i8080 {
         }
     }
   
+    // NOP
     
-    /*------------------------------------------------------------------------
-                                    NOP                                   
-    ------------------------------------------------------------------------*/
-   
-   
     /**
      * Do nowt but take up clock ticks.
      */
@@ -352,9 +340,7 @@ class i8080 {
         this.clock += 4;
     }
 
-    /*------------------------------------------------------------------------
-                           ARITHMETIC OPERATIONS                           
-    ------------------------------------------------------------------------*/
+    // ARITHMETIC OPERATIONS
  
     /**
      * Sets flags accordingly for the results of an ADD/SUB arithmetic
@@ -373,11 +359,7 @@ class i8080 {
         this._flag_manager.CheckAndSet.Zero(raw_result & 0xFF);
     }
 
-
-    /*------------------------------------------------------------------------
-                            ADD ARITHMETIC OPERATIONS                         
-    ------------------------------------------------------------------------*/
-
+    // ADD ARITHMETIC OPERATIONS
 
     /**
      * Internal method to perform an ADD operation and set flags accordingly.
@@ -459,10 +441,7 @@ class i8080 {
         this.clock += 7;
     }
 
-
-    /*------------------------------------------------------------------------
-                        SUBTRACT ARITHMETIC OPERATIONS                      
-    ------------------------------------------------------------------------*/
+    // SUBTRACT ARITHMETIC OPERATIONS
 
     /**
      * Internal method used to perform a subtract operation. Note that two's
@@ -560,17 +539,13 @@ class i8080 {
         this.clock += 7;
     }
 
-
-    /*------------------------------------------------------------------------
-                                COMPARE OPERATIONS                            
-    ------------------------------------------------------------------------*/
-
+    // COMPARISON OPERATIONS
 
     /**
      * Compares value in Accumulator with value in `register`. 
      *
      * Performs a subtract operation and sets flags accordingly, but does not
-     * record the result anywhere.
+     * record the result.
      */
     CMP_R(register) {
         const result = this._sub(this.registers['A'], this.registers[register]);
@@ -582,18 +557,14 @@ class i8080 {
      * register's H and L.
      *
      * Performs a subtract operation and sets flags accordingly, but does not
-     * record the result anywhere.
+     * record the result.
      */
     CMP_M() {
         const result = this._sub(this.registers['A'], this.bus.Read(this._get_register_pair_word('H','L')));
         this.clock += 7;
     }
 
-
-    /*------------------------------------------------------------------------
-                         STACK POINTER INSTRUCTIONS                        
-    ------------------------------------------------------------------------*/
-
+    // STACK POINTER OPERATIONS
 
     PUSH_R(high_byte_register, low_byte_register) {
         this.bus.Write(this.registers[high_byte_register], --this.stack_pointer);
@@ -619,12 +590,8 @@ class i8080 {
         this.clock += 10;
     }
 
-
-    /*------------------------------------------------------------------------
-                          16-BIT LOAD IMMEDIATE OPERATIONS                     
-    ------------------------------------------------------------------------*/
-
-    
+    // 16-BIT LOAD IMMEDIATE OPERATIONS
+   
     /**
      * Load a 16-bit immediate value into one of the register pairs (BC, DE, HL).
      * The first-byte is loaded into the first register of the specified pair, while
