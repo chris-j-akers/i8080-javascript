@@ -23,7 +23,8 @@ test_suite:
         0x3E,                                             // MVI into accumulator
         0xFF,                                             // ...This byte
         0xF5,                                             // PUSH PSW
-        0x76                                              // HALT
+        0x76,                                             // HALT
+        0x3E
     ]
 
     {set_carry}
@@ -34,6 +35,11 @@ test_suite:
 
     c.InjectProgram(program);
     c.ExecuteProgram();
+
+    // SET ALL FLAGS TO 0
+    // ASSIGN FLAGS TO MEMORY
+    // CHECK FLAGS ARE SET
+    // CHECK 0xFF IS IN EXPECTED MEMORY LOCATION
 
     assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), {carry});
     assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), {parity});
