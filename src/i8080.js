@@ -974,9 +974,8 @@ class i8080 {
      */
     INR_R(reg) {
         const lhs = this.registers[reg];
-        const rhs = 1;
-        const raw_result = lhs + rhs;
-        this._set_flags_on_inc_dec_op(lhs, rhs, raw_result);
+        const raw_result = lhs + 1;
+        this._set_flags_on_inc_dec_op(lhs, 1, raw_result);
         this.registers[reg] = raw_result & 0xFF;
         this.clock += 5;
     }
@@ -989,11 +988,9 @@ class i8080 {
      */
     INR_M() {
         const addr = this._get_register_pair_word('H','L');
-
         const lhs = this.bus.Read(addr);
-        const rhs = 1;
-        const raw_result = lhs + rhs;
-        this._set_flags_on_inc_dec_op(lhs, rhs, raw_result);
+        const raw_result = lhs + 1;
+        this._set_flags_on_inc_dec_op(lhs, 1, raw_result);
         this.bus.Write(raw_result & 0xFF, addr);
         this.clock += 10;
     }
@@ -1008,9 +1005,8 @@ class i8080 {
     DCR_R(reg) {
         const lhs = this.registers[reg];
         // 0xFF is the 8-bit two's complement of 1.
-        const rhs = 0xFF; 
-        const raw_result = lhs + rhs;
-        this._set_flags_on_inc_dec_op(lhs, rhs, raw_result);
+        const raw_result = lhs + 0xFF;
+        this._set_flags_on_inc_dec_ophg(lhs, 0xFF, raw_result);
         this.registers[reg] = raw_result & 0xFF;
         this.clock += 5;
 
@@ -1026,8 +1022,7 @@ class i8080 {
         const addr = this._get_register_pair_word('H','L');
         const lhs = this.bus.Read(addr);
         // 0xFF is the 8-bit two's complement of 1.
-        const rhs = 0xFF; 
-        const raw_result = lhs + rhs;
+        const raw_result = lhs + 0xFF;
         this._set_flags_on_inc_dec_op(lhs, rhs, raw_result);
         this.bus.Write(raw_result & 0xFF, addr);
         this.clock += 10;
@@ -1127,43 +1122,23 @@ class i8080 {
         this.clock += 4;
     }
 
-    DAD(high_byte_register) {
-        let register_pair_val;
-        switch(high_byte_register) {
-            case 'B':
-                register_pair_val = (this.registers['B'] << 8) | this.registers['C'] & 0xFFFF;
-                break;
-            case 'D':
-                register_pair_val = (this.registers['D'] << 8) | this.registers['E'] & 0xFFFF;
-                break;
-            case 'H':
-                register_pair_val = (this.registers['H'] << 8) | this.registers['L'] & 0xFFFF;
-                break;
-            case 'SP':
-                register_pair_val = this.stack_pointer
-                break;
-        }
-        const h_and_l_val = (this.registers['H'] << 8) | this.registers['L'] & 0xFFFF;
-        let result = h_and_l_val + register_pair_val;
+    DAD(high_byte_register, low_byte_register) {
+        let result = (this.registers['H'] << 8 | this.registers['L']) & 0xFFFFbg + ((this.registers[high_byte_register] << 8 | this.registers[low_byte_register]) & 0xFFFF);
         (result > 0xFFFF | result < 0) ? this._flag_manager.SetFlag(this._flag_manager.FlagType.Carry) : this._flag_manager.ClearFlag(this._flag_manager.FlagType.Carry);
         result &= 0xFFFF;
         this.registers['H'] = (result >> 8) & 0xFF;
         this.registers['L'] = result & 0xFF;
         this.clock += 10;
     }
+    
+    DAD_SP() {
+        this.registers['H'] = (this.stack_pointer >> 8) & 0xFF;
+        this.registers['L'] = this.stack_pointer & 0xFF;
+        
+    }
 
-    LDAX(high_byte_register) {
-        let low_byte_register;
-        switch(high_byte_register) {
-            case 'B':
-                low_byte_register = 'C';
-                break;
-            case 'D':
-                low_byte_register = 'E'
-                break;
-        }
-        const data = this.bus.Read(this.registers[high_byte_register] << 8 | this.registers[low_byte_register] & 0xFF);
-        this.registers['A'] = data;
+    LDAX(high_byte_register, low_byte_register) {
+        this.registers['A'] = this.bus.Read(this.registers[high_byte_register] << 8 | this.registers[low_byte_register] & 0xFF);
         this.clock += 7;
     }
 
@@ -1270,22 +1245,22 @@ class i8080 {
                 this.LHLD(this._get_next_word());
                 break;
             case 0x0A:
-                this.LDAX('B');
+                this.LDAX('B', 'C');
                 break;
             case 0x1A:
-                this.LDAX('D');
+                this.LDAX('D', 'E');
                 break;
             case 0x09:
-                this.DAD('B');
+                this.DAD('B', 'C');
                 break;
             case 0x19:
-                this.DAD('D');
+                this.DAD('D', 'E');
                 break;
             case 0x29:
-                this.DAD('H');
+                this.DAD('H', 'L');
                 break;
             case 0x39:
-                this.DAD('SP');
+                this.DAD_SP();
                 break;
             case 0x2F:
                 this.CMA();
