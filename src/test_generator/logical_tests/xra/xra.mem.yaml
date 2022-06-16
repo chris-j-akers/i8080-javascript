@@ -15,12 +15,11 @@ test_suite:
     const c = new Computer();
     const FlagType = c.cpu._flag_manager.FlagType;
 
-
     const data = {data};
 
     const program = [
       0x3E,                   // MVI into Accumulator
-      {accumulator},          // Immediate value (in test config)
+      {accumulator},          // ...this value
       0x26,                   // MOV into H...
       null,                   // ...the high-byte of the memory address (ro be inserted)
       0x2E,                   // MOV into L...

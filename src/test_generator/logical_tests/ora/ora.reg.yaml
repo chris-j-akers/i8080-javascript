@@ -30,7 +30,7 @@ test_suite:
         {accumulator},        // ... this immediate value
         null,                 // MVI into register ...
         {data},               // ...this immediate value
-        null,                 // ORA value in register  with Accumulator
+        null,                 // ORA
         0x76                  // HALT
       ]
 

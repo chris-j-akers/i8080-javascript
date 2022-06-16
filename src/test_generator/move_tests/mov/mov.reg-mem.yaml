@@ -30,10 +30,10 @@ test_suite:
       mvi_opcode_lookup.{reg_source}, // MVI into Register...
       data,                           // ...this immediate value
       0x26,                           // MOV into H...
-      null,                           // ...the high-byte of the memory address (to be inserted)
+      null,                           // ...addr high-byte (to be inserted)
       0x2E,                           // MOV into L...
-      null,                            // ... the low-byte of the memory address (to be inserted)
-      {opcode},                       // MOV from register to address in H and L          
+      null,                            // ...addr low-byte (to be inserted)
+      {opcode},                       // MOV
       0x76                            // HALT
     ]
 

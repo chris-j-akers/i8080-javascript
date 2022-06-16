@@ -18,10 +18,10 @@ test_suite:
 
     let program = [
         0x31,                                             // LXI into Stack pointer
-        0xFF,                                             // ...This low-byte and ...
-        0xFF,                                             // ...This high-byte (top of memory)
+        0xFF,                                             // ...addr low-byte
+        0xFF,                                             // ...addr high-byte
         0x3E,                                             // MVI into accumulator
-        0xFF,                                             // ...This byte
+        0xFF,                                             // ...this byte
         0xF5,                                             // PUSH PSW
         0x3E,                                             // MVI into the accumulator... 
         0x00,                                             // ...Zero

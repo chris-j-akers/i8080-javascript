@@ -19,7 +19,7 @@ test_suite:
     let program = [
         0x3E,                 // MVI into the accumulator...
         {accumulator},        // ... this immediate value
-        0xB7,                 // ORA value in register  with Accumulator
+        0xB7,                 // ORA
         0x76                  // HALT
       ]
 

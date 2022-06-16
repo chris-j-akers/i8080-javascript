@@ -14,8 +14,8 @@ test_suite:
     const c = new Computer();
     
     let program = [
-      {opcode},         // MVI into Register {reg_destination}...
-      null,             // ...this byte of data (to be populated in loop)
+      {opcode},         // MVI into Register
+      null,             // ...this data
       0x76              // HALT
     ]
 

@@ -25,10 +25,10 @@ test_suite:
     const c = new Computer();
 
     let program = [
-      mvi_opcode_lookup.{reg_source},    // MVI {reg_source} 
-      null,                             // ...with this value (populated in loop, below)
-      {opcode},                         // MOV to register {reg_destination}
-      0x76                              // HALT
+      mvi_opcode_lookup.{reg_source},     // MVI into source register... 
+      null,                               // ...this value
+      {opcode},                           // MOV
+      0x76                                // HALT
     ]
 
     for (let byte = 0x00; byte <= 0xFF; byte++) {{

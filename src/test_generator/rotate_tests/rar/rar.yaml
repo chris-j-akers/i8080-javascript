@@ -20,7 +20,7 @@ test_suite:
     let program = [
       0x3E,           // MVI into accumulator
       {data},         // ...this byte
-      0x1F,           // RAL
+      0x1F,           // RAR
       0x76,           // HALT
     ]
 

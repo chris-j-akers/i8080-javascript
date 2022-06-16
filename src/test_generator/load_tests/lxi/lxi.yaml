@@ -15,8 +15,8 @@ test_suite:
 
     let program = [
       {opcode},      // LXI into {msb_register}/{lsb_register}...
-      null,          // ...Lower-byte of 16-bit data (to be populated)
-      null,          // ...Higher-byte of 16-bit data (to be populated)
+      null,          // ...low-byte of 16-bit data (inserted, below)
+      null,          // ...high-byte of 16-bit data (inserted, below)
       0x76           // HALT
     ]
 

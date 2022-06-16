@@ -26,10 +26,10 @@ test_suite:
       0x3E,           // MVI into accumulator
       0xFF,           // ...this byte
       null,           // MVI into {high_byte_register}...
-      null,           // ...the high-byte of the memory address (ro be inserted)
+      null,           // ...addr high-byte (inserted, below)
       null,           // MVI into {low_byte_register}...
-      null,           // ... the low-byte of the memory address (to be inserted)
-      {opcode},       // Store Accumulator into address held in above register pair
+      null,           // ... addr low-byte (inserted, below)
+      {opcode},       // STAX
       0x76            // HALT
     ]
 

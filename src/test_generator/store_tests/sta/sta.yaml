@@ -18,8 +18,8 @@ test_suite:
       0x3E,          // Load into Accumulator...
       0xFF,          // ... this value
       0x32,          // STA into..
-      null,          // ...Lower-byte of 16-bit data (to be populated)
-      null,          // ...Higher-byte of 16-bit data (to be populated)
+      null,          // ...addr low-byte (inserted, below)
+      null,          // ...addr high-byte (inserted, below)
       0x76           // HALT
     ]
     
