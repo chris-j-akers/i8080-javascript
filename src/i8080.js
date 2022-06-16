@@ -454,7 +454,7 @@ class i8080 {
      * 0)
      * @returns 
      */
-    __sub(lhs, rhs, carry = 0) {
+    _sub(lhs, rhs, carry = 0) {
         return this._add(lhs, ~(rhs + carry) + 1);
     }
 
@@ -472,7 +472,7 @@ class i8080 {
      * subtracted from the Accumulator (B,C,D,E,H,L)
      */
     SUB_R(register) {
-        this.registers['A'] = this.__sub(this.registers['A'], this.registers[register]);
+        this.registers['A'] = this._sub(this.registers['A'], this.registers[register]);
         this.clock += 4;
     }
 
@@ -489,7 +489,7 @@ class i8080 {
      *
      */
     SUB_M() {      
-        this.registers['A'] = this.__sub(this.registers['A'], this.bus.Read(this._get_register_pair_word('H','L')));
+        this.registers['A'] = this._sub(this.registers['A'], this.bus.Read(this._get_register_pair_word('H','L')));
         this.clock += 7;
     }
 
@@ -501,7 +501,7 @@ class i8080 {
      * subtract.
      */
     SBB_R(register) {               
-        this.registers['A'] = this.__sub(this.registers['A'], this.registers[register], this._flag_manager.IsSet(this._flag_manager.FlagType.Carry) ? 1 : 0);
+        this.registers['A'] = this._sub(this.registers['A'], this.registers[register], this._flag_manager.IsSet(this._flag_manager.FlagType.Carry) ? 1 : 0);
         this.clock += 4;
     }
 
@@ -511,7 +511,7 @@ class i8080 {
      * Accumulator.
      */
     SBB_M() {
-        this.registers['A'] = this.__sub(this.registers['A'], this.bus.Read(this._get_register_pair_word('H','L')), this._flag_manager.IsSet(this._flag_manager.FlagType.Carry) ? 1 : 0);
+        this.registers['A'] = this._sub(this.registers['A'], this.bus.Read(this._get_register_pair_word('H','L')), this._flag_manager.IsSet(this._flag_manager.FlagType.Carry) ? 1 : 0);
         this.clock += 7;
     }
 
@@ -521,7 +521,7 @@ class i8080 {
      * @param {number} val Immediate value to subtract
      */
     SUI(val) {
-        this.registers['A'] = this.__sub(this.registers['A'], val);
+        this.registers['A'] = this._sub(this.registers['A'], val);
         this.clock += 7;        
     }
 
@@ -531,7 +531,7 @@ class i8080 {
      * @param {number} val Immediate value to subtract
      */
     SBI(val) {
-        this.registers['A'] = this.__sub(this.registers['A'], val, this._flag_manager.IsSet(this._flag_manager.FlagType.Carry) ? 1 : 0);
+        this.registers['A'] = this._sub(this.registers['A'], val, this._flag_manager.IsSet(this._flag_manager.FlagType.Carry) ? 1 : 0);
         this.clock += 7;
     }
 
@@ -548,7 +548,7 @@ class i8080 {
      * record the result anywhere.
      */
     CMP_R(register) {
-        const result = this.__sub(this.registers['A'], this.registers[register]);
+        const result = this._sub(this.registers['A'], this.registers[register]);
         this.clock += 4;
     }
 
@@ -560,7 +560,7 @@ class i8080 {
      * record the result anywhere.
      */
     CMP_M() {
-        const result = this.__sub(this.registers['A'], this.bus.Read(this._get_register_pair_word('H','L')));
+        const result = this._sub(this.registers['A'], this.bus.Read(this._get_register_pair_word('H','L')));
         this.clock += 7;
     }
 
@@ -571,34 +571,26 @@ class i8080 {
 
 
     PUSH_R(high_byte_register, low_byte_register) {
-        this.stack_pointer--;
-        this.bus.Write(this.registers[high_byte_register], this.stack_pointer);
-        this.stack_pointer--;
-        this.bus.Write(this.registers[low_byte_register], this.stack_pointer);
+        this.bus.Write(this.registers[high_byte_register], this.stack_pointer--);
+        this.bus.Write(this.registers[low_byte_register], this.stack_pointer--);
         this.clock += 11;
     }
 
-    PUSH_PSW() {
-        this.stack_pointer--;
-        this.bus.Write(this.registers['A'], this.stack_pointer);
-        this.stack_pointer--;
-        this.bus.Write(this.flags, this.stack_pointer);
+    PUSH_PSW()
+        this.bus.Write(this.registers['A'], this.stack_pointer--);
+        this.bus.Write(this.flags, this.stack_pointer--);
         this.clock += 11;
     }
     
     POP_R(high_byte_register, low_byte_register) {
-        this.registers[low_byte_register] = this.bus.Read(this.stack_pointer);
-        this.stack_pointer++;
-        this.registers[high_byte_register] = this.bus.Read(this.stack_pointer);
-        this.stack_pointer++;
+        this.registers[low_byte_register] = this.bus.Read(this.stack_pointer++);
+        this.registers[high_byte_register] = this.bus.Read(this.stack_pointer++);
         this.clock += 10;
     }
     
     POP_PSW() {
-        this.flags = this.bus.Read(this.stack_pointer);
-        this.stack_pointer++;
-        this.registers['A'] = this.bus.Read(this.stack_pointer);
-        this.stack_pointer++;
+        this.flags = this.bus.Read(this.stack_pointer++);
+        this.registers['A'] = this.bus.Read(this.stack_pointer++);
         this.clock += 10;
     }
 
