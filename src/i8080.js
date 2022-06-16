@@ -14,7 +14,7 @@ class i8080 {
     
      
     __dbg__byte_to_binary_str(val) {
-        var str = '';
+        let str = '';
         for (let i = 0; i<8; i++) {
             if (val & (1 << i)) {
                 str += '1';
@@ -28,7 +28,7 @@ class i8080 {
 
 
     __dbg__word_to_binary_str(val) {
-        var str = '';
+        let str = '';
         for (let i = 0; i<16; i++) {
             if (val & (1 << i)) {
                 str += '1';
