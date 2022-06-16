@@ -16,13 +16,12 @@ describe('ADD OpCode Tests (0x80, 0x81, 0x82, 0x83, 0x84, 0x85)', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    0,  // MOV A, #0
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    1,         // MOV [R], 1
-		    null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator...
+		    0,  // ...this immediate value
+		    null,           // MVI into Register (opcode inserted, below)...
+		    1,         // ...this data
+		    null,           // ADD (opcode inserted, below)
 		    0x76            // HALT
 		]
 		
@@ -50,13 +49,12 @@ describe('ADD OpCode Tests (0x80, 0x81, 0x82, 0x83, 0x84, 0x85)', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    0,  // MOV A, #0
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    0,         // MOV [R], 0
-		    null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator...
+		    0,  // ...this immediate value
+		    null,           // MVI into Register (opcode inserted, below)...
+		    0,         // ...this data
+		    null,           // ADD (opcode inserted, below)
 		    0x76            // HALT
 		]
 		
@@ -84,13 +82,12 @@ describe('ADD OpCode Tests (0x80, 0x81, 0x82, 0x83, 0x84, 0x85)', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    1,  // MOV A, #1
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    84,         // MOV [R], 84
-		    null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator...
+		    1,  // ...this immediate value
+		    null,           // MVI into Register (opcode inserted, below)...
+		    84,         // ...this data
+		    null,           // ADD (opcode inserted, below)
 		    0x76            // HALT
 		]
 		
@@ -118,13 +115,12 @@ describe('ADD OpCode Tests (0x80, 0x81, 0x82, 0x83, 0x84, 0x85)', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    15,  // MOV A, #15
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    15,         // MOV [R], 15
-		    null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator...
+		    15,  // ...this immediate value
+		    null,           // MVI into Register (opcode inserted, below)...
+		    15,         // ...this data
+		    null,           // ADD (opcode inserted, below)
 		    0x76            // HALT
 		]
 		
@@ -152,13 +148,12 @@ describe('ADD OpCode Tests (0x80, 0x81, 0x82, 0x83, 0x84, 0x85)', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    112,  // MOV A, #112
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    64,         // MOV [R], 64
-		    null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator...
+		    112,  // ...this immediate value
+		    null,           // MVI into Register (opcode inserted, below)...
+		    64,         // ...this data
+		    null,           // ADD (opcode inserted, below)
 		    0x76            // HALT
 		]
 		
@@ -186,13 +181,12 @@ describe('ADD OpCode Tests (0x80, 0x81, 0x82, 0x83, 0x84, 0x85)', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    66,  // MOV A, #66
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    192,         // MOV [R], 192
-		    null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator...
+		    66,  // ...this immediate value
+		    null,           // MVI into Register (opcode inserted, below)...
+		    192,         // ...this data
+		    null,           // ADD (opcode inserted, below)
 		    0x76            // HALT
 		]
 		

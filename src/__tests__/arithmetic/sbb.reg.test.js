@@ -22,13 +22,12 @@ describe('SBB Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    32,  // MOV A, #32
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    1,         // MOV [R], 1
-		    null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator...
+		    32,  // ...this data
+		    null,           // MVI into register (opcode added, below)
+		    1,         // ...this data
+		    null,           // SBB register (opcode added, below)
 		    0x76            // HALT
 		]
 		
@@ -58,13 +57,12 @@ describe('SBB Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    33,  // MOV A, #33
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    1,         // MOV [R], 1
-		    null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator...
+		    33,  // ...this data
+		    null,           // MVI into register (opcode added, below)
+		    1,         // ...this data
+		    null,           // SBB register (opcode added, below)
 		    0x76            // HALT
 		]
 		
@@ -95,13 +93,12 @@ describe('SBB Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    1,  // MOV A, #1
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    1,         // MOV [R], 1
-		    null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator...
+		    1,  // ...this data
+		    null,           // MVI into register (opcode added, below)
+		    1,         // ...this data
+		    null,           // SBB register (opcode added, below)
 		    0x76            // HALT
 		]
 		
@@ -131,13 +128,12 @@ describe('SBB Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    3,  // MOV A, #3
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    2,         // MOV [R], 2
-		    null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator...
+		    3,  // ...this data
+		    null,           // MVI into register (opcode added, below)
+		    2,         // ...this data
+		    null,           // SBB register (opcode added, below)
 		    0x76            // HALT
 		]
 		
@@ -168,13 +164,12 @@ describe('SBB Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    32,  // MOV A, #32
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    2,         // MOV [R], 2
-		    null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator...
+		    32,  // ...this data
+		    null,           // MVI into register (opcode added, below)
+		    2,         // ...this data
+		    null,           // SBB register (opcode added, below)
 		    0x76            // HALT
 		]
 		
@@ -204,13 +199,12 @@ describe('SBB Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    32,  // MOV A, #32
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    1,         // MOV [R], 1
-		    null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator...
+		    32,  // ...this data
+		    null,           // MVI into register (opcode added, below)
+		    1,         // ...this data
+		    null,           // SBB register (opcode added, below)
 		    0x76            // HALT
 		]
 		
@@ -241,13 +235,12 @@ describe('SBB Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    127,  // MOV A, #127
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    3,         // MOV [R], 3
-		    null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator...
+		    127,  // ...this data
+		    null,           // MVI into register (opcode added, below)
+		    3,         // ...this data
+		    null,           // SBB register (opcode added, below)
 		    0x76            // HALT
 		]
 		
@@ -277,13 +270,12 @@ describe('SBB Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    127,  // MOV A, #127
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    4,         // MOV [R], 4
-		    null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator...
+		    127,  // ...this data
+		    null,           // MVI into register (opcode added, below)
+		    4,         // ...this data
+		    null,           // SBB register (opcode added, below)
 		    0x76            // HALT
 		]
 		
@@ -314,13 +306,12 @@ describe('SBB Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    255,  // MOV A, #255
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    1,         // MOV [R], 1
-		    null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator...
+		    255,  // ...this data
+		    null,           // MVI into register (opcode added, below)
+		    1,         // ...this data
+		    null,           // SBB register (opcode added, below)
 		    0x76            // HALT
 		]
 		
@@ -350,13 +341,12 @@ describe('SBB Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    253,  // MOV A, #253
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    3,         // MOV [R], 3
-		    null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator...
+		    253,  // ...this data
+		    null,           // MVI into register (opcode added, below)
+		    3,         // ...this data
+		    null,           // SBB register (opcode added, below)
 		    0x76            // HALT
 		]
 		
@@ -387,13 +377,12 @@ describe('SBB Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    5,  // MOV A, #5
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    10,         // MOV [R], 10
-		    null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator...
+		    5,  // ...this data
+		    null,           // MVI into register (opcode added, below)
+		    10,         // ...this data
+		    null,           // SBB register (opcode added, below)
 		    0x76            // HALT
 		]
 		
@@ -423,13 +412,12 @@ describe('SBB Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    5,  // MOV A, #5
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    9,         // MOV [R], 9
-		    null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator...
+		    5,  // ...this data
+		    null,           // MVI into register (opcode added, below)
+		    9,         // ...this data
+		    null,           // SBB register (opcode added, below)
 		    0x76            // HALT
 		]
 		

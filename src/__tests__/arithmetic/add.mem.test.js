@@ -13,21 +13,16 @@ describe('ADD Memory', () => {
 		
 		const program = [
 		  0x3E,                   // MVI into Accumulator
-		  0,          // Immediate value (in test config)
+		  0,          // ..this immediate value (in test config)
 		  0x26,                   // MOV into H...
-		  null,                   // ...the high-byte of the memory address (ro be inserted)
+		  null,                   // ...the high-byte of the memory address (inserted, below)
 		  0x2E,                   // MOV into L...
-		  null,                   // ... the low-byte of the memory address (to be inserted)
+		  null,                   // ... the low-byte of the memory address (inserted, below)
 		  0x36,                   // MOV into the memory address...
 		  data,                   // ...the data value
 		  0x86,                   // Add data in Memory Location to Accumulator
-		  0x76                    // Halt Program
+		  0x76                    // HALT
 		]
-		
-		/**
-		  * Our little test program already takes up some memory,
-		  * so we start tests after the code.
-		  */
 		
 		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
 		  program[3] = (mem_addr >> 8) & 0xFF;
@@ -59,21 +54,16 @@ describe('ADD Memory', () => {
 		
 		const program = [
 		  0x3E,                   // MVI into Accumulator
-		  0,          // Immediate value (in test config)
+		  0,          // ..this immediate value (in test config)
 		  0x26,                   // MOV into H...
-		  null,                   // ...the high-byte of the memory address (ro be inserted)
+		  null,                   // ...the high-byte of the memory address (inserted, below)
 		  0x2E,                   // MOV into L...
-		  null,                   // ... the low-byte of the memory address (to be inserted)
+		  null,                   // ... the low-byte of the memory address (inserted, below)
 		  0x36,                   // MOV into the memory address...
 		  data,                   // ...the data value
 		  0x86,                   // Add data in Memory Location to Accumulator
-		  0x76                    // Halt Program
+		  0x76                    // HALT
 		]
-		
-		/**
-		  * Our little test program already takes up some memory,
-		  * so we start tests after the code.
-		  */
 		
 		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
 		  program[3] = (mem_addr >> 8) & 0xFF;
@@ -105,21 +95,16 @@ describe('ADD Memory', () => {
 		
 		const program = [
 		  0x3E,                   // MVI into Accumulator
-		  1,          // Immediate value (in test config)
+		  1,          // ..this immediate value (in test config)
 		  0x26,                   // MOV into H...
-		  null,                   // ...the high-byte of the memory address (ro be inserted)
+		  null,                   // ...the high-byte of the memory address (inserted, below)
 		  0x2E,                   // MOV into L...
-		  null,                   // ... the low-byte of the memory address (to be inserted)
+		  null,                   // ... the low-byte of the memory address (inserted, below)
 		  0x36,                   // MOV into the memory address...
 		  data,                   // ...the data value
 		  0x86,                   // Add data in Memory Location to Accumulator
-		  0x76                    // Halt Program
+		  0x76                    // HALT
 		]
-		
-		/**
-		  * Our little test program already takes up some memory,
-		  * so we start tests after the code.
-		  */
 		
 		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
 		  program[3] = (mem_addr >> 8) & 0xFF;
@@ -151,21 +136,16 @@ describe('ADD Memory', () => {
 		
 		const program = [
 		  0x3E,                   // MVI into Accumulator
-		  1,          // Immediate value (in test config)
+		  1,          // ..this immediate value (in test config)
 		  0x26,                   // MOV into H...
-		  null,                   // ...the high-byte of the memory address (ro be inserted)
+		  null,                   // ...the high-byte of the memory address (inserted, below)
 		  0x2E,                   // MOV into L...
-		  null,                   // ... the low-byte of the memory address (to be inserted)
+		  null,                   // ... the low-byte of the memory address (inserted, below)
 		  0x36,                   // MOV into the memory address...
 		  data,                   // ...the data value
 		  0x86,                   // Add data in Memory Location to Accumulator
-		  0x76                    // Halt Program
+		  0x76                    // HALT
 		]
-		
-		/**
-		  * Our little test program already takes up some memory,
-		  * so we start tests after the code.
-		  */
 		
 		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
 		  program[3] = (mem_addr >> 8) & 0xFF;
@@ -197,21 +177,16 @@ describe('ADD Memory', () => {
 		
 		const program = [
 		  0x3E,                   // MVI into Accumulator
-		  1,          // Immediate value (in test config)
+		  1,          // ..this immediate value (in test config)
 		  0x26,                   // MOV into H...
-		  null,                   // ...the high-byte of the memory address (ro be inserted)
+		  null,                   // ...the high-byte of the memory address (inserted, below)
 		  0x2E,                   // MOV into L...
-		  null,                   // ... the low-byte of the memory address (to be inserted)
+		  null,                   // ... the low-byte of the memory address (inserted, below)
 		  0x36,                   // MOV into the memory address...
 		  data,                   // ...the data value
 		  0x86,                   // Add data in Memory Location to Accumulator
-		  0x76                    // Halt Program
+		  0x76                    // HALT
 		]
-		
-		/**
-		  * Our little test program already takes up some memory,
-		  * so we start tests after the code.
-		  */
 		
 		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
 		  program[3] = (mem_addr >> 8) & 0xFF;
@@ -243,21 +218,16 @@ describe('ADD Memory', () => {
 		
 		const program = [
 		  0x3E,                   // MVI into Accumulator
-		  20,          // Immediate value (in test config)
+		  20,          // ..this immediate value (in test config)
 		  0x26,                   // MOV into H...
-		  null,                   // ...the high-byte of the memory address (ro be inserted)
+		  null,                   // ...the high-byte of the memory address (inserted, below)
 		  0x2E,                   // MOV into L...
-		  null,                   // ... the low-byte of the memory address (to be inserted)
+		  null,                   // ... the low-byte of the memory address (inserted, below)
 		  0x36,                   // MOV into the memory address...
 		  data,                   // ...the data value
 		  0x86,                   // Add data in Memory Location to Accumulator
-		  0x76                    // Halt Program
+		  0x76                    // HALT
 		]
-		
-		/**
-		  * Our little test program already takes up some memory,
-		  * so we start tests after the code.
-		  */
 		
 		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
 		  program[3] = (mem_addr >> 8) & 0xFF;

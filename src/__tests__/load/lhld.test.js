@@ -8,26 +8,26 @@ describe('LHLD', () => {
 		
 		const program = [
 		
-		  // Prep
+		  // PREP
 		
 		  0x26,                   // MVI into H...
 		  0xE,                    // ...this data
 		  0x2E,                   // MVI into L...
 		  0x71,                   // ...this data
-		  0x22,                   // SHLD
-		  null,                   // Low-byte of address (to be populated)
-		  null,                   // High-byte of addres (to be populated)
+		  0x22,                   // SHLD...
+		  null,                   // ...addr low-byte (added, below)
+		  null,                   // ...addr high-byte (added, below)
 		  0x26,                   // MVI into H...
-		  0x00,                   // 0
+		  0x00,                   // ...0
 		  0x2E,                   // MVI into L....
-		  0x00,                   // 0
-		  0x76,                    // HALT (So we can check they're now 0)
+		  0x00,                   // ...0
+		  0x76,                   // HALT
 		
-		  // Test
+		  // TEST
 		
-		  0x2A,                   // LHLD - Finally, the actual test!
-		  null,                   // Low byte of mem addr
-		  null,                   // High byte of mem addr
+		  0x2A,                   // LHLD...
+		  null,                   // ...addr low-byte
+		  null,                   // ...addr high-byte
 		  0x76                    // HALT
 		]
 		

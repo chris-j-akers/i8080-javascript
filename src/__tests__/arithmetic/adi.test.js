@@ -9,11 +9,11 @@ describe('ADI', () => {
 		
 		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  0,  // ...this immediate value
-		  0xC6,          // ADI to the accumulator...
-		  1,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,             // MVI into accumulator....
+		  0,    // ...this immediate value
+		  0xC6,             // ADI to the accumulator...
+		  1,           // ...this immediate value
+		  0x76              // HALT
 		]
 		
 		c.InjectProgram(program);
@@ -36,11 +36,11 @@ describe('ADI', () => {
 		
 		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  0,  // ...this immediate value
-		  0xC6,          // ADI to the accumulator...
-		  0,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,             // MVI into accumulator....
+		  0,    // ...this immediate value
+		  0xC6,             // ADI to the accumulator...
+		  0,           // ...this immediate value
+		  0x76              // HALT
 		]
 		
 		c.InjectProgram(program);
@@ -63,11 +63,11 @@ describe('ADI', () => {
 		
 		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  1,  // ...this immediate value
-		  0xC6,          // ADI to the accumulator...
-		  84,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,             // MVI into accumulator....
+		  1,    // ...this immediate value
+		  0xC6,             // ADI to the accumulator...
+		  84,           // ...this immediate value
+		  0x76              // HALT
 		]
 		
 		c.InjectProgram(program);
@@ -90,11 +90,11 @@ describe('ADI', () => {
 		
 		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  15,  // ...this immediate value
-		  0xC6,          // ADI to the accumulator...
-		  15,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,             // MVI into accumulator....
+		  15,    // ...this immediate value
+		  0xC6,             // ADI to the accumulator...
+		  15,           // ...this immediate value
+		  0x76              // HALT
 		]
 		
 		c.InjectProgram(program);
@@ -117,11 +117,11 @@ describe('ADI', () => {
 		
 		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  112,  // ...this immediate value
-		  0xC6,          // ADI to the accumulator...
-		  64,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,             // MVI into accumulator....
+		  112,    // ...this immediate value
+		  0xC6,             // ADI to the accumulator...
+		  64,           // ...this immediate value
+		  0x76              // HALT
 		]
 		
 		c.InjectProgram(program);
@@ -144,11 +144,11 @@ describe('ADI', () => {
 		
 		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  66,  // ...this immediate value
-		  0xC6,          // ADI to the accumulator...
-		  192,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,             // MVI into accumulator....
+		  66,    // ...this immediate value
+		  0xC6,             // ADI to the accumulator...
+		  192,           // ...this immediate value
+		  0x76              // HALT
 		]
 		
 		c.InjectProgram(program);

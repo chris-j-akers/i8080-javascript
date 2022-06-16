@@ -7,9 +7,9 @@ describe('LXI Stack Pointer', () => {
 		const c = new Computer();
 		
 		let program = [
-		  0x31,      // LXI into stack pointer...
-		  null,          // ...Lower-byte of 16-bit data (to be populated)
-		  null,          // ...Higher-byte of 16-bit data (to be populated)
+		  0x31,          // LXI into stack pointer...
+		  null,          // ...low-byte of 16-bit data (inserted, below)
+		  null,          // ...high-byte of 16-bit data (inserted, below)
 		  0x76           // HALT
 		]
 		

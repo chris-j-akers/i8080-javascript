@@ -13,15 +13,15 @@ describe('ANA Memory', () => {
 		
 		const program = [
 		  0x3E,                   // MVI into Accumulator
-		  4,          // Immediate value (in test config)
-		  0x26,                   // MOV into H...
-		  null,                   // ...the high-byte of the memory address (ro be inserted)
-		  0x2E,                   // MOV into L...
-		  null,                   // ... the low-byte of the memory address (to be inserted)
-		  0x36,                   // MOV into the memory address...
+		  4,          // ...this immediate value
+		  0x26,                   // MVI into H...
+		  null,                   // ...addr high-byte (inserted, below)
+		  0x2E,                   // MVI into L...
+		  null,                   // ...addr low-byte (inserted, below)
+		  0x36,                   // MVI into the memory address...
 		  data,                   // ...the data value
 		  0xA6,                   // ANA data in Memory Location with Accumulator
-		  0x76                    // Halt Program
+		  0x76                    // HALT
 		]
 		
 		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
@@ -57,15 +57,15 @@ describe('ANA Memory', () => {
 		
 		const program = [
 		  0x3E,                   // MVI into Accumulator
-		  0,          // Immediate value (in test config)
-		  0x26,                   // MOV into H...
-		  null,                   // ...the high-byte of the memory address (ro be inserted)
-		  0x2E,                   // MOV into L...
-		  null,                   // ... the low-byte of the memory address (to be inserted)
-		  0x36,                   // MOV into the memory address...
+		  0,          // ...this immediate value
+		  0x26,                   // MVI into H...
+		  null,                   // ...addr high-byte (inserted, below)
+		  0x2E,                   // MVI into L...
+		  null,                   // ...addr low-byte (inserted, below)
+		  0x36,                   // MVI into the memory address...
 		  data,                   // ...the data value
 		  0xA6,                   // ANA data in Memory Location with Accumulator
-		  0x76                    // Halt Program
+		  0x76                    // HALT
 		]
 		
 		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
@@ -100,15 +100,15 @@ describe('ANA Memory', () => {
 		
 		const program = [
 		  0x3E,                   // MVI into Accumulator
-		  128,          // Immediate value (in test config)
-		  0x26,                   // MOV into H...
-		  null,                   // ...the high-byte of the memory address (ro be inserted)
-		  0x2E,                   // MOV into L...
-		  null,                   // ... the low-byte of the memory address (to be inserted)
-		  0x36,                   // MOV into the memory address...
+		  128,          // ...this immediate value
+		  0x26,                   // MVI into H...
+		  null,                   // ...addr high-byte (inserted, below)
+		  0x2E,                   // MVI into L...
+		  null,                   // ...addr low-byte (inserted, below)
+		  0x36,                   // MVI into the memory address...
 		  data,                   // ...the data value
 		  0xA6,                   // ANA data in Memory Location with Accumulator
-		  0x76                    // Halt Program
+		  0x76                    // HALT
 		]
 		
 		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {
@@ -143,15 +143,15 @@ describe('ANA Memory', () => {
 		
 		const program = [
 		  0x3E,                   // MVI into Accumulator
-		  5,          // Immediate value (in test config)
-		  0x26,                   // MOV into H...
-		  null,                   // ...the high-byte of the memory address (ro be inserted)
-		  0x2E,                   // MOV into L...
-		  null,                   // ... the low-byte of the memory address (to be inserted)
-		  0x36,                   // MOV into the memory address...
+		  5,          // ...this immediate value
+		  0x26,                   // MVI into H...
+		  null,                   // ...addr high-byte (inserted, below)
+		  0x2E,                   // MVI into L...
+		  null,                   // ...addr low-byte (inserted, below)
+		  0x36,                   // MVI into the memory address...
 		  data,                   // ...the data value
 		  0xA6,                   // ANA data in Memory Location with Accumulator
-		  0x76                    // Halt Program
+		  0x76                    // HALT
 		]
 		
 		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {

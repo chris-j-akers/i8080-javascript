@@ -46,7 +46,7 @@ test_suite:
     assert.equal(c.cpu.flags, 0);
     assert.equal(c.cpu.registers['A'], 0);
     
-    c.cpu.halt == false;
+    c.cpu.halt = false;
     c.ExecuteProgram(9);  
 
     assert.equal(c.cpu.registers['A'], 0xFF);
@@ -56,7 +56,7 @@ test_suite:
     assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), {zero});
     assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), {sign});
     
-    assert.equal(c.cpu.Clock, 35);
+    assert.equal(c.cpu.Clock, 59);
 
     c.Reset();
     }});

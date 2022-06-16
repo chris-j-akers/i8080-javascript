@@ -24,11 +24,11 @@ describe('ADD OpCode Tests (0x80, 0x81, 0x82, 0x83, 0x84, 0x85) With Unset All F
 		
 		
 		let program = [
-		    0x3E, 
-		    0,  // MOV A, #0
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    1,         // MOV [R], 1
-		    null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator...
+		    0,  // ...this immediate value
+		    null,           // MVI into Register (opcode inserted, below)...
+		    1,         // ...this data
+		    null,           // ADD (opcode inserted, below)
 		    0x76            // HALT
 		]
 		

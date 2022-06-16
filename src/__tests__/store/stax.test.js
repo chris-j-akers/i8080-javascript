@@ -17,10 +17,10 @@ describe('STAX', () => {
 		  0x3E,           // MVI into accumulator
 		  0xFF,           // ...this byte
 		  null,           // MVI into B...
-		  null,           // ...the high-byte of the memory address (ro be inserted)
+		  null,           // ...addr high-byte (inserted, below)
 		  null,           // MVI into C...
-		  null,           // ... the low-byte of the memory address (to be inserted)
-		  2,       // Store Accumulator into address held in above register pair
+		  null,           // ... addr low-byte (inserted, below)
+		  2,       // STAX
 		  0x76            // HALT
 		]
 		
@@ -49,10 +49,10 @@ describe('STAX', () => {
 		  0x3E,           // MVI into accumulator
 		  0xFF,           // ...this byte
 		  null,           // MVI into D...
-		  null,           // ...the high-byte of the memory address (ro be inserted)
+		  null,           // ...addr high-byte (inserted, below)
 		  null,           // MVI into E...
-		  null,           // ... the low-byte of the memory address (to be inserted)
-		  18,       // Store Accumulator into address held in above register pair
+		  null,           // ... addr low-byte (inserted, below)
+		  18,       // STAX
 		  0x76            // HALT
 		]
 		

@@ -22,13 +22,12 @@ describe('SUB Register (Unset All Flags)', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    32,  // MOV A, #32
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    1,         // MOV [R], 1
-		    null,           // Placeholder for relavent SUB opcode (see opcode lookup table)
+		    0x3E,           // MVI into Accumulator...
+		    32,  // ...This value
+		    null,           // MVI into register (opcode added, below)
+		    1,         // ...this data
+		    null,           // SUB
 		    0x76            // HALT
 		]
 		

@@ -20,18 +20,18 @@ describe('LDAX', () => {
 		  // Prep - Load data into memory location, first
 		  
 		  0x26,         // MVI into H register...
-		  null,         // Mem addr high-byte
+		  null,         // ...addr high-byte
 		  0x2E,         // MVI into L register...
-		  null,         // Mem addr low-byte
+		  null,         // ...addr low-byte
 		  0x36,         // MVI into memory location...
 		  data,         // ...the data.
 		  
 		  // Now the test
 		
 		  null,         // MVI into High-Byte Register...
-		  null,         // Mem addr high-byte
+		  null,         // ...addr high-byte
 		  null,         // MVI into Low-Byte Register...
-		  null,         // Mem addr low-byte
+		  null,         // ...addr low-byte
 		  null,         // LDAX
 		  0x76,         // HALT
 		]
@@ -65,18 +65,18 @@ describe('LDAX', () => {
 		  // Prep - Load data into memory location, first
 		  
 		  0x26,         // MVI into H register...
-		  null,         // Mem addr high-byte
+		  null,         // ...addr high-byte
 		  0x2E,         // MVI into L register...
-		  null,         // Mem addr low-byte
+		  null,         // ...addr low-byte
 		  0x36,         // MVI into memory location...
 		  data,         // ...the data.
 		  
 		  // Now the test
 		
 		  null,         // MVI into High-Byte Register...
-		  null,         // Mem addr high-byte
+		  null,         // ...addr high-byte
 		  null,         // MVI into Low-Byte Register...
-		  null,         // Mem addr low-byte
+		  null,         // ...addr low-byte
 		  null,         // LDAX
 		  0x76,         // HALT
 		]

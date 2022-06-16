@@ -9,9 +9,9 @@ describe('MVI Memory', () => {
 		
 		let program = [
 		  0x26,           // MOV into H...
-		  null,           // ...the high-byte of the memory address (to be inserted)
+		  null,           // ...addr high-byte (to be inserted)
 		  0x2E,           // MOV into L...
-		  null,           // ... the low-byte of the memory address (to be inserted)
+		  null,           // ... addr low-byte (to be inserted)
 		  0x36,           // MVI to this address...
 		  data,           // ...this immediate value
 		  0x76,           // HALT

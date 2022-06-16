@@ -8,12 +8,11 @@ describe('XRA Memory', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		const data = 16;
 		
 		const program = [
 		  0x3E,                   // MVI into Accumulator
-		  20,          // Immediate value (in test config)
+		  20,          // ...this value
 		  0x26,                   // MOV into H...
 		  null,                   // ...the high-byte of the memory address (ro be inserted)
 		  0x2E,                   // MOV into L...
@@ -52,12 +51,11 @@ describe('XRA Memory', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		const data = 255;
 		
 		const program = [
 		  0x3E,                   // MVI into Accumulator
-		  255,          // Immediate value (in test config)
+		  255,          // ...this value
 		  0x26,                   // MOV into H...
 		  null,                   // ...the high-byte of the memory address (ro be inserted)
 		  0x2E,                   // MOV into L...
@@ -95,12 +93,11 @@ describe('XRA Memory', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		const data = 255;
 		
 		const program = [
 		  0x3E,                   // MVI into Accumulator
-		  127,          // Immediate value (in test config)
+		  127,          // ...this value
 		  0x26,                   // MOV into H...
 		  null,                   // ...the high-byte of the memory address (ro be inserted)
 		  0x2E,                   // MOV into L...
@@ -138,12 +135,11 @@ describe('XRA Memory', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		const data = 80;
 		
 		const program = [
 		  0x3E,                   // MVI into Accumulator
-		  85,          // Immediate value (in test config)
+		  85,          // ...this value
 		  0x26,                   // MOV into H...
 		  null,                   // ...the high-byte of the memory address (ro be inserted)
 		  0x2E,                   // MOV into L...

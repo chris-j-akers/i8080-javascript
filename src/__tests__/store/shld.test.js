@@ -12,9 +12,9 @@ describe('SHLD', () => {
 		  0x2E,                   // MVI into L...
 		  0x71,                   // ...this data
 		  0x22,                   // SHLD
-		  null,                   // Low-byte of address (to be populated)
-		  null,                   // High-byte of addres (to be populated)
-		  0x76                    // Halt Program
+		  null,                   // addr low-byte (inserted, below)
+		  null,                   // addr high-byte (inserted, below)
+		  0x76                    // HALT
 		]
 		
 		for (let mem_addr = program.length; mem_addr <= max_mem_addr; mem_addr++) {  

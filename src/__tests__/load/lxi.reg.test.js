@@ -8,8 +8,8 @@ describe('LXI Register', () => {
 		
 		let program = [
 		  0x1,      // LXI into B/C...
-		  null,          // ...Lower-byte of 16-bit data (to be populated)
-		  null,          // ...Higher-byte of 16-bit data (to be populated)
+		  null,          // ...low-byte of 16-bit data (inserted, below)
+		  null,          // ...high-byte of 16-bit data (inserted, below)
 		  0x76           // HALT
 		]
 		
@@ -36,8 +36,8 @@ describe('LXI Register', () => {
 		
 		let program = [
 		  0x11,      // LXI into D/E...
-		  null,          // ...Lower-byte of 16-bit data (to be populated)
-		  null,          // ...Higher-byte of 16-bit data (to be populated)
+		  null,          // ...low-byte of 16-bit data (inserted, below)
+		  null,          // ...high-byte of 16-bit data (inserted, below)
 		  0x76           // HALT
 		]
 		
@@ -64,8 +64,8 @@ describe('LXI Register', () => {
 		
 		let program = [
 		  0x21,      // LXI into H/L...
-		  null,          // ...Lower-byte of 16-bit data (to be populated)
-		  null,          // ...Higher-byte of 16-bit data (to be populated)
+		  null,          // ...low-byte of 16-bit data (inserted, below)
+		  null,          // ...high-byte of 16-bit data (inserted, below)
 		  0x76           // HALT
 		]
 		

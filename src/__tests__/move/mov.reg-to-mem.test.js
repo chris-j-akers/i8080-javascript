@@ -21,10 +21,10 @@ describe('MOV to Register to Memory', () => {
 		  mvi_opcode_lookup.B, // MVI into Register...
 		  data,                           // ...this immediate value
 		  0x26,                           // MOV into H...
-		  null,                           // ...the high-byte of the memory address (to be inserted)
+		  null,                           // ...addr high-byte (to be inserted)
 		  0x2E,                           // MOV into L...
-		  null,                            // ... the low-byte of the memory address (to be inserted)
-		  0x70,                       // MOV from register to address in H and L          
+		  null,                            // ...addr low-byte (to be inserted)
+		  0x70,                       // MOV
 		  0x76                            // HALT
 		]
 		
@@ -52,10 +52,10 @@ describe('MOV to Register to Memory', () => {
 		  mvi_opcode_lookup.C, // MVI into Register...
 		  data,                           // ...this immediate value
 		  0x26,                           // MOV into H...
-		  null,                           // ...the high-byte of the memory address (to be inserted)
+		  null,                           // ...addr high-byte (to be inserted)
 		  0x2E,                           // MOV into L...
-		  null,                            // ... the low-byte of the memory address (to be inserted)
-		  0x71,                       // MOV from register to address in H and L          
+		  null,                            // ...addr low-byte (to be inserted)
+		  0x71,                       // MOV
 		  0x76                            // HALT
 		]
 		
@@ -83,10 +83,10 @@ describe('MOV to Register to Memory', () => {
 		  mvi_opcode_lookup.D, // MVI into Register...
 		  data,                           // ...this immediate value
 		  0x26,                           // MOV into H...
-		  null,                           // ...the high-byte of the memory address (to be inserted)
+		  null,                           // ...addr high-byte (to be inserted)
 		  0x2E,                           // MOV into L...
-		  null,                            // ... the low-byte of the memory address (to be inserted)
-		  0x72,                       // MOV from register to address in H and L          
+		  null,                            // ...addr low-byte (to be inserted)
+		  0x72,                       // MOV
 		  0x76                            // HALT
 		]
 		
@@ -114,10 +114,10 @@ describe('MOV to Register to Memory', () => {
 		  mvi_opcode_lookup.E, // MVI into Register...
 		  data,                           // ...this immediate value
 		  0x26,                           // MOV into H...
-		  null,                           // ...the high-byte of the memory address (to be inserted)
+		  null,                           // ...addr high-byte (to be inserted)
 		  0x2E,                           // MOV into L...
-		  null,                            // ... the low-byte of the memory address (to be inserted)
-		  0x73,                       // MOV from register to address in H and L          
+		  null,                            // ...addr low-byte (to be inserted)
+		  0x73,                       // MOV
 		  0x76                            // HALT
 		]
 		
@@ -145,10 +145,10 @@ describe('MOV to Register to Memory', () => {
 		  mvi_opcode_lookup.H, // MVI into Register...
 		  data,                           // ...this immediate value
 		  0x26,                           // MOV into H...
-		  null,                           // ...the high-byte of the memory address (to be inserted)
+		  null,                           // ...addr high-byte (to be inserted)
 		  0x2E,                           // MOV into L...
-		  null,                            // ... the low-byte of the memory address (to be inserted)
-		  0x74,                       // MOV from register to address in H and L          
+		  null,                            // ...addr low-byte (to be inserted)
+		  0x74,                       // MOV
 		  0x76                            // HALT
 		]
 		
@@ -176,10 +176,10 @@ describe('MOV to Register to Memory', () => {
 		  mvi_opcode_lookup.L, // MVI into Register...
 		  data,                           // ...this immediate value
 		  0x26,                           // MOV into H...
-		  null,                           // ...the high-byte of the memory address (to be inserted)
+		  null,                           // ...addr high-byte (to be inserted)
 		  0x2E,                           // MOV into L...
-		  null,                            // ... the low-byte of the memory address (to be inserted)
-		  0x75,                       // MOV from register to address in H and L          
+		  null,                            // ...addr low-byte (to be inserted)
+		  0x75,                       // MOV
 		  0x76                            // HALT
 		]
 		
@@ -207,10 +207,10 @@ describe('MOV to Register to Memory', () => {
 		  mvi_opcode_lookup.A, // MVI into Register...
 		  data,                           // ...this immediate value
 		  0x26,                           // MOV into H...
-		  null,                           // ...the high-byte of the memory address (to be inserted)
+		  null,                           // ...addr high-byte (to be inserted)
 		  0x2E,                           // MOV into L...
-		  null,                            // ... the low-byte of the memory address (to be inserted)
-		  0x77,                       // MOV from register to address in H and L          
+		  null,                            // ...addr low-byte (to be inserted)
+		  0x77,                       // MOV
 		  0x76                            // HALT
 		]
 		

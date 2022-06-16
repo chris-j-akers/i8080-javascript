@@ -2,20 +2,25 @@ import { Computer } from '../../computer.js'
 import { i8080 } from '../../i8080.js'
 import { strict as assert } from 'assert'
 
-describe('PUSH (PSW)', () => {
+describe('POP (PSW)', () => {
 	it('No Flags Set', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
 		let program = [
 		    0x31,                                             // LXI into Stack pointer
-		    0xFF,                                             // ...addr low-byte
+		    0xFF,                                             // ...addr low-byt ...
 		    0xFF,                                             // ...addr high-byte
 		    0x3E,                                             // MVI into accumulator
-		    0xFF,                                             // ...this byte
+		    0xFF,                                             // ...This byte
 		    0xF5,                                             // PUSH PSW
 		    0x3E,                                             // MVI into the accumulator... 
 		    0x00,                                             // ...Zero
+		    0x76,                                             // HALT 
+		    
+		    // Part two, POP!
+		    
+		    0xF1,                                             // POP PSW
 		    0x76,                                             // HALT
 		]
 		
@@ -35,22 +40,20 @@ describe('PUSH (PSW)', () => {
 		
 		// No Op-Code for this, so set it here
 		c.cpu.flags = 0x0;
-		
 		assert.equal(c.cpu.flags, 0);
 		assert.equal(c.cpu.registers['A'], 0);
 		
-		// We assign it back to flags so we can use the FlagManager code to check flag status
-		c.cpu.flags = c.bus.Read(c.cpu.stack_pointer++);
+		c.cpu.halt = false;
+		c.ExecuteProgram(9);  
 		
-		assert.equal(c.bus.Read(c.cpu.stack_pointer), 0xFF);
-		
+		assert.equal(c.cpu.registers['A'], 0xFF);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c.cpu.Clock, 42);
+		assert.equal(c.cpu.Clock, 59);
 		
 		c.Reset();
 		});
@@ -61,13 +64,18 @@ describe('PUSH (PSW)', () => {
 		
 		let program = [
 		    0x31,                                             // LXI into Stack pointer
-		    0xFF,                                             // ...addr low-byte
+		    0xFF,                                             // ...addr low-byt ...
 		    0xFF,                                             // ...addr high-byte
 		    0x3E,                                             // MVI into accumulator
-		    0xFF,                                             // ...this byte
+		    0xFF,                                             // ...This byte
 		    0xF5,                                             // PUSH PSW
 		    0x3E,                                             // MVI into the accumulator... 
 		    0x00,                                             // ...Zero
+		    0x76,                                             // HALT 
+		    
+		    // Part two, POP!
+		    
+		    0xF1,                                             // POP PSW
 		    0x76,                                             // HALT
 		]
 		
@@ -92,22 +100,20 @@ describe('PUSH (PSW)', () => {
 		
 		// No Op-Code for this, so set it here
 		c.cpu.flags = 0x0;
-		
 		assert.equal(c.cpu.flags, 0);
 		assert.equal(c.cpu.registers['A'], 0);
 		
-		// We assign it back to flags so we can use the FlagManager code to check flag status
-		c.cpu.flags = c.bus.Read(c.cpu.stack_pointer++);
+		c.cpu.halt = false;
+		c.ExecuteProgram(9);  
 		
-		assert.equal(c.bus.Read(c.cpu.stack_pointer), 0xFF);
-		
+		assert.equal(c.cpu.registers['A'], 0xFF);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), true);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), true);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		
-		assert.equal(c.cpu.Clock, 42);
+		assert.equal(c.cpu.Clock, 59);
 		
 		c.Reset();
 		});
@@ -118,13 +124,18 @@ describe('PUSH (PSW)', () => {
 		
 		let program = [
 		    0x31,                                             // LXI into Stack pointer
-		    0xFF,                                             // ...addr low-byte
+		    0xFF,                                             // ...addr low-byt ...
 		    0xFF,                                             // ...addr high-byte
 		    0x3E,                                             // MVI into accumulator
-		    0xFF,                                             // ...this byte
+		    0xFF,                                             // ...This byte
 		    0xF5,                                             // PUSH PSW
 		    0x3E,                                             // MVI into the accumulator... 
 		    0x00,                                             // ...Zero
+		    0x76,                                             // HALT 
+		    
+		    // Part two, POP!
+		    
+		    0xF1,                                             // POP PSW
 		    0x76,                                             // HALT
 		]
 		
@@ -145,22 +156,20 @@ describe('PUSH (PSW)', () => {
 		
 		// No Op-Code for this, so set it here
 		c.cpu.flags = 0x0;
-		
 		assert.equal(c.cpu.flags, 0);
 		assert.equal(c.cpu.registers['A'], 0);
 		
-		// We assign it back to flags so we can use the FlagManager code to check flag status
-		c.cpu.flags = c.bus.Read(c.cpu.stack_pointer++);
+		c.cpu.halt = false;
+		c.ExecuteProgram(9);  
 		
-		assert.equal(c.bus.Read(c.cpu.stack_pointer), 0xFF);
-		
+		assert.equal(c.cpu.registers['A'], 0xFF);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c.cpu.Clock, 42);
+		assert.equal(c.cpu.Clock, 59);
 		
 		c.Reset();
 		});
@@ -171,13 +180,18 @@ describe('PUSH (PSW)', () => {
 		
 		let program = [
 		    0x31,                                             // LXI into Stack pointer
-		    0xFF,                                             // ...addr low-byte
+		    0xFF,                                             // ...addr low-byt ...
 		    0xFF,                                             // ...addr high-byte
 		    0x3E,                                             // MVI into accumulator
-		    0xFF,                                             // ...this byte
+		    0xFF,                                             // ...This byte
 		    0xF5,                                             // PUSH PSW
 		    0x3E,                                             // MVI into the accumulator... 
 		    0x00,                                             // ...Zero
+		    0x76,                                             // HALT 
+		    
+		    // Part two, POP!
+		    
+		    0xF1,                                             // POP PSW
 		    0x76,                                             // HALT
 		]
 		
@@ -198,22 +212,20 @@ describe('PUSH (PSW)', () => {
 		
 		// No Op-Code for this, so set it here
 		c.cpu.flags = 0x0;
-		
 		assert.equal(c.cpu.flags, 0);
 		assert.equal(c.cpu.registers['A'], 0);
 		
-		// We assign it back to flags so we can use the FlagManager code to check flag status
-		c.cpu.flags = c.bus.Read(c.cpu.stack_pointer++);
+		c.cpu.halt = false;
+		c.ExecuteProgram(9);  
 		
-		assert.equal(c.bus.Read(c.cpu.stack_pointer), 0xFF);
-		
+		assert.equal(c.cpu.registers['A'], 0xFF);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), true);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c.cpu.Clock, 42);
+		assert.equal(c.cpu.Clock, 59);
 		
 		c.Reset();
 		});
@@ -224,13 +236,18 @@ describe('PUSH (PSW)', () => {
 		
 		let program = [
 		    0x31,                                             // LXI into Stack pointer
-		    0xFF,                                             // ...addr low-byte
+		    0xFF,                                             // ...addr low-byt ...
 		    0xFF,                                             // ...addr high-byte
 		    0x3E,                                             // MVI into accumulator
-		    0xFF,                                             // ...this byte
+		    0xFF,                                             // ...This byte
 		    0xF5,                                             // PUSH PSW
 		    0x3E,                                             // MVI into the accumulator... 
 		    0x00,                                             // ...Zero
+		    0x76,                                             // HALT 
+		    
+		    // Part two, POP!
+		    
+		    0xF1,                                             // POP PSW
 		    0x76,                                             // HALT
 		]
 		
@@ -251,22 +268,20 @@ describe('PUSH (PSW)', () => {
 		
 		// No Op-Code for this, so set it here
 		c.cpu.flags = 0x0;
-		
 		assert.equal(c.cpu.flags, 0);
 		assert.equal(c.cpu.registers['A'], 0);
 		
-		// We assign it back to flags so we can use the FlagManager code to check flag status
-		c.cpu.flags = c.bus.Read(c.cpu.stack_pointer++);
+		c.cpu.halt = false;
+		c.ExecuteProgram(9);  
 		
-		assert.equal(c.bus.Read(c.cpu.stack_pointer), 0xFF);
-		
+		assert.equal(c.cpu.registers['A'], 0xFF);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), true);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c.cpu.Clock, 42);
+		assert.equal(c.cpu.Clock, 59);
 		
 		c.Reset();
 		});
@@ -277,13 +292,18 @@ describe('PUSH (PSW)', () => {
 		
 		let program = [
 		    0x31,                                             // LXI into Stack pointer
-		    0xFF,                                             // ...addr low-byte
+		    0xFF,                                             // ...addr low-byt ...
 		    0xFF,                                             // ...addr high-byte
 		    0x3E,                                             // MVI into accumulator
-		    0xFF,                                             // ...this byte
+		    0xFF,                                             // ...This byte
 		    0xF5,                                             // PUSH PSW
 		    0x3E,                                             // MVI into the accumulator... 
 		    0x00,                                             // ...Zero
+		    0x76,                                             // HALT 
+		    
+		    // Part two, POP!
+		    
+		    0xF1,                                             // POP PSW
 		    0x76,                                             // HALT
 		]
 		
@@ -304,22 +324,20 @@ describe('PUSH (PSW)', () => {
 		
 		// No Op-Code for this, so set it here
 		c.cpu.flags = 0x0;
-		
 		assert.equal(c.cpu.flags, 0);
 		assert.equal(c.cpu.registers['A'], 0);
 		
-		// We assign it back to flags so we can use the FlagManager code to check flag status
-		c.cpu.flags = c.bus.Read(c.cpu.stack_pointer++);
+		c.cpu.halt = false;
+		c.ExecuteProgram(9);  
 		
-		assert.equal(c.bus.Read(c.cpu.stack_pointer), 0xFF);
-		
+		assert.equal(c.cpu.registers['A'], 0xFF);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c.cpu.Clock, 42);
+		assert.equal(c.cpu.Clock, 59);
 		
 		c.Reset();
 		});
@@ -330,13 +348,18 @@ describe('PUSH (PSW)', () => {
 		
 		let program = [
 		    0x31,                                             // LXI into Stack pointer
-		    0xFF,                                             // ...addr low-byte
+		    0xFF,                                             // ...addr low-byt ...
 		    0xFF,                                             // ...addr high-byte
 		    0x3E,                                             // MVI into accumulator
-		    0xFF,                                             // ...this byte
+		    0xFF,                                             // ...This byte
 		    0xF5,                                             // PUSH PSW
 		    0x3E,                                             // MVI into the accumulator... 
 		    0x00,                                             // ...Zero
+		    0x76,                                             // HALT 
+		    
+		    // Part two, POP!
+		    
+		    0xF1,                                             // POP PSW
 		    0x76,                                             // HALT
 		]
 		
@@ -357,22 +380,20 @@ describe('PUSH (PSW)', () => {
 		
 		// No Op-Code for this, so set it here
 		c.cpu.flags = 0x0;
-		
 		assert.equal(c.cpu.flags, 0);
 		assert.equal(c.cpu.registers['A'], 0);
 		
-		// We assign it back to flags so we can use the FlagManager code to check flag status
-		c.cpu.flags = c.bus.Read(c.cpu.stack_pointer++);
+		c.cpu.halt = false;
+		c.ExecuteProgram(9);  
 		
-		assert.equal(c.bus.Read(c.cpu.stack_pointer), 0xFF);
-		
+		assert.equal(c.cpu.registers['A'], 0xFF);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
 		
-		assert.equal(c.cpu.Clock, 42);
+		assert.equal(c.cpu.Clock, 59);
 		
 		c.Reset();
 		});

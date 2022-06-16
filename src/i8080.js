@@ -1,7 +1,5 @@
 'use strict';
 
-import { __util__byte_as_binary, __util__word_as_binary} from './i8080-utils.js'
-
 /**
  * An Intel 8080 CPU implemented in software.
  */
@@ -60,7 +58,7 @@ class i8080 {
         let rval = '';
         for (let register in this.registers) {
             rval = this.registers[register];
-            str += `${register}: ${rval}, 0x${rval.toString(16)}, ${__util__byte_as_binary(rval)} | `
+            str += `${register}: ${rval}, 0x${rval.toString(16)}, ${this.__dbg__byte_to_binary_str(rval)} | `
         }
         return str.slice(0,-3) + ']';
     }
@@ -70,7 +68,7 @@ class i8080 {
      * stack pointer
      */
     __dbg__get_sp() {
-        return `SP [${this.stack_pointer}, ${this.stack_pointer.toString(16)}, ${__util__word_as_binary(this.stack_pointer)}]`;
+        return `SP [${this.stack_pointer}, ${this.stack_pointer.toString(16)}, ${this.__dbg__word_to_binary_str(this.stack_pointer)}]`;
     }
 
     /**
@@ -78,7 +76,7 @@ class i8080 {
      * program counter
      */
     __dbg__get_pc() {
-        return `PC [${this.program_counter}, ${this.program_counter.toString(16)}, ${__util__word_as_binary(this.program_counter)}]`;
+        return `PC [${this.program_counter}, ${this.program_counter.toString(16)}, ${this.__dbg__word_to_binary_str(this.program_counter)}]`;
     }
 
     /**
@@ -86,7 +84,7 @@ class i8080 {
      * CPU clock
      */
     __dbg__get_clock() {
-        return `CL [${this.clock}, ${this.clock.toString(16)}, ${__util__word_as_binary(this.clock)}]`;
+        return `CL [${this.clock}, ${this.clock.toString(16)}, ${this.__dbg__word_to_binary_str(this.clock)}]`;
     }
 
     /**
@@ -598,14 +596,14 @@ class i8080 {
 
 
     PUSH_R(high_byte_register, low_byte_register) {
-        this.bus.Write(this.registers[high_byte_register], this.stack_pointer--);
-        this.bus.Write(this.registers[low_byte_register], this.stack_pointer--);
+        this.bus.Write(this.registers[high_byte_register], --this.stack_pointer);
+        this.bus.Write(this.registers[low_byte_register], --this.stack_pointer);
         this.clock += 11;
     }
 
-    PUSH_PSW()
-        this.bus.Write(this.registers['A'], this.stack_pointer--);
-        this.bus.Write(this.flags, this.stack_pointer--);
+    PUSH_PSW() {
+        this.bus.Write(this.registers['A'], --this.stack_pointer);
+        this.bus.Write(this.flags, --this.stack_pointer);
         this.clock += 11;
     }
     
@@ -1025,7 +1023,7 @@ class i8080 {
         const lhs = this.registers[reg];
         // 0xFF is the 8-bit two's complement of 1.
         const raw_result = lhs + 0xFF;
-        this._set_flags_on_inc_dec_ophg(lhs, 0xFF, raw_result);
+        this._set_flags_on_inc_dec_op(lhs, 0xFF, raw_result);
         this.registers[reg] = raw_result & 0xFF;
         this.clock += 5;
 
@@ -1042,7 +1040,7 @@ class i8080 {
         const lhs = this.bus.Read(addr);
         // 0xFF is the 8-bit two's complement of 1.
         const raw_result = lhs + 0xFF;
-        this._set_flags_on_inc_dec_op(lhs, rhs, raw_result);
+        this._set_flags_on_inc_dec_op(lhs, 0xFF, raw_result);
         this.bus.Write(raw_result & 0xFF, addr);
         this.clock += 10;
     }
@@ -1142,7 +1140,7 @@ class i8080 {
     }
 
     DAD(high_byte_register, low_byte_register) {
-        let result = ((this.registers['H'] << 8 | this.registers['L']) & 0xFFFF)) + (this.registers[high_byte_register] << 8 | this.registers[low_byte_register]) & 0xFFFF));
+        let result = ((this.registers['H'] << 8 | this.registers['L']) & 0xFFFF) + ((this.registers[high_byte_register] << 8 | this.registers[low_byte_register]) & 0xFFFF);
         (result > 0xFFFF | result < 0) ? this._flag_manager.SetFlag(this._flag_manager.FlagType.Carry) : this._flag_manager.ClearFlag(this._flag_manager.FlagType.Carry);
         result &= 0xFFFF;
         this.registers['H'] = (result >> 8) & 0xFF;
@@ -1151,9 +1149,12 @@ class i8080 {
     }
     
     DAD_SP() {
-        this.registers['H'] = (this.stack_pointer >> 8) & 0xFF;
-        this.registers['L'] = this.stack_pointer & 0xFF;
-        
+        let result = (this.registers['H'] << 8 | this.registers['L']) + this.stack_pointer;
+        (result > 0xFFFF | result < 0) ? this._flag_manager.SetFlag(this._flag_manager.FlagType.Carry) : this._flag_manager.ClearFlag(this._flag_manager.FlagType.Carry);
+        result &= 0xFFFF;
+        this.registers['H'] = (result >> 8) & 0xFF;
+        this.registers['L'] = result & 0xFF;
+        this.clock += 10
     }
 
     LDAX(high_byte_register, low_byte_register) {
@@ -1220,6 +1221,9 @@ class i8080 {
                 break;
             case 0xE1:
                 this.POP_R('H', 'L');
+                break;
+            case 0xF1:
+                this.POP_PSW();
                 break;
             case 0xC5:
                 this.PUSH_R('B', 'C');

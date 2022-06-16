@@ -22,7 +22,7 @@ describe('ORA Register', () => {
 		    5,        // ... this immediate value
 		    null,                 // MVI into register ...
 		    4,               // ...this immediate value
-		    null,                 // ORA value in register  with Accumulator
+		    null,                 // ORA
 		    0x76                  // HALT
 		  ]
 		
@@ -60,7 +60,7 @@ describe('ORA Register', () => {
 		    0,        // ... this immediate value
 		    null,                 // MVI into register ...
 		    0,               // ...this immediate value
-		    null,                 // ORA value in register  with Accumulator
+		    null,                 // ORA
 		    0x76                  // HALT
 		  ]
 		
@@ -97,7 +97,7 @@ describe('ORA Register', () => {
 		    127,        // ... this immediate value
 		    null,                 // MVI into register ...
 		    255,               // ...this immediate value
-		    null,                 // ORA value in register  with Accumulator
+		    null,                 // ORA
 		    0x76                  // HALT
 		  ]
 		
@@ -134,7 +134,7 @@ describe('ORA Register', () => {
 		    68,        // ... this immediate value
 		    null,                 // MVI into register ...
 		    81,               // ...this immediate value
-		    null,                 // ORA value in register  with Accumulator
+		    null,                 // ORA
 		    0x76                  // HALT
 		  ]
 		

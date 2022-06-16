@@ -17,13 +17,12 @@ describe('CMP Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E,           // MOV into A
-		    32,  // Value #32
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    1,         // MOV [R], 1
-		    null,           // Placeholder for relavent SUB opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator
+		    32,  // ...this data
+		    null,           // MVI into Register (opcode added, below)
+		    1,         // ...this data
+		    null,           // SUB
 		    0x76            // HALT
 		]
 		
@@ -51,13 +50,12 @@ describe('CMP Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E,           // MOV into A
-		    1,  // Value #1
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    1,         // MOV [R], 1
-		    null,           // Placeholder for relavent SUB opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator
+		    1,  // ...this data
+		    null,           // MVI into Register (opcode added, below)
+		    1,         // ...this data
+		    null,           // SUB
 		    0x76            // HALT
 		]
 		
@@ -85,13 +83,12 @@ describe('CMP Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E,           // MOV into A
-		    32,  // Value #32
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    2,         // MOV [R], 2
-		    null,           // Placeholder for relavent SUB opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator
+		    32,  // ...this data
+		    null,           // MVI into Register (opcode added, below)
+		    2,         // ...this data
+		    null,           // SUB
 		    0x76            // HALT
 		]
 		
@@ -119,13 +116,12 @@ describe('CMP Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E,           // MOV into A
-		    127,  // Value #127
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    3,         // MOV [R], 3
-		    null,           // Placeholder for relavent SUB opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator
+		    127,  // ...this data
+		    null,           // MVI into Register (opcode added, below)
+		    3,         // ...this data
+		    null,           // SUB
 		    0x76            // HALT
 		]
 		
@@ -153,13 +149,12 @@ describe('CMP Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E,           // MOV into A
-		    255,  // Value #255
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    1,         // MOV [R], 1
-		    null,           // Placeholder for relavent SUB opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator
+		    255,  // ...this data
+		    null,           // MVI into Register (opcode added, below)
+		    1,         // ...this data
+		    null,           // SUB
 		    0x76            // HALT
 		]
 		
@@ -187,13 +182,12 @@ describe('CMP Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E,           // MOV into A
-		    5,  // Value #5
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    10,         // MOV [R], 10
-		    null,           // Placeholder for relavent SUB opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator
+		    5,  // ...this data
+		    null,           // MVI into Register (opcode added, below)
+		    10,         // ...this data
+		    null,           // SUB
 		    0x76            // HALT
 		]
 		

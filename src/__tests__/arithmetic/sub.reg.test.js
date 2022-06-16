@@ -22,13 +22,12 @@ describe('SUB Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    32,  // MOV A, #32
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    1,         // MOV [R], 1
-		    null,           // Placeholder for relavent SUB opcode (see opcode lookup table)
+		    0x3E,           // MVI into Accumulator...
+		    32,  // ...This value
+		    null,           // MVI into register (opcode added, below)
+		    1,         // ...this data
+		    null,           // SUB
 		    0x76            // HALT
 		]
 		
@@ -56,13 +55,12 @@ describe('SUB Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    1,  // MOV A, #1
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    1,         // MOV [R], 1
-		    null,           // Placeholder for relavent SUB opcode (see opcode lookup table)
+		    0x3E,           // MVI into Accumulator...
+		    1,  // ...This value
+		    null,           // MVI into register (opcode added, below)
+		    1,         // ...this data
+		    null,           // SUB
 		    0x76            // HALT
 		]
 		
@@ -90,13 +88,12 @@ describe('SUB Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    32,  // MOV A, #32
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    2,         // MOV [R], 2
-		    null,           // Placeholder for relavent SUB opcode (see opcode lookup table)
+		    0x3E,           // MVI into Accumulator...
+		    32,  // ...This value
+		    null,           // MVI into register (opcode added, below)
+		    2,         // ...this data
+		    null,           // SUB
 		    0x76            // HALT
 		]
 		
@@ -124,13 +121,12 @@ describe('SUB Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    127,  // MOV A, #127
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    3,         // MOV [R], 3
-		    null,           // Placeholder for relavent SUB opcode (see opcode lookup table)
+		    0x3E,           // MVI into Accumulator...
+		    127,  // ...This value
+		    null,           // MVI into register (opcode added, below)
+		    3,         // ...this data
+		    null,           // SUB
 		    0x76            // HALT
 		]
 		
@@ -158,13 +154,12 @@ describe('SUB Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    255,  // MOV A, #255
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    1,         // MOV [R], 1
-		    null,           // Placeholder for relavent SUB opcode (see opcode lookup table)
+		    0x3E,           // MVI into Accumulator...
+		    255,  // ...This value
+		    null,           // MVI into register (opcode added, below)
+		    1,         // ...this data
+		    null,           // SUB
 		    0x76            // HALT
 		]
 		
@@ -192,13 +187,12 @@ describe('SUB Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    5,  // MOV A, #5
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    10,         // MOV [R], 10
-		    null,           // Placeholder for relavent SUB opcode (see opcode lookup table)
+		    0x3E,           // MVI into Accumulator...
+		    5,  // ...This value
+		    null,           // MVI into register (opcode added, below)
+		    10,         // ...this data
+		    null,           // SUB
 		    0x76            // HALT
 		]
 		

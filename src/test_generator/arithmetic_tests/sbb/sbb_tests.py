@@ -1,8 +1,7 @@
 import config
 
 def generate_sbb_acc(boilerplate, test):
-    return boilerplate.format(comment=test['comment'],
-                                accumulator=test['accumulator'],
+    return boilerplate.format(  accumulator=test['accumulator'],
                                 set_carry = "c.cpu._flag_manager.SetFlag(FlagType.Carry);\nassert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);\n" 
                                     if test['set_carry'] 
                                     else "assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);\n",
@@ -15,8 +14,7 @@ def generate_sbb_acc(boilerplate, test):
 
 
 def generate_sbb_reg(boilerplate, test):
-    return boilerplate.format(comment=test['comment'],
-                                data=test['data'],
+    return boilerplate.format(  data=test['data'],
                                 accumulator=test['accumulator'],
                                 set_carry = "c.cpu._flag_manager.SetFlag(FlagType.Carry);\nassert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);\n" 
                                     if test['set_carry'] 
@@ -30,7 +28,6 @@ def generate_sbb_reg(boilerplate, test):
 
 def generate_sbb_mem(boilerplate, test):
     return boilerplate.format(max_mem_addr=config.MAX_MEM_ADDR,
-                                comment=test['comment'],
                                 data=test['data'],
                                 accumulator=test['accumulator'],
                                 set_carry = "c.cpu._flag_manager.SetFlag(FlagType.Carry);\nassert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);\n" 

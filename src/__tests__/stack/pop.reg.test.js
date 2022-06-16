@@ -18,8 +18,8 @@ describe('POP (R)', () => {
 		
 		let program = [
 		    0x31,                                             // LXI into Stack pointer
-		    0xFF,                                             // ...This low-byte and ...
-		    0xFF,                                             // ...This high-byte (top of memory)
+		    0xFF,                                             // ...addr low-byte
+		    0xFF,                                             // ...addr high-byte
 		    opcode_lookup['B'].MVI,             // MVI into first register...
 		    0x8F,                                             // ...This byte
 		    opcode_lookup['C'].MVI,              // MVI into second register...
@@ -65,8 +65,8 @@ describe('POP (R)', () => {
 		
 		let program = [
 		    0x31,                                             // LXI into Stack pointer
-		    0xFF,                                             // ...This low-byte and ...
-		    0xFF,                                             // ...This high-byte (top of memory)
+		    0xFF,                                             // ...addr low-byte
+		    0xFF,                                             // ...addr high-byte
 		    opcode_lookup['D'].MVI,             // MVI into first register...
 		    0x8F,                                             // ...This byte
 		    opcode_lookup['E'].MVI,              // MVI into second register...
@@ -112,8 +112,8 @@ describe('POP (R)', () => {
 		
 		let program = [
 		    0x31,                                             // LXI into Stack pointer
-		    0xFF,                                             // ...This low-byte and ...
-		    0xFF,                                             // ...This high-byte (top of memory)
+		    0xFF,                                             // ...addr low-byte
+		    0xFF,                                             // ...addr high-byte
 		    opcode_lookup['H'].MVI,             // MVI into first register...
 		    0x8F,                                             // ...This byte
 		    opcode_lookup['L'].MVI,              // MVI into second register...

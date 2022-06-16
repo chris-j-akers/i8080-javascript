@@ -6,8 +6,8 @@ describe('MVI Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  0x6,         // MVI into Register B...
-		  null,             // ...this byte of data (to be populated in loop)
+		  0x6,         // MVI into Register
+		  null,             // ...this data
 		  0x76              // HALT
 		]
 		
@@ -27,8 +27,8 @@ describe('MVI Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  0xe,         // MVI into Register C...
-		  null,             // ...this byte of data (to be populated in loop)
+		  0xe,         // MVI into Register
+		  null,             // ...this data
 		  0x76              // HALT
 		]
 		
@@ -48,8 +48,8 @@ describe('MVI Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  0x16,         // MVI into Register D...
-		  null,             // ...this byte of data (to be populated in loop)
+		  0x16,         // MVI into Register
+		  null,             // ...this data
 		  0x76              // HALT
 		]
 		
@@ -69,8 +69,8 @@ describe('MVI Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  0x1e,         // MVI into Register E...
-		  null,             // ...this byte of data (to be populated in loop)
+		  0x1e,         // MVI into Register
+		  null,             // ...this data
 		  0x76              // HALT
 		]
 		
@@ -90,8 +90,8 @@ describe('MVI Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  0x26,         // MVI into Register H...
-		  null,             // ...this byte of data (to be populated in loop)
+		  0x26,         // MVI into Register
+		  null,             // ...this data
 		  0x76              // HALT
 		]
 		
@@ -111,8 +111,8 @@ describe('MVI Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  0x2e,         // MVI into Register L...
-		  null,             // ...this byte of data (to be populated in loop)
+		  0x2e,         // MVI into Register
+		  null,             // ...this data
 		  0x76              // HALT
 		]
 		
@@ -132,8 +132,8 @@ describe('MVI Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  0x3e,         // MVI into Register A...
-		  null,             // ...this byte of data (to be populated in loop)
+		  0x3e,         // MVI into Register
+		  null,             // ...this data
 		  0x76              // HALT
 		]
 		

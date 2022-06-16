@@ -22,13 +22,12 @@ describe('SBB Register (Unset All Flags)', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    32,  // MOV A, #32
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    1,         // MOV [R], 1
-		    null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator...
+		    32,  // ...this data
+		    null,           // MVI into register (opcode added, below)
+		    1,         // ...this data
+		    null,           // SBB register (opcode added, below)
 		    0x76            // HALT
 		]
 		
@@ -68,13 +67,12 @@ describe('SBB Register (Unset All Flags)', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    0x3E, 
-		    33,  // MOV A, #33
-		    null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
-		    1,         // MOV [R], 1
-		    null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+		    0x3E,           // MVI into accumulator...
+		    33,  // ...this data
+		    null,           // MVI into register (opcode added, below)
+		    1,         // ...this data
+		    null,           // SBB register (opcode added, below)
 		    0x76            // HALT
 		]
 		

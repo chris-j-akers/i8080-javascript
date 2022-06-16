@@ -11,7 +11,7 @@ describe('RAR', () => {
 		let program = [
 		  0x3E,           // MVI into accumulator
 		  1,         // ...this byte
-		  0x1F,           // RAL
+		  0x1F,           // RAR
 		  0x76,           // HALT
 		]
 		
@@ -43,7 +43,7 @@ describe('RAR', () => {
 		let program = [
 		  0x3E,           // MVI into accumulator
 		  2,         // ...this byte
-		  0x1F,           // RAL
+		  0x1F,           // RAR
 		  0x76,           // HALT
 		]
 		
@@ -75,7 +75,7 @@ describe('RAR', () => {
 		let program = [
 		  0x3E,           // MVI into accumulator
 		  1,         // ...this byte
-		  0x1F,           // RAL
+		  0x1F,           // RAR
 		  0x76,           // HALT
 		]
 		
@@ -108,7 +108,7 @@ describe('RAR', () => {
 		let program = [
 		  0x3E,           // MVI into accumulator
 		  2,         // ...this byte
-		  0x1F,           // RAL
+		  0x1F,           // RAR
 		  0x76,           // HALT
 		]
 		

@@ -7,13 +7,12 @@ describe('ACI', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  0,  // ...this immediate value
-		  0xCE,          // ACI to the accumulator...
-		  1,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,                   // Move into accumulator....
+		  0,          // ...this immediate value
+		  0xCE,                   // ACI to the accumulator...
+		  1,                 // ...this immediate value
+		  0x76                    // HALT
 		]
 		
 		c.InjectProgram(program);
@@ -36,13 +35,12 @@ describe('ACI', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  0,  // ...this immediate value
-		  0xCE,          // ACI to the accumulator...
-		  1,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,                   // Move into accumulator....
+		  0,          // ...this immediate value
+		  0xCE,                   // ACI to the accumulator...
+		  1,                 // ...this immediate value
+		  0x76                    // HALT
 		]
 		
 		c.InjectProgram(program);
@@ -66,13 +64,12 @@ describe('ACI', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  0,  // ...this immediate value
-		  0xCE,          // ACI to the accumulator...
+		  0x3E,                   // Move into accumulator....
 		  0,          // ...this immediate value
-		  0x76            // Halt
+		  0xCE,                   // ACI to the accumulator...
+		  0,                 // ...this immediate value
+		  0x76                    // HALT
 		]
 		
 		c.InjectProgram(program);
@@ -95,13 +92,12 @@ describe('ACI', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  1,  // ...this immediate value
-		  0xCE,          // ACI to the accumulator...
-		  84,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,                   // Move into accumulator....
+		  1,          // ...this immediate value
+		  0xCE,                   // ACI to the accumulator...
+		  84,                 // ...this immediate value
+		  0x76                    // HALT
 		]
 		
 		c.InjectProgram(program);
@@ -124,13 +120,12 @@ describe('ACI', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  1,  // ...this immediate value
-		  0xCE,          // ACI to the accumulator...
-		  83,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,                   // Move into accumulator....
+		  1,          // ...this immediate value
+		  0xCE,                   // ACI to the accumulator...
+		  83,                 // ...this immediate value
+		  0x76                    // HALT
 		]
 		
 		c.InjectProgram(program);
@@ -154,13 +149,12 @@ describe('ACI', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  1,  // ...this immediate value
-		  0xCE,          // ACI to the accumulator...
-		  15,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,                   // Move into accumulator....
+		  1,          // ...this immediate value
+		  0xCE,                   // ACI to the accumulator...
+		  15,                 // ...this immediate value
+		  0x76                    // HALT
 		]
 		
 		c.InjectProgram(program);
@@ -183,13 +177,12 @@ describe('ACI', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  1,  // ...this immediate value
-		  0xCE,          // ACI to the accumulator...
-		  14,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,                   // Move into accumulator....
+		  1,          // ...this immediate value
+		  0xCE,                   // ACI to the accumulator...
+		  14,                 // ...this immediate value
+		  0x76                    // HALT
 		]
 		
 		c.InjectProgram(program);
@@ -213,13 +206,12 @@ describe('ACI', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  1,  // ...this immediate value
-		  0xCE,          // ACI to the accumulator...
-		  127,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,                   // Move into accumulator....
+		  1,          // ...this immediate value
+		  0xCE,                   // ACI to the accumulator...
+		  127,                 // ...this immediate value
+		  0x76                    // HALT
 		]
 		
 		c.InjectProgram(program);
@@ -242,13 +234,12 @@ describe('ACI', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  1,  // ...this immediate value
-		  0xCE,          // ACI to the accumulator...
-		  126,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,                   // Move into accumulator....
+		  1,          // ...this immediate value
+		  0xCE,                   // ACI to the accumulator...
+		  126,                 // ...this immediate value
+		  0x76                    // HALT
 		]
 		
 		c.InjectProgram(program);
@@ -272,13 +263,12 @@ describe('ACI', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  20,  // ...this immediate value
-		  0xCE,          // ACI to the accumulator...
-		  255,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,                   // Move into accumulator....
+		  20,          // ...this immediate value
+		  0xCE,                   // ACI to the accumulator...
+		  255,                 // ...this immediate value
+		  0x76                    // HALT
 		]
 		
 		c.InjectProgram(program);
@@ -301,13 +291,12 @@ describe('ACI', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  1,  // ...this immediate value
-		  0xCE,          // ACI to the accumulator...
-		  254,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,                   // Move into accumulator....
+		  1,          // ...this immediate value
+		  0xCE,                   // ACI to the accumulator...
+		  254,                 // ...this immediate value
+		  0x76                    // HALT
 		]
 		
 		c.InjectProgram(program);

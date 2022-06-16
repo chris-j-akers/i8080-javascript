@@ -11,7 +11,7 @@ describe('ORA Accumulator', () => {
 		let program = [
 		    0x3E,                 // MVI into the accumulator...
 		    4,        // ... this immediate value
-		    0xB7,                 // ORA value in register  with Accumulator
+		    0xB7,                 // ORA
 		    0x76                  // HALT
 		  ]
 		
@@ -44,7 +44,7 @@ describe('ORA Accumulator', () => {
 		let program = [
 		    0x3E,                 // MVI into the accumulator...
 		    0,        // ... this immediate value
-		    0xB7,                 // ORA value in register  with Accumulator
+		    0xB7,                 // ORA
 		    0x76                  // HALT
 		  ]
 		
@@ -76,7 +76,7 @@ describe('ORA Accumulator', () => {
 		let program = [
 		    0x3E,                 // MVI into the accumulator...
 		    128,        // ... this immediate value
-		    0xB7,                 // ORA value in register  with Accumulator
+		    0xB7,                 // ORA
 		    0x76                  // HALT
 		  ]
 		
@@ -108,7 +108,7 @@ describe('ORA Accumulator', () => {
 		let program = [
 		    0x3E,                 // MVI into the accumulator...
 		    68,        // ... this immediate value
-		    0xB7,                 // ORA value in register  with Accumulator
+		    0xB7,                 // ORA
 		    0x76                  // HALT
 		  ]
 		

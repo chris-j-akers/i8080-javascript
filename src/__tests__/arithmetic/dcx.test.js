@@ -19,11 +19,11 @@ describe('DCX', () => {
 		
 		
 		const program = [
-		  mvi_opcode_lookup.B,     // Move into B....
+		  mvi_opcode_lookup.B,     // MVI into B....
 		  0x00,                                       // ...this immediate value
-		  mvi_opcode_lookup.C,      // Move into C....
+		  mvi_opcode_lookup.C,      // MVI into C....
 		  0x04,                                       // ...this immediate value
-		  11,
+		  11,                                   // DCX Register
 		  0x76                                        // HALT
 		]
 		
@@ -57,11 +57,11 @@ describe('DCX', () => {
 		
 		
 		const program = [
-		  mvi_opcode_lookup.D,     // Move into D....
+		  mvi_opcode_lookup.D,     // MVI into D....
 		  0x00,                                       // ...this immediate value
-		  mvi_opcode_lookup.E,      // Move into E....
+		  mvi_opcode_lookup.E,      // MVI into E....
 		  0x04,                                       // ...this immediate value
-		  27,
+		  27,                                   // DCX Register
 		  0x76                                        // HALT
 		]
 		
@@ -95,11 +95,11 @@ describe('DCX', () => {
 		
 		
 		const program = [
-		  mvi_opcode_lookup.H,     // Move into H....
+		  mvi_opcode_lookup.H,     // MVI into H....
 		  0x00,                                       // ...this immediate value
-		  mvi_opcode_lookup.L,      // Move into L....
+		  mvi_opcode_lookup.L,      // MVI into L....
 		  0x04,                                       // ...this immediate value
-		  43,
+		  43,                                   // DCX Register
 		  0x76                                        // HALT
 		]
 		

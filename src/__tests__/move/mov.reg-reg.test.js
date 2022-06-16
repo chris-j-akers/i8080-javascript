@@ -16,10 +16,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.B,    // MVI B 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x40,                         // MOV to register B
-		  0x76                              // HALT
+		  mvi_opcode_lookup.B,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x40,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -40,10 +40,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.C,    // MVI C 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x41,                         // MOV to register B
-		  0x76                              // HALT
+		  mvi_opcode_lookup.C,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x41,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -64,10 +64,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.D,    // MVI D 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x42,                         // MOV to register B
-		  0x76                              // HALT
+		  mvi_opcode_lookup.D,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x42,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -88,10 +88,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.E,    // MVI E 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x43,                         // MOV to register B
-		  0x76                              // HALT
+		  mvi_opcode_lookup.E,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x43,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -112,10 +112,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.H,    // MVI H 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x44,                         // MOV to register B
-		  0x76                              // HALT
+		  mvi_opcode_lookup.H,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x44,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -136,10 +136,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.L,    // MVI L 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x45,                         // MOV to register B
-		  0x76                              // HALT
+		  mvi_opcode_lookup.L,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x45,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -160,10 +160,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.A,    // MVI A 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x47,                         // MOV to register B
-		  0x76                              // HALT
+		  mvi_opcode_lookup.A,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x47,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -184,10 +184,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.B,    // MVI B 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x48,                         // MOV to register C
-		  0x76                              // HALT
+		  mvi_opcode_lookup.B,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x48,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -208,10 +208,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.C,    // MVI C 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x49,                         // MOV to register C
-		  0x76                              // HALT
+		  mvi_opcode_lookup.C,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x49,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -232,10 +232,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.D,    // MVI D 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x4a,                         // MOV to register C
-		  0x76                              // HALT
+		  mvi_opcode_lookup.D,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x4a,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -256,10 +256,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.E,    // MVI E 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x4b,                         // MOV to register C
-		  0x76                              // HALT
+		  mvi_opcode_lookup.E,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x4b,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -280,10 +280,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.H,    // MVI H 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x4c,                         // MOV to register C
-		  0x76                              // HALT
+		  mvi_opcode_lookup.H,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x4c,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -304,10 +304,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.L,    // MVI L 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x4d,                         // MOV to register C
-		  0x76                              // HALT
+		  mvi_opcode_lookup.L,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x4d,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -328,10 +328,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.A,    // MVI A 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x4f,                         // MOV to register C
-		  0x76                              // HALT
+		  mvi_opcode_lookup.A,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x4f,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -352,10 +352,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.B,    // MVI B 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x50,                         // MOV to register D
-		  0x76                              // HALT
+		  mvi_opcode_lookup.B,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x50,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -376,10 +376,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.C,    // MVI C 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x51,                         // MOV to register D
-		  0x76                              // HALT
+		  mvi_opcode_lookup.C,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x51,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -400,10 +400,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.D,    // MVI D 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x52,                         // MOV to register D
-		  0x76                              // HALT
+		  mvi_opcode_lookup.D,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x52,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -424,10 +424,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.E,    // MVI E 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x53,                         // MOV to register D
-		  0x76                              // HALT
+		  mvi_opcode_lookup.E,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x53,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -448,10 +448,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.H,    // MVI H 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x54,                         // MOV to register D
-		  0x76                              // HALT
+		  mvi_opcode_lookup.H,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x54,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -472,10 +472,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.L,    // MVI L 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x55,                         // MOV to register D
-		  0x76                              // HALT
+		  mvi_opcode_lookup.L,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x55,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -496,10 +496,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.A,    // MVI A 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x57,                         // MOV to register D
-		  0x76                              // HALT
+		  mvi_opcode_lookup.A,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x57,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -520,10 +520,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.B,    // MVI B 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x58,                         // MOV to register E
-		  0x76                              // HALT
+		  mvi_opcode_lookup.B,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x58,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -544,10 +544,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.C,    // MVI C 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x59,                         // MOV to register E
-		  0x76                              // HALT
+		  mvi_opcode_lookup.C,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x59,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -568,10 +568,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.D,    // MVI D 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x5a,                         // MOV to register E
-		  0x76                              // HALT
+		  mvi_opcode_lookup.D,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x5a,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -592,10 +592,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.E,    // MVI E 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x5b,                         // MOV to register E
-		  0x76                              // HALT
+		  mvi_opcode_lookup.E,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x5b,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -616,10 +616,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.H,    // MVI H 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x5c,                         // MOV to register E
-		  0x76                              // HALT
+		  mvi_opcode_lookup.H,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x5c,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -640,10 +640,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.L,    // MVI L 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x5d,                         // MOV to register E
-		  0x76                              // HALT
+		  mvi_opcode_lookup.L,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x5d,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -664,10 +664,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.A,    // MVI A 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x5f,                         // MOV to register E
-		  0x76                              // HALT
+		  mvi_opcode_lookup.A,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x5f,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -688,10 +688,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.B,    // MVI B 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x60,                         // MOV to register H
-		  0x76                              // HALT
+		  mvi_opcode_lookup.B,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x60,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -712,10 +712,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.C,    // MVI C 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x61,                         // MOV to register H
-		  0x76                              // HALT
+		  mvi_opcode_lookup.C,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x61,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -736,10 +736,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.D,    // MVI D 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x62,                         // MOV to register H
-		  0x76                              // HALT
+		  mvi_opcode_lookup.D,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x62,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -760,10 +760,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.E,    // MVI E 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x63,                         // MOV to register H
-		  0x76                              // HALT
+		  mvi_opcode_lookup.E,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x63,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -784,10 +784,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.H,    // MVI H 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x64,                         // MOV to register H
-		  0x76                              // HALT
+		  mvi_opcode_lookup.H,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x64,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -808,10 +808,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.L,    // MVI L 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x65,                         // MOV to register H
-		  0x76                              // HALT
+		  mvi_opcode_lookup.L,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x65,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -832,10 +832,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.A,    // MVI A 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x67,                         // MOV to register A
-		  0x76                              // HALT
+		  mvi_opcode_lookup.A,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x67,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -856,10 +856,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.B,    // MVI B 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x68,                         // MOV to register L
-		  0x76                              // HALT
+		  mvi_opcode_lookup.B,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x68,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -880,10 +880,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.C,    // MVI C 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x69,                         // MOV to register L
-		  0x76                              // HALT
+		  mvi_opcode_lookup.C,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x69,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -904,10 +904,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.D,    // MVI D 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x6a,                         // MOV to register L
-		  0x76                              // HALT
+		  mvi_opcode_lookup.D,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x6a,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -928,10 +928,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.E,    // MVI E 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x6b,                         // MOV to register L
-		  0x76                              // HALT
+		  mvi_opcode_lookup.E,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x6b,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -952,10 +952,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.H,    // MVI H 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x6c,                         // MOV to register L
-		  0x76                              // HALT
+		  mvi_opcode_lookup.H,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x6c,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -976,10 +976,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.L,    // MVI L 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x6d,                         // MOV to register L
-		  0x76                              // HALT
+		  mvi_opcode_lookup.L,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x6d,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -1000,10 +1000,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.A,    // MVI A 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x6f,                         // MOV to register A
-		  0x76                              // HALT
+		  mvi_opcode_lookup.A,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x6f,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -1024,10 +1024,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.B,    // MVI B 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x78,                         // MOV to register A
-		  0x76                              // HALT
+		  mvi_opcode_lookup.B,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x78,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -1048,10 +1048,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.C,    // MVI C 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x79,                         // MOV to register A
-		  0x76                              // HALT
+		  mvi_opcode_lookup.C,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x79,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -1072,10 +1072,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.D,    // MVI D 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x7a,                         // MOV to register A
-		  0x76                              // HALT
+		  mvi_opcode_lookup.D,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x7a,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -1096,10 +1096,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.E,    // MVI E 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x7b,                         // MOV to register A
-		  0x76                              // HALT
+		  mvi_opcode_lookup.E,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x7b,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -1120,10 +1120,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.H,    // MVI H 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x7c,                         // MOV to register A
-		  0x76                              // HALT
+		  mvi_opcode_lookup.H,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x7c,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -1144,10 +1144,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.L,    // MVI L 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x7d,                         // MOV to register A
-		  0x76                              // HALT
+		  mvi_opcode_lookup.L,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x7d,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {
@@ -1168,10 +1168,10 @@ describe('MOV Register to Register', () => {
 		const c = new Computer();
 		
 		let program = [
-		  mvi_opcode_lookup.A,    // MVI A 
-		  null,                             // ...with this value (populated in loop, below)
-		  0x7f,                         // MOV to register A
-		  0x76                              // HALT
+		  mvi_opcode_lookup.A,     // MVI into source register... 
+		  null,                               // ...this value
+		  0x7f,                           // MOV
+		  0x76                                // HALT
 		]
 		
 		for (let byte = 0x00; byte <= 0xFF; byte++) {

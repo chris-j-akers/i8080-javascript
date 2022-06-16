@@ -22,11 +22,10 @@ describe('INR R', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    null,
-		    0,
-		    null,
+		    null,           // MVI into register (opcode added, below)...
+		    0,         // ...this data
+		    null,           // INR on register (opcode added, below)
 		    0x76            // HALT
 		]
 		
@@ -59,11 +58,10 @@ describe('INR R', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    null,
-		    255,
-		    null,
+		    null,           // MVI into register (opcode added, below)...
+		    255,         // ...this data
+		    null,           // INR on register (opcode added, below)
 		    0x76            // HALT
 		]
 		
@@ -96,11 +94,10 @@ describe('INR R', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    null,
-		    84,
-		    null,
+		    null,           // MVI into register (opcode added, below)...
+		    84,         // ...this data
+		    null,           // INR on register (opcode added, below)
 		    0x76            // HALT
 		]
 		
@@ -133,11 +130,10 @@ describe('INR R', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    null,
-		    175,
-		    null,
+		    null,           // MVI into register (opcode added, below)...
+		    175,         // ...this data
+		    null,           // INR on register (opcode added, below)
 		    0x76            // HALT
 		]
 		

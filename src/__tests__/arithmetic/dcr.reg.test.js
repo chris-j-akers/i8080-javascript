@@ -22,11 +22,10 @@ describe('DCR Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    null,
-		    32,
-		    null,
+		    null,           // MVI into Register (opcode added, below)...
+		    32,         // ...this data
+		    null,           // DCR (opcode added, below)
 		    0x76            // HALT
 		]
 		
@@ -59,11 +58,10 @@ describe('DCR Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    null,
-		    1,
-		    null,
+		    null,           // MVI into Register (opcode added, below)...
+		    1,         // ...this data
+		    null,           // DCR (opcode added, below)
 		    0x76            // HALT
 		]
 		
@@ -96,11 +94,10 @@ describe('DCR Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    null,
-		    31,
-		    null,
+		    null,           // MVI into Register (opcode added, below)...
+		    31,         // ...this data
+		    null,           // DCR (opcode added, below)
 		    0x76            // HALT
 		]
 		
@@ -133,11 +130,10 @@ describe('DCR Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    null,
-		    125,
-		    null,
+		    null,           // MVI into Register (opcode added, below)...
+		    125,         // ...this data
+		    null,           // DCR (opcode added, below)
 		    0x76            // HALT
 		]
 		
@@ -170,11 +166,10 @@ describe('DCR Register', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
-		
 		let program = [
-		    null,
-		    255,
-		    null,
+		    null,           // MVI into Register (opcode added, below)...
+		    255,         // ...this data
+		    null,           // DCR (opcode added, below)
 		    0x76            // HALT
 		]
 		

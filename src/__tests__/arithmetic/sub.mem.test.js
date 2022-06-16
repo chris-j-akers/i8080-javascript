@@ -12,16 +12,16 @@ describe('SUB Memory', () => {
 		const data = 1;
 		
 		const program = [
-		  0x3E, // MVI into Accumulator...
-		  32, // ...this immediate value
-		  0x26, // MOV into H...
-		  null, // ...the high-byte of the memory address of data (to be filled, below)
-		  0x2E, // MOV into L...
-		  null, // ... the low-byte of the memory address of data (to be filled, below)
-		  0x36, // MOV into the memory address...
-		  data, // ...the data
-		  0x96, // SUB M
-		  0x76  // HALT
+		  0x3E,                   // MVI into Accumulator...
+		  32,          // ...this immediate value
+		  0x26,                   // MVI into H...
+		  null,                   // ...the high-byte of the memory address of data (to be filled, below)
+		  0x2E,                   // MVI into L...
+		  null,                   // ... the low-byte of the memory address of data (to be filled, below)
+		  0x36,                   // MVI into the memory address...
+		  data,                   // ...this data
+		  0x96,                   // SUB M
+		  0x76                    // HALT
 		]
 		
 		/**
@@ -58,16 +58,16 @@ describe('SUB Memory', () => {
 		const data = 1;
 		
 		const program = [
-		  0x3E, // MVI into Accumulator...
-		  1, // ...this immediate value
-		  0x26, // MOV into H...
-		  null, // ...the high-byte of the memory address of data (to be filled, below)
-		  0x2E, // MOV into L...
-		  null, // ... the low-byte of the memory address of data (to be filled, below)
-		  0x36, // MOV into the memory address...
-		  data, // ...the data
-		  0x96, // SUB M
-		  0x76  // HALT
+		  0x3E,                   // MVI into Accumulator...
+		  1,          // ...this immediate value
+		  0x26,                   // MVI into H...
+		  null,                   // ...the high-byte of the memory address of data (to be filled, below)
+		  0x2E,                   // MVI into L...
+		  null,                   // ... the low-byte of the memory address of data (to be filled, below)
+		  0x36,                   // MVI into the memory address...
+		  data,                   // ...this data
+		  0x96,                   // SUB M
+		  0x76                    // HALT
 		]
 		
 		/**
@@ -104,16 +104,16 @@ describe('SUB Memory', () => {
 		const data = 2;
 		
 		const program = [
-		  0x3E, // MVI into Accumulator...
-		  32, // ...this immediate value
-		  0x26, // MOV into H...
-		  null, // ...the high-byte of the memory address of data (to be filled, below)
-		  0x2E, // MOV into L...
-		  null, // ... the low-byte of the memory address of data (to be filled, below)
-		  0x36, // MOV into the memory address...
-		  data, // ...the data
-		  0x96, // SUB M
-		  0x76  // HALT
+		  0x3E,                   // MVI into Accumulator...
+		  32,          // ...this immediate value
+		  0x26,                   // MVI into H...
+		  null,                   // ...the high-byte of the memory address of data (to be filled, below)
+		  0x2E,                   // MVI into L...
+		  null,                   // ... the low-byte of the memory address of data (to be filled, below)
+		  0x36,                   // MVI into the memory address...
+		  data,                   // ...this data
+		  0x96,                   // SUB M
+		  0x76                    // HALT
 		]
 		
 		/**
@@ -150,16 +150,16 @@ describe('SUB Memory', () => {
 		const data = 3;
 		
 		const program = [
-		  0x3E, // MVI into Accumulator...
-		  127, // ...this immediate value
-		  0x26, // MOV into H...
-		  null, // ...the high-byte of the memory address of data (to be filled, below)
-		  0x2E, // MOV into L...
-		  null, // ... the low-byte of the memory address of data (to be filled, below)
-		  0x36, // MOV into the memory address...
-		  data, // ...the data
-		  0x96, // SUB M
-		  0x76  // HALT
+		  0x3E,                   // MVI into Accumulator...
+		  127,          // ...this immediate value
+		  0x26,                   // MVI into H...
+		  null,                   // ...the high-byte of the memory address of data (to be filled, below)
+		  0x2E,                   // MVI into L...
+		  null,                   // ... the low-byte of the memory address of data (to be filled, below)
+		  0x36,                   // MVI into the memory address...
+		  data,                   // ...this data
+		  0x96,                   // SUB M
+		  0x76                    // HALT
 		]
 		
 		/**
@@ -196,16 +196,16 @@ describe('SUB Memory', () => {
 		const data = 1;
 		
 		const program = [
-		  0x3E, // MVI into Accumulator...
-		  255, // ...this immediate value
-		  0x26, // MOV into H...
-		  null, // ...the high-byte of the memory address of data (to be filled, below)
-		  0x2E, // MOV into L...
-		  null, // ... the low-byte of the memory address of data (to be filled, below)
-		  0x36, // MOV into the memory address...
-		  data, // ...the data
-		  0x96, // SUB M
-		  0x76  // HALT
+		  0x3E,                   // MVI into Accumulator...
+		  255,          // ...this immediate value
+		  0x26,                   // MVI into H...
+		  null,                   // ...the high-byte of the memory address of data (to be filled, below)
+		  0x2E,                   // MVI into L...
+		  null,                   // ... the low-byte of the memory address of data (to be filled, below)
+		  0x36,                   // MVI into the memory address...
+		  data,                   // ...this data
+		  0x96,                   // SUB M
+		  0x76                    // HALT
 		]
 		
 		/**
@@ -242,16 +242,16 @@ describe('SUB Memory', () => {
 		const data = 10;
 		
 		const program = [
-		  0x3E, // MVI into Accumulator...
-		  5, // ...this immediate value
-		  0x26, // MOV into H...
-		  null, // ...the high-byte of the memory address of data (to be filled, below)
-		  0x2E, // MOV into L...
-		  null, // ... the low-byte of the memory address of data (to be filled, below)
-		  0x36, // MOV into the memory address...
-		  data, // ...the data
-		  0x96, // SUB M
-		  0x76  // HALT
+		  0x3E,                   // MVI into Accumulator...
+		  5,          // ...this immediate value
+		  0x26,                   // MVI into H...
+		  null,                   // ...the high-byte of the memory address of data (to be filled, below)
+		  0x2E,                   // MVI into L...
+		  null,                   // ... the low-byte of the memory address of data (to be filled, below)
+		  0x36,                   // MVI into the memory address...
+		  data,                   // ...this data
+		  0x96,                   // SUB M
+		  0x76                    // HALT
 		]
 		
 		/**

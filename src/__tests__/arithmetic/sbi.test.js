@@ -9,11 +9,11 @@ describe('SBI', () => {
 		
 		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  32,  // ...this immediate value
-		  0xDE,          // SBI from the accumulator...
-		  1,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,                   // MVI into accumulator....
+		  32,          // ...this immediate value
+		  0xDE,                   // SBI from the accumulator...
+		  1,                 // ...this immediate value
+		  0x76                    // HALT 
 		]
 		
 		c.InjectProgram(program);
@@ -38,11 +38,11 @@ describe('SBI', () => {
 		
 		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  33,  // ...this immediate value
-		  0xDE,          // SBI from the accumulator...
-		  1,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,                   // MVI into accumulator....
+		  33,          // ...this immediate value
+		  0xDE,                   // SBI from the accumulator...
+		  1,                 // ...this immediate value
+		  0x76                    // HALT 
 		]
 		
 		c.InjectProgram(program);
@@ -68,11 +68,11 @@ describe('SBI', () => {
 		
 		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  1,  // ...this immediate value
-		  0xDE,          // SBI from the accumulator...
+		  0x3E,                   // MVI into accumulator....
 		  1,          // ...this immediate value
-		  0x76            // Halt
+		  0xDE,                   // SBI from the accumulator...
+		  1,                 // ...this immediate value
+		  0x76                    // HALT 
 		]
 		
 		c.InjectProgram(program);
@@ -97,11 +97,11 @@ describe('SBI', () => {
 		
 		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  3,  // ...this immediate value
-		  0xDE,          // SBI from the accumulator...
-		  2,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,                   // MVI into accumulator....
+		  3,          // ...this immediate value
+		  0xDE,                   // SBI from the accumulator...
+		  2,                 // ...this immediate value
+		  0x76                    // HALT 
 		]
 		
 		c.InjectProgram(program);
@@ -127,11 +127,11 @@ describe('SBI', () => {
 		
 		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  32,  // ...this immediate value
-		  0xDE,          // SBI from the accumulator...
-		  2,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,                   // MVI into accumulator....
+		  32,          // ...this immediate value
+		  0xDE,                   // SBI from the accumulator...
+		  2,                 // ...this immediate value
+		  0x76                    // HALT 
 		]
 		
 		c.InjectProgram(program);
@@ -156,11 +156,11 @@ describe('SBI', () => {
 		
 		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  32,  // ...this immediate value
-		  0xDE,          // SBI from the accumulator...
-		  1,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,                   // MVI into accumulator....
+		  32,          // ...this immediate value
+		  0xDE,                   // SBI from the accumulator...
+		  1,                 // ...this immediate value
+		  0x76                    // HALT 
 		]
 		
 		c.InjectProgram(program);
@@ -186,11 +186,11 @@ describe('SBI', () => {
 		
 		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  127,  // ...this immediate value
-		  0xDE,          // SBI from the accumulator...
-		  3,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,                   // MVI into accumulator....
+		  127,          // ...this immediate value
+		  0xDE,                   // SBI from the accumulator...
+		  3,                 // ...this immediate value
+		  0x76                    // HALT 
 		]
 		
 		c.InjectProgram(program);
@@ -215,11 +215,11 @@ describe('SBI', () => {
 		
 		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  127,  // ...this immediate value
-		  0xDE,          // SBI from the accumulator...
-		  4,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,                   // MVI into accumulator....
+		  127,          // ...this immediate value
+		  0xDE,                   // SBI from the accumulator...
+		  4,                 // ...this immediate value
+		  0x76                    // HALT 
 		]
 		
 		c.InjectProgram(program);
@@ -245,11 +245,11 @@ describe('SBI', () => {
 		
 		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  255,  // ...this immediate value
-		  0xDE,          // SBI from the accumulator...
-		  1,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,                   // MVI into accumulator....
+		  255,          // ...this immediate value
+		  0xDE,                   // SBI from the accumulator...
+		  1,                 // ...this immediate value
+		  0x76                    // HALT 
 		]
 		
 		c.InjectProgram(program);
@@ -274,11 +274,11 @@ describe('SBI', () => {
 		
 		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  253,  // ...this immediate value
-		  0xDE,          // SBI from the accumulator...
-		  3,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,                   // MVI into accumulator....
+		  253,          // ...this immediate value
+		  0xDE,                   // SBI from the accumulator...
+		  3,                 // ...this immediate value
+		  0x76                    // HALT 
 		]
 		
 		c.InjectProgram(program);
@@ -304,11 +304,11 @@ describe('SBI', () => {
 		
 		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  5,  // ...this immediate value
-		  0xDE,          // SBI from the accumulator...
-		  10,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,                   // MVI into accumulator....
+		  5,          // ...this immediate value
+		  0xDE,                   // SBI from the accumulator...
+		  10,                 // ...this immediate value
+		  0x76                    // HALT 
 		]
 		
 		c.InjectProgram(program);
@@ -333,11 +333,11 @@ describe('SBI', () => {
 		
 		
 		const program = [
-		  0x3E,           // Move into accumulator....
-		  5,  // ...this immediate value
-		  0xDE,          // SBI from the accumulator...
-		  9,          // ...this immediate value
-		  0x76            // Halt
+		  0x3E,                   // MVI into accumulator....
+		  5,          // ...this immediate value
+		  0xDE,                   // SBI from the accumulator...
+		  9,                 // ...this immediate value
+		  0x76                    // HALT 
 		]
 		
 		c.InjectProgram(program);

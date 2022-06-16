@@ -9,12 +9,12 @@ describe('MOV Memory to Register', () => {
 		
 		let program = [
 		  0x26,           // MOV into H...
-		  null,           // ...the high-byte of the memory address (to be inserted)
+		  null,           // ...addr high-byte (to be inserted)
 		  0x2E,           // MOV into L...
-		  null,           // ... the low-byte of the memory address (to be inserted)
+		  null,           // ... addr low-byte (to be inserted)
 		  0x36,           // MVI to this address...
 		  data,           // ...this immediate value
-		  0x46,       // MOV from this address in H and L to register        
+		  0x46,       // MOV
 		  0x76            // HALT
 		]
 		
@@ -39,12 +39,12 @@ describe('MOV Memory to Register', () => {
 		
 		let program = [
 		  0x26,           // MOV into H...
-		  null,           // ...the high-byte of the memory address (to be inserted)
+		  null,           // ...addr high-byte (to be inserted)
 		  0x2E,           // MOV into L...
-		  null,           // ... the low-byte of the memory address (to be inserted)
+		  null,           // ... addr low-byte (to be inserted)
 		  0x36,           // MVI to this address...
 		  data,           // ...this immediate value
-		  0x4e,       // MOV from this address in H and L to register        
+		  0x4e,       // MOV
 		  0x76            // HALT
 		]
 		
@@ -69,12 +69,12 @@ describe('MOV Memory to Register', () => {
 		
 		let program = [
 		  0x26,           // MOV into H...
-		  null,           // ...the high-byte of the memory address (to be inserted)
+		  null,           // ...addr high-byte (to be inserted)
 		  0x2E,           // MOV into L...
-		  null,           // ... the low-byte of the memory address (to be inserted)
+		  null,           // ... addr low-byte (to be inserted)
 		  0x36,           // MVI to this address...
 		  data,           // ...this immediate value
-		  0x56,       // MOV from this address in H and L to register        
+		  0x56,       // MOV
 		  0x76            // HALT
 		]
 		
@@ -99,12 +99,12 @@ describe('MOV Memory to Register', () => {
 		
 		let program = [
 		  0x26,           // MOV into H...
-		  null,           // ...the high-byte of the memory address (to be inserted)
+		  null,           // ...addr high-byte (to be inserted)
 		  0x2E,           // MOV into L...
-		  null,           // ... the low-byte of the memory address (to be inserted)
+		  null,           // ... addr low-byte (to be inserted)
 		  0x36,           // MVI to this address...
 		  data,           // ...this immediate value
-		  0x5e,       // MOV from this address in H and L to register        
+		  0x5e,       // MOV
 		  0x76            // HALT
 		]
 		
@@ -129,12 +129,12 @@ describe('MOV Memory to Register', () => {
 		
 		let program = [
 		  0x26,           // MOV into H...
-		  null,           // ...the high-byte of the memory address (to be inserted)
+		  null,           // ...addr high-byte (to be inserted)
 		  0x2E,           // MOV into L...
-		  null,           // ... the low-byte of the memory address (to be inserted)
+		  null,           // ... addr low-byte (to be inserted)
 		  0x36,           // MVI to this address...
 		  data,           // ...this immediate value
-		  0x66,       // MOV from this address in H and L to register        
+		  0x66,       // MOV
 		  0x76            // HALT
 		]
 		
@@ -159,12 +159,12 @@ describe('MOV Memory to Register', () => {
 		
 		let program = [
 		  0x26,           // MOV into H...
-		  null,           // ...the high-byte of the memory address (to be inserted)
+		  null,           // ...addr high-byte (to be inserted)
 		  0x2E,           // MOV into L...
-		  null,           // ... the low-byte of the memory address (to be inserted)
+		  null,           // ... addr low-byte (to be inserted)
 		  0x36,           // MVI to this address...
 		  data,           // ...this immediate value
-		  0x6e,       // MOV from this address in H and L to register        
+		  0x6e,       // MOV
 		  0x76            // HALT
 		]
 		
@@ -189,12 +189,12 @@ describe('MOV Memory to Register', () => {
 		
 		let program = [
 		  0x26,           // MOV into H...
-		  null,           // ...the high-byte of the memory address (to be inserted)
+		  null,           // ...addr high-byte (to be inserted)
 		  0x2E,           // MOV into L...
-		  null,           // ... the low-byte of the memory address (to be inserted)
+		  null,           // ... addr low-byte (to be inserted)
 		  0x36,           // MVI to this address...
 		  data,           // ...this immediate value
-		  0x7e,       // MOV from this address in H and L to register        
+		  0x7e,       // MOV
 		  0x76            // HALT
 		]
 		

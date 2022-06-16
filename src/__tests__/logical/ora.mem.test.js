@@ -15,12 +15,12 @@ describe('ORA Memory', () => {
 		  0x3E,                   // MVI into Accumulator
 		  5,          // Immediate value (in test config)
 		  0x26,                   // MOV into H...
-		  null,                   // ...the high-byte of the memory address (ro be inserted)
+		  null,                   // ...addr high-byte (inserted, below)
 		  0x2E,                   // MOV into L...
-		  null,                   // ... the low-byte of the memory address (to be inserted)
+		  null,                   // ... addr low-byte (inserted, below)
 		  0x36,                   // MOV into the memory address...
 		  data,                   // ...the data value
-		  0xB6,                   // ORA data in Memory Location with Accumulator
+		  0xB6,                   // ORA
 		  0x76                    // Halt Program
 		]
 		
@@ -59,12 +59,12 @@ describe('ORA Memory', () => {
 		  0x3E,                   // MVI into Accumulator
 		  0,          // Immediate value (in test config)
 		  0x26,                   // MOV into H...
-		  null,                   // ...the high-byte of the memory address (ro be inserted)
+		  null,                   // ...addr high-byte (inserted, below)
 		  0x2E,                   // MOV into L...
-		  null,                   // ... the low-byte of the memory address (to be inserted)
+		  null,                   // ... addr low-byte (inserted, below)
 		  0x36,                   // MOV into the memory address...
 		  data,                   // ...the data value
-		  0xB6,                   // ORA data in Memory Location with Accumulator
+		  0xB6,                   // ORA
 		  0x76                    // Halt Program
 		]
 		
@@ -102,12 +102,12 @@ describe('ORA Memory', () => {
 		  0x3E,                   // MVI into Accumulator
 		  127,          // Immediate value (in test config)
 		  0x26,                   // MOV into H...
-		  null,                   // ...the high-byte of the memory address (ro be inserted)
+		  null,                   // ...addr high-byte (inserted, below)
 		  0x2E,                   // MOV into L...
-		  null,                   // ... the low-byte of the memory address (to be inserted)
+		  null,                   // ... addr low-byte (inserted, below)
 		  0x36,                   // MOV into the memory address...
 		  data,                   // ...the data value
-		  0xB6,                   // ORA data in Memory Location with Accumulator
+		  0xB6,                   // ORA
 		  0x76                    // Halt Program
 		]
 		
@@ -145,12 +145,12 @@ describe('ORA Memory', () => {
 		  0x3E,                   // MVI into Accumulator
 		  68,          // Immediate value (in test config)
 		  0x26,                   // MOV into H...
-		  null,                   // ...the high-byte of the memory address (ro be inserted)
+		  null,                   // ...addr high-byte (inserted, below)
 		  0x2E,                   // MOV into L...
-		  null,                   // ... the low-byte of the memory address (to be inserted)
+		  null,                   // ... addr low-byte (inserted, below)
 		  0x36,                   // MOV into the memory address...
 		  data,                   // ...the data value
-		  0xB6,                   // ORA data in Memory Location with Accumulator
+		  0xB6,                   // ORA
 		  0x76                    // Halt Program
 		]
 		

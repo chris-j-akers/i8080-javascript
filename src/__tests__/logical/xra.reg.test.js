@@ -22,7 +22,7 @@ describe('XRA Register', () => {
 		    20,        // ... this immediate value
 		    null,                 // MVI into register ...
 		    16,               // ...this immediate value
-		    null,                 // XRA value in register  with Accumulator
+		    null,                 // XRA
 		    0x76                  // HALT
 		  ]
 		
@@ -60,7 +60,7 @@ describe('XRA Register', () => {
 		    255,        // ... this immediate value
 		    null,                 // MVI into register ...
 		    255,               // ...this immediate value
-		    null,                 // XRA value in register  with Accumulator
+		    null,                 // XRA
 		    0x76                  // HALT
 		  ]
 		
@@ -97,7 +97,7 @@ describe('XRA Register', () => {
 		    127,        // ... this immediate value
 		    null,                 // MVI into register ...
 		    255,               // ...this immediate value
-		    null,                 // XRA value in register  with Accumulator
+		    null,                 // XRA
 		    0x76                  // HALT
 		  ]
 		
@@ -134,7 +134,7 @@ describe('XRA Register', () => {
 		    85,        // ... this immediate value
 		    null,                 // MVI into register ...
 		    80,               // ...this immediate value
-		    null,                 // XRA value in register  with Accumulator
+		    null,                 // XRA
 		    0x76                  // HALT
 		  ]
 		
