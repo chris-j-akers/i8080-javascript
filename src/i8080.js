@@ -1142,7 +1142,7 @@ class i8080 {
     }
 
     DAD(high_byte_register, low_byte_register) {
-        let result = ((this.registers['H'] << 8 | this.registers['L']) & 0xFFFF)) + ((this.registers[high_byte_register] << 8 | this.registers[low_byte_register]) & 0xFFFF));
+        let result = ((this.registers['H'] << 8 | this.registers['L']) & 0xFFFF)) + (this.registers[high_byte_register] << 8 | this.registers[low_byte_register]) & 0xFFFF));
         (result > 0xFFFF | result < 0) ? this._flag_manager.SetFlag(this._flag_manager.FlagType.Carry) : this._flag_manager.ClearFlag(this._flag_manager.FlagType.Carry);
         result &= 0xFFFF;
         this.registers['H'] = (result >> 8) & 0xFF;
