@@ -1,12 +1,19 @@
 'use strict';
 
 /**
- * An Intel 8080 CPU implemented in software.
+ * An Intel 8080 CPU implemented in JavaScript.
  */
 class i8080 {
 
     // DEBUG AND HELPER FUNCTIONS
      
+    /**
+     * Returns a string representations of an an 8-bit (byte) number in binary.
+     * NOTE: Assumes that `val` passed is an 8-bit number.
+     *
+     * @param {number} val Value to be formatted
+     * @returns 
+     */
     __dbg__byte_to_binary_str(val) {
         let str = '';
         for (let i = 0; i<8; i++) {
@@ -21,6 +28,13 @@ class i8080 {
         }
 
 
+    /**
+     * Returns a string representation of an a 16-bit (word) number in binary.
+     * NOTE: Assumes that `val` passed is a 16-bit number.
+     *
+     * @param {number} val Value to be formatted
+     * @returns 
+     */
     __dbg__word_to_binary_str(val) {
         let str = '';
         for (let i = 0; i<16; i++) {
@@ -205,6 +219,9 @@ class i8080 {
         return (bit_count % 2 === 0)
     }
 
+    /**
+     * Object used to set, check and clear bits in the CPU flags register.
+     */
     _flag_manager = {
         /** 
          * Get bit-pos of flag by FlagName
@@ -334,7 +351,7 @@ class i8080 {
     // NOP
     
     /**
-     * Do nowt but take up clock ticks.
+     * No Operation - Just takes up clock-ticks.
      */
      NOP() {
         this.clock += 4;
@@ -730,12 +747,8 @@ class i8080 {
         this.clock += 10;
     }
 
+    // LOGICAL BITWISE OPERATIONS
 
-    /*------------------------------------------------------------------------
-                            LOGICAL BITWISE OPERATIONS                        
-    ------------------------------------------------------------------------*/
-
-    
     _set_flags_on_logical_op(raw_result) {
         this._flag_manager.ClearFlag(this._flag_manager.FlagType.Carry);
         this._flag_manager.CheckAndSet.Zero(raw_result & 0xFF);
@@ -1012,10 +1025,7 @@ class i8080 {
         this.clock += 10;
     }
 
-
-    /*--------------------------------------------------------------------------
-                            ACCUMULATOR ROTATE OPERATIONS        
-    --------------------------------------------------------------------------*/
+    // ACCUMULATOR ROTATE OPERATIONS
    
     /**
      * Rotate Accumulator Left.
@@ -1073,11 +1083,7 @@ class i8080 {
         this.clock += 4;
     }
 
-
-    /*--------------------------------------------------------------------------
-                                  CARRY BIT OPERATIONS    
-    --------------------------------------------------------------------------*/
-
+    // CARRY-BIT OPERATIONS
 
     /**
      * The Carry flag is set to 1.
@@ -1129,9 +1135,18 @@ class i8080 {
         this.clock += 7;
     }
 
-    /*--------------------------------------------------------------------------
-                                  PROGRAM EXECUTION  
-    --------------------------------------------------------------------------*/
+    // RETURN INSTRUCTIONS
+
+    RNZ() {
+        if (!this._flag_manager.IsSet(this._flag_manager.FlagType.Zero)) {
+            const addr_low_byte = this.bus.Read(this.stack_pointer++);
+            const addr_high_byte = this.bus.Read(this.stack_pointer++);
+            this.program_counter = (addr_high_byte << 8) | addr_low_byte;
+        }
+    }
+
+
+    // PROGRAM EXECUTION
 
     /**
      * @returns The next 8-bits of memory from the current program counter
