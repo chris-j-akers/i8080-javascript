@@ -1182,7 +1182,7 @@ class i8080 {
      * instructions, but switch works just as well and, although longer, is
      * simple to read.
      */
-    execute_next_instruction() {
+    ExecuteNextInstruction() {
         const opcode = this._get_next_byte();
         switch(opcode) {
             case 0x00:

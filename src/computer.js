@@ -33,7 +33,7 @@ class Computer {
     ExecuteProgram(from_addr=0x0) {
         this.cpu.ProgramCounter = from_addr;
         while(this.cpu.halt === false) {
-            this.cpu.execute_next_instruction();
+            this.cpu.ExecuteNextInstruction();
         }
     }
 }
