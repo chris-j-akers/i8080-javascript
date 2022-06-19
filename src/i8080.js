@@ -1189,6 +1189,15 @@ class i8080 {
         this.clock +=5;
     }
 
+    JUMP(expr, addr) {
+        if (expr) {
+            this.program_counter = addr;
+            this.clock += 10;
+            return;
+        }
+        this.clock += 3;
+    }
+
     // PROGRAM EXECUTION
 
     /**
@@ -1237,6 +1246,18 @@ class i8080 {
             case 0x38:
             case 0x30:
                 this.NOP();
+                break;
+            case 0xF2:
+                this.JUMP(!this._flag_manager.IsSet(this._flag_manager.FlagType.Sign), this._get_next_word());
+                break;                
+            case 0xE2:
+                this.JUMP(!this._flag_manager.IsSet(this._flag_manager.FlagType.Parity), this._get_next_word());
+                break;
+            case 0xD2:
+                this.JUMP(!this._flag_manager.IsSet(this._flag_manager.FlagType.Carry), this._get_next_word());
+                break;                
+            case 0xC2:
+                this.JUMP(!this._flag_manager.IsSet(this._flag_manager.FlagType.Zero), this._get_next_word());
                 break;
             case 0xF8:
                 this.RETURN(this._flag_manager.IsSet(this._flag_manager.FlagType.Sign))

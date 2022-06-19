@@ -49,6 +49,10 @@ import return_tests.rz.rz_tests as rz_tests
 import return_tests.rc.rc_tests as rc_tests
 import return_tests.rpe.rpe_tests as rpe_tests
 import return_tests.rm.rm_tests as rm_tests
+import jump_tests.jnz.jnz_tests as jnz_tests
+import jump_tests.jnc.jnc_tests as jnc_tests
+import jump_tests.jpo.jpo_tests as jpo_tests
+import jump_tests.jp.jp_tests as jp_tests
 
 
 def generate_test(test_suite, working_dir, populate_function):
