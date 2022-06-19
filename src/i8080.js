@@ -1238,6 +1238,24 @@ class i8080 {
             case 0x30:
                 this.NOP();
                 break;
+            case 0xF8:
+                this.RETURN(this._flag_manager.IsSet(this._flag_manager.FlagType.Sign))
+                break;
+            case 0xE8:
+                this.RETURN(this._flag_manager.IsSet(this._flag_manager.FlagType.Parity))
+                break;
+            case 0xD8:
+                this.RETURN(this._flag_manager.IsSet(this._flag_manager.FlagType.Carry))
+                break;
+            case 0xC8:
+                this.RETURN(this._flag_manager.IsSet(this._flag_manager.FlagType.Zero))
+                break;
+            case 0xF0:
+                this.RETURN(!this._flag_manager.IsSet(this._flag_manager.FlagType.Sign))
+                break;
+            case 0xE0:
+                this.RETURN(!this._flag_manager.IsSet(this._flag_manager.FlagType.Parity))
+                break;
             case 0xC0:
                 this.RETURN(!this._flag_manager.IsSet(this._flag_manager.FlagType.Zero));
                 break;

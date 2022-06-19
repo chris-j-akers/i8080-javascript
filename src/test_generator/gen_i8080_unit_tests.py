@@ -43,6 +43,12 @@ import stack_tests.push.push_tests as push_tests
 import stack_tests.pop.pop_tests as pop_tests
 import return_tests.rnz.rnz_tests as rnz_tests
 import return_tests.rnc.rnc_tests as rnc_tests
+import return_tests.rpo.rpo_tests as rpo_tests
+import return_tests.rp.rp_tests as rp_tests
+import return_tests.rz.rz_tests as rz_tests
+import return_tests.rc.rc_tests as rc_tests
+import return_tests.rpe.rpe_tests as rpe_tests
+import return_tests.rm.rm_tests as rm_tests
 
 
 def generate_test(test_suite, working_dir, populate_function):

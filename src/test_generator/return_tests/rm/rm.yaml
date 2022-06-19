@@ -1,0 +1,69 @@
+# Tests moving data from Memory locations to Register using MOV OpCode
+---
+test_suite:
+  enable: True
+  generator_function: rm_tests.generate_rm
+  description: 'RM'
+  output_file_name: '/return/rm.test.js'
+  header: |
+    import { Computer } from '../../computer.js'
+    import { i8080 } from '../../i8080.js'
+    import { strict as assert } from 'assert'
+
+  footer: |
+    });
+  boilerplate: |
+    const c = new Computer();
+    const FlagType = c.cpu._flag_manager.FlagType;
+
+    let program = [
+      0x3E,                   // MVI into accumulator
+      {accumulator},          // ...this byte
+      0x31,                   // Load stack pointer with...
+      0xFE,                   // ..This low-byte
+      0xFF,                   // ...and this high-byte
+      0x26,                   // MVI into Register H...
+      0xFF,                   // ...This high-byte
+      0x2E,                   // MVI into Register L...
+      0xFE,                   // ...This high-byte
+      0x36,                   // MVI into memory location (stored in registers H/L)
+      0x76,                   // ...OpCode 0x76 (So the program HALTS when the program counter changes on JNZ)
+      0xC6,                   // Add...
+      {add},                  // ...This immediate value to accumulator
+      0xF8,                   // RM
+      0x76,                   // HALT
+    ]
+
+      c.InjectProgram(program);
+      c.ExecuteProgram();
+
+      assert.equal(c.cpu.registers['A'], {expected_result})
+      assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), {sign});
+      assert.equal(c.cpu.program_counter, {expected_program_counter});
+      assert.equal(c.cpu.Clock, {expected_clock});
+
+    }});
+    
+  tests:
+
+    - test:
+      name: Sign is set, program counter is modified
+      accumulator: 100
+      add: 87
+      expected_result: 187
+      expected_program_counter: 0xFFFF
+      expected_clock: 66
+      sign: true
+
+    - test: 
+      name: Sign bit is set, program counter is not modified
+      accumulator: 10
+      add: 10
+      expected_result: 20
+      expected_program_counter: 15
+      expected_clock: 60
+      sign: false
+
+
+
+    
