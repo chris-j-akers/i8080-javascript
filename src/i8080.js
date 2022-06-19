@@ -583,11 +583,21 @@ class i8080 {
 
     // STACK POINTER OPERATIONS
 
+    /**
+    * Push a 16-bit value onto the stack from one of the register pairs (BC, DE,
+    * HL).
+    *
+    * @param {char} high_byte_register Register that contains high-byte of
+    * 16-bit value
+    * @param {char} low_byte_register Register that contains low-byte of 16-bit
+    * value
+    */
     PUSH_R(high_byte_register, low_byte_register) {
         this.bus.Write(this.registers[high_byte_register], --this.stack_pointer);
         this.bus.Write(this.registers[low_byte_register], --this.stack_pointer);
         this.clock += 11;
     }
+
 
     PUSH_PSW() {
         this.bus.Write(this.registers['A'], --this.stack_pointer);
@@ -595,6 +605,11 @@ class i8080 {
         this.clock += 11;
     }
     
+    /**
+     * 
+     * @param {*} high_byte_register 
+     * @param {*} low_byte_register 
+     */
     POP_R(high_byte_register, low_byte_register) {
         this.registers[low_byte_register] = this.bus.Read(this.stack_pointer++);
         this.registers[high_byte_register] = this.bus.Read(this.stack_pointer++);
@@ -689,7 +704,7 @@ class i8080 {
 
 
     /**
-     * Move (Copy) value from one register to another.
+     * Move value from one register to another.
      *
      * @param {char} reg_destination The name of the destination register
      * (A,B,C,D,E,H,L)
@@ -701,7 +716,7 @@ class i8080 {
     }
 
     /**
-     * Move (Copy) value from register to location in memory. The 16-bit address of the
+     * Move value from register to location in memory. The 16-bit address of the
      * destination should be loaded into the H and L registers.
      *
      * @param {char} reg_source The name of the source register (A,B,C,D,E,H,L)
@@ -712,9 +727,9 @@ class i8080 {
     }
 
     /**
-     * Move (Copy) value from memory location to register. The 16-bit address of the
+     * Move value from memory location to register. The 16-bit address of the
      * memory location should be loaded into the H and L registers.
-     * 
+     *
      * @param {char} reg_destination The name of the destination register
      * (A,B,C,D,E,H,L)
      */
@@ -725,7 +740,7 @@ class i8080 {
 
     /**
      * Move an immediate 8-bit value into a register.
-     * 
+     *
      * @param {char} reg_destination Name of the destination register
      * (A,B,C,D,E,H,L)
      * @param {*} val The 8-bit immediate value to store
@@ -737,7 +752,7 @@ class i8080 {
 
     /**
      * Move an immediate 8-bit value into a memory location. The address of the
-     * location should be loaded into the H and L registers.
+     * location is loaded into the H and L registers.
      *
      * @param {number} val The 8-bit immediate value to store
      */
@@ -757,8 +772,8 @@ class i8080 {
     }
        
     /**
-     * Logically AND the contents of a register with the contents of the
-     * Accumulator, leaving the result in the Accumulator.
+     * AND contents of the Accumulator with contents of a register. Result is
+     * stored in the accumulator.
      *
      * @param {char} register The register to use.
      */
@@ -770,12 +785,11 @@ class i8080 {
     }
 
     /**
-     * Logically AND the contents of a memory location with the contents of the
-     * Accumulator, leaving the result in the Accumulator.
-     *
-     * The address of the memory location is stored in the `H` and `L`
-     * registers.
-     */
+    * AND contents of the accumulator with the contents of a memory location.
+    * Result is stored in the accumulator.
+    *
+    * The 16-bit address of the memory location is loaded from register-pair HL.
+    */
     ANA_M() {
         const raw_result = this.registers['A'] & this.bus.Read(this._get_register_pair_word('H','L'));
         this._set_flags_on_logical_op(raw_result);
@@ -784,8 +798,8 @@ class i8080 {
     }
 
     /**
-     * Logically AND an immediate value with the contents of the Accumulator,
-     * leaving the result in the Accumulator.
+     * AND contents of the accumulator with an immediate 8-bit value. Result is
+     * stored in the accumulator.
      *
      * @param {number} val Immediate value to use.
      */
@@ -797,8 +811,8 @@ class i8080 {
     }
 
     /**
-     * EXCLUSIVE OR contents of the Accumulator with the contents of a register,
-     * leaving the result in the Accumulator.
+     * EXCLUSIVE OR contents of the Accumulator with the contents of a register.
+     * Result is stored in the accumulator.
      *
      * @param {char} reg Register to use.
      */
@@ -810,10 +824,12 @@ class i8080 {
     }
 
     /**
-     * EXCLUSIVE OR contents of the accumulator with the contents of a memory
-     * location. The 16-bit address of the memory location is stored in
-     * register-pair HL.
-     */
+    * EXCLUSIVE OR contents of the accumulator with the contents of a memory
+    * location. Result is stored in the accumulator.
+    * 
+    * The 16-bit address of the memory location is loaded from register-pair
+    * HL.
+    */
     XRA_M() {
         const raw_result = this.registers['A'] ^ this.bus.Read(this._get_register_pair_word('H', 'L'));
         this._set_flags_on_logical_op(raw_result);
@@ -821,6 +837,12 @@ class i8080 {
         this.clock += 7;
     }
 
+    /**
+     * EXCLUSIVE OR an immediate 8-bit value with the contents of the
+     * accumulator. Result is stored in the accumulator.
+     *
+     * @param {number} val Immediate value to use.
+     */
     XRI(val) {
         const raw_result = this.registers['A'] ^ val;
         this._set_flags_on_logical_op(raw_result);
@@ -828,6 +850,12 @@ class i8080 {
         this.clock += 4;
     }
 
+    /**
+     * OR contents of a register with the contents of the accumulator. Result is
+     * stored in the accumulator.
+     *
+     * @param {char} register Register to use
+     */
     ORA_R(register) {
         const raw_result = this.registers['A'] | this.registers[register];
         this._set_flags_on_logical_op(raw_result);
@@ -835,6 +863,13 @@ class i8080 {
         this.clock += 4;
     }
 
+    /**
+     * OR contents of the accumulator with the contents of a memory location.
+     * Result is stored in the accumulator.
+     *
+     * The 16-bit address of the memory location is loaded from register-pair
+     * HL.
+     */
     ORA_M() {
         const raw_result = this.registers['A'] | this.bus.Read(this._get_register_pair_word('H','L'));
         this._set_flags_on_logical_op(raw_result);
@@ -842,6 +877,12 @@ class i8080 {
         this.clock += 7;
     }
 
+    /**
+     * OR an immediate 8-bit value with the contents of the accumulator. Result
+     * is stored in the accumulator.
+     *
+     * @param {number} val Immediate value to use.
+     */
     ORI(val) {
         const raw_result = this.registers['A'] | val;
         this._set_flags_on_logical_op(raw_result);
@@ -1137,14 +1178,16 @@ class i8080 {
 
     // RETURN INSTRUCTIONS
 
-    RNZ() {
-        if (!this._flag_manager.IsSet(this._flag_manager.FlagType.Zero)) {
+    RETURN(expr) {
+        if (expr) {
             const addr_low_byte = this.bus.Read(this.stack_pointer++);
             const addr_high_byte = this.bus.Read(this.stack_pointer++);
             this.program_counter = (addr_high_byte << 8) | addr_low_byte;
+            this.clock += 11;
+            return;
         }
+        this.clock +=5;
     }
-
 
     // PROGRAM EXECUTION
 
@@ -1194,6 +1237,12 @@ class i8080 {
             case 0x38:
             case 0x30:
                 this.NOP();
+                break;
+            case 0xC0:
+                this.RETURN(!this._flag_manager.IsSet(this._flag_manager.FlagType.Zero));
+                break;
+            case 0xD0:
+                this.RETURN(!this._flag_manager.IsSet(this._flag_manager.FlagType.Carry));
                 break;
             case 0xC1:
                 this.POP_R('B', 'C');

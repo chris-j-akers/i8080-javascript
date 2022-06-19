@@ -1,0 +1,71 @@
+# Tests moving data from Memory locations to Register using MOV OpCode
+---
+test_suite:
+  enable: True
+  generator_function: rnc_tests.generate_rnc
+  description: 'RNC'
+  output_file_name: '/return/rnc.test.js'
+  header: |
+    import { Computer } from '../../computer.js'
+    import { i8080 } from '../../i8080.js'
+    import { strict as assert } from 'assert'
+
+  footer: |
+    });
+  boilerplate: |
+    const c = new Computer();
+    const FlagType = c.cpu._flag_manager.FlagType;
+
+    let program = [
+      0x3E,                   // MVI into accumulator
+      {accumulator},          // ...this byte
+      0x31,                   // Load stack pointer with...
+      0xFE,                   // ..This low-byte
+      0xFF,                   // ...and this high-byte
+      0x26,                   // MVI into Register H...
+      0xFF,                   // ...This high-byte
+      0x2E,                   // MVI into Register L...
+      0xFE,                   // ...This high-byte
+      0x36,                   // MVI into memory location (stored in registers H/L)
+      0x76,                   // ...OpCode 0x76 (So the program HALTS when the program counter changes on JNZ)
+      0xC6,                   // Add...
+      {add},                  // ...This immediate value to accumulator
+      0xD0,                   // RNC
+      0x76,                   // HALT
+    ]
+
+      c.InjectProgram(program);
+      c.ExecuteProgram();
+
+      assert.equal(c.cpu.registers['A'], {expected_result})
+      assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), {carry});
+      assert.equal(c.cpu.program_counter, {expected_program_counter});
+      assert.equal(c.cpu.Clock, {expected_clock});
+
+      c.Reset();
+
+    }});
+    
+  tests:
+
+    - test:
+      name: Carry is set, program counter is not modified
+      accumulator: 255
+      add: 10
+      expected_result: 9
+      expected_program_counter: 15
+      expected_clock: 60
+      carry: true
+
+
+    - test: 
+      name: Carry is not set, program counter is modified
+      accumulator: 10
+      add: 5
+      expected_result: 15
+      expected_program_counter: 0xFFFF
+      expected_clock: 66
+      carry: false
+
+
+    

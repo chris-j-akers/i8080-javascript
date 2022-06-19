@@ -41,6 +41,8 @@ import complement_tests.cma.cma_tests as cma_tests
 import compare_tests.cmp.cmp_tests as cmp_tests
 import stack_tests.push.push_tests as push_tests
 import stack_tests.pop.pop_tests as pop_tests
+import return_tests.rnz.rnz_tests as rnz_tests
+import return_tests.rnc.rnc_tests as rnc_tests
 
 
 def generate_test(test_suite, working_dir, populate_function):
