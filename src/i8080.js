@@ -8,7 +8,7 @@ class i8080 {
     // DEBUG AND HELPER FUNCTIONS
      
     /**
-     * Returns a string representations of an an 8-bit (byte) number in binary.
+     * Returns a string representation of an an 8-bit (byte) number in binary.
      * NOTE: Assumes that `val` passed is an 8-bit number.
      *
      * @param {number} val Value to be formatted
@@ -29,7 +29,7 @@ class i8080 {
 
 
     /**
-     * Returns a string representation of an a 16-bit (word) number in binary.
+     * Returns a string representation of a 16-bit (word) number in binary.
      * NOTE: Assumes that `val` passed is a 16-bit number.
      *
      * @param {number} val Value to be formatted
