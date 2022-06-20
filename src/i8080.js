@@ -1213,8 +1213,8 @@ class i8080 {
     /**
     * @returns The next 16-bits of memory from the current program counter
     * position. The first byte forms the lower-byte of the word and the second
-    * byte forms the upper-byte (little endian). Program
-    * counter is incremented by 2 bytes. 
+    * byte forms the upper-byte (little endian). Program counter is incremented
+    * by 2 bytes. 
     */
     _get_next_word() {
         const lower_byte = this.bus.Read(this.program_counter);
@@ -1247,6 +1247,18 @@ class i8080 {
             case 0x30:
                 this.NOP();
                 break;
+            case 0xFA:
+                this.JUMP(this._flag_manager.IsSet(this._flag_manager.FlagType.Sign), this._get_next_word());
+                break;      
+            case 0xEA:
+                this.JUMP(this._flag_manager.IsSet(this._flag_manager.FlagType.Parity), this._get_next_word());
+                break;
+            case 0xCA:
+                this.JUMP(this._flag_manager.IsSet(this._flag_manager.FlagType.Zero), this._get_next_word());
+                break;
+            case 0xDA:
+                this.JUMP(this._flag_manager.IsSet(this._flag_manager.FlagType.Carry), this._get_next_word());
+                break;                
             case 0xF2:
                 this.JUMP(!this._flag_manager.IsSet(this._flag_manager.FlagType.Sign), this._get_next_word());
                 break;                

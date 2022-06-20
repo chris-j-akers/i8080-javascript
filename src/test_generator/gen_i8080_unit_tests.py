@@ -53,6 +53,10 @@ import jump_tests.jnz.jnz_tests as jnz_tests
 import jump_tests.jnc.jnc_tests as jnc_tests
 import jump_tests.jpo.jpo_tests as jpo_tests
 import jump_tests.jp.jp_tests as jp_tests
+import jump_tests.jc.jc_tests as jc_tests
+import jump_tests.jz.jz_tests as jz_tests
+import jump_tests.jm.jm_tests as jm_tests
+import jump_tests.jpe.jpe_tests as jpe_tests
 
 
 def generate_test(test_suite, working_dir, populate_function):
