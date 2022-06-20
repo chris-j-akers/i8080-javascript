@@ -1309,6 +1309,27 @@ class i8080 {
             case 0x30:
                 this.NOP();
                 break;
+            case 0xCD:
+                this.CALL(true, this._get_next_word());
+                break;
+            case 0xFC:
+                this.CALL(this._flag_manager.IsSet(this._flag_manager.FlagType.Sign), this._get_next_word());
+                break;
+            case 0xEC:
+                this.CALL(this._flag_manager.IsSet(this._flag_manager.FlagType.Parity), this._get_next_word());
+                break;
+            case 0xDC:
+                this.CALL(this._flag_manager.IsSet(this._flag_manager.FlagType.Carry), this._get_next_word());
+                break;
+            case 0xCC:
+                this.CALL(this._flag_manager.IsSet(this._flag_manager.FlagType.Zero), this._get_next_word());
+                break;
+            case 0xF4:
+                this.CALL(!this._flag_manager.IsSet(this._flag_manager.FlagType.Sign), this._get_next_word());
+                break;
+            case 0xE4:
+                this.CALL(!this._flag_manager.IsSet(this._flag_manager.FlagType.Parity), this._get_next_word());
+                break;
             case 0xD4:
                 this.CALL(!this._flag_manager.IsSet(this._flag_manager.FlagType.Carry), this._get_next_word());
                 break;

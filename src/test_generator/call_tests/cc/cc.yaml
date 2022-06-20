@@ -2,9 +2,9 @@
 ---
 test_suite:
   enable: True
-  generator_function: cnz_tests.generate_cnz
-  description: 'CNZ'
-  output_file_name: '/call/cnz.test.js'
+  generator_function: cc_tests.generate_cc
+  description: 'CC'
+  output_file_name: '/call/cc.test.js'
   header: |
     import { Computer } from '../../computer.js'
     import { i8080 } from '../../i8080.js'
@@ -52,10 +52,10 @@ test_suite:
       // Now perform calculation to trigger/or not trigger flag
 
       0x3E,                   // MVI into accumulator
-      {accumulator},          // ...this byte
-      0xDE,                   // Subtract...
-      {subtract},             // ...This immediate value from accumulator
-      0xC4,                   // CNZ
+      {accumulator},                     // ...this byte
+      0xC6,                   // ADI...
+      {add},                  // ...This immediate value to accumulator
+      0xDC,                   // CC
       0xAA,                   // ...low-byte of address
       0xAA,                   // ...high-byte of address
       0x76,                   // HALT
@@ -67,7 +67,8 @@ test_suite:
       assert.equal(c.cpu.registers['A'], {expected_result});
       assert.equal(c.cpu.stack_pointer, {expected_stack_pointer});
       
-      assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), {zero});
+      // INR operations don't touch the carry flag
+      assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), {carry});
       assert.equal(c.cpu.Clock, {expected_clock});
 
       }});
@@ -75,24 +76,24 @@ test_suite:
   tests:
 
     - test:
-      name: Return is 0, call not made
-      accumulator: 10
-      subtract: 10
+      name: Carry is set, call is made
+      accumulator: 255
+      add: 10
       stack_pointer: 0xFFFF
-      expected_result: 0
-      expected_clock: 83
-      expected_stack_pointer: 0xFFFF
-      zero: true
-
-    - test: 
-      name: Return is not 0, call is made and extra INC op is made
-      accumulator: 10
-      subtract: 5
-      stack_pointer: 0xFFFF
-      expected_result: 6
+      expected_result: 10
       expected_clock: 104
       expected_stack_pointer: 0xFFFF
-      zero: false
+      carry: true
+
+    - test: 
+      name: Carry is not set, call is not made
+      accumulator: 10
+      add: 5
+      stack_pointer: 0xFFFF
+      expected_result: 15
+      expected_clock: 83
+      expected_stack_pointer: 0xFFFF
+      carry: false
 
 
     

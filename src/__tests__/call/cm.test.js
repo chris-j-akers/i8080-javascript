@@ -2,8 +2,8 @@ import { Computer } from '../../computer.js'
 import { i8080 } from '../../i8080.js'
 import { strict as assert } from 'assert'
 
-describe('CNZ', () => {
-	it('Return is 0, call not made', () => {
+describe('CM', () => {
+	it('Sign is set, call is made', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
@@ -43,10 +43,10 @@ describe('CNZ', () => {
 		  // Now perform calculation to trigger/or not trigger flag
 		
 		  0x3E,                   // MVI into accumulator
-		  10,          // ...this byte
-		  0xDE,                   // Subtract...
-		  10,             // ...This immediate value from accumulator
-		  0xC4,                   // CNZ
+		  100,          // ...this byte
+		  0xC6,                   // ADI...
+		  87,                  // ...This immediate value from accumulator
+		  0xFC,                   // CM
 		  0xAA,                   // ...low-byte of address
 		  0xAA,                   // ...high-byte of address
 		  0x76,                   // HALT
@@ -55,15 +55,15 @@ describe('CNZ', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.registers['A'], 0);
+		  assert.equal(c.cpu.registers['A'], 188);
 		  assert.equal(c.cpu.stack_pointer, 65535);
 		  
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
-		  assert.equal(c.cpu.Clock, 83);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
+		  assert.equal(c.cpu.Clock, 104);
 		
 		  });
 		
-	it('Return is not 0, call is made and extra INC op is made', () => {
+	it('Sign bit is set, call is not made', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
@@ -104,9 +104,9 @@ describe('CNZ', () => {
 		
 		  0x3E,                   // MVI into accumulator
 		  10,          // ...this byte
-		  0xDE,                   // Subtract...
-		  5,             // ...This immediate value from accumulator
-		  0xC4,                   // CNZ
+		  0xC6,                   // ADI...
+		  10,                  // ...This immediate value from accumulator
+		  0xFC,                   // CM
 		  0xAA,                   // ...low-byte of address
 		  0xAA,                   // ...high-byte of address
 		  0x76,                   // HALT
@@ -115,11 +115,11 @@ describe('CNZ', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.registers['A'], 6);
+		  assert.equal(c.cpu.registers['A'], 20);
 		  assert.equal(c.cpu.stack_pointer, 65535);
 		  
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
-		  assert.equal(c.cpu.Clock, 104);
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.cpu.Clock, 83);
 		
 		  });
 		

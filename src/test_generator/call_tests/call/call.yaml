@@ -2,9 +2,9 @@
 ---
 test_suite:
   enable: True
-  generator_function: cnz_tests.generate_cnz
-  description: 'CNZ'
-  output_file_name: '/call/cnz.test.js'
+  generator_function: call_tests.generate_call
+  description: 'CALL'
+  output_file_name: '/call/call.test.js'
   header: |
     import { Computer } from '../../computer.js'
     import { i8080 } from '../../i8080.js'
@@ -23,8 +23,6 @@ test_suite:
       // 1) Initialise the Stack at location 0xFFFF
       // 2) Load INR OpCode (0x3C) into Memory Address 0xAAAA
       // 3) Load RET OpCode (0xC9) into Memory Address 0xAAAB
-      // 4) Load an immediate value into accumulator
-      // 5) Perform subtract immediate operation on accumulator
       // 6) Call code at memory address 0xAAAA if zero flag was *not* set
       // 7) Increment the Accumulator
       // 8) Return back to previous location
@@ -49,13 +47,11 @@ test_suite:
       0x36,                   // MVI into above memory address
       0xC9,                   // RET 
 
-      // Now perform calculation to trigger/or not trigger flag
+      // Now CALL
 
       0x3E,                   // MVI into accumulator
-      {accumulator},          // ...this byte
-      0xDE,                   // Subtract...
-      {subtract},             // ...This immediate value from accumulator
-      0xC4,                   // CNZ
+      {accumulator},                     // ...this byte
+      0xCD,                   // CALL
       0xAA,                   // ...low-byte of address
       0xAA,                   // ...high-byte of address
       0x76,                   // HALT
@@ -66,8 +62,6 @@ test_suite:
 
       assert.equal(c.cpu.registers['A'], {expected_result});
       assert.equal(c.cpu.stack_pointer, {expected_stack_pointer});
-      
-      assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), {zero});
       assert.equal(c.cpu.Clock, {expected_clock});
 
       }});
@@ -75,24 +69,14 @@ test_suite:
   tests:
 
     - test:
-      name: Return is 0, call not made
+      name: Call is made
       accumulator: 10
-      subtract: 10
       stack_pointer: 0xFFFF
-      expected_result: 0
-      expected_clock: 83
+      expected_result: 11
+      expected_clock: 97
       expected_stack_pointer: 0xFFFF
-      zero: true
 
-    - test: 
-      name: Return is not 0, call is made and extra INC op is made
-      accumulator: 10
-      subtract: 5
-      stack_pointer: 0xFFFF
-      expected_result: 6
-      expected_clock: 104
-      expected_stack_pointer: 0xFFFF
-      zero: false
+
 
 
     

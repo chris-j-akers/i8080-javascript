@@ -2,8 +2,8 @@ import { Computer } from '../../computer.js'
 import { i8080 } from '../../i8080.js'
 import { strict as assert } from 'assert'
 
-describe('CNZ', () => {
-	it('Return is 0, call not made', () => {
+describe('CZ', () => {
+	it('Return is 0, call is made', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
@@ -46,7 +46,7 @@ describe('CNZ', () => {
 		  10,          // ...this byte
 		  0xDE,                   // Subtract...
 		  10,             // ...This immediate value from accumulator
-		  0xC4,                   // CNZ
+		  0xCC,                   // CZ
 		  0xAA,                   // ...low-byte of address
 		  0xAA,                   // ...high-byte of address
 		  0x76,                   // HALT
@@ -55,15 +55,16 @@ describe('CNZ', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.registers['A'], 0);
+		  assert.equal(c.cpu.registers['A'], 1);
 		  assert.equal(c.cpu.stack_pointer, 65535);
 		  
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
-		  assert.equal(c.cpu.Clock, 83);
+		  // The increment operation will clear the Zero flag, as expected
+		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu.Clock, 104);
 		
 		  });
 		
-	it('Return is not 0, call is made and extra INC op is made', () => {
+	it('Return is not 0, call is not made', () => {
 		const c = new Computer();
 		const FlagType = c.cpu._flag_manager.FlagType;
 		
@@ -106,7 +107,7 @@ describe('CNZ', () => {
 		  10,          // ...this byte
 		  0xDE,                   // Subtract...
 		  5,             // ...This immediate value from accumulator
-		  0xC4,                   // CNZ
+		  0xCC,                   // CZ
 		  0xAA,                   // ...low-byte of address
 		  0xAA,                   // ...high-byte of address
 		  0x76,                   // HALT
@@ -115,11 +116,12 @@ describe('CNZ', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.registers['A'], 6);
+		  assert.equal(c.cpu.registers['A'], 5);
 		  assert.equal(c.cpu.stack_pointer, 65535);
 		  
+		  // The increment operation will clear the Zero flag, as expected
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
-		  assert.equal(c.cpu.Clock, 104);
+		  assert.equal(c.cpu.Clock, 83);
 		
 		  });
 		

@@ -2,9 +2,9 @@
 ---
 test_suite:
   enable: True
-  generator_function: cnz_tests.generate_cnz
-  description: 'CNZ'
-  output_file_name: '/call/cnz.test.js'
+  generator_function: cz_tests.generate_cz
+  description: 'CZ'
+  output_file_name: '/call/cz.test.js'
   header: |
     import { Computer } from '../../computer.js'
     import { i8080 } from '../../i8080.js'
@@ -55,7 +55,7 @@ test_suite:
       {accumulator},          // ...this byte
       0xDE,                   // Subtract...
       {subtract},             // ...This immediate value from accumulator
-      0xC4,                   // CNZ
+      0xCC,                   // CZ
       0xAA,                   // ...low-byte of address
       0xAA,                   // ...high-byte of address
       0x76,                   // HALT
@@ -67,6 +67,7 @@ test_suite:
       assert.equal(c.cpu.registers['A'], {expected_result});
       assert.equal(c.cpu.stack_pointer, {expected_stack_pointer});
       
+      // The increment operation will clear the Zero flag, as expected
       assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), {zero});
       assert.equal(c.cpu.Clock, {expected_clock});
 
@@ -75,22 +76,22 @@ test_suite:
   tests:
 
     - test:
-      name: Return is 0, call not made
+      name: Return is 0, call is made
       accumulator: 10
       subtract: 10
       stack_pointer: 0xFFFF
-      expected_result: 0
-      expected_clock: 83
+      expected_result: 1
+      expected_clock: 104
       expected_stack_pointer: 0xFFFF
-      zero: true
+      zero: false
 
     - test: 
-      name: Return is not 0, call is made and extra INC op is made
+      name: Return is not 0, call is not made
       accumulator: 10
       subtract: 5
       stack_pointer: 0xFFFF
-      expected_result: 6
-      expected_clock: 104
+      expected_result: 5
+      expected_clock: 83
       expected_stack_pointer: 0xFFFF
       zero: false
 

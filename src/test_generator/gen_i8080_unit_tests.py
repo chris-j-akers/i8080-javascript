@@ -63,6 +63,13 @@ import jump_tests.jpe.jpe_tests as jpe_tests
 import jump_tests.jmp.jmp_tests as jmp_tests
 import call_tests.cnz.cnz_tests as cnz_tests
 import call_tests.cnc.cnc_tests as cnc_tests
+import call_tests.cpo.cpo_tests as cpo_tests
+import call_tests.cp.cp_tests as cp_tests
+import call_tests.cz.cz_tests as cz_tests
+import call_tests.cc.cc_tests as cc_tests
+import call_tests.cpe.cpe_tests as cpe_tests
+import call_tests.cm.cm_tests as cm_tests
+import call_tests.call.call_tests as call_tests
 
 def generate_test(test_suite, working_dir, populate_function):
     output_file = f'{working_dir}{test_suite["output_file_name"]}'
