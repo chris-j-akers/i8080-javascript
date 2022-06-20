@@ -1198,6 +1198,19 @@ class i8080 {
         this.clock += 3;
     }
 
+    XTHL() {
+        const l_addr = this.bus.Read(this.stack_pointer);
+        const h_addr = this.bus.Read(this.stack_pointer + 1);
+
+        this.bus.Write(this.registers['L'], this.stack_pointer);
+        this.bus.Write(this.registers['H'], this.stack_pointer + 1);
+
+        this.registers['L'] = l_addr;
+        this.registers['H'] = h_addr;
+
+        this.clock += 18;
+    }
+
     // PROGRAM EXECUTION
 
     /**
@@ -1246,6 +1259,12 @@ class i8080 {
             case 0x38:
             case 0x30:
                 this.NOP();
+                break;
+            case 0xE3:
+                this.XTHL();
+                break;
+            case 0xC3:
+                this.JUMP(true, this._get_next_word());
                 break;
             case 0xFA:
                 this.JUMP(this._flag_manager.IsSet(this._flag_manager.FlagType.Sign), this._get_next_word());

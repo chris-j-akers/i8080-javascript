@@ -41,6 +41,7 @@ import complement_tests.cma.cma_tests as cma_tests
 import compare_tests.cmp.cmp_tests as cmp_tests
 import stack_tests.push.push_tests as push_tests
 import stack_tests.pop.pop_tests as pop_tests
+import stack_tests.xthl.xthl_tests as xthl_tests
 import return_tests.rnz.rnz_tests as rnz_tests
 import return_tests.rnc.rnc_tests as rnc_tests
 import return_tests.rpo.rpo_tests as rpo_tests
@@ -57,7 +58,7 @@ import jump_tests.jc.jc_tests as jc_tests
 import jump_tests.jz.jz_tests as jz_tests
 import jump_tests.jm.jm_tests as jm_tests
 import jump_tests.jpe.jpe_tests as jpe_tests
-
+import jump_tests.jmp.jmp_tests as jmp_tests
 
 def generate_test(test_suite, working_dir, populate_function):
     output_file = f'{working_dir}{test_suite["output_file_name"]}'

@@ -36,8 +36,6 @@ describe('PUSH (R)', () => {
 		    assert.equal(c.bus.Read(0xFFFF-2), 0x9D);
 		    assert.equal(c.cpu.stack_pointer, 0xFFFF-2);
 		    assert.equal(c.cpu.Clock, 42);
-		
-		    c.Reset();
 		});
 		
 	it('Push data in D & E onto the Stack', () => {
@@ -63,8 +61,6 @@ describe('PUSH (R)', () => {
 		    assert.equal(c.bus.Read(0xFFFF-2), 0x9D);
 		    assert.equal(c.cpu.stack_pointer, 0xFFFF-2);
 		    assert.equal(c.cpu.Clock, 42);
-		
-		    c.Reset();
 		});
 		
 	it('Push data in H & L onto the Stack', () => {
@@ -90,8 +86,6 @@ describe('PUSH (R)', () => {
 		    assert.equal(c.bus.Read(0xFFFF-2), 0x9D);
 		    assert.equal(c.cpu.stack_pointer, 0xFFFF-2);
 		    assert.equal(c.cpu.Clock, 42);
-		
-		    c.Reset();
 		});
 		
 });
