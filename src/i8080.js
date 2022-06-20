@@ -1373,7 +1373,7 @@ class i8080 {
                 this.JUMP(!this._flag_manager.IsSet(this._flag_manager.FlagType.Zero), this._get_next_word());
                 break;
             case 0xC9:
-                this.RET(true);
+                this.RET();
                 break;
             case 0xF8:
                 this.RETURN(this._flag_manager.IsSet(this._flag_manager.FlagType.Sign))
