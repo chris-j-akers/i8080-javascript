@@ -1223,6 +1223,11 @@ class i8080 {
         this.clock += 5;
     }
 
+    SPHL() {
+        this.stack_pointer = this.registers['H'] << 8 | this.registers['L'];
+        this.clock += 5;
+    }
+
     // PROGRAM EXECUTION
 
     /**
@@ -1271,6 +1276,9 @@ class i8080 {
             case 0x38:
             case 0x30:
                 this.NOP();
+                break;
+            case 0xF9:
+                this.SPHL();
                 break;
             case 0xEB:
                 this.XCHG();

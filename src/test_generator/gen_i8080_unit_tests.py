@@ -43,6 +43,7 @@ import compare_tests.cmp.cmp_tests as cmp_tests
 import stack_tests.push.push_tests as push_tests
 import stack_tests.pop.pop_tests as pop_tests
 import stack_tests.xthl.xthl_tests as xthl_tests
+import stack_tests.sphl.sphl_tests as sphl_tests
 import return_tests.rnz.rnz_tests as rnz_tests
 import return_tests.rnc.rnc_tests as rnc_tests
 import return_tests.rpo.rpo_tests as rpo_tests
