@@ -51,7 +51,7 @@ describe('XTHL', () => {
 		  assert.equal(c.cpu.bus.Read(16 << 8 | 173), 60);
 		  assert.equal(c.cpu.bus.Read(16 << 8 | 173 + 1), 11);
 		  assert.equal(c.cpu.registers['H'], 13);
-		  assert.equal(c.cpu.registers['L'], 240+1);
+		  assert.equal(c.cpu.registers['L'], 240);
 		
 		});
 		
