@@ -5,6 +5,7 @@ from pathlib import Path
 import config
 import move_tests.mov.mov_tests as mov_tests
 import move_tests.mvi.mvi_tests as mvi_tests
+import move_tests.xchg.xchg_tests as xchg_tests
 import arithmetic_tests.adc.adc_tests as adc_tests
 import arithmetic_tests.add.add_tests as add_tests
 import arithmetic_tests.sbb.sbb_tests as sbb_tests

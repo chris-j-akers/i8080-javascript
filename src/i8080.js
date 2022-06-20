@@ -1211,6 +1211,18 @@ class i8080 {
         this.clock += 18;
     }
 
+    XCHG() {
+        const h_data = this.registers['H'];
+        const l_data = this.registers['L'];
+        
+        this.registers['H'] = this.registers['D'];
+        this.registers['L'] = this.registers['E'];
+        this.registers['D'] = h_data
+        this.registers['E'] = l_data
+        
+        this.clock += 5;
+    }
+
     // PROGRAM EXECUTION
 
     /**
@@ -1259,6 +1271,9 @@ class i8080 {
             case 0x38:
             case 0x30:
                 this.NOP();
+                break;
+            case 0xEB:
+                this.XCHG();
                 break;
             case 0xE3:
                 this.XTHL();
