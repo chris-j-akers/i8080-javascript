@@ -1309,6 +1309,9 @@ class i8080 {
             case 0x30:
                 this.NOP();
                 break;
+            case 0xD4:
+                this.CALL(!this._flag_manager.IsSet(this._flag_manager.FlagType.Carry), this._get_next_word());
+                break;
             case 0xC4:
                 this.CALL(!this._flag_manager.IsSet(this._flag_manager.FlagType.Zero), this._get_next_word());
                 break;
