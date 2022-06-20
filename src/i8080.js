@@ -583,6 +583,25 @@ class i8080 {
 
     // STACK POINTER OPERATIONS
 
+    _push_byte_to_stack(byte) {
+        this.bus.Write(byte, --this.stack_pointer);
+    }
+
+    _pop_byte_from_stack() {
+        return this.bus.Read(this.stack_pointer++);
+    }
+
+    _push_word_to_stack(word) {
+        this._push_byte_to_stack(word >> 8 & 0xFF);
+        this._push_byte_to_stack(word & 0xFF);
+    }
+
+    _pop_word_from_stack() {
+        const word_low_byte = this._pop_byte_from_stack();
+        const word_high_byte = this._pop_byte_from_stack();
+        return (word_high_byte << 8 | word_low_byte) & 0xFFFF
+    }
+
     /**
     * Push a 16-bit value onto the stack from one of the register pairs (BC, DE,
     * HL).
@@ -593,15 +612,15 @@ class i8080 {
     * value
     */
     PUSH_R(high_byte_register, low_byte_register) {
-        this.bus.Write(this.registers[high_byte_register], --this.stack_pointer);
-        this.bus.Write(this.registers[low_byte_register], --this.stack_pointer);
+        this._push_byte_to_stack(this.registers[high_byte_register]);
+        this._push_byte_to_stack(this.registers[low_byte_register]);
         this.clock += 11;
     }
 
 
     PUSH_PSW() {
-        this.bus.Write(this.registers['A'], --this.stack_pointer);
-        this.bus.Write(this.flags, --this.stack_pointer);
+        this._push_byte_to_stack(this.registers['A']);
+        this._push_byte_to_stack(this.flags);
         this.clock += 11;
     }
     
@@ -1178,11 +1197,14 @@ class i8080 {
 
     // RETURN INSTRUCTIONS
 
+    RET() {
+        this.program_counter = this._pop_word_from_stack();
+        this.clock += 10;
+    }
+
     RETURN(expr) {
         if (expr) {
-            const addr_low_byte = this.bus.Read(this.stack_pointer++);
-            const addr_high_byte = this.bus.Read(this.stack_pointer++);
-            this.program_counter = (addr_high_byte << 8) | addr_low_byte;
+            this.program_counter = this._pop_word_from_stack();
             this.clock += 11;
             return;
         }
@@ -1196,6 +1218,16 @@ class i8080 {
             return;
         }
         this.clock += 3;
+    }
+
+    CALL(expr, addr) {
+        if (expr) {
+            this._push_word_to_stack(this.program_counter);
+            this.program_counter = addr;
+            this.clock += 17;
+            return;
+        }
+        this.clock += 11;
     }
 
     XTHL() {
@@ -1277,6 +1309,9 @@ class i8080 {
             case 0x30:
                 this.NOP();
                 break;
+            case 0xC4:
+                this.CALL(!this._flag_manager.IsSet(this._flag_manager.FlagType.Zero), this._get_next_word());
+                break;
             case 0xF9:
                 this.SPHL();
                 break;
@@ -1312,6 +1347,9 @@ class i8080 {
                 break;                
             case 0xC2:
                 this.JUMP(!this._flag_manager.IsSet(this._flag_manager.FlagType.Zero), this._get_next_word());
+                break;
+            case 0xC9:
+                this.RET(true);
                 break;
             case 0xF8:
                 this.RETURN(this._flag_manager.IsSet(this._flag_manager.FlagType.Sign))

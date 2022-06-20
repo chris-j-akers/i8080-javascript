@@ -61,6 +61,7 @@ import jump_tests.jz.jz_tests as jz_tests
 import jump_tests.jm.jm_tests as jm_tests
 import jump_tests.jpe.jpe_tests as jpe_tests
 import jump_tests.jmp.jmp_tests as jmp_tests
+import call_tests.cnz.cnz_tests as cnz_tests
 
 def generate_test(test_suite, working_dir, populate_function):
     output_file = f'{working_dir}{test_suite["output_file_name"]}'
