@@ -1,3 +1,5 @@
+
+
 import sys
 
 def extract(program_name, rom_path, output_directory):
@@ -6,10 +8,11 @@ def extract(program_name, rom_path, output_directory):
         rom_data = bytearray(rom_file.read())
 
     with open('{0}/{1}.js'.format(output_directory, program_name), 'w') as out_file:
-        out_file.write('const {0}_program = ['.format(program_name))
+        out_file.write('const {0}_program = [\n'.format(program_name))
         for byte in rom_data:
-            out_file.write('{0},\n'.format(hex(byte)))
-        out_file.write('];')
+            out_file.write('\t{0},\n'.format(hex(byte)))
+        out_file.write('];\n')
+        out_file.write('export {{ {0}_program }};'.format(program_name))
 
 def usage():
     print('USAGE: python3 rom_extractor.py [name-of-program] [path-to-rom-file] [output-directory]')
