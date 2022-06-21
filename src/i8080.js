@@ -571,6 +571,8 @@ class i8080 {
      *
      * Performs a subtract operation and sets flags accordingly, but does not
      * record the result.
+     * 
+     * @param {char} register The name of the register to use.
      */
     CMP_R(register) {
         const result = this._sub(this.registers['A'], this.registers[register]);
@@ -586,6 +588,19 @@ class i8080 {
      */
     CMP_M() {
         const result = this._sub(this.registers['A'], this.bus.Read(this._get_register_pair_word('H','L')));
+        this.clock += 7;
+    }
+
+    /**
+     * Compares value in accumulator with immediate 8-bit value.
+     *
+     * Performs a subtract operation and sets flags accordingly, but does not
+     * record the result.
+     *
+     * @param {number} val The 8-bit value to use.
+     */
+    CPI(val) {
+        const result = this._sub(this.registers['A'], val & 0xFF);
         this.clock += 7;
     }
 
@@ -1321,6 +1336,9 @@ class i8080 {
             case 0x38:
             case 0x30:
                 this.NOP();
+                break;
+            case 0xFE:
+                this.CPI(this._get_next_byte());
                 break;
             case 0xE9:
                 this.PCHL();
