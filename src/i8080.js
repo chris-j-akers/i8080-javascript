@@ -127,6 +127,7 @@ class i8080 {
         this.program_counter = 0x0;
         this.flags = 0x2;
         this.clock = 0x0;
+        this.interrupts_enabled = true;
         this.halt = false;
     }
 
@@ -140,7 +141,7 @@ class i8080 {
     }
 
     /**
-     * Sets the value of the CPU's internal program_counter. Usually used to set
+     * Set the value of the CPU's internal program_counter. Usually used to set
      * the address from which to start executing an in-memory program (JMP calls
      * access the field directly).
      */
@@ -149,7 +150,7 @@ class i8080 {
     }
 
     /**
-     * Returns the current value of the CPU's internal program_counter
+     * Get the current value of the CPU's internal program_counter
      * (16-bit address).
      */
     get ProgramCounter() {
@@ -157,17 +158,24 @@ class i8080 {
     }
 
     /**
-     * Returns the current value of the CPU's internal stack pointer
+     * Get the current value of the CPU's internal stack pointer
      */
     get StackPointer() {
         return this.stack_pointer & 0xFFFF;
     }
 
     /**
-     * Returns the current value of the CPU's internal clock
+     * Get the current value of the CPU's internal clock
      */
     get Clock() {
         return this.clock;
+    }
+
+    /**
+     * Get the current value of the CPU's `interrupts_enabled` field.
+     */
+    get InterruptsEnabled() {
+        return this.interrupts_enabled;
     }
 
     /**
@@ -1260,6 +1268,11 @@ class i8080 {
         this.clock += 5;
     }
 
+    PCHL() {
+        this.program_counter = this.registers['H'] << 8 | this.registers['L']
+        this.clock += 5;
+    }
+
     // PROGRAM EXECUTION
 
     /**
@@ -1309,7 +1322,18 @@ class i8080 {
             case 0x30:
                 this.NOP();
                 break;
+            case 0xE9:
+                this.PCHL();
+                break;
+            case 0xFB:
+                this.interrupts_enabled = true;
+            case 0xF3:
+                this.interrupts_enabled = false;
+                break;
             case 0xCD:
+            case 0xDD:
+            case 0xED:
+            case 0xFD:
                 this.CALL(true, this._get_next_word());
                 break;
             case 0xFC:
@@ -1346,6 +1370,7 @@ class i8080 {
                 this.XTHL();
                 break;
             case 0xC3:
+            case 0xCB:
                 this.JUMP(true, this._get_next_word());
                 break;
             case 0xFA:
@@ -1373,6 +1398,7 @@ class i8080 {
                 this.JUMP(!this._flag_manager.IsSet(this._flag_manager.FlagType.Zero), this._get_next_word());
                 break;
             case 0xC9:
+            case 0xD9:
                 this.RET();
                 break;
             case 0xF8:

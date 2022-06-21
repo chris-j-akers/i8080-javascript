@@ -61,6 +61,7 @@ import jump_tests.jz.jz_tests as jz_tests
 import jump_tests.jm.jm_tests as jm_tests
 import jump_tests.jpe.jpe_tests as jpe_tests
 import jump_tests.jmp.jmp_tests as jmp_tests
+import jump_tests.pchl.pchl_tests as pchl_tests
 import call_tests.cnz.cnz_tests as cnz_tests
 import call_tests.cnc.cnc_tests as cnc_tests
 import call_tests.cpo.cpo_tests as cpo_tests
