@@ -1218,6 +1218,14 @@ class i8080 {
         this.clock += 7;
     }
 
+    // RESTART INSTRUCTIONS
+
+    RST(vector) {
+        this._push_word_to_stack(this.program_counter);
+        this.program_counter = vector;
+        this.clock += 11;
+    }
+
     // RETURN INSTRUCTIONS
 
     RET() {
@@ -1336,6 +1344,17 @@ class i8080 {
             case 0x38:
             case 0x30:
                 this.NOP();
+                break;
+            case 0xC7:
+            case 0xD7:
+            case 0xE7:
+            case 0xF7:
+            case 0xCF:
+            case 0xDF:
+            case 0xEF:
+            case 0xFF:  
+                // Bits 3-5 of the OpCode hold the jump address
+                this.RST(opcode & 0x38);
                 break;
             case 0xFE:
                 this.CPI(this._get_next_byte());

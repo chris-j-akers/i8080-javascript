@@ -72,6 +72,7 @@ import call_tests.cc.cc_tests as cc_tests
 import call_tests.cpe.cpe_tests as cpe_tests
 import call_tests.cm.cm_tests as cm_tests
 import call_tests.call.call_tests as call_tests
+import restart_tests.rst.rst_tests as rst_tests
 
 def generate_test(test_suite, working_dir, populate_function):
     output_file = f'{working_dir}{test_suite["output_file_name"]}'
