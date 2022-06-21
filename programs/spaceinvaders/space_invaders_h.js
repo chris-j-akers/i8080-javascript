@@ -1,4 +1,4 @@
-const space_invaders_program = [0x0,
+const space_invaders_h_program = [0x0,
 0x0,
 0x0,
 0xc3,
