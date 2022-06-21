@@ -1346,12 +1346,33 @@ class i8080 {
 
     /**
      * @returns The next 8-bits of memory from the current program counter
+     * position. Does not increment the program counter (mainly used for
+     * debug/disassembly)
+     */
+     _peek_next_byte() {
+        const next_byte = this.bus.ReadRAM(this.program_counter);
+        return next_byte;
+}
+    /**
+     * @returns The next 8-bits of memory from the current program counter
      * position, then increments the program counter by 1 byte.
      */
     _get_next_byte() {
-        const next_byte = this.bus.ReadRAM(this.program_counter);
+        const next_byte = this._peek_next_byte();
         this.program_counter++;
         return next_byte;
+    }
+
+    /**
+    * @returns The next 16-bits of memory from the current program counter
+    * position. The first byte forms the lower-byte of the word and the second
+    * byte forms the upper-byte (little endian). Does not increment the program
+    * counter (mainly used for debug/disassembly)
+    */
+    _peek_next_word() {
+        const lower_byte = this.bus.ReadRAM(this.program_counter);
+        const upper_byte = this.bus.ReadRAM(this.program_counter + 1);
+        return (upper_byte << 8) | lower_byte;
     }
 
     /**
@@ -1361,10 +1382,8 @@ class i8080 {
     * by 2 bytes. 
     */
     _get_next_word() {
-        const lower_byte = this.bus.ReadRAM(this.program_counter);
-        this.program_counter++;
-        const upper_byte = this.bus.ReadRAM(this.program_counter);
-        this.program_counter++;
+        const lower_byte = this._get_next_byte();
+        const upper_byte = this._get_next_byte();
         return (upper_byte << 8) | lower_byte;
     }
 
@@ -1379,6 +1398,7 @@ class i8080 {
      * simple to read.
      */
     ExecuteNextInstruction() {
+        let disassemble;
         const opcode = this._get_next_byte();
         switch(opcode) {
             case 0x00:
@@ -1389,8 +1409,8 @@ class i8080 {
             case 0x28:
             case 0x38:
             case 0x30:
+                disassemble = `NOP`;
                 this.NOP();
-                break;
             case 0xC7:
             case 0xD7:
             case 0xE7:
@@ -1400,713 +1420,945 @@ class i8080 {
             case 0xEF:
             case 0xFF:  
                 // Bits 3-5 of the OpCode hold the jump address
+                disassemble = `RST\t${(opcode & 0x38).toString(16)}`;
                 this.RST(opcode & 0x38);
                 break;
             case 0xFE:
+                disassemble = `CPI\t${this._peek_next_byte().toString(16)}`;
                 this.CPI(this._get_next_byte());
                 break;
             case 0xE9:
+                disassemble = `PCHL`;
                 this.PCHL();
                 break;
             case 0xFB:
+                disassemble = `EI`;
                 this.interrupts_enabled = true;
             case 0xF3:
+                disassemble = `DI`
                 this.interrupts_enabled = false;
                 break;
             case 0xCD:
             case 0xDD:
             case 0xED:
             case 0xFD:
+                disassemble = `CALL\t${this._peek_next_word()}`;
                 this.CALL(true, this._get_next_word());
                 break;
             case 0xFC:
+                disassemble = `CM\t${this._peek_next_word()}`;
                 this.CALL(this._flag_manager.IsSet(this._flag_manager.FlagType.Sign), this._get_next_word());
                 break;
             case 0xEC:
+                disassemble = `CPE\t${this._peek_next_word()}`
                 this.CALL(this._flag_manager.IsSet(this._flag_manager.FlagType.Parity), this._get_next_word());
                 break;
             case 0xDC:
+                disassemble = `CC\t${this._peek_next_word()}`
                 this.CALL(this._flag_manager.IsSet(this._flag_manager.FlagType.Carry), this._get_next_word());
                 break;
             case 0xCC:
+                disassemble = `CZ\t${this._peek_next_word()}`
                 this.CALL(this._flag_manager.IsSet(this._flag_manager.FlagType.Zero), this._get_next_word());
                 break;
             case 0xF4:
+                disassemble = `CP\t${this._peek_next_word()}`;
                 this.CALL(!this._flag_manager.IsSet(this._flag_manager.FlagType.Sign), this._get_next_word());
                 break;
             case 0xE4:
+                disassemble = `CPO\t${this._peek_next_word()}`;
                 this.CALL(!this._flag_manager.IsSet(this._flag_manager.FlagType.Parity), this._get_next_word());
                 break;
             case 0xD4:
+                disassemble = `CNC\t${this._peek_next_word()}`;
                 this.CALL(!this._flag_manager.IsSet(this._flag_manager.FlagType.Carry), this._get_next_word());
                 break;
             case 0xC4:
+                disassemble = `CNZ\t${this._peek_next_word()}`;
                 this.CALL(!this._flag_manager.IsSet(this._flag_manager.FlagType.Zero), this._get_next_word());
                 break;
             case 0xF9:
+                disassemble =`SPHL`;
                 this.SPHL();
                 break;
             case 0xEB:
+                disassemble = `XCHG`;
                 this.XCHG();
                 break;
             case 0xE3:
+                disassemble = `XTHL`;
                 this.XTHL();
                 break;
             case 0xC3:
             case 0xCB:
+                disassemble = `JMP\t${this._peek_next_word()}`
                 this.JUMP(true, this._get_next_word());
                 break;
             case 0xFA:
+                disassemble = `JM\t${this._peek_next_word()}`;
                 this.JUMP(this._flag_manager.IsSet(this._flag_manager.FlagType.Sign), this._get_next_word());
                 break;      
             case 0xEA:
+                disassemble = `JPE\t${this._peek_next_word()}`;
                 this.JUMP(this._flag_manager.IsSet(this._flag_manager.FlagType.Parity), this._get_next_word());
                 break;
             case 0xCA:
+                disassemble = `JZ\t${this._peek_next_word()}`;
                 this.JUMP(this._flag_manager.IsSet(this._flag_manager.FlagType.Zero), this._get_next_word());
                 break;
             case 0xDA:
+                disassemble = `JC\t${this._peek_next_word()}`;
                 this.JUMP(this._flag_manager.IsSet(this._flag_manager.FlagType.Carry), this._get_next_word());
                 break;                
             case 0xF2:
+                disassemble = `JP\t${this._peek_next_word()}`;
                 this.JUMP(!this._flag_manager.IsSet(this._flag_manager.FlagType.Sign), this._get_next_word());
                 break;                
             case 0xE2:
+                disassemble = `JPO\t${this._peek_next_word()}`;
                 this.JUMP(!this._flag_manager.IsSet(this._flag_manager.FlagType.Parity), this._get_next_word());
                 break;
             case 0xD2:
+                disassemble = `JC\t${this._peek_next_word()}`;
                 this.JUMP(!this._flag_manager.IsSet(this._flag_manager.FlagType.Carry), this._get_next_word());
                 break;                
             case 0xC2:
+                disassemble = `JZ\t${this._peek_next_word()}`;
                 this.JUMP(!this._flag_manager.IsSet(this._flag_manager.FlagType.Zero), this._get_next_word());
                 break;
             case 0xC9:
             case 0xD9:
+                disassemble = `RET`;
                 this.RET();
                 break;
             case 0xF8:
+                disassemble = `RM`;
                 this.RETURN(this._flag_manager.IsSet(this._flag_manager.FlagType.Sign))
                 break;
             case 0xE8:
+                disassemble = `RPE\t${this._peek_next_word()}`;
                 this.RETURN(this._flag_manager.IsSet(this._flag_manager.FlagType.Parity))
                 break;
             case 0xD8:
+                disassemble = `RC`
                 this.RETURN(this._flag_manager.IsSet(this._flag_manager.FlagType.Carry))
                 break;
             case 0xC8:
+                disassemble = `RZ`;
                 this.RETURN(this._flag_manager.IsSet(this._flag_manager.FlagType.Zero))
                 break;
             case 0xF0:
+                disassemble = `RP`;
                 this.RETURN(!this._flag_manager.IsSet(this._flag_manager.FlagType.Sign))
                 break;
             case 0xE0:
+                disassemble = `RPO`;
                 this.RETURN(!this._flag_manager.IsSet(this._flag_manager.FlagType.Parity))
                 break;
             case 0xC0:
+                disassemble = `RNZ`;
                 this.RETURN(!this._flag_manager.IsSet(this._flag_manager.FlagType.Zero));
                 break;
             case 0xD0:
+                disassemble = `RNC`;
                 this.RETURN(!this._flag_manager.IsSet(this._flag_manager.FlagType.Carry));
                 break;
             case 0xC1:
+                disassemble = `POP\tBC`;
                 this.POP_R('B', 'C');
                 break;
             case 0xD1:
+                disassemble = `POP\tDE`;
                 this.POP_R('D', 'E');
                 break;
             case 0xE1:
+                disassemble = `POP\tHL`;
                 this.POP_R('H', 'L');
                 break;
             case 0xF1:
+                disassemble = `POP\tPSW`;
                 this.POP_PSW();
                 break;
             case 0xC5:
+                disassemble = `PUSH\tBC`;
                 this.PUSH_R('B', 'C');
                 break;
             case 0xD5:
+                disassemble = `PUSH\tDE`;
                 this.PUSH_R('D', 'E');
                 break;
             case 0xE5:
+                disassemble = `PUSH\tHL`;
                 this.PUSH_R('H', 'L');
                 break;
             case 0xF5:
+                disassemble = `PUSH\tPSW`;
                 this.PUSH_PSW();
                 break;
             case 0xB8:
+                disassemble = `CMP\tB`;
                 this.CMP_R('B');
                 break;
             case 0xB9:
+                disassemble = `CMP\tC`;
                 this.CMP_R('C');
                 break;
             case 0xBA:
+                disassemble = `CMP\tD`;
                 this.CMP_R('D');
                 break;
             case 0xBB:
+                disassemble = `CMP\tE`;
                 this.CMP_R('E');
                 break;
             case 0xBC:
+                disassemble = `CMP\tH`;
                 this.CMP_R('H');
                 break;
             case 0xBD:
+                disassemble = `CMP\tL`;
                 this.CMP_R('L');
                 break;
             case 0xBE:
                 this.CMP_M();
+                disassemble = `CMP\tM`;
                 break;
             case 0xBF:
+                disassemble = `CMP\tA`;
                 this.CMP_R('A');
                 break;
             case 0x3A:
+                disassemble = `LSA\t${this._peek_next_word}`;
                 this.LSA(this._get_next_word());
                 break;
             case 0x2A:
+                disassemble = `LHLD\t${this._peek_next_word}`;
                 this.LHLD(this._get_next_word());
                 break;
             case 0x0A:
+                disassemble = `LDAX\tBC`;
                 this.LDAX('B', 'C');
                 break;
             case 0x1A:
+                disassemble = `LDAX\tDE`;
                 this.LDAX('D', 'E');
                 break;
             case 0x09:
+                disassemble = `DAD\tBC`;
                 this.DAD('B', 'C');
                 break;
             case 0x19:
+                disassemble = `DAD\tDE`;
                 this.DAD('D', 'E');
                 break;
             case 0x29:
+                disassemble = `DAD\tHL`;
                 this.DAD('H', 'L');
                 break;
             case 0x39:
+                disassemble = `DAD\tSP`;
                 this.DAD_SP();
                 break;
             case 0x2F:
+                disassemble = `CMA`;
                 this.CMA();
                 break;
             case 0x37:
+                disassemble = `STC`;
                 this.STC();
                 break;
             case 0x3F:
+                disassemble = `CMC`;
                 this.CMC();
                 break;
             case 0x17:
+                disassemble = `RAL`;
                 this.RAL();
                 break;
             case 0x1F:
+                disassemble = `RAR`;
                 this.RAR();
                 break;
             case 0x07:
+                disassemble = `RLC`;
                 this.RLC();
                 break;
             case 0x0F:
+                disassemble = `RRC`;
                 this.RRC();
                 break;
             case 0x0B:
+                disassemble = `DXC\tBC`;
                 this.DCX_R('B', 'C');
                 break;
             case 0x1B:
+                disassemble = `DXC\tDE`;
                 this.DCX_R('D', 'E');
                 break;
             case 0x2B:
+                disassemble = `DXC\tHL`;
                 this.DCX_R('H', 'L');
                 break;
             case 0x3B:
+                disassemble = `DXC\tSP`;
                 this.DCX_SP();
                 break;
             case 0x05:
+                disassemble = `DCR\tB`;
                 this.DCR_R('B');
                 break;
             case 0x15:
+                disassemble = `DCR\tD`;
                 this.DCR_R('D');
                 break;
             case 0x25:
+                disassemble = `DCR\tH`;
                 this.DCR_R('H');
                 break;
             case 0x35:
+                disassemble = `DCR\tM`;
                 this.DCR_M();
                 break;
             case 0x0D:
+                disassemble = `DCR\tC`;
                 this.DCR_R('C');
                 break;
             case 0x1D:
+                disassemble = `DCR\tE`;
                 this.DCR_R('E');
                 break;
             case 0x2D:
+                disassemble = `DCR\tL`;
                 this.DCR_R('L');
                 break;
             case 0x3D:
+                disassemble = `DCR\tA`;
                 this.DCR_R('A');
                 break;
             case 0x04:
+                disassemble = `INR\tB`;
                 this.INR_R('B');
                 break;
             case 0x14:
+                disassemble = `INR\tD`;
                 this.INR_R('D');
                 break;
             case 0x24:
+                disassemble = `INR\tH`;
                 this.INR_R('H');
                 break;
             case 0x34:
+                disassemble = `INR\tM`;
                 this.INR_M();
                 break;
             case 0x0C:
+                disassemble = `INR\tC`;
                 this.INR_R('C');
                 break;
             case 0x1C:
+                disassemble = `INR\tE`;
                 this.INR_R('E');
                 break;
             case 0x2C:
+                disassemble = `INR\tL`;
                 this.INR_R('L');
                 break;
             case 0x3C:
+                disassemble = `INR\tA`;
                 this.INR_R('A');
                 break;
             case 0x01: 
+                disassemble = `LXI\tBC\t${this._peek_next_word()}`;
                 this.LXI_R('B', 'C', this._get_next_word());
                 break;
             case 0x02:
+                disassemble = `STAX\tBC`;
                 this.STAX('B', 'C');
                 break;
             case 0x03:
+                disassemble = `INX\tBC`;
                 this.INX_R('B', 'C');
                 break;
             case 0x11:
+                disassemble = `LXI\tDE\t${this._peek_next_word()}`;
                 this.LXI_R('D', 'E', this._get_next_word());
                 break;
             case 0x12:
+                disassemble = `STAX\tDE`;
                 this.STAX('D', 'E');
                 break;
             case 0x13:
+                disassemble = `INX\tDE`;
                 this.INX_R('D', 'E');
                 break;
             case 0x21:
+                disassemble = `LXI\tHL\t${this._peek_next_word()}`;
                 this.LXI_R('H', 'L', this._get_next_word());
                 break;
             case 0x0E:
+                disassemble = `MVI\tC\t${this._peek_next_byte()}`;
                 this.MVI_R('C', this._get_next_byte());
                 break;
             case 0x1E:
+                disassemble = `MVI\tE\t${this._peek_next_byte()}`;
                 this.MVI_R('E', this._get_next_byte());
                 break;
             case 0x22:
+                disassemble = `SHLD\t${this._peek_next_word()}`;
                 this.SHLD(this._get_next_word());
                 break;
             case 0x23:
+                disassemble = `INX\tHL`;
                 this.INX_R('H', 'L');
                 break;
             case 0x2E:
+                disassemble = `MVI\tL\t${this._peek_next_byte()}`;
                 this.MVI_R('L', this._get_next_byte());
                 break;
             case 0x31:
+                disassemble = `LXI\tSP`;
                 this.LXI_SP(this._get_next_word());
                 break;
             case 0x32:
+                disassemble = `STA`;
                 this.STA(this._get_next_word());
                 break;
             case 0x33:
+                disassemble = `INX\tSP`;
                 this.INX_SP();
                 break;
             case 0x3E:
+                disassemble = `MVI\tA\t${this._peek_next_byte()}`;
                 this.MVI_R('A', this._get_next_byte());
                 break;
             case 0x06:
+                disassemble = `MVI\tB\t${this._peek_next_byte()}`;
                 this.MVI_R('B', this._get_next_byte());
                 break;
             case 0x16:
+                disassemble = `MVI\tD\t${this._peek_next_byte()}`;
                 this.MVI_R('D', this._get_next_byte());
                 break;
             case 0x26:
+                disassemble = `MVI\tH\t${this._peek_next_byte()}`;
                 this.MVI_R('H', this._get_next_byte());
                 break;
             case 0x36:
+                disassemble = `MVI\tM\t${this._peek_next_byte()}`;
                 this.MVI_TO_MEM(this._get_next_byte());
                 break;
             case 0x40:
+                disassemble = `MOV\tB,B`;
                 this.MOV_R('B', 'B');
                 break;
             case 0x41:
+                disassemble = `MOV\tB,C`;
                 this.MOV_R('B', 'C');
                 break;
             case 0x42:
+                disassemble = `MOV\tB,D`;
                 this.MOV_R('B', 'D');
                 break;
             case 0x43:
+                disassemble = `MOV\tB,E`;
                 this.MOV_R('B', 'E');
                 break;
             case 0x44:
+                disassemble = `MOV\tB,H`;
                 this.MOV_R('B', 'H');
                 break;
             case 0x45:
+                disassemble = `MOV\tB,L`;
                 this.MOV_R('B', 'L');
                 break;
             case 0x46:
+                disassemble = `MOV\tB,M`;
                 this.MOV_FROM_MEM('B');
                 break;
             case 0x47:
+                disassemble = `MOV\tB,A`;
                 this.MOV_R('B', 'A');
                 break;
             case 0x48:
+                disassemble = `MOV\tC,B`;
                 this.MOV_R('C', 'B');
                 break;
             case 0x49:
+                disassemble = `MOV\tC,C`;
                 this.MOV_R('C', 'C');
                 break;
             case 0x4A:
+                disassemble = `MOV\tC,D`;
                 this.MOV_R('C', 'D');
                 break;
             case 0x4B:
+                disassemble = `MOV\tC,E`;
                 this.MOV_R('C', 'E');
                 break;
             case 0x4C:
+                disassemble = `MOV\tC,H`;
                 this.MOV_R('C', 'H');
                 break;
             case 0x4D:
+                disassemble = `MOV\tC,L`;
                 this.MOV_R('C', 'L');
                 break;
             case 0x4E:
+                disassemble = `MOV\tC,M`;
                 this.MOV_FROM_MEM('C');
                 break;
             case 0x4F:
+                disassemble = `MOV\tC,A`;
                 this.MOV_R('C', 'A');
                 break;
             case 0x50:
+                disassemble = `MOV\tD,B`;
                 this.MOV_R('D', 'B');
                 break;
             case 0x51:
+                disassemble = `MOV\tD,C`;
                 this.MOV_R('D', 'C');
                 break;
             case 0x52:
+                disassemble = `MOV\tD,D`;
                 this.MOV_R('D', 'D');
                 break;
             case 0x53:
+                disassemble = `MOV\tD,E`;
                 this.MOV_R('D', 'E');
                 break;
             case 0x54:
+                disassemble = `MOV\tD,H`;
                 this.MOV_R('D', 'H');
                 break;
             case 0x55:
+                disassemble = `MOV\tD,H`;
                 this.MOV_R('D', 'L');
                 break;
             case 0x56:
+                disassemble = `MOV\tD,M`;
                 this.MOV_FROM_MEM('D');
                 break;
             case 0x57:
+                disassemble = `MOV\tD,A`;
                 this.MOV_R('D', 'A');
                 break;
             case 0x58:
+                disassemble = `MOV\tE,B`;
                 this.MOV_R('E', 'B');
                 break;
             case 0x59:
+                disassemble = `MOV\tE,C`;
                 this.MOV_R('E', 'C');
                 break;
             case 0x5A:
+                disassemble = `MOV\tE,D`;
                 this.MOV_R('E', 'D');
                 break;
             case 0x5B:
+                disassemble = `MOV\tE,E`;
                 this.MOV_R('E', 'E');
                 break;
             case 0x5C:
+                disassemble = `MOV\tE,H`;
                 this.MOV_R('E', 'H');
                 break;
             case 0x5D:
+                disassemble = `MOV\tE,L`;
                 this.MOV_R('E', 'L');
                 break;
             case 0x5E:
+                disassemble = `MOV\tE,M`;
                 this.MOV_FROM_MEM('E');
                 break;
             case 0x5F:
+                disassemble = `MOV\tE,A`;
                 this.MOV_R('E', 'A');
                 break;
             case 0x60:
+                disassemble = `MOV\tH,B`;
                 this.MOV_R('H', 'B');
                 break;
             case 0x61:
+                disassemble = `MOV\tH,C`;
                 this.MOV_R('H', 'C');
                 break;
             case 0x62:
+                disassemble = `MOV\tH,D`;
                 this.MOV_R('H', 'D');
                 break;
             case 0x63:
+                disassemble = `MOV\tH,E`;
                 this.MOV_R('H', 'E');
                 break;
             case 0x64:
+                disassemble = `MOV\tH,H`;
                 this.MOV_R('H', 'H');
                 break;
             case 0x65:
+                disassemble = `MOV\tH,L`;
                 this.MOV_R('H', 'L');
                 break;
             case 0x66:
+                disassemble = `MOV\tH,M`;
                 this.MOV_FROM_MEM('H');
                 break;
             case 0x67:
+                disassemble = `MOV\tH,A`;
                 this.MOV_R('H', 'A');
                 break;
             case 0x68:
+                disassemble = `MOV\tL,B`;
                 this.MOV_R('L', 'B');
                 break;
             case 0x69:
+                disassemble = `MOV\tL,C`;
                 this.MOV_R('L', 'C');
                 break;
             case 0x6A:
+                disassemble = `MOV\tL,D`;
                 this.MOV_R('L', 'D');
                 break;
             case 0x6B:
+                disassemble = `MOV\tL,E`;
                 this.MOV_R('L', 'E');
                 break;
             case 0x6C:
+                disassemble = `MOV\tL,H`;
                 this.MOV_R('L', 'H');
                 break;
             case 0x6D:
+                disassemble = `MOV\tL,L`;
                 this.MOV_R('L', 'L');
                 break;
             case 0x6E:
+                disassemble = `MOV\tL,M`;
                 this.MOV_FROM_MEM('L');
                 break;
             case 0x6F:
+                disassemble = `MOV\tL,A`;
                 this.MOV_R('L', 'A');
                 break;
             case 0x70:
+                disassemble = `MOV\tM,B`;
                 this.MOV_TO_MEM('B');
                 break;
             case 0x71:
+                disassemble = `MOV\tM,C`;
                 this.MOV_TO_MEM('C');
                 break;
             case 0x72:
+                disassemble = `MOV\tM,D`;
                 this.MOV_TO_MEM('D');
                 break;
             case 0x73:
+                disassemble = `MOV\tM,E`;
                 this.MOV_TO_MEM('E');
                 break;
             case 0x74:
+                disassemble = `MOV\tM,H`;
                 this.MOV_TO_MEM('H');
                 break;
             case 0x75:
+                disassemble = `MOV\tM,L`;
                 this.MOV_TO_MEM('L');
                 break;
             case 0x77:
+                disassemble = `MOV\tM,A`;
                 this.MOV_TO_MEM('A');
                 break;
             case 0x78:
+                disassemble = `MOV\tA,B`;
                 this.MOV_R('A', 'B');
                 break;
             case 0x79:
+                disassemble = `MOV\tA,C`;
                 this.MOV_R('A', 'C');
                 break;
             case 0x7A:
+                disassemble = `MOV\tA,D`;
                 this.MOV_R('A', 'D');
                 break;
             case 0x7B:
+                disassemble = `MOV\tA,E`;
                 this.MOV_R('A', 'E');
                 break;
             case 0x7C:
+                disassemble = `MOV\tA,H`;
                 this.MOV_R('A', 'H');
                 break;
             case 0x7D:
+                disassemble = `MOV\tA,L`;
                 this.MOV_R('A', 'L');
                 break;
             case 0x7E:
+                disassemble = `MOV\tA,M`;
                 this.MOV_FROM_MEM('A');
                 break;
             case 0x7F:
+                disassemble = `MOV\tA,A`;
                 this.MOV_R('A', 'A');
                 break;
             case 0x76:
+                disassemble = `HALT`;
                 this.halt = true;
                 this.clock += 7;
                 return;
             case 0x80:
+                disassemble = `ADD\tB`;
                 this.ADD_R('B');
                 break;
             case 0x81:
+                disassemble = `ADD\tC`;
                 this.ADD_R('C');
                 break;
             case 0x82:
+                disassemble = `ADD\tC`;
                 this.ADD_R('D');
                 break;
             case 0x83:
+                disassemble = `ADD\tE`;
                 this.ADD_R('E');
                 break;
             case 0x84:
+                disassemble = `ADD\tH`;
                 this.ADD_R('H');
                 break;
             case 0x85:
+                disassemble = `ADD\tL`;
                 this.ADD_R('L');
                 break;
             case 0x86:
+                disassemble = `ADD\tM`;
                 this.ADD_M();
                 break;
             case 0x87:
+                disassemble = `ADD\tA`;
                 this.ADD_R('A');
                 break;
             case 0x88:
+                disassemble = `ADC\tB`;
                 this.ADC_R('B');
                 break;
             case 0x89:
+                disassemble = `ADC\tC`;
                 this.ADC_R('C');
                 break;
             case 0x8A:
+                disassemble = `ADC\tD`;
                 this.ADC_R('D');
                 break;
             case 0x8B:
+                disassemble = `ADC\tE`;
                 this.ADC_R('E');
                 break;
             case 0x8C:
+                disassemble = `ADC\tH`;
                 this.ADC_R('H');
                 break;
             case 0x8D:
+                disassemble = `ADC\tL`;
                 this.ADC_R('L');
                 break;
             case 0x8E:
+                disassemble = `ADC\tM`;
                 this.ADC_M();
                 break;
             case 0x8F:
+                disassemble = `ADC\tA`;
                 this.ADC_R('A');
                 break;
             case 0x90:
+                disassemble = `SUB\tB`;
                 this.SUB_R('B');
                 break;
             case 0x91:
+                disassemble = `SUB\tC`;
                 this.SUB_R('C');
                 break;
             case 0x92:
+                disassemble = `SUB\tD`;
                 this.SUB_R('D');
                 break;
             case 0x93:
+                disassemble = `SUB\tE`;
                 this.SUB_R('E');
                 break;
             case 0x94:
+                disassemble = `SUB\tH`;
                 this.SUB_R('H');
                 break;
             case 0x95:
+                disassemble = `SUB\tL`;
                 this.SUB_R('L');
                 break;
             case 0x96:
+                disassemble = `SUB\tM`;
                 this.SUB_M();
                 break;
             case 0x97:
+                disassemble = `SUB\tA`;
                 this.SUB_R('A');
                 break;
             case 0x98:
+                disassemble = `SBB\tB`;
                 this.SBB_R('B');
                 break;
             case 0x99:
+                disassemble = `SBB\tC`;
                 this.SBB_R('C');
                 break;
             case 0x9A:
+                disassemble = `SBB\tD`;
                 this.SBB_R('D');
                 break;
             case 0x9B:
+                disassemble = `SBB\tE`;
                 this.SBB_R('E');
                 break;
             case 0x9C:
+                disassemble = `SBB\tH`;
                 this.SBB_R('H');
                 break;
             case 0x9D:
+                disassemble = `SBB\tL`;
                 this.SBB_R('L');
                 break;
             case 0x9E:
+                disassemble = `SBB\tM`;
                 this.SBB_M();
                 break;
             case 0x9F:
+                disassemble = `SBB\tA`;
                 this.SBB_R('A');
                 break;
             case 0xA0:
+                disassemble = `ANA\tB`;
                 this.ANA_R('B');
                 break;
             case 0xA1:
+                disassemble = `ANA\tC`;
                 this.ANA_R('C');
                 break;
             case 0xA2:
+                disassemble = `ANA\tD`;
                 this.ANA_R('D');
                 break;
             case 0xA3:
+                disassemble = `ANA\tE`;
                 this.ANA_R('E');
                 break;
             case 0xA4:
+                disassemble = `ANA\tH`;
                 this.ANA_R('H');
                 break;
             case 0xA5:
+                disassemble = `ANA\tL`;
                 this.ANA_R('L');
                 break;
             case 0xA6:
+                disassemble = `ANA\tM`;
                 this.ANA_M();
                 break;
             case 0xA7:
+                disassemble = `ANA\tA`;
                 this.ANA_R('A');
                 break;  
             case 0xA8:
+                disassemble = `XRA\tB`;
                 this.XRA_R('B');
                 break;
             case 0xA9:
+                disassemble = `XRA\tC`;
                 this.XRA_R('C');
                 break;
             case 0xAA:
+                disassemble = `XRA\tD`;
                 this.XRA_R('D');
                 break;
             case 0xAB:
+                disassemble = `XRA\tE`;
                 this.XRA_R('E');
                 break;
             case 0xAC:
+                disassemble = `XRA\tH`;
                 this.XRA_R('H');
                 break;
             case 0xAD:
+                disassemble = `XRA\tL`;
                 this.XRA_R('L');
                 break;       
             case 0xAE:
+                disassemble = `XRA\tM`;
                 this.XRA_M();
                 break;
             case 0xAF:
+                disassemble = `XRA\tA`;
                 this.XRA_R('A');
                 break;              
             case 0xB0:
+                disassemble = `ORA\tB`;
                 this.ORA_R('B');
                 break;
             case 0xB1:
+                disassemble = `ORA\tC`;
                 this.ORA_R('C');
                 break;
             case 0xB2:
+                disassemble = `ORA\tD`;
                 this.ORA_R('D');
                 break;
             case 0xB3:
+                disassemble = `ORA\tE`;
                 this.ORA_R('E');
                 break;
             case 0xB4:
+                disassemble = `ORA\tH`;
                 this.ORA_R('H');
                 break;
             case 0xB5:
+                disassemble = `ORA\tL`;
                 this.ORA_R('L');
                 break;
             case 0xB6:
+                disassemble = `ORA\tM`;
                 this.ORA_M();
                 break;
             case 0xB7:
+                disassemble = `ORA\tA`;
                 this.ORA_R('A');
                 break;                
             case 0xC6:
+                disassemble = `ADI\t${this._peek_next_byte()}`;
                 this.ADI(this._get_next_byte());
                 break;
             case 0xCE:
+                disassemble = `ACI\t${this._peek_next_byte()}`;
                 this.ACI(this._get_next_byte());
                 break;
             case 0xD6:
+                disassemble = `SUI\t${this._peek_next_byte()}`;
                 this.SUI(this._get_next_byte());
                 break;
             case 0xDE:
+                disassemble = `SBI\t${this._peek_next_byte()}`;
                 this.SBI(this._get_next_byte());
                 break;
             case 0xE6:
+                disassemble = `ANI\t${this._peek_next_byte()}`;
                 this.ANI(this._get_next_byte());
                 break;
             case 0xEE:
+                disassemble = `XRI\t${this._peek_next_byte()}`;
                 this.XRI(this._get_next_byte());
                 break;
             case 0xF6:
+                disassemble = `ORI\t${this._peek_next_byte()}`;
                 this.ORI(this._get_next_byte());
                 break;
         }
+        return disassemble;
     }
-
-
 }
 
 export { i8080 };
