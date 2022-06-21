@@ -246,7 +246,7 @@ class i8080 {
         },
 
         /**
-         * Sets the specified flag bit in the flag register.
+         * Set specified flag bit in the flag register.
          *
          * @param {number} bit_pos bit position of the flag to set (see `FlagType`
          * object)
@@ -267,7 +267,7 @@ class i8080 {
         },
     
         /**
-         * Clears (Unsets) the specified flag bit in the flag register.
+         * Clear (Unset) specified flag bit in the flag register.
          * 
          * @param {number} bit_pos bit position of the flag to clear (see `FlagType`
          * object))
@@ -278,9 +278,8 @@ class i8080 {
         },
     
         /**
-        * Object used to set or clears CPU Flags based on the results of various
-        * operations. In the case of Aux Carry, only the left-hand side and
-        * right-hand side of the operation is taken into account.
+        * Object used to set or clear CPU Flags based on the results of various
+        * operations.
         *
         * @param {number} result The result of the operation.
         * @param {number} lhs The left-hand side of the operation.
@@ -359,7 +358,7 @@ class i8080 {
     // NOP
     
     /**
-     * No Operation - Just takes up clock-ticks.
+     * No Operation
      */
      NOP() {
         this.clock += 4;
@@ -604,21 +603,42 @@ class i8080 {
         this.clock += 7;
     }
 
-    // STACK POINTER OPERATIONS
+    // STACK POINTER OPERATIONS (STACK GROWS DOWN)
 
-    _push_byte_to_stack(byte) {
-        this.bus.WriteRAM(byte, --this.stack_pointer);
+    /**
+     * Pushes an 8-bit value to the top of the stack and decreases the stack
+     * pointer by 1.
+     *
+     * @param {number} val Value to push
+     */
+    _push_byte_to_stack(val) {
+        this.bus.WriteRAM(val, --this.stack_pointer);
     }
 
+    /**
+     * @returns byte from the top of the stack and increases the stack-pointer
+     * by 1
+     */
     _pop_byte_from_stack() {
         return this.bus.ReadRAM(this.stack_pointer++);
     }
 
-    _push_word_to_stack(word) {
-        this._push_byte_to_stack(word >> 8 & 0xFF);
-        this._push_byte_to_stack(word & 0xFF);
+    /**
+     * Pushes a 16-bit value onto the top of the stack and decreases the stack
+     * pointer by 2.
+     *
+     * @param {val} val 16-bit value to be pushed
+     */
+    _push_word_to_stack(val) {
+        this._push_byte_to_stack(val >> 8 & 0xFF);
+        this._push_byte_to_stack(val & 0xFF);
     }
 
+    /**
+     *
+     * @returns 16-bit word from the top of the stack and increases the stack
+     * pointer by 2.
+     */
     _pop_word_from_stack() {
         const word_low_byte = this._pop_byte_from_stack();
         const word_high_byte = this._pop_byte_from_stack();
@@ -640,7 +660,10 @@ class i8080 {
         this.clock += 11;
     }
 
-
+    /**
+     * Push the contents of the accumulator, followed by the contents of the
+     * flags register to the top of the stack.
+     */
     PUSH_PSW() {
         this._push_byte_to_stack(this.registers['A']);
         this._push_byte_to_stack(this.flags);
@@ -648,9 +671,15 @@ class i8080 {
     }
     
     /**
-     * 
-     * @param {*} high_byte_register 
-     * @param {*} low_byte_register 
+     * Pop 2 bytes from the top of the stack and load them into one of the
+     * register pairs (BC, DE, HL). Note the little-endian storage means the
+     * first item popped is loaded into the low-byte-register and second item
+     * the high-byte-register.
+     *
+     * @param {char} high_byte_register Register to store the second byte popped
+     * from the stack
+     * @param {char} low_byte_register Register to store the first byte popped
+     * from the stack
      */
     POP_R(high_byte_register, low_byte_register) {
         this.registers[low_byte_register] = this.bus.ReadRAM(this.stack_pointer++);
@@ -658,6 +687,10 @@ class i8080 {
         this.clock += 10;
     }
     
+    /**
+     * Pop 2 bytes from the top of the stack and load the first byte into the
+     * flags register and the second byte into the accumulator.
+     */
     POP_PSW() {
         this.flags = this.bus.ReadRAM(this.stack_pointer++);
         this.registers['A'] = this.bus.ReadRAM(this.stack_pointer++);
@@ -806,6 +839,12 @@ class i8080 {
 
     // LOGICAL BITWISE OPERATIONS
 
+    /**
+     * Adjust relevant flags depending on the result of a logical bit-wise
+     * operation.
+     *
+     * @param {number} raw_result Result of the operation
+     */
     _set_flags_on_logical_op(raw_result) {
         this._flag_manager.ClearFlag(this._flag_manager.FlagType.Carry);
         this._flag_manager.CheckAndSet.Zero(raw_result & 0xFF);
@@ -994,6 +1033,20 @@ class i8080 {
                         INCREMENT AND DECREMENT OPERATIONS                    
     ------------------------------------------------------------------------*/
 
+    /**
+     * Adjust relevant flags according to the result of an increment or
+     * decrement operation.
+     *
+     * @param {number} lhs Result of the left-hand side of the operation
+     * @param {number} rhs Result of the right-hand side of the operatiom
+     * @param {number} raw_result Result of the operation
+     */
+    _set_flags_on_inc_dec_op(lhs, rhs, raw_result) {
+        this._flag_manager.CheckAndSet.AuxillaryCarry(lhs, rhs);
+        this._flag_manager.CheckAndSet.Parity(raw_result);
+        this._flag_manager.CheckAndSet.Sign(raw_result);
+        this._flag_manager.CheckAndSet.Zero(raw_result);
+    }
     
     /**
      * The 16-bit number stored in the specified register pair (BC, DE, HL) is
@@ -1036,13 +1089,6 @@ class i8080 {
     DCX_SP() {
         this.stack_pointer = (this.stack_pointer + 0xFFFF) & 0xFFFF;
         this.clock += 5;
-    }
-
-    _set_flags_on_inc_dec_op(lhs, rhs, raw_result) {
-        this._flag_manager.CheckAndSet.AuxillaryCarry(lhs, rhs);
-        this._flag_manager.CheckAndSet.Parity(raw_result);
-        this._flag_manager.CheckAndSet.Sign(raw_result);
-        this._flag_manager.CheckAndSet.Zero(raw_result);
     }
     
     /**
