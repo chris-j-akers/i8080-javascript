@@ -40,7 +40,7 @@ describe('INR Memory', () => {
 		  // Here, we're just checking the carry flag hasn't been touched.
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), carry_set);
 		
-		  assert.equal(c.bus.Read(mem_addr),1);
+		  assert.equal(c.bus.ReadRAM(mem_addr),1);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
@@ -89,7 +89,7 @@ describe('INR Memory', () => {
 		  // Here, we're just checking the carry flag hasn't been touched.
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), carry_set);
 		
-		  assert.equal(c.bus.Read(mem_addr),0);
+		  assert.equal(c.bus.ReadRAM(mem_addr),0);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), true);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), true);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);
@@ -138,7 +138,7 @@ describe('INR Memory', () => {
 		  // Here, we're just checking the carry flag hasn't been touched.
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), carry_set);
 		
-		  assert.equal(c.bus.Read(mem_addr),85);
+		  assert.equal(c.bus.ReadRAM(mem_addr),85);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), true);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
@@ -187,7 +187,7 @@ describe('INR Memory', () => {
 		  // Here, we're just checking the carry flag hasn't been touched.
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), carry_set);
 		
-		  assert.equal(c.bus.Read(mem_addr),176);
+		  assert.equal(c.bus.ReadRAM(mem_addr),176);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), false);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), true);
 		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);

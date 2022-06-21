@@ -27,7 +27,7 @@ describe('MOV Memory to Register', () => {
 		
 		  assert.equal(c.cpu.Clock, 38);
 		
-		  assert.equal(c.bus.Read(mem_addr), c.cpu.registers.B);
+		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.registers.B);
 		  c.Reset();
 		}
 		});
@@ -57,7 +57,7 @@ describe('MOV Memory to Register', () => {
 		
 		  assert.equal(c.cpu.Clock, 38);
 		
-		  assert.equal(c.bus.Read(mem_addr), c.cpu.registers.C);
+		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.registers.C);
 		  c.Reset();
 		}
 		});
@@ -87,7 +87,7 @@ describe('MOV Memory to Register', () => {
 		
 		  assert.equal(c.cpu.Clock, 38);
 		
-		  assert.equal(c.bus.Read(mem_addr), c.cpu.registers.D);
+		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.registers.D);
 		  c.Reset();
 		}
 		});
@@ -117,7 +117,7 @@ describe('MOV Memory to Register', () => {
 		
 		  assert.equal(c.cpu.Clock, 38);
 		
-		  assert.equal(c.bus.Read(mem_addr), c.cpu.registers.E);
+		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.registers.E);
 		  c.Reset();
 		}
 		});
@@ -147,7 +147,7 @@ describe('MOV Memory to Register', () => {
 		
 		  assert.equal(c.cpu.Clock, 38);
 		
-		  assert.equal(c.bus.Read(mem_addr), c.cpu.registers.H);
+		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.registers.H);
 		  c.Reset();
 		}
 		});
@@ -177,7 +177,7 @@ describe('MOV Memory to Register', () => {
 		
 		  assert.equal(c.cpu.Clock, 38);
 		
-		  assert.equal(c.bus.Read(mem_addr), c.cpu.registers.L);
+		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.registers.L);
 		  c.Reset();
 		}
 		});
@@ -207,7 +207,7 @@ describe('MOV Memory to Register', () => {
 		
 		  assert.equal(c.cpu.Clock, 38);
 		
-		  assert.equal(c.bus.Read(mem_addr), c.cpu.registers.A);
+		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.registers.A);
 		  c.Reset();
 		}
 		});

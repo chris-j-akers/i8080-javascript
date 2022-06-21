@@ -38,8 +38,8 @@ describe('XTHL', () => {
 		
 		  // Check we're set-up correctly
 		
-		  assert.equal(c.cpu.bus.Read(16 << 8 | 173), 240);
-		  assert.equal(c.cpu.bus.Read(16 << 8 | 173 + 1), 13);
+		  assert.equal(c.bus.ReadRAM(16 << 8 | 173), 240);
+		  assert.equal(c.bus.ReadRAM(16 << 8 | 173 + 1), 13);
 		  assert.equal(c.cpu.registers['H'], 0x0B);
 		  assert.equal(c.cpu.registers['L'], 0x3C);
 		  
@@ -48,8 +48,8 @@ describe('XTHL', () => {
 		  c.cpu.halt = false;
 		  c.ExecuteProgram(18);
 		
-		  assert.equal(c.cpu.bus.Read(16 << 8 | 173), 60);
-		  assert.equal(c.cpu.bus.Read(16 << 8 | 173 + 1), 11);
+		  assert.equal(c.bus.ReadRAM(16 << 8 | 173), 60);
+		  assert.equal(c.bus.ReadRAM(16 << 8 | 173 + 1), 11);
 		  assert.equal(c.cpu.registers['H'], 13);
 		  assert.equal(c.cpu.registers['L'], 240);
 		

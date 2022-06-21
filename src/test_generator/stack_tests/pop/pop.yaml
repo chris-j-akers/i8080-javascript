@@ -52,8 +52,8 @@ test_suite:
         assert.equal(c.cpu.registers['{register_high}'], 0);
         assert.equal(c.cpu.registers['{register_low}'], 0);
 
-        assert.equal(c.bus.Read(0xFFFF-1), 0x8F);
-        assert.equal(c.bus.Read(0xFFFF-2), 0x9D);
+        assert.equal(c.bus.ReadRAM(0xFFFF-1), 0x8F);
+        assert.equal(c.bus.ReadRAM(0xFFFF-2), 0x9D);
         assert.equal(c.cpu.stack_pointer, 0xFFFF-2);
 
         c.cpu.halt = false;

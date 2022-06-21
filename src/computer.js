@@ -26,7 +26,7 @@ class Computer {
 
     InjectProgram(program, at_addr=0x0) {
         for (let i=0; i<program.length; i++) {
-            this.bus.Write(program[i], at_addr + i);
+            this.bus.WriteRAM(program[i], at_addr + i);
         }
     }
 

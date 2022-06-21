@@ -18,11 +18,11 @@
         this.cpu = cpu;
     }
 
-    Write(val, addr) {
+    WriteRAM(val, addr) {
         this.mmu.Write(val, addr);
     }
 
-    Read(addr) {
+    ReadRAM(addr) {
         return this.mmu.Read(addr);
     }
 }

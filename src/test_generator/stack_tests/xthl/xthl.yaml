@@ -46,8 +46,8 @@ test_suite:
 
       // Check we're set-up correctly
 
-      assert.equal(c.cpu.bus.Read({mem_addr_high_byte} << 8 | {mem_addr_low_byte}), {mem_first_byte});
-      assert.equal(c.cpu.bus.Read({mem_addr_high_byte} << 8 | {mem_addr_low_byte} + 1), {mem_second_byte});
+      assert.equal(c.bus.ReadRAM({mem_addr_high_byte} << 8 | {mem_addr_low_byte}), {mem_first_byte});
+      assert.equal(c.bus.ReadRAM({mem_addr_high_byte} << 8 | {mem_addr_low_byte} + 1), {mem_second_byte});
       assert.equal(c.cpu.registers['H'], 0x0B);
       assert.equal(c.cpu.registers['L'], 0x3C);
       
@@ -56,8 +56,8 @@ test_suite:
       c.cpu.halt = false;
       c.ExecuteProgram(18);
 
-      assert.equal(c.cpu.bus.Read({mem_addr_high_byte} << 8 | {mem_addr_low_byte}), {l_register});
-      assert.equal(c.cpu.bus.Read({mem_addr_high_byte} << 8 | {mem_addr_low_byte} + 1), {h_register});
+      assert.equal(c.bus.ReadRAM({mem_addr_high_byte} << 8 | {mem_addr_low_byte}), {l_register});
+      assert.equal(c.bus.ReadRAM({mem_addr_high_byte} << 8 | {mem_addr_low_byte} + 1), {h_register});
       assert.equal(c.cpu.registers['H'], {mem_second_byte});
       assert.equal(c.cpu.registers['L'], {mem_first_byte});
 

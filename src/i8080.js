@@ -420,7 +420,7 @@ class i8080 {
      * `L` to the Accumulator.
      */
     ADD_M() {
-        this.registers['A'] = this._add(this.registers['A'], this.bus.Read(this._get_register_pair_word('H','L')));
+        this.registers['A'] = this._add(this.registers['A'], this.bus.ReadRAM(this._get_register_pair_word('H','L')));
         this.clock += 7;
     }
 
@@ -441,7 +441,7 @@ class i8080 {
      * `L` to the Accumulator, including the Carry bit, if set.
      */
     ADC_M() {
-        this.registers['A'] = this._add(this.registers['A'], this.bus.Read(this._get_register_pair_word('H','L')), this._flag_manager.IsSet(this._flag_manager.FlagType.Carry) ? 1 : 0);
+        this.registers['A'] = this._add(this.registers['A'], this.bus.ReadRAM(this._get_register_pair_word('H','L')), this._flag_manager.IsSet(this._flag_manager.FlagType.Carry) ? 1 : 0);
         this.clock += 7;
     }
 
@@ -518,7 +518,7 @@ class i8080 {
      *
      */
     SUB_M() {      
-        this.registers['A'] = this._sub(this.registers['A'], this.bus.Read(this._get_register_pair_word('H','L')));
+        this.registers['A'] = this._sub(this.registers['A'], this.bus.ReadRAM(this._get_register_pair_word('H','L')));
         this.clock += 7;
     }
 
@@ -540,7 +540,7 @@ class i8080 {
      * Accumulator.
      */
     SBB_M() {
-        this.registers['A'] = this._sub(this.registers['A'], this.bus.Read(this._get_register_pair_word('H','L')), this._flag_manager.IsSet(this._flag_manager.FlagType.Carry) ? 1 : 0);
+        this.registers['A'] = this._sub(this.registers['A'], this.bus.ReadRAM(this._get_register_pair_word('H','L')), this._flag_manager.IsSet(this._flag_manager.FlagType.Carry) ? 1 : 0);
         this.clock += 7;
     }
 
@@ -587,7 +587,7 @@ class i8080 {
      * record the result.
      */
     CMP_M() {
-        const result = this._sub(this.registers['A'], this.bus.Read(this._get_register_pair_word('H','L')));
+        const result = this._sub(this.registers['A'], this.bus.ReadRAM(this._get_register_pair_word('H','L')));
         this.clock += 7;
     }
 
@@ -607,11 +607,11 @@ class i8080 {
     // STACK POINTER OPERATIONS
 
     _push_byte_to_stack(byte) {
-        this.bus.Write(byte, --this.stack_pointer);
+        this.bus.WriteRAM(byte, --this.stack_pointer);
     }
 
     _pop_byte_from_stack() {
-        return this.bus.Read(this.stack_pointer++);
+        return this.bus.ReadRAM(this.stack_pointer++);
     }
 
     _push_word_to_stack(word) {
@@ -653,14 +653,14 @@ class i8080 {
      * @param {*} low_byte_register 
      */
     POP_R(high_byte_register, low_byte_register) {
-        this.registers[low_byte_register] = this.bus.Read(this.stack_pointer++);
-        this.registers[high_byte_register] = this.bus.Read(this.stack_pointer++);
+        this.registers[low_byte_register] = this.bus.ReadRAM(this.stack_pointer++);
+        this.registers[high_byte_register] = this.bus.ReadRAM(this.stack_pointer++);
         this.clock += 10;
     }
     
     POP_PSW() {
-        this.flags = this.bus.Read(this.stack_pointer++);
-        this.registers['A'] = this.bus.Read(this.stack_pointer++);
+        this.flags = this.bus.ReadRAM(this.stack_pointer++);
+        this.registers['A'] = this.bus.ReadRAM(this.stack_pointer++);
         this.clock += 10;
     }
 
@@ -764,7 +764,7 @@ class i8080 {
      * @param {char} reg_source The name of the source register (A,B,C,D,E,H,L)
      */
     MOV_TO_MEM(reg_source) {
-        this.bus.Write(this.registers[reg_source], this._get_register_pair_word('H', 'L'));
+        this.bus.WriteRAM(this.registers[reg_source], this._get_register_pair_word('H', 'L'));
         this.clock += 7
     }
 
@@ -776,7 +776,7 @@ class i8080 {
      * (A,B,C,D,E,H,L)
      */
     MOV_FROM_MEM(reg_destination) {
-        this.registers[reg_destination] = this.bus.Read(this._get_register_pair_word('H', 'L'));
+        this.registers[reg_destination] = this.bus.ReadRAM(this._get_register_pair_word('H', 'L'));
         this.clock += 7
     }
 
@@ -800,7 +800,7 @@ class i8080 {
      */
     MVI_TO_MEM(val) {
         const addr = this._get_register_pair_word('H', 'L');
-        this.bus.Write(val, addr);
+        this.bus.WriteRAM(val, addr);
         this.clock += 10;
     }
 
@@ -833,7 +833,7 @@ class i8080 {
     * The 16-bit address of the memory location is loaded from register-pair HL.
     */
     ANA_M() {
-        const raw_result = this.registers['A'] & this.bus.Read(this._get_register_pair_word('H','L'));
+        const raw_result = this.registers['A'] & this.bus.ReadRAM(this._get_register_pair_word('H','L'));
         this._set_flags_on_logical_op(raw_result);
         this.registers['A'] = raw_result & 0xFF;
         this.clock += 7;
@@ -873,7 +873,7 @@ class i8080 {
     * HL.
     */
     XRA_M() {
-        const raw_result = this.registers['A'] ^ this.bus.Read(this._get_register_pair_word('H', 'L'));
+        const raw_result = this.registers['A'] ^ this.bus.ReadRAM(this._get_register_pair_word('H', 'L'));
         this._set_flags_on_logical_op(raw_result);
         this.registers['A'] = raw_result & 0xFF;
         this.clock += 7;
@@ -913,7 +913,7 @@ class i8080 {
      * HL.
      */
     ORA_M() {
-        const raw_result = this.registers['A'] | this.bus.Read(this._get_register_pair_word('H','L'));
+        const raw_result = this.registers['A'] | this.bus.ReadRAM(this._get_register_pair_word('H','L'));
         this._set_flags_on_logical_op(raw_result);
         this.registers['A'] = raw_result & 0xFF;
         this.clock += 7;
@@ -941,7 +941,7 @@ class i8080 {
      */
     STAX(high_byte_register, low_byte_register) {
         const addr = this._get_register_pair_word(high_byte_register, low_byte_register);
-        this.bus.Write(this.registers['A'], addr);
+        this.bus.WriteRAM(this.registers['A'], addr);
         this.clock += 7;
     }
 
@@ -952,8 +952,8 @@ class i8080 {
      * @param {number} addr 16-bit memory address of storage location.
      */
     SHLD(addr) {
-        this.bus.Write(this.registers.L, addr);
-        this.bus.Write(this.registers.H, addr + 1);
+        this.bus.WriteRAM(this.registers.L, addr);
+        this.bus.WriteRAM(this.registers.H, addr + 1);
         this.clock += 16;
     }
 
@@ -965,8 +965,8 @@ class i8080 {
      * @param {number} addr Memory address of data.
      */
     LHLD(addr) {
-        this.registers['L'] = this.bus.Read(addr);
-        this.registers['H'] = this.bus.Read(addr+1);
+        this.registers['L'] = this.bus.ReadRAM(addr);
+        this.registers['H'] = this.bus.ReadRAM(addr+1);
         this.clock += 16;
     }
 
@@ -975,7 +975,7 @@ class i8080 {
      * @param {number} addr 16-bit memory address of storage location
      */
     STA(addr) {
-        this.bus.Write(this.registers.A, addr);
+        this.bus.WriteRAM(this.registers.A, addr);
         this.clock += 13;
     }
 
@@ -985,7 +985,7 @@ class i8080 {
      * @param {number} val Address of data to load into Accumulator
      */
     LSA(addr) {
-        this.registers['A'] = this.bus.Read(addr);
+        this.registers['A'] = this.bus.ReadRAM(addr);
         this.clock += 13;
     }
 
@@ -1068,10 +1068,10 @@ class i8080 {
      */
     INR_M() {
         const addr = this._get_register_pair_word('H','L');
-        const lhs = this.bus.Read(addr);
+        const lhs = this.bus.ReadRAM(addr);
         const raw_result = lhs + 1;
         this._set_flags_on_inc_dec_op(lhs, 1, raw_result);
-        this.bus.Write(raw_result & 0xFF, addr);
+        this.bus.WriteRAM(raw_result & 0xFF, addr);
         this.clock += 10;
     }
 
@@ -1100,11 +1100,11 @@ class i8080 {
      */
     DCR_M() {
         const addr = this._get_register_pair_word('H','L');
-        const lhs = this.bus.Read(addr);
+        const lhs = this.bus.ReadRAM(addr);
         // 0xFF is the 8-bit two's complement of 1.
         const raw_result = lhs + 0xFF;
         this._set_flags_on_inc_dec_op(lhs, 0xFF, raw_result);
-        this.bus.Write(raw_result & 0xFF, addr);
+        this.bus.WriteRAM(raw_result & 0xFF, addr);
         this.clock += 10;
     }
 
@@ -1214,7 +1214,7 @@ class i8080 {
     }
 
     LDAX(high_byte_register, low_byte_register) {
-        this.registers['A'] = this.bus.Read(this.registers[high_byte_register] << 8 | this.registers[low_byte_register] & 0xFF);
+        this.registers['A'] = this.bus.ReadRAM(this.registers[high_byte_register] << 8 | this.registers[low_byte_register] & 0xFF);
         this.clock += 7;
     }
 
@@ -1254,11 +1254,11 @@ class i8080 {
     }
 
     XTHL() {
-        const l_addr = this.bus.Read(this.stack_pointer);
-        const h_addr = this.bus.Read(this.stack_pointer + 1);
+        const l_addr = this.bus.ReadRAM(this.stack_pointer);
+        const h_addr = this.bus.ReadRAM(this.stack_pointer + 1);
 
-        this.bus.Write(this.registers['L'], this.stack_pointer);
-        this.bus.Write(this.registers['H'], this.stack_pointer + 1);
+        this.bus.WriteRAM(this.registers['L'], this.stack_pointer);
+        this.bus.WriteRAM(this.registers['H'], this.stack_pointer + 1);
 
         this.registers['L'] = l_addr;
         this.registers['H'] = h_addr;
@@ -1295,7 +1295,7 @@ class i8080 {
      * position, then increments the program counter by 1 byte.
      */
     _get_next_byte() {
-        const next_byte = this.bus.Read(this.program_counter);
+        const next_byte = this.bus.ReadRAM(this.program_counter);
         this.program_counter++;
         return next_byte;
     }
@@ -1307,9 +1307,9 @@ class i8080 {
     * by 2 bytes. 
     */
     _get_next_word() {
-        const lower_byte = this.bus.Read(this.program_counter);
+        const lower_byte = this.bus.ReadRAM(this.program_counter);
         this.program_counter++;
-        const upper_byte = this.bus.Read(this.program_counter);
+        const upper_byte = this.bus.ReadRAM(this.program_counter);
         this.program_counter++;
         return (upper_byte << 8) | lower_byte;
     }

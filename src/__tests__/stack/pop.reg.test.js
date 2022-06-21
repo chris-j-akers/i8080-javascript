@@ -44,8 +44,8 @@ describe('POP (R)', () => {
 		    assert.equal(c.cpu.registers['B'], 0);
 		    assert.equal(c.cpu.registers['C'], 0);
 		
-		    assert.equal(c.bus.Read(0xFFFF-1), 0x8F);
-		    assert.equal(c.bus.Read(0xFFFF-2), 0x9D);
+		    assert.equal(c.bus.ReadRAM(0xFFFF-1), 0x8F);
+		    assert.equal(c.bus.ReadRAM(0xFFFF-2), 0x9D);
 		    assert.equal(c.cpu.stack_pointer, 0xFFFF-2);
 		
 		    c.cpu.halt = false;
@@ -91,8 +91,8 @@ describe('POP (R)', () => {
 		    assert.equal(c.cpu.registers['D'], 0);
 		    assert.equal(c.cpu.registers['E'], 0);
 		
-		    assert.equal(c.bus.Read(0xFFFF-1), 0x8F);
-		    assert.equal(c.bus.Read(0xFFFF-2), 0x9D);
+		    assert.equal(c.bus.ReadRAM(0xFFFF-1), 0x8F);
+		    assert.equal(c.bus.ReadRAM(0xFFFF-2), 0x9D);
 		    assert.equal(c.cpu.stack_pointer, 0xFFFF-2);
 		
 		    c.cpu.halt = false;
@@ -138,8 +138,8 @@ describe('POP (R)', () => {
 		    assert.equal(c.cpu.registers['H'], 0);
 		    assert.equal(c.cpu.registers['L'], 0);
 		
-		    assert.equal(c.bus.Read(0xFFFF-1), 0x8F);
-		    assert.equal(c.bus.Read(0xFFFF-2), 0x9D);
+		    assert.equal(c.bus.ReadRAM(0xFFFF-1), 0x8F);
+		    assert.equal(c.bus.ReadRAM(0xFFFF-2), 0x9D);
 		    assert.equal(c.cpu.stack_pointer, 0xFFFF-2);
 		
 		    c.cpu.halt = false;

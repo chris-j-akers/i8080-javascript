@@ -22,7 +22,7 @@ describe('STA', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.bus.Read(mem_addr), 0xFF);
+		  assert.equal(c.bus.ReadRAM(mem_addr), 0xFF);
 		
 		  assert.equal(c.cpu.Clock, 27);
 		  c.Reset();

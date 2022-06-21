@@ -33,7 +33,7 @@ describe('STAX', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.bus.Read(mem_addr), 0xFF);
+		  assert.equal(c.bus.ReadRAM(mem_addr), 0xFF);
 		  assert.equal(c.cpu.Clock, 35);
 		
 		  c.Reset();
@@ -65,7 +65,7 @@ describe('STAX', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.bus.Read(mem_addr), 0xFF);
+		  assert.equal(c.bus.ReadRAM(mem_addr), 0xFF);
 		  assert.equal(c.cpu.Clock, 35);
 		
 		  c.Reset();

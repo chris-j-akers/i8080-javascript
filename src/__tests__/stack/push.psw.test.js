@@ -40,9 +40,9 @@ describe('PUSH (PSW)', () => {
 		assert.equal(c.cpu.registers['A'], 0);
 		
 		// We assign it back to flags so we can use the FlagManager code to check flag status
-		c.cpu.flags = c.bus.Read(c.cpu.stack_pointer++);
+		c.cpu.flags = c.bus.ReadRAM(c.cpu.stack_pointer++);
 		
-		assert.equal(c.bus.Read(c.cpu.stack_pointer), 0xFF);
+		assert.equal(c.bus.ReadRAM(c.cpu.stack_pointer), 0xFF);
 		
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), false);
@@ -97,9 +97,9 @@ describe('PUSH (PSW)', () => {
 		assert.equal(c.cpu.registers['A'], 0);
 		
 		// We assign it back to flags so we can use the FlagManager code to check flag status
-		c.cpu.flags = c.bus.Read(c.cpu.stack_pointer++);
+		c.cpu.flags = c.bus.ReadRAM(c.cpu.stack_pointer++);
 		
-		assert.equal(c.bus.Read(c.cpu.stack_pointer), 0xFF);
+		assert.equal(c.bus.ReadRAM(c.cpu.stack_pointer), 0xFF);
 		
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), true);
@@ -150,9 +150,9 @@ describe('PUSH (PSW)', () => {
 		assert.equal(c.cpu.registers['A'], 0);
 		
 		// We assign it back to flags so we can use the FlagManager code to check flag status
-		c.cpu.flags = c.bus.Read(c.cpu.stack_pointer++);
+		c.cpu.flags = c.bus.ReadRAM(c.cpu.stack_pointer++);
 		
-		assert.equal(c.bus.Read(c.cpu.stack_pointer), 0xFF);
+		assert.equal(c.bus.ReadRAM(c.cpu.stack_pointer), 0xFF);
 		
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), false);
@@ -203,9 +203,9 @@ describe('PUSH (PSW)', () => {
 		assert.equal(c.cpu.registers['A'], 0);
 		
 		// We assign it back to flags so we can use the FlagManager code to check flag status
-		c.cpu.flags = c.bus.Read(c.cpu.stack_pointer++);
+		c.cpu.flags = c.bus.ReadRAM(c.cpu.stack_pointer++);
 		
-		assert.equal(c.bus.Read(c.cpu.stack_pointer), 0xFF);
+		assert.equal(c.bus.ReadRAM(c.cpu.stack_pointer), 0xFF);
 		
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), true);
@@ -256,9 +256,9 @@ describe('PUSH (PSW)', () => {
 		assert.equal(c.cpu.registers['A'], 0);
 		
 		// We assign it back to flags so we can use the FlagManager code to check flag status
-		c.cpu.flags = c.bus.Read(c.cpu.stack_pointer++);
+		c.cpu.flags = c.bus.ReadRAM(c.cpu.stack_pointer++);
 		
-		assert.equal(c.bus.Read(c.cpu.stack_pointer), 0xFF);
+		assert.equal(c.bus.ReadRAM(c.cpu.stack_pointer), 0xFF);
 		
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), false);
@@ -309,9 +309,9 @@ describe('PUSH (PSW)', () => {
 		assert.equal(c.cpu.registers['A'], 0);
 		
 		// We assign it back to flags so we can use the FlagManager code to check flag status
-		c.cpu.flags = c.bus.Read(c.cpu.stack_pointer++);
+		c.cpu.flags = c.bus.ReadRAM(c.cpu.stack_pointer++);
 		
-		assert.equal(c.bus.Read(c.cpu.stack_pointer), 0xFF);
+		assert.equal(c.bus.ReadRAM(c.cpu.stack_pointer), 0xFF);
 		
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), false);
@@ -362,9 +362,9 @@ describe('PUSH (PSW)', () => {
 		assert.equal(c.cpu.registers['A'], 0);
 		
 		// We assign it back to flags so we can use the FlagManager code to check flag status
-		c.cpu.flags = c.bus.Read(c.cpu.stack_pointer++);
+		c.cpu.flags = c.bus.ReadRAM(c.cpu.stack_pointer++);
 		
-		assert.equal(c.bus.Read(c.cpu.stack_pointer), 0xFF);
+		assert.equal(c.bus.ReadRAM(c.cpu.stack_pointer), 0xFF);
 		
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
 		assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), false);

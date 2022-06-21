@@ -32,8 +32,8 @@ describe('PUSH (R)', () => {
 		    c.InjectProgram(program);
 		    c.ExecuteProgram();
 		
-		    assert.equal(c.bus.Read(0xFFFF-1), 0x8F);
-		    assert.equal(c.bus.Read(0xFFFF-2), 0x9D);
+		    assert.equal(c.bus.ReadRAM(0xFFFF-1), 0x8F);
+		    assert.equal(c.bus.ReadRAM(0xFFFF-2), 0x9D);
 		    assert.equal(c.cpu.stack_pointer, 0xFFFF-2);
 		    assert.equal(c.cpu.Clock, 42);
 		});
@@ -57,8 +57,8 @@ describe('PUSH (R)', () => {
 		    c.InjectProgram(program);
 		    c.ExecuteProgram();
 		
-		    assert.equal(c.bus.Read(0xFFFF-1), 0x8F);
-		    assert.equal(c.bus.Read(0xFFFF-2), 0x9D);
+		    assert.equal(c.bus.ReadRAM(0xFFFF-1), 0x8F);
+		    assert.equal(c.bus.ReadRAM(0xFFFF-2), 0x9D);
 		    assert.equal(c.cpu.stack_pointer, 0xFFFF-2);
 		    assert.equal(c.cpu.Clock, 42);
 		});
@@ -82,8 +82,8 @@ describe('PUSH (R)', () => {
 		    c.InjectProgram(program);
 		    c.ExecuteProgram();
 		
-		    assert.equal(c.bus.Read(0xFFFF-1), 0x8F);
-		    assert.equal(c.bus.Read(0xFFFF-2), 0x9D);
+		    assert.equal(c.bus.ReadRAM(0xFFFF-1), 0x8F);
+		    assert.equal(c.bus.ReadRAM(0xFFFF-2), 0x9D);
 		    assert.equal(c.cpu.stack_pointer, 0xFFFF-2);
 		    assert.equal(c.cpu.Clock, 42);
 		});

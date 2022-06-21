@@ -32,8 +32,8 @@ test_suite:
       c.InjectProgram(program);
       c.ExecuteProgram();
 
-      assert.equal(c.bus.Read(mem_addr), 0x71);
-      assert.equal(c.bus.Read(mem_addr + 1), 0xE);
+      assert.equal(c.bus.ReadRAM(mem_addr), 0x71);
+      assert.equal(c.bus.ReadRAM(mem_addr + 1), 0xE);
 
       assert.equal(c.cpu.Clock, 37);
 
