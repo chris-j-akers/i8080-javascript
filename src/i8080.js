@@ -1816,7 +1816,7 @@ class i8080 {
                 this.MVI_R('L', this._get_next_byte());
                 break;
             case 0x31:
-                disassemble = `LXI\tSP`;
+                disassemble = `LXI\tSP\t${this._peek_next_word()}`;
                 this.LXI_SP(this._get_next_word());
                 break;
             case 0x32:
