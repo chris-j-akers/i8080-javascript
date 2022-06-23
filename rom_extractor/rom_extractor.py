@@ -1,27 +1,36 @@
 
 
+from ctypes.wintypes import BYTE
 import sys
 
-def extract(program_name, rom_path, output_directory):
+def extract(rom_path, output_directory):
+
+    BYTE_COUNT_PER_LINE = 10
+
     rom_data = None
     with open(rom_path, 'rb') as rom_file:
         rom_data = bytearray(rom_file.read())
 
-    with open('{0}/{1}.js'.format(output_directory, program_name), 'w') as out_file:
-        out_file.write('const {0}_program = [\n'.format(program_name))
+    byte_count = 0;
+    with open('out.js', 'w') as out_file:
+        out_file.write('const Code = [\n\t')
         for byte in rom_data:
-            out_file.write('\t{0},\n'.format(hex(byte)))
+            if byte_count > BYTE_COUNT_PER_LINE:
+                out_file.write('\n\t')
+                byte_count = 0
+            out_file.write('{0},'.format(hex(byte)))
+            byte_count += 1
         out_file.write('];\n')
-        out_file.write('export {{ {0}_program }};'.format(program_name))
+        out_file.write('export { Code };')
 
 def usage():
-    print('USAGE: python3 rom_extractor.py [name-of-program] [path-to-rom-file] [output-directory]')
+    print('USAGE: python3 rom_extractor.py [path-to-rom-file] [output-directory]')
 
 def main():
-    if len(sys.argv) != 4:
+    if len(sys.argv) != 3:
         usage()
         exit()
-    extract(sys.argv[1], sys.argv[2], sys.argv[3])
+    extract(sys.argv[1], sys.argv[2])
 
 if __name__ == '__main__':
     main()

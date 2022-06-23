@@ -178,6 +178,22 @@ class i8080 {
         return this.interrupts_enabled;
     }
 
+    get Halt() {
+        return this.halt;
+    }
+
+    set Halt(val) {
+        this.halt = val;
+    }
+
+    get Registers() {
+        return this.registers;
+    }
+
+    get FlagManager() {
+        return this._flag_manager;
+    }
+
     /**
      * Get a 16-bit memory address stored in a pair of 8-bit registers.
      *
@@ -1411,6 +1427,11 @@ class i8080 {
             case 0x30:
                 disassemble = `NOP`;
                 this.NOP();
+                break;
+            case 0x27:
+                disassemble = `DAA`;
+                this.DAA();
+                break;
             case 0xC7:
             case 0xD7:
             case 0xE7:
@@ -1442,39 +1463,39 @@ class i8080 {
             case 0xDD:
             case 0xED:
             case 0xFD:
-                disassemble = `CALL\t${this._peek_next_word()}`;
+                disassemble = `CALL\t${this._peek_next_word().toString(16)}`;
                 this.CALL(true, this._get_next_word());
                 break;
             case 0xFC:
-                disassemble = `CM\t${this._peek_next_word()}`;
+                disassemble = `CM\t${this._peek_next_word().toString(16)}`;
                 this.CALL(this._flag_manager.IsSet(this._flag_manager.FlagType.Sign), this._get_next_word());
                 break;
             case 0xEC:
-                disassemble = `CPE\t${this._peek_next_word()}`
+                disassemble = `CPE\t${this._peek_next_word().toString(16)}`
                 this.CALL(this._flag_manager.IsSet(this._flag_manager.FlagType.Parity), this._get_next_word());
                 break;
             case 0xDC:
-                disassemble = `CC\t${this._peek_next_word()}`
+                disassemble = `CC\t${this._peek_next_word().toString(16)}`
                 this.CALL(this._flag_manager.IsSet(this._flag_manager.FlagType.Carry), this._get_next_word());
                 break;
             case 0xCC:
-                disassemble = `CZ\t${this._peek_next_word()}`
+                disassemble = `CZ\t${this._peek_next_word().toString(16)}`
                 this.CALL(this._flag_manager.IsSet(this._flag_manager.FlagType.Zero), this._get_next_word());
                 break;
             case 0xF4:
-                disassemble = `CP\t${this._peek_next_word()}`;
+                disassemble = `CP\t${this._peek_next_word().toString(16)}`;
                 this.CALL(!this._flag_manager.IsSet(this._flag_manager.FlagType.Sign), this._get_next_word());
                 break;
             case 0xE4:
-                disassemble = `CPO\t${this._peek_next_word()}`;
+                disassemble = `CPO\t${this._peek_next_word().toString(16)}`;
                 this.CALL(!this._flag_manager.IsSet(this._flag_manager.FlagType.Parity), this._get_next_word());
                 break;
             case 0xD4:
-                disassemble = `CNC\t${this._peek_next_word()}`;
+                disassemble = `CNC\t${this._peek_next_word().toString(16)}`;
                 this.CALL(!this._flag_manager.IsSet(this._flag_manager.FlagType.Carry), this._get_next_word());
                 break;
             case 0xC4:
-                disassemble = `CNZ\t${this._peek_next_word()}`;
+                disassemble = `CNZ\t${this._peek_next_word().toString(16)}`;
                 this.CALL(!this._flag_manager.IsSet(this._flag_manager.FlagType.Zero), this._get_next_word());
                 break;
             case 0xF9:
@@ -1491,39 +1512,39 @@ class i8080 {
                 break;
             case 0xC3:
             case 0xCB:
-                disassemble = `JMP\t${this._peek_next_word()}`
+                disassemble = `JMP\t0x${this._peek_next_word().toString(16)}`
                 this.JUMP(true, this._get_next_word());
                 break;
             case 0xFA:
-                disassemble = `JM\t${this._peek_next_word()}`;
+                disassemble = `JM\t0x${this._peek_next_word().toString(16)}`;
                 this.JUMP(this._flag_manager.IsSet(this._flag_manager.FlagType.Sign), this._get_next_word());
                 break;      
             case 0xEA:
-                disassemble = `JPE\t${this._peek_next_word()}`;
+                disassemble = `JPE\t${this._peek_next_word().toString(16)}`;
                 this.JUMP(this._flag_manager.IsSet(this._flag_manager.FlagType.Parity), this._get_next_word());
                 break;
             case 0xCA:
-                disassemble = `JZ\t${this._peek_next_word()}`;
+                disassemble = `JZ\t0x${this._peek_next_word().toString(16)}`;
                 this.JUMP(this._flag_manager.IsSet(this._flag_manager.FlagType.Zero), this._get_next_word());
                 break;
             case 0xDA:
-                disassemble = `JC\t${this._peek_next_word()}`;
+                disassemble = `JC\t${this._peek_next_word().toString(16)}`;
                 this.JUMP(this._flag_manager.IsSet(this._flag_manager.FlagType.Carry), this._get_next_word());
                 break;                
             case 0xF2:
-                disassemble = `JP\t${this._peek_next_word()}`;
+                disassemble = `JP\t${this._peek_next_word().toString(16)}`;
                 this.JUMP(!this._flag_manager.IsSet(this._flag_manager.FlagType.Sign), this._get_next_word());
                 break;                
             case 0xE2:
-                disassemble = `JPO\t${this._peek_next_word()}`;
+                disassemble = `JPO\t${this._peek_next_word().toString(16)}`;
                 this.JUMP(!this._flag_manager.IsSet(this._flag_manager.FlagType.Parity), this._get_next_word());
                 break;
             case 0xD2:
-                disassemble = `JC\t${this._peek_next_word()}`;
+                disassemble = `JNC\t${this._peek_next_word().toString(16)}`;
                 this.JUMP(!this._flag_manager.IsSet(this._flag_manager.FlagType.Carry), this._get_next_word());
                 break;                
             case 0xC2:
-                disassemble = `JZ\t${this._peek_next_word()}`;
+                disassemble = `JNZ\t${this._peek_next_word().toString(16)}`;
                 this.JUMP(!this._flag_manager.IsSet(this._flag_manager.FlagType.Zero), this._get_next_word());
                 break;
             case 0xC9:
@@ -1536,7 +1557,7 @@ class i8080 {
                 this.RETURN(this._flag_manager.IsSet(this._flag_manager.FlagType.Sign))
                 break;
             case 0xE8:
-                disassemble = `RPE\t${this._peek_next_word()}`;
+                disassemble = `RPE\t${this._peek_next_word().toString(16)}`;
                 this.RETURN(this._flag_manager.IsSet(this._flag_manager.FlagType.Parity))
                 break;
             case 0xD8:
@@ -1628,11 +1649,11 @@ class i8080 {
                 this.CMP_R('A');
                 break;
             case 0x3A:
-                disassemble = `LSA\t${this._peek_next_word}`;
+                disassemble = `LSA\t${this._peek_next_word().toString(16)}`;
                 this.LSA(this._get_next_word());
                 break;
             case 0x2A:
-                disassemble = `LHLD\t${this._peek_next_word}`;
+                disassemble = `LHLD\t${this._peek_next_word().toString(16)}`;
                 this.LHLD(this._get_next_word());
                 break;
             case 0x0A:
@@ -1768,7 +1789,7 @@ class i8080 {
                 this.INR_R('A');
                 break;
             case 0x01: 
-                disassemble = `LXI\tBC\t${this._peek_next_word()}`;
+                disassemble = `LXI\tBC\t${this._peek_next_word().toString(16)}`;
                 this.LXI_R('B', 'C', this._get_next_word());
                 break;
             case 0x02:
@@ -1780,7 +1801,7 @@ class i8080 {
                 this.INX_R('B', 'C');
                 break;
             case 0x11:
-                disassemble = `LXI\tDE\t${this._peek_next_word()}`;
+                disassemble = `LXI\tDE\t${this._peek_next_word().toString(16)}`;
                 this.LXI_R('D', 'E', this._get_next_word());
                 break;
             case 0x12:
@@ -1792,19 +1813,19 @@ class i8080 {
                 this.INX_R('D', 'E');
                 break;
             case 0x21:
-                disassemble = `LXI\tHL\t${this._peek_next_word()}`;
+                disassemble = `LXI\tHL\t${this._peek_next_word().toString(16)}`;
                 this.LXI_R('H', 'L', this._get_next_word());
                 break;
             case 0x0E:
-                disassemble = `MVI\tC\t${this._peek_next_byte()}`;
+                disassemble = `MVI\tC\t${this._peek_next_byte().toString(16)}`;
                 this.MVI_R('C', this._get_next_byte());
                 break;
             case 0x1E:
-                disassemble = `MVI\tE\t${this._peek_next_byte()}`;
+                disassemble = `MVI\tE\t${this._peek_next_byte().toString(16)}`;
                 this.MVI_R('E', this._get_next_byte());
                 break;
             case 0x22:
-                disassemble = `SHLD\t${this._peek_next_word()}`;
+                disassemble = `SHLD\t${this._peek_next_word().toString(16)}`;
                 this.SHLD(this._get_next_word());
                 break;
             case 0x23:
@@ -1812,11 +1833,11 @@ class i8080 {
                 this.INX_R('H', 'L');
                 break;
             case 0x2E:
-                disassemble = `MVI\tL\t${this._peek_next_byte()}`;
+                disassemble = `MVI\tL\t${this._peek_next_byte().toString(16)}`;
                 this.MVI_R('L', this._get_next_byte());
                 break;
             case 0x31:
-                disassemble = `LXI\tSP\t${this._peek_next_word()}`;
+                disassemble = `LXI\tSP\t${this._peek_next_word().toString(16)}`;
                 this.LXI_SP(this._get_next_word());
                 break;
             case 0x32:
@@ -1828,23 +1849,23 @@ class i8080 {
                 this.INX_SP();
                 break;
             case 0x3E:
-                disassemble = `MVI\tA\t${this._peek_next_byte()}`;
+                disassemble = `MVI\tA\t${this._peek_next_byte().toString(16)}`;
                 this.MVI_R('A', this._get_next_byte());
                 break;
             case 0x06:
-                disassemble = `MVI\tB\t${this._peek_next_byte()}`;
+                disassemble = `MVI\tB\t${this._peek_next_byte().toString(16)}`;
                 this.MVI_R('B', this._get_next_byte());
                 break;
             case 0x16:
-                disassemble = `MVI\tD\t${this._peek_next_byte()}`;
+                disassemble = `MVI\tD\t${this._peek_next_byte().toString(16)}`;
                 this.MVI_R('D', this._get_next_byte());
                 break;
             case 0x26:
-                disassemble = `MVI\tH\t${this._peek_next_byte()}`;
+                disassemble = `MVI\tH\t${this._peek_next_byte().toString(16)}`;
                 this.MVI_R('H', this._get_next_byte());
                 break;
             case 0x36:
-                disassemble = `MVI\tM\t${this._peek_next_byte()}`;
+                disassemble = `MVI\tM\t${this._peek_next_byte().toString(16)}`;
                 this.MVI_TO_MEM(this._get_next_byte());
                 break;
             case 0x40:
@@ -2329,31 +2350,31 @@ class i8080 {
                 this.ORA_R('A');
                 break;                
             case 0xC6:
-                disassemble = `ADI\t${this._peek_next_byte()}`;
+                disassemble = `ADI\t${this._peek_next_byte().toString(16)}`;
                 this.ADI(this._get_next_byte());
                 break;
             case 0xCE:
-                disassemble = `ACI\t${this._peek_next_byte()}`;
+                disassemble = `ACI\t${this._peek_next_byte().toString(16)}`;
                 this.ACI(this._get_next_byte());
                 break;
             case 0xD6:
-                disassemble = `SUI\t${this._peek_next_byte()}`;
+                disassemble = `SUI\t${this._peek_next_byte().toString(16)}`;
                 this.SUI(this._get_next_byte());
                 break;
             case 0xDE:
-                disassemble = `SBI\t${this._peek_next_byte()}`;
+                disassemble = `SBI\t${this._peek_next_byte().toString(16)}`;
                 this.SBI(this._get_next_byte());
                 break;
             case 0xE6:
-                disassemble = `ANI\t${this._peek_next_byte()}`;
+                disassemble = `ANI\t${this._peek_next_byte().toString(16)}`;
                 this.ANI(this._get_next_byte());
                 break;
             case 0xEE:
-                disassemble = `XRI\t${this._peek_next_byte()}`;
+                disassemble = `XRI\t${this._peek_next_byte().toString(16)}`;
                 this.XRI(this._get_next_byte());
                 break;
             case 0xF6:
-                disassemble = `ORI\t${this._peek_next_byte()}`;
+                disassemble = `ORI\t${this._peek_next_byte().toString(16)}`;
                 this.ORI(this._get_next_byte());
                 break;
         }

@@ -1,16 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <title>i8080 Emulator</title>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <title>i8080 Emulator</title>
+        <link rel="stylesheet" href="style.css">
+        <script type="module" src="src/computer.js"></script>
+        <script type="module" src="src/mmu.js"></script>
+        <script type="module" src="src/bus.js"></script>
+        <script type="module" src="src/i8080.js"></script>
+        <!-- <script type="module" src="src/scratch.js"></script> -->
+        <script type="module" src="index.js"></script>
     </head>
     <body>
+        <section id="diagnostics">
+            <table class="registerTable">
+                <thead>
+                  <tr>
+                    <th>Register</th>
+                    <th>Dec</th>
+                    <th>Hex</th>
+                    <th>Bin</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>A(ccumulator)</td>
+                    <td id="reg_table_A_dec">000</td>
+                    <td id="reg_table_A_hex">0x00</td>
+                    <td id="reg_table_A_bin">00000000</td>
+                  </tr>
+                  <tr>
+                    <td>B</td>
+                    <td id="reg_table_B_dec">000</td>
+                    <td id="reg_table_B_hex">0x00</td>
+                    <td id="reg_table_B_bin">00000000</td>                  </tr>
+                  <tr>
+                    <td>C</td>
+                    <td id="reg_table_C_dec">000</td>
+                    <td id="reg_table_C_hex">0x00</td>
+                    <td id="reg_table_C_bin">00000000</td>                  </tr>
+                  <tr>
+                    <td>D</td>
+                    <td id="reg_table_D_dec">000</td>
+                    <td id="reg_table_D_hex">0x00</td>
+                    <td id="reg_table_D_bin">00000000</td>                  </tr>
+                  <tr>
+                    <td>E</td>
+                    <td id="reg_table_E_dec">000</td>
+                    <td id="reg_table_E_hex">0x00</td>
+                    <td id="reg_table_E_bin">00000000</td>                  </tr>
+                  <tr>
+                    <td>H</td>
+                    <td id="reg_table_H_dec">000</td>
+                    <td id="reg_table_H_hex">0x00</td>
+                    <td id="reg_table_H_bin">00000000</td>                  </tr>
+                  <tr>
+                    <td>L</td>
+                    <td id="reg_table_L_dec">000</td>
+                    <td id="reg_table_L_hex">0x00</td>
+                    <td id="reg_table_L_bin">00000000</td>                  </tr>
+                </tbody>
+            </table>
+            </p>
+            <table class="registerTable">
+                <thead>
+                    <tr>
+                    <th>Carry</th>
+                    <th>Parity</th>
+                    <th>Auxillary Carry</th>
+                    <th>Zero</th>
+                    <th>Sign</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr>
+                            <td id="flag_table_C">0</td>
+                            <td id="flag_table_P">0</td>
+                            <td id="flag_table_A">0</td>
+                            <td id="flag_table_Z">0</td>
+                            <td id="flag_table_S">0</td>
+                        </tr>
+                </tbody>
+            </table>
+            </p>
+            <table class="registerTable">
+              <thead>
+                  <tr>
+                  <th>Program Counter</th>
+                  <th>Stack Pointer</th>
+                  <th>Clock</th>
+                  <th>Halt</th>
+                  </tr>
+              </thead>
+              <tbody>
+                <tr>
+                    <td id="misc_table_PC">0</td>
+                    <td id="misc_table_SP">0</td>
+                    <td id="misc_table_C">0</td>
+                    <td id="misc_table_H">0</td>
+                </tr>
+              </tbody>
+            </table>
+        </section>
+        </p>
+        <section>
+            <button id="next">NEXT</button>
+            <button id="madness">RARRRWWWWW!</button>
+        </section>
+        <pre id="disassemble">
+        </pre>
     </body>
-    <script type="module" src="src/scratch.js"></script>
-    <script type="module" src="src/computer.js"></script>
-    <script type="module" src="src/mmu.js"></script>
-    <script type="module" src="src/bus.js"></script>
-    <script type="module" src="src/i8080.js"></script>
+
 </html>

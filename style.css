@@ -1,0 +1,23 @@
+table.registerTable {
+    font-family: courier;
+    font-size: 12px;
+    background-color: #FFFFFF;
+    border-collapse: collapse;
+    border-width: 1px;
+    border-color: #000000;
+    border-style: solid;
+    color: #000000;
+  }
+  
+  table.registerTable td, table.registerTable th {
+    border-width: 1px;
+    border-color: #000000;
+    border-style: solid;
+    padding-left: 3px;
+    padding-right: 3px;
+  }
+  
+  table.registerTable thead {
+    background-color: #7EA8F8;
+  }
+  
