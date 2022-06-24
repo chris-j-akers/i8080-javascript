@@ -9,15 +9,79 @@ table.registerTable {
     color: #000000;
   }
   
-  table.registerTable td, table.registerTable th {
-    border-width: 1px;
-    border-color: #000000;
-    border-style: solid;
-    padding-left: 3px;
-    padding-right: 3px;
-  }
-  
-  table.registerTable thead {
-    background-color: #7EA8F8;
-  }
-  
+table.registerTable td, table.registerTable th {
+  border-width: 1px;
+  border-color: #000000;
+  border-style: solid;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+table.registerTable thead {
+  background-color: #7EA8F8;
+}
+
+.diagnosticLayout {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: left;
+}
+
+.registerLayout {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: left;
+}
+
+.miscDiagLayout {
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+}
+
+.output {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: left;
+}
+
+.disassemble {
+  white-space: pre;
+  font-family: courier;
+  font-size: 12px;
+  margin: 10px;
+  padding: 0px;
+  border: solid;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 800px;
+  width: 500px;
+}
+
+.machineOutput {
+  white-space: pre;
+  font-family: courier;
+  font-size: 12px;
+  margin: 10px;
+  width: 500px;
+  border: solid;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 800px;
+}
+
+.ramOutput {
+  white-space: pre;
+  font-family: courier;
+  font-size: 12px;
+  margin: 10px;
+  width: 500px;
+  border: solid;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 800px;
+}

@@ -19,7 +19,13 @@ class MMU {
     }
 
     Read(addr) {
-        return this.ram[addr];
+        if (typeof this.ram[addr] != 'undefined') {
+            return this.ram[addr];
+        }
+        else {
+            return 0x0;
+        }
+    
     }
 }
 

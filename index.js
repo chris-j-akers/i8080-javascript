@@ -42,59 +42,80 @@ const misc_table = {
 
 const btnNext = document.getElementById('next');
 const btnMadness = document.getElementById('madness');
+const btnInit = document.getElementById('init');
 const dis = document.getElementById('disassemble');
+dis.textContent = ''
+const output = document.getElementById('output');
+output.textContent = '';
+const ramOutput = document.getElementById('ramOutput');
+ramOutput.textContent = '';
+
+const inpUpto = document.getElementById('inpUpto');
+const btnUpto = document.getElementById('upto');
 
 btnNext.addEventListener('click', () => {
-    dis.textContent += `\n${rom.ExecuteNextLine()}`;
+    dis.textContent += `\n${cabinet.ExecuteNextLine()}`;
     refreshControls();
 });
 
 btnMadness.addEventListener('click', () => {
-    for (let i=c.cpu.ProgramCounter; i<c.bus.mmu.ram.length; i++) {
-        if (c.cpu.halt == false) {
-            exec();
-        }
-        else {
-            return;
-        }
+    while (cabinet.Stopped == false) {
+        dis.textContent += `\n${cabinet.ExecuteNextLine(output)}`;
+        refreshControls();
     }
+    return;
 });
 
+btnInit.addEventListener('click',() => {
+    cabinet.Initialise(ramOutput);
+});
+
+btnUpto.addEventListener('click', () => {
+    const addr =parseInt(inpUpto.value);
+    console.log(addr.toString(16));
+    while (cabinet.Stopped == false && cabinet.computer.CPUProgramCounter != addr) {
+        dis.textContent += `\n${cabinet.ExecuteNextLine(output)}`;
+        refreshControls();
+    }
+
+})
+
 function refreshControls() {
-    register_table.A_DEC.textContent = `${c.cpu.registers['A'].toString().padStart(3,'0')}`
-    register_table.A_HEX.textContent = `0x${c.cpu.registers['A'].toString(16).padStart(2,'0)')}`;
+    register_table.A_DEC.textContent = `${cabinet.Computer.CPURegisters['A'].toString().padStart(3,'0')}`
+    register_table.A_HEX.textContent = `0x${cabinet.Computer.CPURegisters['A'].toString(16).padStart(2,'0)')}`;
 
-    register_table.B_DEC.textContent = `${c.cpu.registers['B'].toString().padStart(3,'0')}`
-    register_table.B_HEX.textContent = `0x${c.cpu.registers['B'].toString(16).padStart(2,'0)')}`;
+    register_table.B_DEC.textContent = `${cabinet.Computer.CPURegisters['B'].toString().padStart(3,'0')}`
+    register_table.B_HEX.textContent = `0x${cabinet.Computer.CPURegisters['B'].toString(16).padStart(2,'0)')}`;
 
-    register_table.C_DEC.textContent = `${c.cpu.registers['C'].toString().padStart(3,'0')}`
-    register_table.C_HEX.textContent = `0x${c.cpu.registers['C'].toString(16).padStart(2,'0)')}`;
+    register_table.C_DEC.textContent = `${cabinet.Computer.CPURegisters['C'].toString().padStart(3,'0')}`
+    register_table.C_HEX.textContent = `0x${cabinet.Computer.CPURegisters['C'].toString(16).padStart(2,'0)')}`;
 
-    register_table.D_DEC.textContent = `${c.cpu.registers['D'].toString().padStart(3,'0')}`
-    register_table.D_HEX.textContent = `0x${c.cpu.registers['D'].toString(16).padStart(2,'0)')}`;
+    register_table.D_DEC.textContent = `${cabinet.Computer.CPURegisters['D'].toString().padStart(3,'0')}`
+    register_table.D_HEX.textContent = `0x${cabinet.Computer.CPURegisters['D'].toString(16).padStart(2,'0)')}`;
 
-    register_table.E_DEC.textContent = `${c.cpu.registers['E'].toString().padStart(3,'0')}`
-    register_table.E_HEX.textContent = `0x${c.cpu.registers['E'].toString(16).padStart(2,'0)')}`;
+    register_table.E_DEC.textContent = `${cabinet.Computer.CPURegisters['E'].toString().padStart(3,'0')}`
+    register_table.E_HEX.textContent = `0x${cabinet.Computer.CPURegisters['E'].toString(16).padStart(2,'0)')}`;
 
-    register_table.H_DEC.textContent = `${c.cpu.registers['H'].toString().padStart(3,'0')}`
-    register_table.H_HEX.textContent = `0x${c.cpu.registers['H'].toString(16).padStart(2,'0)')}`;
+    register_table.H_DEC.textContent = `${cabinet.Computer.CPURegisters['H'].toString().padStart(3,'0')}`
+    register_table.H_HEX.textContent = `0x${cabinet.Computer.CPURegisters['H'].toString(16).padStart(2,'0)')}`;
 
-    register_table.L_DEC.textContent = `${c.cpu.registers['L'].toString().padStart(3,'0')}`
-    register_table.L_HEX.textContent = `0x${c.cpu.registers['L'].toString(16).padStart(2,'0)')}`;
+    register_table.L_DEC.textContent = `${cabinet.Computer.CPURegisters['L'].toString().padStart(3,'0')}`
+    register_table.L_HEX.textContent = `0x${cabinet.Computer.CPURegisters['L'].toString(16).padStart(2,'0)')}`;
 
-    flags_table.C.textContent = `${c.cpu._flag_manager.IsSet(c.cpu._flag_manager.FlagType.Carry) ? '1' : '0'}`;
-    flags_table.P.textContent = `${c.cpu._flag_manager.IsSet(c.cpu._flag_manager.FlagType.Parity) ? '1' : '0'}`;
-    flags_table.A.textContent = `${c.cpu._flag_manager.IsSet(c.cpu._flag_manager.FlagType.AuxillaryCarry) ? '1' : '0'}`;
-    flags_table.Z.textContent = `${c.cpu._flag_manager.IsSet(c.cpu._flag_manager.FlagType.Zero) ? '1' : '0'}`;
-    flags_table.S.textContent = `${c.cpu._flag_manager.IsSet(c.cpu._flag_manager.FlagType.Sign) ? '1' : '0'}`;
+    flags_table.C.textContent = `${cabinet.Computer.CPUFlagManager.IsSet(cabinet.Computer.CPUFlagManager.FlagType.Carry) ? '1' : '0'}`;
+    flags_table.P.textContent = `${cabinet.Computer.CPUFlagManager.IsSet(cabinet.Computer.CPUFlagManager.FlagType.Parity) ? '1' : '0'}`;
+    flags_table.A.textContent = `${cabinet.Computer.CPUFlagManager.IsSet(cabinet.Computer.CPUFlagManager.FlagType.AuxillaryCarry) ? '1' : '0'}`;
+    flags_table.Z.textContent = `${cabinet.Computer.CPUFlagManager.IsSet(cabinet.Computer.CPUFlagManager.FlagType.Zero) ? '1' : '0'}`;
+    flags_table.S.textContent = `${cabinet.Computer.CPUFlagManager.IsSet(cabinet.Computer.CPUFlagManager.FlagType.Sign) ? '1' : '0'}`;
 
-    misc_table.PC.textContent = `${c.cpu.ProgramCounter.toString(16)}`;
-    misc_table.SP.textContent = `${c.cpu.StackPointer.toString(16)}`;
-    misc_table.C.textContent = `${c.cpu.Clock.toString(16)}`;
-    misc_table.H.textContent = `${c.cpu.Halt ? '1' : '0'}`;
+    misc_table.PC.textContent = `${cabinet.Computer.CPUProgramCounter.toString(16)}`;
+    misc_table.SP.textContent = `${cabinet.Computer.CPUStackPointer.toString(16)}`;
+    misc_table.C.textContent = `${cabinet.Computer.CPUClock.toString(16)}`;
+    misc_table.H.textContent = `${cabinet.Computer.CPUHalt ? '1' : '0'}`;
 }
 
-const rom = new CpuDiag(0x100);
-rom.Initialise();
+
+const cabinet = new CpuDiag(0x100);
+
 
 

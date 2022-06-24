@@ -1,8 +1,32 @@
-import { ArcadeMachine } from "./arcademachine.js";
+'use strict'
+
+import { ArcadeMachine } from "./cabinet.js";
 
 class CpuDiag extends ArcadeMachine {
 
-    ExecuteNextLine() {
+    get Stopped() {
+        return this.computer.CPUHalt;
+    }
+
+    /**
+     * This emulates the C_WRITESTR CP/M syscall which simply writes text to screen.
+     * 
+     * @returns $ terminated string located at 16-bit addr stored in Registers D and E
+     */
+    _get_mem_string() {
+        let straddr = this.computer.CPURegisters['D'] << 8 | this.computer.CPURegisters['E'] & 0xFF;
+        console.log(`straddr: ${straddr}`);
+        let ret_str = ''
+        let next_char = String.fromCharCode(this.computer.Bus.ReadRAM(straddr));
+        while(next_char != '$') {
+            ret_str += next_char;
+            straddr++;
+            next_char = String.fromCharCode(this.computer.Bus.ReadRAM(straddr))
+        }
+        return ret_str;
+    }
+
+    ExecuteNextLine(output) {
         switch(this.computer.CPUProgramCounter) {
             case 5:
                 switch(this.computer.CPURegisters['C']) {
@@ -10,32 +34,33 @@ class CpuDiag extends ArcadeMachine {
                         this.computer.CPUHalt = true;
                         return;
                     case 9:
-                        const strAddr = this.computer.cpu._get_register_pair_word('D','E');
-                        let str = '';
-                        let nextChar = String.fromCharCode(this.computer.Bus.ReadRAM(strAddr));
-                        for (let i=strAddr; nextChar != '$'; i++) {
-                            str = str.concat(nextChar);
-                            nextChar = String.fromCharCode(this.computer.Bus.ReadRAM(i));
+                        const str = this._get_mem_string();
+                        console.log(`String is: ${str}`);
+                        if (typeof output != undefined) {
+                            output.textContent += str;
                         }
-                        console.log(str);
-                        c.cpu.RET();
-                        return;
+                        this.computer.CPURET();
+                        return '0005\tC_WRITESTR (CP/M SYSCALL)\n    \tRET';
                     case 2:
-                        console.log(String.fromCharCode(computer.CPURegisters['E']));
-                        c.cpu.RET();
-                        return;
+                        if (typeof output != undefined) {
+                            output.textContent += String.fromCharCode(this.computer.CPURegisters['E']);
+                        }
+                        this.computer.CPURET();
+                        return '0005\tC_WRITE (CP/M SYSCALL)\n    \tRET';
                     }
                 return;
             case 0:
-                console.log('WARM BOOT CALLED (0x00), HALTING');
+                if (output != undefined) {
+                    output.textContent += '\nWarm Boot Called. Halting program.';
+                }
                 this.computer.CPUHalt = true;
-                return;
+                return '   \tHALTED';
             default:
                 return this.computer.ExecuteNextInstruction();
         }
     }
 
-    code = [
+    _code = [
         0xc3,0xab,0x1,0x4d,0x49,0x43,0x52,0x4f,0x43,0x4f,0x53,
         0x4d,0x20,0x41,0x53,0x53,0x4f,0x43,0x49,0x41,0x54,0x45,
         0x53,0x20,0x38,0x30,0x38,0x30,0x2f,0x38,0x30,0x38,0x35,

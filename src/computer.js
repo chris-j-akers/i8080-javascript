@@ -95,9 +95,17 @@ class Computer {
         return this.cpu.FlagManager;
     }
 
+    get CPUStackPointer() {
+        return this.cpu.StackPointer;
+    }
+
+    get CPUClock() {
+        return this.cpu.Clock;
+    }
+
     /**
      * Call the CPU's RET function (POP address off the stack, then set program
-     * counter to that address). This is used when emulatoring syscalls and to
+     * counter to that address). This is used when emulating syscalls and to
      * make sure we can return to the correct place in the code once the syscall
      * has completed.
      */

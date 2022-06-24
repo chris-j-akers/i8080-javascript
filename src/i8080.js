@@ -770,13 +770,13 @@ class i8080 {
         // instruction whose operation is affected by the Auxiliary Carry bit.
 
         if ((this.registers['A'] & 0x0F) > 9 || this._flag_manager.IsSet(this._flag_manager.FlagType.AuxillaryCarry)) {
-            const val = this.registers['A'] += 0x06;
-            this._set_flags_on_arithmetic_op(val, this.registers['A'], 0x06);
+            const val = this.registers['A'] + 0x06;
+            this._flag_manager.CheckAndSet.AuxillaryCarry(this.registers['A'], 0x06);
             this.registers['A'] = val & 0xFF;
         }
 
         if ((this.registers['A'] & 0xF0) > 0x90 || this._flag_manager.IsSet(this._flag_manager.FlagType.Carry)) {
-            const val = this.registers['A'] += 0x60;
+            const val = this.registers['A'] + 0x60;
 
             // According to the documentation, we do not clear the Carry if the test
             // is false, here. We leave it, so calling set_flag() directly instead of
@@ -863,6 +863,7 @@ class i8080 {
      */
     _set_flags_on_logical_op(raw_result) {
         this._flag_manager.ClearFlag(this._flag_manager.FlagType.Carry);
+        this._flag_manager.ClearFlag(this._flag_manager.FlagType.AuxillaryCarry);
         this._flag_manager.CheckAndSet.Zero(raw_result & 0xFF);
         this._flag_manager.CheckAndSet.Sign(raw_result);
         this._flag_manager.CheckAndSet.Parity(raw_result);
