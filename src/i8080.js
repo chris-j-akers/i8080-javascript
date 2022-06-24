@@ -53,8 +53,8 @@ class i8080 {
      */
     _dbgGetFlags() {
         let str = 'F  [';
-        for (let flag in this._flag_manager.FlagType) {
-            str += `${flag}: ${(this._flags & (1 << this._flag_manager.FlagType[flag])) ? '1' : '0'}, `
+        for (let flag in this._flagManager.FlagType) {
+            str += `${flag}: ${(this._flags & (1 << this._flagManager.FlagType[flag])) ? '1' : '0'}, `
         }
         return str.slice(0,-2) + ']';
     }
@@ -203,7 +203,7 @@ class i8080 {
      * Get read-only access to CPU's internal Flag Manager
      */
     get FlagManager() {
-        return this._flag_manager;
+        return this._flagManager;
     }
 
     /**
@@ -218,7 +218,7 @@ class i8080 {
      * @param {character} The register which stores the low-byte of the address
      * @returns A 16-bit memory address.
      */
-    _get_register_pair_word(reg_highbyte, reg_lowbyte) {
+    _getRegisterPairWord(reg_highbyte, reg_lowbyte) {
         return ((this._registers[reg_highbyte] << 8) | this._registers[reg_lowbyte]) & 0xFFFF;
     }
 
@@ -235,7 +235,7 @@ class i8080 {
      * @param {character} reg_lowbyte  The register which will store the
      * low-byte of the address
      */
-    _store_word_in_register_pair(addr, reg_highbyte, reg_lowbyte) {
+    _storeWordInRegisterPair(addr, reg_highbyte, reg_lowbyte) {
         this.MVI_R(reg_highbyte,(addr >> 8) & 0xff);
         this.MVI_R(reg_lowbyte,addr & 0xff);
     }
@@ -258,7 +258,7 @@ class i8080 {
     /**
      * Object used to set, check and clear bits in the CPU flags register.
      */
-    _flag_manager = {
+    _flagManager = {
         /** 
          * Get bit-pos of flag by FlagName
          * 
@@ -321,13 +321,13 @@ class i8080 {
                  * 1-byte (8-bits), so 255. Any higher result than that must mean a
                  * Carry out of the 7th bit occured.
                  */
-                result > 255 || result < 0 ? this._flag_manager.SetFlag(this._flag_manager.FlagType.Carry) : this._flag_manager.ClearFlag(this._flag_manager.FlagType.Carry);
+                result > 255 || result < 0 ? this._flagManager.SetFlag(this._flagManager.FlagType.Carry) : this._flagManager.ClearFlag(this._flagManager.FlagType.Carry);
             },
             Parity: (result) => {
                 /*
                  * Parity Flag: Set if the number of 1's is even.
                  */
-                this._parity(result) ? this._flag_manager.SetFlag(this._flag_manager.FlagType.Parity) : this._flag_manager.ClearFlag(this._flag_manager.FlagType.Parity);
+                this._parity(result) ? this._flagManager.SetFlag(this._flagManager.FlagType.Parity) : this._flagManager.ClearFlag(this._flagManager.FlagType.Parity);
             },
             AuxillaryCarry: (lhs, rhs) => {
                 /*
@@ -362,13 +362,13 @@ class i8080 {
                 * this case.
                 *
                 */
-                ((lhs & 0x0f) + (rhs & 0x0f)) & (1 << 4) ? this._flag_manager.SetFlag(this._flag_manager.FlagType.AuxillaryCarry) : this._flag_manager.ClearFlag(this._flag_manager.FlagType.AuxillaryCarry);
+                ((lhs & 0x0f) + (rhs & 0x0f)) & (1 << 4) ? this._flagManager.SetFlag(this._flagManager.FlagType.AuxillaryCarry) : this._flagManager.ClearFlag(this._flagManager.FlagType.AuxillaryCarry);
             },
             Zero: (result) => {
                 /*
                  * Zero Flag: Set if the operation result is 0
                  */
-                 (result & 0xFF) === 0 ? this._flag_manager.SetFlag(this._flag_manager.FlagType.Zero) : this._flag_manager.ClearFlag(this._flag_manager.FlagType.Zero);
+                 (result & 0xFF) === 0 ? this._flagManager.SetFlag(this._flagManager.FlagType.Zero) : this._flagManager.ClearFlag(this._flagManager.FlagType.Zero);
             },
             Sign: (result) => {
                 /*
@@ -378,7 +378,7 @@ class i8080 {
                  * result of some operation and sets the sign flag accordingly. It
                  * doesn't care what the number actually is.
                  */
-                 result & (1 << 7) ? this._flag_manager.SetFlag(this._flag_manager.FlagType.Sign) : this._flag_manager.ClearFlag(this._flag_manager.FlagType.Sign)
+                 result & (1 << 7) ? this._flagManager.SetFlag(this._flagManager.FlagType.Sign) : this._flagManager.ClearFlag(this._flagManager.FlagType.Sign)
             }
         }
     }
@@ -400,15 +400,15 @@ class i8080 {
      *
      * @param {number} lhs Left-hand side of expression used in operation
      * @param {number} rhs Right-hand side of expression used in operation
-     * @param {number} raw_result Result of operation (before being &'d to
+     * @param {number} rawResult Result of operation (before being &'d to
      * 8-bit)
      */
-     _set_flags_on_arithmetic_op(lhs, rhs, raw_result) {
-        this._flag_manager.CheckAndSet.Carry(raw_result);
-        this._flag_manager.CheckAndSet.Parity(raw_result);
-        this._flag_manager.CheckAndSet.AuxillaryCarry(lhs, rhs);
-        this._flag_manager.CheckAndSet.Sign(raw_result);
-        this._flag_manager.CheckAndSet.Zero(raw_result & 0xFF);
+     _setFlagsOnArithmeticOp(lhs, rhs, rawResult) {
+        this._flagManager.CheckAndSet.Carry(rawResult);
+        this._flagManager.CheckAndSet.Parity(rawResult);
+        this._flagManager.CheckAndSet.AuxillaryCarry(lhs, rhs);
+        this._flagManager.CheckAndSet.Sign(rawResult);
+        this._flagManager.CheckAndSet.Zero(rawResult & 0xFF);
     }
 
     // ADD ARITHMETIC OPERATIONS
@@ -427,7 +427,7 @@ class i8080 {
      */
     _add(lhs, rhs, carry = 0) {
         const raw_result = lhs + (rhs + carry);
-        this._set_flags_on_arithmetic_op(lhs, rhs + carry, raw_result);
+        this._setFlagsOnArithmeticOp(lhs, rhs + carry, raw_result);
         return raw_result & 0xFF;
     }
 
@@ -447,7 +447,7 @@ class i8080 {
      * `L` to the Accumulator.
      */
     ADD_M() {
-        this._registers['A'] = this._add(this._registers['A'], this.bus.ReadRAM(this._get_register_pair_word('H','L')));
+        this._registers['A'] = this._add(this._registers['A'], this.bus.ReadRAM(this._getRegisterPairWord('H','L')));
         this._clock += 7;
     }
 
@@ -459,7 +459,7 @@ class i8080 {
      * to be added.
      */
     ADC_R(register) {
-        this._registers['A'] = this._add(this._registers['A'], this._registers[register], this._flag_manager.IsSet(this._flag_manager.FlagType.Carry) ? 1 : 0 );
+        this._registers['A'] = this._add(this._registers['A'], this._registers[register], this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0 );
         this._clock += 4;
     }
 
@@ -468,7 +468,7 @@ class i8080 {
      * `L` to the Accumulator, including the Carry bit, if set.
      */
     ADC_M() {
-        this._registers['A'] = this._add(this._registers['A'], this.bus.ReadRAM(this._get_register_pair_word('H','L')), this._flag_manager.IsSet(this._flag_manager.FlagType.Carry) ? 1 : 0);
+        this._registers['A'] = this._add(this._registers['A'], this.bus.ReadRAM(this._getRegisterPairWord('H','L')), this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
         this._clock += 7;
     }
 
@@ -489,7 +489,7 @@ class i8080 {
      * @param {number} val The immediate value to add.
      */
     ACI(val) {
-        this._registers['A'] = this._add(this._registers['A'], val, this._flag_manager.IsSet(this._flag_manager.FlagType.Carry) ? 1 : 0);
+        this._registers['A'] = this._add(this._registers['A'], val, this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
         this._clock += 7;
     }
 
@@ -545,7 +545,7 @@ class i8080 {
      *
      */
     SUB_M() {      
-        this._registers['A'] = this._sub(this._registers['A'], this.bus.ReadRAM(this._get_register_pair_word('H','L')));
+        this._registers['A'] = this._sub(this._registers['A'], this.bus.ReadRAM(this._getRegisterPairWord('H','L')));
         this._clock += 7;
     }
 
@@ -557,7 +557,7 @@ class i8080 {
      * subtract.
      */
     SBB_R(register) {               
-        this._registers['A'] = this._sub(this._registers['A'], this._registers[register], this._flag_manager.IsSet(this._flag_manager.FlagType.Carry) ? 1 : 0);
+        this._registers['A'] = this._sub(this._registers['A'], this._registers[register], this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
         this._clock += 4;
     }
 
@@ -567,7 +567,7 @@ class i8080 {
      * Accumulator.
      */
     SBB_M() {
-        this._registers['A'] = this._sub(this._registers['A'], this.bus.ReadRAM(this._get_register_pair_word('H','L')), this._flag_manager.IsSet(this._flag_manager.FlagType.Carry) ? 1 : 0);
+        this._registers['A'] = this._sub(this._registers['A'], this.bus.ReadRAM(this._getRegisterPairWord('H','L')), this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
         this._clock += 7;
     }
 
@@ -587,7 +587,7 @@ class i8080 {
      * @param {number} val Immediate value to subtract
      */
     SBI(val) {
-        this._registers['A'] = this._sub(this._registers['A'], val, this._flag_manager.IsSet(this._flag_manager.FlagType.Carry) ? 1 : 0);
+        this._registers['A'] = this._sub(this._registers['A'], val, this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
         this._clock += 7;
     }
 
@@ -614,7 +614,7 @@ class i8080 {
      * record the result.
      */
     CMP_M() {
-        const result = this._sub(this._registers['A'], this.bus.ReadRAM(this._get_register_pair_word('H','L')));
+        const result = this._sub(this._registers['A'], this.bus.ReadRAM(this._getRegisterPairWord('H','L')));
         this._clock += 7;
     }
 
@@ -639,7 +639,7 @@ class i8080 {
      *
      * @param {number} val Value to push
      */
-    _push_byte_to_stack(val) {
+    _pushByteToStack(val) {
         this.bus.WriteRAM(val, --this._stackPointer);
     }
 
@@ -647,7 +647,7 @@ class i8080 {
      * @returns byte from the top of the stack and increases the stack-pointer
      * by 1
      */
-    _pop_byte_from_stack() {
+    _popByteFromStack() {
         return this.bus.ReadRAM(this._stackPointer++);
     }
 
@@ -657,9 +657,9 @@ class i8080 {
      *
      * @param {val} val 16-bit value to be pushed
      */
-    _push_word_to_stack(val) {
-        this._push_byte_to_stack(val >> 8 & 0xFF);
-        this._push_byte_to_stack(val & 0xFF);
+    _pushWordToStack(val) {
+        this._pushByteToStack(val >> 8 & 0xFF);
+        this._pushByteToStack(val & 0xFF);
     }
 
     /**
@@ -667,24 +667,24 @@ class i8080 {
      * @returns 16-bit word from the top of the stack and increases the stack
      * pointer by 2.
      */
-    _pop_word_from_stack() {
-        const word_low_byte = this._pop_byte_from_stack();
-        const word_high_byte = this._pop_byte_from_stack();
-        return (word_high_byte << 8 | word_low_byte) & 0xFFFF
+    _popWordFromStack() {
+        const wordLowByte = this._popByteFromStack();
+        const wordHighByte = this._popByteFromStack();
+        return (wordHighByte << 8 | wordLowByte) & 0xFFFF
     }
 
     /**
     * Push a 16-bit value onto the stack from one of the register pairs (BC, DE,
     * HL).
     *
-    * @param {char} high_byte_register Register that contains high-byte of
+    * @param {char} highByteRegister Register that contains high-byte of
     * 16-bit value
-    * @param {char} low_byte_register Register that contains low-byte of 16-bit
+    * @param {char} lowByteRegister Register that contains low-byte of 16-bit
     * value
     */
-    PUSH_R(high_byte_register, low_byte_register) {
-        this._push_byte_to_stack(this._registers[high_byte_register]);
-        this._push_byte_to_stack(this._registers[low_byte_register]);
+    PUSH_R(highByteRegister, lowByteRegister) {
+        this._pushByteToStack(this._registers[highByteRegister]);
+        this._pushByteToStack(this._registers[lowByteRegister]);
         this._clock += 11;
     }
 
@@ -693,8 +693,8 @@ class i8080 {
      * flags register to the top of the stack.
      */
     PUSH_PSW() {
-        this._push_byte_to_stack(this._registers['A']);
-        this._push_byte_to_stack(this._flags);
+        this._pushByteToStack(this._registers['A']);
+        this._pushByteToStack(this._flags);
         this._clock += 11;
     }
     
@@ -704,14 +704,14 @@ class i8080 {
      * first item popped is loaded into the low-byte-register and second item
      * the high-byte-register.
      *
-     * @param {char} high_byte_register Register to store the second byte popped
+     * @param {char} highByteRegister Register to store the second byte popped
      * from the stack
-     * @param {char} low_byte_register Register to store the first byte popped
+     * @param {char} lowByteRegister Register to store the first byte popped
      * from the stack
      */
-    POP_R(high_byte_register, low_byte_register) {
-        this._registers[low_byte_register] = this.bus.ReadRAM(this._stackPointer++);
-        this._registers[high_byte_register] = this.bus.ReadRAM(this._stackPointer++);
+    POP_R(highByteRegister, lowByteRegister) {
+        this._registers[lowByteRegister] = this.bus.ReadRAM(this._stackPointer++);
+        this._registers[highByteRegister] = this.bus.ReadRAM(this._stackPointer++);
         this._clock += 10;
     }
     
@@ -732,13 +732,13 @@ class i8080 {
      * The first-byte is loaded into the first register of the specified pair, while
      * the second byte is loaded into the second register of the specified pair.
      *
-     * @param {char} high_byte_register Name of the first register in the pair (B, D, H)
-     * @param {char} low_byte_register Name of the second register in the pair (C, E, L)
+     * @param {char} highByteRegister Name of the first register in the pair (B, D, H)
+     * @param {char} lowByteRegister Name of the second register in the pair (C, E, L)
      * @param {number} val 16-bit immediate value to be stored
      */
-    LXI_R(high_byte_register, low_byte_register, val) {
-        this._registers[high_byte_register] = (val >> 8) & 0xFF;
-        this._registers[low_byte_register] = val & 0xFF;
+    LXI_R(highByteRegister, lowByteRegister, val) {
+        this._registers[highByteRegister] = (val >> 8) & 0xFF;
+        this._registers[lowByteRegister] = val & 0xFF;
         this._clock += 10;
     }
     
@@ -778,15 +778,15 @@ class i8080 {
      * 
      */
     DAA() {
-        if ((this._registers['A'] & 0x0F) > 9 || this._flag_manager.IsSet(this._flag_manager.FlagType.AuxillaryCarry)) {
+        if ((this._registers['A'] & 0x0F) > 9 || this._flagManager.IsSet(this._flagManager.FlagType.AuxillaryCarry)) {
             const val = this._registers['A'] + 0x06;
-            this._flag_manager.CheckAndSet.AuxillaryCarry(this._registers['A'], 0x06);
+            this._flagManager.CheckAndSet.AuxillaryCarry(this._registers['A'], 0x06);
             this._registers['A'] = val & 0xFF;
         }
 
-        if ((this._registers['A'] & 0xF0) > 0x90 || this._flag_manager.IsSet(this._flag_manager.FlagType.Carry)) {
+        if ((this._registers['A'] & 0xF0) > 0x90 || this._flagManager.IsSet(this._flagManager.FlagType.Carry)) {
             const val = this._registers['A'] + 0x60;
-            if (val > 255 || val < 0) this._flag_manager.SetFlag(this._flag_manager.FlagType.Carry);
+            if (val > 255 || val < 0) this._flagManager.SetFlag(this._flagManager.FlagType.Carry);
             this._registers['A'] = val & 0xFF;
         }
         this._clock += 4;
@@ -796,12 +796,12 @@ class i8080 {
     /**
      * Move value from one register to another.
      *
-     * @param {char} reg_destination The name of the destination register
+     * @param {char} regDestination The name of the destination register
      * (A,B,C,D,E,H,L)
-     * @param {*} reg_source The name of the source register (A,B,C,D,E,H,L)
+     * @param {*} regSource The name of the source register (A,B,C,D,E,H,L)
      */
-    MOV_R(reg_destination, reg_source) {
-        this._registers[reg_destination] = this._registers[reg_source];
+    MOV_R(regDestination, regSource) {
+        this._registers[regDestination] = this._registers[regSource];
         this._clock += 5
     }
 
@@ -809,10 +809,10 @@ class i8080 {
      * Move value from register to location in memory. The 16-bit address of the
      * destination should be loaded into the H and L registers.
      *
-     * @param {char} reg_source The name of the source register (A,B,C,D,E,H,L)
+     * @param {char} regSource The name of the source register (A,B,C,D,E,H,L)
      */
-    MOV_TO_MEM(reg_source) {
-        this.bus.WriteRAM(this._registers[reg_source], this._get_register_pair_word('H', 'L'));
+    MOV_TO_MEM(regSource) {
+        this.bus.WriteRAM(this._registers[regSource], this._getRegisterPairWord('H', 'L'));
         this._clock += 7
     }
 
@@ -820,23 +820,23 @@ class i8080 {
      * Move value from memory location to register. The 16-bit address of the
      * memory location should be loaded into the H and L registers.
      *
-     * @param {char} reg_destination The name of the destination register
+     * @param {char} regDestination The name of the destination register
      * (A,B,C,D,E,H,L)
      */
-    MOV_FROM_MEM(reg_destination) {
-        this._registers[reg_destination] = this.bus.ReadRAM(this._get_register_pair_word('H', 'L'));
+    MOV_FROM_MEM(regDestination) {
+        this._registers[regDestination] = this.bus.ReadRAM(this._getRegisterPairWord('H', 'L'));
         this._clock += 7
     }
 
     /**
      * Move an immediate 8-bit value into a register.
      *
-     * @param {char} reg_destination Name of the destination register
+     * @param {char} regDestination Name of the destination register
      * (A,B,C,D,E,H,L)
      * @param {*} val The 8-bit immediate value to store
      */
-    MVI_R(reg_destination, val) {
-        this._registers[reg_destination] = (val & 0xFF);
+    MVI_R(regDestination, val) {
+        this._registers[regDestination] = (val & 0xFF);
         this._clock += 7
     }
 
@@ -847,7 +847,7 @@ class i8080 {
      * @param {number} val The 8-bit immediate value to store
      */
     MVI_TO_MEM(val) {
-        const addr = this._get_register_pair_word('H', 'L');
+        const addr = this._getRegisterPairWord('H', 'L');
         this.bus.WriteRAM(val, addr);
         this._clock += 10;
     }
@@ -860,12 +860,12 @@ class i8080 {
      *
      * @param {number} raw_result Result of the operation
      */
-    _set_flags_on_logical_op(raw_result) {
-        this._flag_manager.ClearFlag(this._flag_manager.FlagType.Carry);
-        this._flag_manager.ClearFlag(this._flag_manager.FlagType.AuxillaryCarry);
-        this._flag_manager.CheckAndSet.Zero(raw_result & 0xFF);
-        this._flag_manager.CheckAndSet.Sign(raw_result);
-        this._flag_manager.CheckAndSet.Parity(raw_result);
+    _setFlagsOnLogicalOp(raw_result) {
+        this._flagManager.ClearFlag(this._flagManager.FlagType.Carry);
+        this._flagManager.ClearFlag(this._flagManager.FlagType.AuxillaryCarry);
+        this._flagManager.CheckAndSet.Zero(raw_result & 0xFF);
+        this._flagManager.CheckAndSet.Sign(raw_result);
+        this._flagManager.CheckAndSet.Parity(raw_result);
     }
        
     /**
@@ -876,7 +876,7 @@ class i8080 {
      */
     ANA_R(register) {
         const raw_result = this._registers['A'] & this._registers[register];
-        this._set_flags_on_logical_op(raw_result);
+        this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
         this._clock += 4;
     }
@@ -888,8 +888,8 @@ class i8080 {
     * The 16-bit address of the memory location is loaded from register-pair HL.
     */
     ANA_M() {
-        const raw_result = this._registers['A'] & this.bus.ReadRAM(this._get_register_pair_word('H','L'));
-        this._set_flags_on_logical_op(raw_result);
+        const raw_result = this._registers['A'] & this.bus.ReadRAM(this._getRegisterPairWord('H','L'));
+        this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
         this._clock += 7;
     }
@@ -902,7 +902,7 @@ class i8080 {
      */
     ANI(val) {
         const raw_result = this._registers['A'] & val;
-        this._set_flags_on_logical_op(raw_result);
+        this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
         this._clock += 4;
     }
@@ -915,7 +915,7 @@ class i8080 {
      */
     XRA_R(reg) {
         const raw_result = this._registers['A'] ^ this._registers[reg];
-        this._set_flags_on_logical_op(raw_result);
+        this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
         this._clock += 4;
     }
@@ -928,8 +928,8 @@ class i8080 {
     * HL.
     */
     XRA_M() {
-        const raw_result = this._registers['A'] ^ this.bus.ReadRAM(this._get_register_pair_word('H', 'L'));
-        this._set_flags_on_logical_op(raw_result);
+        const raw_result = this._registers['A'] ^ this.bus.ReadRAM(this._getRegisterPairWord('H', 'L'));
+        this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
         this._clock += 7;
     }
@@ -942,7 +942,7 @@ class i8080 {
      */
     XRI(val) {
         const raw_result = this._registers['A'] ^ val;
-        this._set_flags_on_logical_op(raw_result);
+        this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
         this._clock += 4;
     }
@@ -955,7 +955,7 @@ class i8080 {
      */
     ORA_R(register) {
         const raw_result = this._registers['A'] | this._registers[register];
-        this._set_flags_on_logical_op(raw_result);
+        this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
         this._clock += 4;
     }
@@ -968,8 +968,8 @@ class i8080 {
      * HL.
      */
     ORA_M() {
-        const raw_result = this._registers['A'] | this.bus.ReadRAM(this._get_register_pair_word('H','L'));
-        this._set_flags_on_logical_op(raw_result);
+        const raw_result = this._registers['A'] | this.bus.ReadRAM(this._getRegisterPairWord('H','L'));
+        this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
         this._clock += 7;
     }
@@ -982,7 +982,7 @@ class i8080 {
      */
     ORI(val) {
         const raw_result = this._registers['A'] | val;
-        this._set_flags_on_logical_op(raw_result);
+        this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
         this._clock += 4;
     }
@@ -995,7 +995,7 @@ class i8080 {
      * `C`, `D` = `D` & `E`. 
      */
     STAX(high_byte_register, low_byte_register) {
-        const addr = this._get_register_pair_word(high_byte_register, low_byte_register);
+        const addr = this._getRegisterPairWord(high_byte_register, low_byte_register);
         this.bus.WriteRAM(this._registers['A'], addr);
         this._clock += 7;
     }
@@ -1055,25 +1055,25 @@ class i8080 {
      *
      * @param {number} lhs Result of the left-hand side of the operation
      * @param {number} rhs Result of the right-hand side of the operatiom
-     * @param {number} raw_result Result of the operation
+     * @param {number} rawResult Result of the operation
      */
-    _set_flags_on_inc_dec_op(lhs, rhs, raw_result) {
-        this._flag_manager.CheckAndSet.AuxillaryCarry(lhs, rhs);
-        this._flag_manager.CheckAndSet.Parity(raw_result);
-        this._flag_manager.CheckAndSet.Sign(raw_result);
-        this._flag_manager.CheckAndSet.Zero(raw_result);
+    _setFlagsOnIncDecOp(lhs, rhs, rawResult) {
+        this._flagManager.CheckAndSet.AuxillaryCarry(lhs, rhs);
+        this._flagManager.CheckAndSet.Parity(rawResult);
+        this._flagManager.CheckAndSet.Sign(rawResult);
+        this._flagManager.CheckAndSet.Zero(rawResult);
     }
     
     /**
      * The 16-bit number stored in the specified register pair (BC, DE, HL) is
      * incremented by 1.
      * .
-     * @param {char} high_byte_register First register of the pair (B, D, H)
+     * @param {char} highByteRegister First register of the pair (B, D, H)
      */
-    INX_R(high_byte_register, low_byte_register) {
-        const word = ((this._registers[high_byte_register] << 8) | this._registers[low_byte_register]) + 1;
-        this._registers[high_byte_register] = (word >> 8) & 0xFF;
-        this._registers[low_byte_register] = word & 0xFF;        
+    INX_R(highByteRegister, lowByteRegister) {
+        const word = ((this._registers[highByteRegister] << 8) | this._registers[lowByteRegister]) + 1;
+        this._registers[highByteRegister] = (word >> 8) & 0xFF;
+        this._registers[lowByteRegister] = word & 0xFF;        
         this._clock += 5;
     }
     
@@ -1089,13 +1089,13 @@ class i8080 {
      * The 16-bit number stored in the specified register pair (BC, DE, HL) is
      * decremented by 1 (uses two's complement addition).
      * 
-     * @param {char} high_byte_register First register of the pair (B, D, H)
-     * @param {char} low_byte_register Second register of the pair (C, E, L)
+     * @param {char} highByteRegister First register of the pair (B, D, H)
+     * @param {char} lowByteRegister Second register of the pair (C, E, L)
      */
-    DCX_R(high_byte_register, low_byte_register) {
-        const word = ((this._registers[high_byte_register] << 8) | this._registers[low_byte_register]) + 0xFFFF;
-        this._registers[high_byte_register] = (word >> 8) & 0xFF;
-        this._registers[low_byte_register] = word & 0xFF;        
+    DCX_R(highByteRegister, lowByteRegister) {
+        const word = ((this._registers[highByteRegister] << 8) | this._registers[lowByteRegister]) + 0xFFFF;
+        this._registers[highByteRegister] = (word >> 8) & 0xFF;
+        this._registers[lowByteRegister] = word & 0xFF;        
         this._clock += 5;
     }
 
@@ -1116,9 +1116,9 @@ class i8080 {
      */
     INR_R(reg) {
         const lhs = this._registers[reg];
-        const raw_result = lhs + 1;
-        this._set_flags_on_inc_dec_op(lhs, 1, raw_result);
-        this._registers[reg] = raw_result & 0xFF;
+        const rawResult = lhs + 1;
+        this._setFlagsOnIncDecOp(lhs, 1, rawResult);
+        this._registers[reg] = rawResult & 0xFF;
         this._clock += 5;
     }
 
@@ -1129,11 +1129,11 @@ class i8080 {
      * Flags affected: P, Z, AC, S.
      */
     INR_M() {
-        const addr = this._get_register_pair_word('H','L');
+        const addr = this._getRegisterPairWord('H','L');
         const lhs = this.bus.ReadRAM(addr);
-        const raw_result = lhs + 1;
-        this._set_flags_on_inc_dec_op(lhs, 1, raw_result);
-        this.bus.WriteRAM(raw_result & 0xFF, addr);
+        const rawResult = lhs + 1;
+        this._setFlagsOnIncDecOp(lhs, 1, rawResult);
+        this.bus.WriteRAM(rawResult & 0xFF, addr);
         this._clock += 10;
     }
 
@@ -1147,9 +1147,9 @@ class i8080 {
     DCR_R(reg) {
         const lhs = this._registers[reg];
         // 0xFF is the 8-bit two's complement of 1.
-        const raw_result = lhs + 0xFF;
-        this._set_flags_on_inc_dec_op(lhs, 0xFF, raw_result);
-        this._registers[reg] = raw_result & 0xFF;
+        const rawResult = lhs + 0xFF;
+        this._setFlagsOnIncDecOp(lhs, 0xFF, rawResult);
+        this._registers[reg] = rawResult & 0xFF;
         this._clock += 5;
 
     }
@@ -1161,12 +1161,12 @@ class i8080 {
      * Flags affected: P, Z, AC, S.
      */
     DCR_M() {
-        const addr = this._get_register_pair_word('H','L');
+        const addr = this._getRegisterPairWord('H','L');
         const lhs = this.bus.ReadRAM(addr);
         // 0xFF is the 8-bit two's complement of 1.
-        const raw_result = lhs + 0xFF;
-        this._set_flags_on_inc_dec_op(lhs, 0xFF, raw_result);
-        this.bus.WriteRAM(raw_result & 0xFF, addr);
+        const rawResult = lhs + 0xFF;
+        this._setFlagsOnIncDecOp(lhs, 0xFF, rawResult);
+        this.bus.WriteRAM(rawResult & 0xFF, addr);
         this._clock += 10;
     }
 
@@ -1180,7 +1180,7 @@ class i8080 {
      * Accumulator.
      */
     RLC() {
-        this._flag_manager.ClearFlag(this._flag_manager.FlagType.Carry);
+        this._flagManager.ClearFlag(this._flagManager.FlagType.Carry);
         this._flags |= (this._registers['A'] >> 7) & 0x01;
         this._registers['A'] <<= 1;
         this._registers['A'] |= (this._flags & 0x01);
@@ -1196,7 +1196,7 @@ class i8080 {
      * accumulator.
      */
     RRC() {
-        this._flag_manager.ClearFlag(this._flag_manager.FlagType.Carry);
+        this._flagManager.ClearFlag(this._flagManager.FlagType.Carry);
         this._flags |= this._registers['A'] & 0x01;
         this._registers['A'] >>= 1;
         this._registers['A'] |= (this._flags << 7) & 0x80;
@@ -1211,8 +1211,8 @@ class i8080 {
      * as the LSB and replaced with the MSB.
      */
     RAL() {
-        const carry_bit = this._flag_manager.IsSet(this._flag_manager.FlagType.Carry) ? 1 : 0;
-        this._registers['A'] & 0x80 ? this._flag_manager.SetFlag(i8080.Carry) : this._flag_manager.ClearFlag(i8080.Carry);
+        const carry_bit = this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0;
+        this._registers['A'] & 0x80 ? this._flagManager.SetFlag(i8080.Carry) : this._flagManager.ClearFlag(i8080.Carry);
         this._registers['A'] <<= 1;
         this._registers['A'] |= carry_bit & 0x01;
         this._registers['A'] &= 0xFF;
@@ -1220,8 +1220,8 @@ class i8080 {
     }
 
     RAR() {
-        const carry_bit = this._flag_manager.IsSet(this._flag_manager.FlagType.Carry) ? 1 : 0;
-        this._registers['A'] & 0x01 ? this._flag_manager.SetFlag(i8080.Carry) : this._flag_manager.ClearFlag(i8080.Carry);
+        const carry_bit = this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0;
+        this._registers['A'] & 0x01 ? this._flagManager.SetFlag(i8080.Carry) : this._flagManager.ClearFlag(i8080.Carry);
         this._registers['A'] >>= 1;
         this._registers['A'] |= (carry_bit << 7) & 0x80;
         this._registers['A'] &= 0xFF;
@@ -1234,7 +1234,7 @@ class i8080 {
      * The Carry flag is set to 1.
      */
     STC() {
-        this._flag_manager.SetFlag(this._flag_manager.FlagType.Carry);
+        this._flagManager.SetFlag(this._flagManager.FlagType.Carry);
         this._clock += 4;
     }
 
@@ -1242,7 +1242,7 @@ class i8080 {
      * Toggle Carry bit: If 1, set to 0 and if 0, set to 1.
      */
     CMC() {
-        this._flag_manager.IsSet(i8080.Carry) ? this._flag_manager.ClearFlag(i8080.Carry) : this._flag_manager.SetFlag(i8080.Carry);
+        this._flagManager.IsSet(i8080.Carry) ? this._flagManager.ClearFlag(i8080.Carry) : this._flagManager.SetFlag(i8080.Carry);
         this._clock += 4;
     }
 
@@ -1257,9 +1257,9 @@ class i8080 {
         this._clock += 4;
     }
 
-    DAD(high_byte_register, low_byte_register) {
-        let result = ((this._registers['H'] << 8 | this._registers['L']) & 0xFFFF) + ((this._registers[high_byte_register] << 8 | this._registers[low_byte_register]) & 0xFFFF);
-        (result > 0xFFFF | result < 0) ? this._flag_manager.SetFlag(this._flag_manager.FlagType.Carry) : this._flag_manager.ClearFlag(this._flag_manager.FlagType.Carry);
+    DAD(highByteRegister, lowByteRegister) {
+        let result = ((this._registers['H'] << 8 | this._registers['L']) & 0xFFFF) + ((this._registers[highByteRegister] << 8 | this._registers[lowByteRegister]) & 0xFFFF);
+        (result > 0xFFFF | result < 0) ? this._flagManager.SetFlag(this._flagManager.FlagType.Carry) : this._flagManager.ClearFlag(this._flagManager.FlagType.Carry);
         result &= 0xFFFF;
         this._registers['H'] = (result >> 8) & 0xFF;
         this._registers['L'] = result & 0xFF;
@@ -1268,22 +1268,22 @@ class i8080 {
     
     DAD_SP() {
         let result = (this._registers['H'] << 8 | this._registers['L']) + this._stackPointer;
-        (result > 0xFFFF | result < 0) ? this._flag_manager.SetFlag(this._flag_manager.FlagType.Carry) : this._flag_manager.ClearFlag(this._flag_manager.FlagType.Carry);
+        (result > 0xFFFF | result < 0) ? this._flagManager.SetFlag(this._flagManager.FlagType.Carry) : this._flagManager.ClearFlag(this._flagManager.FlagType.Carry);
         result &= 0xFFFF;
         this._registers['H'] = (result >> 8) & 0xFF;
         this._registers['L'] = result & 0xFF;
         this._clock += 10
     }
 
-    LDAX(high_byte_register, low_byte_register) {
-        this._registers['A'] = this.bus.ReadRAM(this._registers[high_byte_register] << 8 | this._registers[low_byte_register] & 0xFF);
+    LDAX(highByteRegister, lowByteRegister) {
+        this._registers['A'] = this.bus.ReadRAM(this._registers[highByteRegister] << 8 | this._registers[lowByteRegister] & 0xFF);
         this._clock += 7;
     }
 
     // RESTART INSTRUCTIONS
 
     RST(vector) {
-        this._push_word_to_stack(this._programCounter);
+        this._pushWordToStack(this._programCounter);
         this._programCounter = vector;
         this._clock += 11;
     }
@@ -1291,13 +1291,13 @@ class i8080 {
     // RETURN INSTRUCTIONS
 
     RET() {
-        this._programCounter = this._pop_word_from_stack();
+        this._programCounter = this._popWordFromStack();
         this._clock += 10;
     }
 
     RETURN(expr) {
         if (expr) {
-            this._programCounter = this._pop_word_from_stack();
+            this._programCounter = this._popWordFromStack();
             this._clock += 11;
             return;
         }
@@ -1315,7 +1315,7 @@ class i8080 {
 
     CALL(expr, addr) {
         if (expr) {
-            this._push_word_to_stack(this._programCounter);
+            this._pushWordToStack(this._programCounter);
             this._programCounter = addr;
             this._clock += 17;
             return;
@@ -1324,26 +1324,26 @@ class i8080 {
     }
 
     XTHL() {
-        const l_addr = this.bus.ReadRAM(this._stackPointer);
-        const h_addr = this.bus.ReadRAM(this._stackPointer + 1);
+        const lowByteAddr = this.bus.ReadRAM(this._stackPointer);
+        const highByteAddr = this.bus.ReadRAM(this._stackPointer + 1);
 
         this.bus.WriteRAM(this._registers['L'], this._stackPointer);
         this.bus.WriteRAM(this._registers['H'], this._stackPointer + 1);
 
-        this._registers['L'] = l_addr;
-        this._registers['H'] = h_addr;
+        this._registers['L'] = lowByteAddr;
+        this._registers['H'] = highByteAddr;
 
         this._clock += 18;
     }
 
     XCHG() {
-        const h_data = this._registers['H'];
-        const l_data = this._registers['L'];
+        const highByteData = this._registers['H'];
+        const lowByteData = this._registers['L'];
         
         this._registers['H'] = this._registers['D'];
         this._registers['L'] = this._registers['E'];
-        this._registers['D'] = h_data
-        this._registers['E'] = l_data
+        this._registers['D'] = highByteData
+        this._registers['E'] = lowByteData
         
         this._clock += 5;
     }
@@ -1365,18 +1365,17 @@ class i8080 {
      * position. Does not increment the program counter (mainly used for
      * debug/disassembly)
      */
-     _peek_next_byte() {
-        const next_byte = this.bus.ReadRAM(this._programCounter);
-        return next_byte;
+     _peekNextByte() {
+        return this.bus.ReadRAM(this._programCounter);
 }
     /**
      * @returns The next 8-bits of memory from the current program counter
      * position, then increments the program counter by 1 byte.
      */
-    _get_next_byte() {
-        const next_byte = this._peek_next_byte();
+    _getNextByte() {
+        const nextByte = this._peekNextByte();
         this._programCounter++;
-        return next_byte;
+        return nextByte;
     }
 
     /**
@@ -1385,10 +1384,10 @@ class i8080 {
     * byte forms the upper-byte (little endian). Does not increment the program
     * counter (mainly used for debug/disassembly).
     */
-    _peek_next_word() {
-        const lower_byte = this.bus.ReadRAM(this._programCounter);
-        const upper_byte = this.bus.ReadRAM(this._programCounter + 1);
-        return (upper_byte << 8) | lower_byte;
+    _peekNextWord() {
+        const lowerByte = this.bus.ReadRAM(this._programCounter);
+        const upperByte = this.bus.ReadRAM(this._programCounter + 1);
+        return (upperByte << 8) | lowerByte;
     }
 
     /**
@@ -1397,10 +1396,10 @@ class i8080 {
     * byte forms the upper-byte (little endian). Program counter is incremented
     * by 2 bytes (mainly used for debug/disassembly).
     */
-    _get_next_word() {
-        const lower_byte = this._get_next_byte();
-        const upper_byte = this._get_next_byte();
-        return (upper_byte << 8) | lower_byte;
+    _getNextWord() {
+        const lowerByte = this._getNextByte();
+        const upperByte = this._getNextByte();
+        return (upperByte << 8) | lowerByte;
     }
 
     /**
@@ -1415,7 +1414,7 @@ class i8080 {
      */
     ExecuteNextInstruction() {
         let disassemble;
-        const opcode = this._get_next_byte();
+        const opcode = this._getNextByte();
         switch(opcode) {
             case 0x00:
             case 0x08:
@@ -1445,8 +1444,8 @@ class i8080 {
                 this.RST(opcode & 0x38);
                 break;
             case 0xFE:
-                disassemble = `CPI\t${this._peek_next_byte().toString(16)}`;
-                this.CPI(this._get_next_byte());
+                disassemble = `CPI\t${this._peekNextByte().toString(16)}`;
+                this.CPI(this._getNextByte());
                 break;
             case 0xE9:
                 disassemble = `PCHL`;
@@ -1463,40 +1462,40 @@ class i8080 {
             case 0xDD:
             case 0xED:
             case 0xFD:
-                disassemble = `CALL\t${this._peek_next_word().toString(16)}`;
-                this.CALL(true, this._get_next_word());
+                disassemble = `CALL\t${this._peekNextWord().toString(16)}`;
+                this.CALL(true, this._getNextWord());
                 break;
             case 0xFC:
-                disassemble = `CM\t${this._peek_next_word().toString(16)}`;
-                this.CALL(this._flag_manager.IsSet(this._flag_manager.FlagType.Sign), this._get_next_word());
+                disassemble = `CM\t${this._peekNextWord().toString(16)}`;
+                this.CALL(this._flagManager.IsSet(this._flagManager.FlagType.Sign), this._getNextWord());
                 break;
             case 0xEC:
-                disassemble = `CPE\t${this._peek_next_word().toString(16)}`
-                this.CALL(this._flag_manager.IsSet(this._flag_manager.FlagType.Parity), this._get_next_word());
+                disassemble = `CPE\t${this._peekNextWord().toString(16)}`
+                this.CALL(this._flagManager.IsSet(this._flagManager.FlagType.Parity), this._getNextWord());
                 break;
             case 0xDC:
-                disassemble = `CC\t${this._peek_next_word().toString(16)}`
-                this.CALL(this._flag_manager.IsSet(this._flag_manager.FlagType.Carry), this._get_next_word());
+                disassemble = `CC\t${this._peekNextWord().toString(16)}`
+                this.CALL(this._flagManager.IsSet(this._flagManager.FlagType.Carry), this._getNextWord());
                 break;
             case 0xCC:
-                disassemble = `CZ\t${this._peek_next_word().toString(16)}`
-                this.CALL(this._flag_manager.IsSet(this._flag_manager.FlagType.Zero), this._get_next_word());
+                disassemble = `CZ\t${this._peekNextWord().toString(16)}`
+                this.CALL(this._flagManager.IsSet(this._flagManager.FlagType.Zero), this._getNextWord());
                 break;
             case 0xF4:
-                disassemble = `CP\t${this._peek_next_word().toString(16)}`;
-                this.CALL(!this._flag_manager.IsSet(this._flag_manager.FlagType.Sign), this._get_next_word());
+                disassemble = `CP\t${this._peekNextWord().toString(16)}`;
+                this.CALL(!this._flagManager.IsSet(this._flagManager.FlagType.Sign), this._getNextWord());
                 break;
             case 0xE4:
-                disassemble = `CPO\t${this._peek_next_word().toString(16)}`;
-                this.CALL(!this._flag_manager.IsSet(this._flag_manager.FlagType.Parity), this._get_next_word());
+                disassemble = `CPO\t${this._peekNextWord().toString(16)}`;
+                this.CALL(!this._flagManager.IsSet(this._flagManager.FlagType.Parity), this._getNextWord());
                 break;
             case 0xD4:
-                disassemble = `CNC\t${this._peek_next_word().toString(16)}`;
-                this.CALL(!this._flag_manager.IsSet(this._flag_manager.FlagType.Carry), this._get_next_word());
+                disassemble = `CNC\t${this._peekNextWord().toString(16)}`;
+                this.CALL(!this._flagManager.IsSet(this._flagManager.FlagType.Carry), this._getNextWord());
                 break;
             case 0xC4:
-                disassemble = `CNZ\t${this._peek_next_word().toString(16)}`;
-                this.CALL(!this._flag_manager.IsSet(this._flag_manager.FlagType.Zero), this._get_next_word());
+                disassemble = `CNZ\t${this._peekNextWord().toString(16)}`;
+                this.CALL(!this._flagManager.IsSet(this._flagManager.FlagType.Zero), this._getNextWord());
                 break;
             case 0xF9:
                 disassemble =`SPHL`;
@@ -1512,40 +1511,40 @@ class i8080 {
                 break;
             case 0xC3:
             case 0xCB:
-                disassemble = `JMP\t0x${this._peek_next_word().toString(16)}`
-                this.JUMP(true, this._get_next_word());
+                disassemble = `JMP\t0x${this._peekNextWord().toString(16)}`
+                this.JUMP(true, this._getNextWord());
                 break;
             case 0xFA:
-                disassemble = `JM\t0x${this._peek_next_word().toString(16)}`;
-                this.JUMP(this._flag_manager.IsSet(this._flag_manager.FlagType.Sign), this._get_next_word());
+                disassemble = `JM\t0x${this._peekNextWord().toString(16)}`;
+                this.JUMP(this._flagManager.IsSet(this._flagManager.FlagType.Sign), this._getNextWord());
                 break;      
             case 0xEA:
-                disassemble = `JPE\t${this._peek_next_word().toString(16)}`;
-                this.JUMP(this._flag_manager.IsSet(this._flag_manager.FlagType.Parity), this._get_next_word());
+                disassemble = `JPE\t${this._peekNextWord().toString(16)}`;
+                this.JUMP(this._flagManager.IsSet(this._flagManager.FlagType.Parity), this._getNextWord());
                 break;
             case 0xCA:
-                disassemble = `JZ\t0x${this._peek_next_word().toString(16)}`;
-                this.JUMP(this._flag_manager.IsSet(this._flag_manager.FlagType.Zero), this._get_next_word());
+                disassemble = `JZ\t0x${this._peekNextWord().toString(16)}`;
+                this.JUMP(this._flagManager.IsSet(this._flagManager.FlagType.Zero), this._getNextWord());
                 break;
             case 0xDA:
-                disassemble = `JC\t${this._peek_next_word().toString(16)}`;
-                this.JUMP(this._flag_manager.IsSet(this._flag_manager.FlagType.Carry), this._get_next_word());
+                disassemble = `JC\t${this._peekNextWord().toString(16)}`;
+                this.JUMP(this._flagManager.IsSet(this._flagManager.FlagType.Carry), this._getNextWord());
                 break;                
             case 0xF2:
-                disassemble = `JP\t${this._peek_next_word().toString(16)}`;
-                this.JUMP(!this._flag_manager.IsSet(this._flag_manager.FlagType.Sign), this._get_next_word());
+                disassemble = `JP\t${this._peekNextWord().toString(16)}`;
+                this.JUMP(!this._flagManager.IsSet(this._flagManager.FlagType.Sign), this._getNextWord());
                 break;                
             case 0xE2:
-                disassemble = `JPO\t${this._peek_next_word().toString(16)}`;
-                this.JUMP(!this._flag_manager.IsSet(this._flag_manager.FlagType.Parity), this._get_next_word());
+                disassemble = `JPO\t${this._peekNextWord().toString(16)}`;
+                this.JUMP(!this._flagManager.IsSet(this._flagManager.FlagType.Parity), this._getNextWord());
                 break;
             case 0xD2:
-                disassemble = `JNC\t${this._peek_next_word().toString(16)}`;
-                this.JUMP(!this._flag_manager.IsSet(this._flag_manager.FlagType.Carry), this._get_next_word());
+                disassemble = `JNC\t${this._peekNextWord().toString(16)}`;
+                this.JUMP(!this._flagManager.IsSet(this._flagManager.FlagType.Carry), this._getNextWord());
                 break;                
             case 0xC2:
-                disassemble = `JNZ\t${this._peek_next_word().toString(16)}`;
-                this.JUMP(!this._flag_manager.IsSet(this._flag_manager.FlagType.Zero), this._get_next_word());
+                disassemble = `JNZ\t${this._peekNextWord().toString(16)}`;
+                this.JUMP(!this._flagManager.IsSet(this._flagManager.FlagType.Zero), this._getNextWord());
                 break;
             case 0xC9:
             case 0xD9:
@@ -1554,35 +1553,35 @@ class i8080 {
                 break;
             case 0xF8:
                 disassemble = `RM`;
-                this.RETURN(this._flag_manager.IsSet(this._flag_manager.FlagType.Sign))
+                this.RETURN(this._flagManager.IsSet(this._flagManager.FlagType.Sign))
                 break;
             case 0xE8:
-                disassemble = `RPE\t${this._peek_next_word().toString(16)}`;
-                this.RETURN(this._flag_manager.IsSet(this._flag_manager.FlagType.Parity))
+                disassemble = `RPE\t${this._peekNextWord().toString(16)}`;
+                this.RETURN(this._flagManager.IsSet(this._flagManager.FlagType.Parity))
                 break;
             case 0xD8:
                 disassemble = `RC`
-                this.RETURN(this._flag_manager.IsSet(this._flag_manager.FlagType.Carry))
+                this.RETURN(this._flagManager.IsSet(this._flagManager.FlagType.Carry))
                 break;
             case 0xC8:
                 disassemble = `RZ`;
-                this.RETURN(this._flag_manager.IsSet(this._flag_manager.FlagType.Zero))
+                this.RETURN(this._flagManager.IsSet(this._flagManager.FlagType.Zero))
                 break;
             case 0xF0:
                 disassemble = `RP`;
-                this.RETURN(!this._flag_manager.IsSet(this._flag_manager.FlagType.Sign))
+                this.RETURN(!this._flagManager.IsSet(this._flagManager.FlagType.Sign))
                 break;
             case 0xE0:
                 disassemble = `RPO`;
-                this.RETURN(!this._flag_manager.IsSet(this._flag_manager.FlagType.Parity))
+                this.RETURN(!this._flagManager.IsSet(this._flagManager.FlagType.Parity))
                 break;
             case 0xC0:
                 disassemble = `RNZ`;
-                this.RETURN(!this._flag_manager.IsSet(this._flag_manager.FlagType.Zero));
+                this.RETURN(!this._flagManager.IsSet(this._flagManager.FlagType.Zero));
                 break;
             case 0xD0:
                 disassemble = `RNC`;
-                this.RETURN(!this._flag_manager.IsSet(this._flag_manager.FlagType.Carry));
+                this.RETURN(!this._flagManager.IsSet(this._flagManager.FlagType.Carry));
                 break;
             case 0xC1:
                 disassemble = `POP\tBC`;
@@ -1649,12 +1648,12 @@ class i8080 {
                 this.CMP_R('A');
                 break;
             case 0x3A:
-                disassemble = `LSA\t${this._peek_next_word().toString(16)}`;
-                this.LSA(this._get_next_word());
+                disassemble = `LSA\t${this._peekNextWord().toString(16)}`;
+                this.LSA(this._getNextWord());
                 break;
             case 0x2A:
-                disassemble = `LHLD\t${this._peek_next_word().toString(16)}`;
-                this.LHLD(this._get_next_word());
+                disassemble = `LHLD\t${this._peekNextWord().toString(16)}`;
+                this.LHLD(this._getNextWord());
                 break;
             case 0x0A:
                 disassemble = `LDAX\tBC`;
@@ -1789,8 +1788,8 @@ class i8080 {
                 this.INR_R('A');
                 break;
             case 0x01: 
-                disassemble = `LXI\tBC\t${this._peek_next_word().toString(16)}`;
-                this.LXI_R('B', 'C', this._get_next_word());
+                disassemble = `LXI\tBC\t${this._peekNextWord().toString(16)}`;
+                this.LXI_R('B', 'C', this._getNextWord());
                 break;
             case 0x02:
                 disassemble = `STAX\tBC`;
@@ -1801,8 +1800,8 @@ class i8080 {
                 this.INX_R('B', 'C');
                 break;
             case 0x11:
-                disassemble = `LXI\tDE\t${this._peek_next_word().toString(16)}`;
-                this.LXI_R('D', 'E', this._get_next_word());
+                disassemble = `LXI\tDE\t${this._peekNextWord().toString(16)}`;
+                this.LXI_R('D', 'E', this._getNextWord());
                 break;
             case 0x12:
                 disassemble = `STAX\tDE`;
@@ -1813,60 +1812,60 @@ class i8080 {
                 this.INX_R('D', 'E');
                 break;
             case 0x21:
-                disassemble = `LXI\tHL\t${this._peek_next_word().toString(16)}`;
-                this.LXI_R('H', 'L', this._get_next_word());
+                disassemble = `LXI\tHL\t${this._peekNextWord().toString(16)}`;
+                this.LXI_R('H', 'L', this._getNextWord());
                 break;
             case 0x0E:
-                disassemble = `MVI\tC\t${this._peek_next_byte().toString(16)}`;
-                this.MVI_R('C', this._get_next_byte());
+                disassemble = `MVI\tC\t${this._peekNextByte().toString(16)}`;
+                this.MVI_R('C', this._getNextByte());
                 break;
             case 0x1E:
-                disassemble = `MVI\tE\t${this._peek_next_byte().toString(16)}`;
-                this.MVI_R('E', this._get_next_byte());
+                disassemble = `MVI\tE\t${this._peekNextByte().toString(16)}`;
+                this.MVI_R('E', this._getNextByte());
                 break;
             case 0x22:
-                disassemble = `SHLD\t${this._peek_next_word().toString(16)}`;
-                this.SHLD(this._get_next_word());
+                disassemble = `SHLD\t${this._peekNextWord().toString(16)}`;
+                this.SHLD(this._getNextWord());
                 break;
             case 0x23:
                 disassemble = `INX\tHL`;
                 this.INX_R('H', 'L');
                 break;
             case 0x2E:
-                disassemble = `MVI\tL\t${this._peek_next_byte().toString(16)}`;
-                this.MVI_R('L', this._get_next_byte());
+                disassemble = `MVI\tL\t${this._peekNextByte().toString(16)}`;
+                this.MVI_R('L', this._getNextByte());
                 break;
             case 0x31:
-                disassemble = `LXI\tSP\t${this._peek_next_word().toString(16)}`;
-                this.LXI_SP(this._get_next_word());
+                disassemble = `LXI\tSP\t${this._peekNextWord().toString(16)}`;
+                this.LXI_SP(this._getNextWord());
                 break;
             case 0x32:
                 disassemble = `STA`;
-                this.STA(this._get_next_word());
+                this.STA(this._getNextWord());
                 break;
             case 0x33:
                 disassemble = `INX\tSP`;
                 this.INX_SP();
                 break;
             case 0x3E:
-                disassemble = `MVI\tA\t${this._peek_next_byte().toString(16)}`;
-                this.MVI_R('A', this._get_next_byte());
+                disassemble = `MVI\tA\t${this._peekNextByte().toString(16)}`;
+                this.MVI_R('A', this._getNextByte());
                 break;
             case 0x06:
-                disassemble = `MVI\tB\t${this._peek_next_byte().toString(16)}`;
-                this.MVI_R('B', this._get_next_byte());
+                disassemble = `MVI\tB\t${this._peekNextByte().toString(16)}`;
+                this.MVI_R('B', this._getNextByte());
                 break;
             case 0x16:
-                disassemble = `MVI\tD\t${this._peek_next_byte().toString(16)}`;
-                this.MVI_R('D', this._get_next_byte());
+                disassemble = `MVI\tD\t${this._peekNextByte().toString(16)}`;
+                this.MVI_R('D', this._getNextByte());
                 break;
             case 0x26:
-                disassemble = `MVI\tH\t${this._peek_next_byte().toString(16)}`;
-                this.MVI_R('H', this._get_next_byte());
+                disassemble = `MVI\tH\t${this._peekNextByte().toString(16)}`;
+                this.MVI_R('H', this._getNextByte());
                 break;
             case 0x36:
-                disassemble = `MVI\tM\t${this._peek_next_byte().toString(16)}`;
-                this.MVI_TO_MEM(this._get_next_byte());
+                disassemble = `MVI\tM\t${this._peekNextByte().toString(16)}`;
+                this.MVI_TO_MEM(this._getNextByte());
                 break;
             case 0x40:
                 disassemble = `MOV\tB,B`;
@@ -2350,32 +2349,32 @@ class i8080 {
                 this.ORA_R('A');
                 break;                
             case 0xC6:
-                disassemble = `ADI\t${this._peek_next_byte().toString(16)}`;
-                this.ADI(this._get_next_byte());
+                disassemble = `ADI\t${this._peekNextByte().toString(16)}`;
+                this.ADI(this._getNextByte());
                 break;
             case 0xCE:
-                disassemble = `ACI\t${this._peek_next_byte().toString(16)}`;
-                this.ACI(this._get_next_byte());
+                disassemble = `ACI\t${this._peekNextByte().toString(16)}`;
+                this.ACI(this._getNextByte());
                 break;
             case 0xD6:
-                disassemble = `SUI\t${this._peek_next_byte().toString(16)}`;
-                this.SUI(this._get_next_byte());
+                disassemble = `SUI\t${this._peekNextByte().toString(16)}`;
+                this.SUI(this._getNextByte());
                 break;
             case 0xDE:
-                disassemble = `SBI\t${this._peek_next_byte().toString(16)}`;
-                this.SBI(this._get_next_byte());
+                disassemble = `SBI\t${this._peekNextByte().toString(16)}`;
+                this.SBI(this._getNextByte());
                 break;
             case 0xE6:
-                disassemble = `ANI\t${this._peek_next_byte().toString(16)}`;
-                this.ANI(this._get_next_byte());
+                disassemble = `ANI\t${this._peekNextByte().toString(16)}`;
+                this.ANI(this._getNextByte());
                 break;
             case 0xEE:
-                disassemble = `XRI\t${this._peek_next_byte().toString(16)}`;
-                this.XRI(this._get_next_byte());
+                disassemble = `XRI\t${this._peekNextByte().toString(16)}`;
+                this.XRI(this._getNextByte());
                 break;
             case 0xF6:
-                disassemble = `ORI\t${this._peek_next_byte().toString(16)}`;
-                this.ORI(this._get_next_byte());
+                disassemble = `ORI\t${this._peekNextByte().toString(16)}`;
+                this.ORI(this._getNextByte());
                 break;
         }
         return disassemble;
