@@ -32,7 +32,7 @@ class CpuDiag extends ArcadeMachine {
                 switch(this.computer.CPURegisters['C']) {
                     case 0:
                         this.computer.CPUHalt = true;
-                        return;
+                        return '   \tHALTED';
                     case 9:
                         const str = this._get_mem_string();
                         console.log(`String is: ${str}`);
@@ -50,9 +50,6 @@ class CpuDiag extends ArcadeMachine {
                     }
                 return;
             case 0:
-                if (output != undefined) {
-                    output.textContent += '\nWarm Boot Called. Halting program.';
-                }
                 this.computer.CPUHalt = true;
                 return '   \tHALTED';
             default:

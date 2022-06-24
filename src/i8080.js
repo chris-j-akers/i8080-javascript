@@ -738,37 +738,34 @@ class i8080 {
         this.clock += 10;
     }
 
-// *   ===================================================================================
-// *   Single Register Operations
-// *   ===================================================================================
 
-// *  This section describes instructions which operate on a single register or memory 
-// *  location. If a memory reference is specified, the memory byte addressed by the H
-// *  and L registers is operated upon. The H register holds the most significant 8 bits 
-// *  of the address wh ile the L register holds the least significant 8 bits of the 
-// *  address.
-
+    /**
+     * This is a weird instruction and barely used, but in for a penny ....
+     * 
+     * Taken directly from the 8080 Programmers Guide:
+     * 
+     * The eight-bit hexadecimal number in the accumulator is adjusted to form two 
+     * four-bit binary-coded-decimal digits by the following two-step process:
+     *
+     * (1) If the least significant four bits of the accumulator represents a number
+     * greater than 9, or if the Auxiliary Carry bit is equal to one, the 
+     * accumulator is incremented by six. Otherwise, no incrementing occurs.
+     *
+     * (2) If the most significant four bits of the accumulator now represent a 
+     * number greater than 9, or if the normal carry bit is equal to one, the most
+     * significant four bits of the accumulator are incremented by six. Otherwise, 
+     * no incrementing occurs.
+     *
+     * If a carry out of the least significant four bits occurs during Step (1), 
+     * the Auxiliary Carry bit is set; otherwise it is reset. Likewise, if a carry 
+     * out of the most significant four bits occurs during Step (2). the normal 
+     * Carry bit is set; otherwise, it is unaffected:
+     *
+     * This instruction is used when adding decimal numbers. It is the only 
+     * instruction whose operation is affected by the Auxiliary Carry bit.
+     * 
+     */
     DAA() {
-        //  The eight-bit hexadecimal number in the accumulator is adjusted to form two 
-        // four-bit binary-coded-decimal digits by the following two-step process:
-
-        // (1) If the least significant four bits of the accumulator represents a number
-        // greater than 9, or if the Auxiliary Carry bit is equal to one, the 
-        // accumulator is incremented by six. Otherwise, no incrementing occurs.
-
-        // (2) If the most significant four bits of the accumulator now represent a 
-        // number greater than 9, or if the normal carry bit is equal to one, the most
-        // significant four bits of the accumulator are incremented by six. Otherwise, 
-        // no incrementing occurs.
-
-        // If a carry out of the least significant four bits occurs during Step (1), 
-        // the Auxiliary Carry bit is set; otherwise it is reset. Likewise, if a carry 
-        // out of the most significant four bits occurs during Step (2). the normal 
-        // Carry bit is set; otherwise, it is unaffected:
-
-        // This instruction is used when adding decimal numbers. It is the only 
-        // instruction whose operation is affected by the Auxiliary Carry bit.
-
         if ((this.registers['A'] & 0x0F) > 9 || this._flag_manager.IsSet(this._flag_manager.FlagType.AuxillaryCarry)) {
             const val = this.registers['A'] + 0x06;
             this._flag_manager.CheckAndSet.AuxillaryCarry(this.registers['A'], 0x06);
@@ -777,21 +774,11 @@ class i8080 {
 
         if ((this.registers['A'] & 0xF0) > 0x90 || this._flag_manager.IsSet(this._flag_manager.FlagType.Carry)) {
             const val = this.registers['A'] + 0x60;
-
-            // According to the documentation, we do not clear the Carry if the test
-            // is false, here. We leave it, so calling set_flag() directly instead of
-            // set_flags() to stop the reset on the false condition.
             if (val > 255 || val < 0) this._flag_manager.SetFlag(this._flag_manager.FlagType.Carry);
             this.registers['A'] = val & 0xFF;
         }
-
         this.clock += 4;
     }
-
-
-    /*------------------------------------------------------------------------
-                                MOV(E) OPERATIONS                             
-    ------------------------------------------------------------------------*/
 
 
     /**
@@ -1384,7 +1371,7 @@ class i8080 {
     * @returns The next 16-bits of memory from the current program counter
     * position. The first byte forms the lower-byte of the word and the second
     * byte forms the upper-byte (little endian). Does not increment the program
-    * counter (mainly used for debug/disassembly)
+    * counter (mainly used for debug/disassembly).
     */
     _peek_next_word() {
         const lower_byte = this.bus.ReadRAM(this.program_counter);
@@ -1396,7 +1383,7 @@ class i8080 {
     * @returns The next 16-bits of memory from the current program counter
     * position. The first byte forms the lower-byte of the word and the second
     * byte forms the upper-byte (little endian). Program counter is incremented
-    * by 2 bytes. 
+    * by 2 bytes (mainly used for debug/disassembly).
     */
     _get_next_word() {
         const lower_byte = this._get_next_byte();
