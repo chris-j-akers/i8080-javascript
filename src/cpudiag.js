@@ -9,9 +9,11 @@ class CpuDiag extends ArcadeMachine {
     }
 
     /**
-     * This emulates the C_WRITESTR CP/M syscall which simply writes text to screen.
-     * 
-     * @returns $ terminated string located at 16-bit addr stored in Registers D and E
+     * Helper function to emulate the C_WRITESTR CP/M syscall which simply
+     * writes text to screen.
+     *
+     * @returns $ terminated string located at 16-bit addr stored in Registers D
+     * and E
      */
     _get_mem_string() {
         let straddr = this.computer.CPURegisters['D'] << 8 | this.computer.CPURegisters['E'] & 0xFF;
