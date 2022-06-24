@@ -15,7 +15,7 @@ class CpuDiag extends ArcadeMachine {
      * @returns $ terminated string located at 16-bit addr stored in Registers D
      * and E
      */
-    _get_mem_string() {
+    _getMemString() {
         let straddr = this.computer.CPURegisters['D'] << 8 | this.computer.CPURegisters['E'] & 0xFF;
         console.log(`straddr: ${straddr}`);
         let ret_str = ''
@@ -28,6 +28,19 @@ class CpuDiag extends ArcadeMachine {
         return ret_str;
     }
 
+    /**
+     * Execute the next line of code, according to the location of the Program
+     * Counter.
+     *
+     * This method should call ExecuteNextLine() of its Computer object which, in
+     * turn, calls the ExecuteNextLine() of its CPU object. This allows us a
+     * couple of layers of abstractions.
+     *
+     * Here is where any extra emulation requires is placed
+     *
+     * @param {string} output Disassembly of line just executed
+     * @returns 
+     */
     ExecuteNextLine(output) {
         switch(this.computer.CPUProgramCounter) {
             case 5:
@@ -36,18 +49,18 @@ class CpuDiag extends ArcadeMachine {
                         this.computer.CPUHalt = true;
                         return '   \tHALTED';
                     case 9:
-                        const str = this._get_mem_string();
-                        console.log(`String is: ${str}`);
+                        const outputStr = this._getMemString();
+                        console.log(`String is: ${outputStr}`);
                         if (typeof output != undefined) {
-                            output.textContent += str;
+                            output.textContent += outputStr;
                         }
-                        this.computer.CPURET();
+                        this.computer.CPU_RET();
                         return '0005\tC_WRITESTR (CP/M SYSCALL)\n    \tRET';
                     case 2:
                         if (typeof output != undefined) {
                             output.textContent += String.fromCharCode(this.computer.CPURegisters['E']);
                         }
-                        this.computer.CPURET();
+                        this.computer.CPU_RET();
                         return '0005\tC_WRITE (CP/M SYSCALL)\n    \tRET';
                     }
                 return;

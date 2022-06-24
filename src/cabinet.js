@@ -11,11 +11,11 @@ import { Computer } from "./computer.js";
  */
 class Cabinet {
 
-    constructor(startaddr) {
+    constructor(startAddr) {
         if (new.target === 'Cabinet') {
             throw new TypeError('Cannot construct Cabinet object directly.')
         }
-        this.startaddr = startaddr;
+        this.startAddr = startAddr;
         this.computer = null;
     }
 
@@ -29,8 +29,8 @@ class Cabinet {
 
     Initialise(ramOutput) {
         this.computer = new Computer();
-        this.computer.InjectProgram(this.Code, this.startaddr);
-        this.computer.CPUProgramCounter = this.startaddr;
+        this.computer.InjectProgram(this.Code, this.startAddr);
+        this.computer.CPUProgramCounter = this.startAddr;
 
         if(typeof ramOutput != undefined) {
             let str = '';
@@ -41,6 +41,20 @@ class Cabinet {
         }
     }
 
+    /**
+     * Execute the next line of code, according to the location of the Program
+     * Counter.
+     *
+     * This method should call ExecuteNextLine() of the Cabinet's Computer
+     * object which, in turn, will call the ExecuteNextLine() of its own CPU
+     * object. This gives us a couple of layers of abstraction. The CPU is
+     * completley ignorant of what we're acually using it for.
+     *
+     * Here is where any extra emulation requires is placed
+     *
+     * @param {string} output Disassembly of line just executed
+     * @returns 
+     */
     ExecuteNextLine() {
         throw new TypeError('ExecuteNextLine() not implemented in empty Cabinet.')
     }

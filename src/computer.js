@@ -62,43 +62,46 @@ class Computer {
     }
 
     /**
-     * Get the Halt status of the CPU
+     * Get the Halt status of the CPU. Required so we know when to stop
+     * executing the Code.
      */
     get CPUHalt() {
         return this.cpu.Halt;
     }
 
     /**
-     * Set the Halt status of the CPU
+     * Set the Halt status of the CPU.
      */
     set CPUHalt(val) {
         this.cpu.Halt = val;
     }
 
     /**
-     * Get the current set of registers from the CPU and their values.
+     * Get read-only set of registers from the CPU.
      * 
      * This is used for diagnostic purposes.
      */
     get CPURegisters() {
-        return this.cpu._registers;
+        return this.cpu.Registers;
     }
 
     /**
-     * Expose the CPU's FlagManager
-     *
-     * This is used for diagnostic purposes. Exposing the whole Flag Manager
-     * might be a bit overkill. It might be wiser to provide another accessor
-     * method to call the IsSet() function only.
+     * Expose the CPU's FlagManager and its associated functions
      */
     get CPUFlagManager() {
         return this.cpu.FlagManager;
     }
 
+    /**
+     * Get CPU's internal stack pointer field.
+     */
     get CPUStackPointer() {
         return this.cpu.StackPointer;
     }
 
+    /**
+     * Get CPU's internal Clock field.
+     */
     get CPUClock() {
         return this.cpu.Clock;
     }
@@ -109,7 +112,7 @@ class Computer {
      * make sure we can return to the correct place in the code once the syscall
      * has completed.
      */
-    CPURET() {
+    CPU_RET() {
         this.cpu.RET();
     }
 
@@ -121,8 +124,8 @@ class Computer {
      * addr)
      */
     ExecuteNextInstruction() {
-        if (this.cpu._halt == false) {
-            const instruction = `${this.cpu.ProgramCounter.toString(16).padStart(4,'0')}\t${this.cpu.ExecuteNextInstruction()}`;
+        if (this.CPUHalt == false) {
+            const instruction = `${this.CPUProgramCounter.toString(16).padStart(4,'0')}\t${this.cpu.ExecuteNextInstruction()}`;
             return instruction;
         }
     }
@@ -151,8 +154,8 @@ class Computer {
      * @param {number} from_addr Address of program in memory
      */
     ExecuteProgram(from_addr=0x0) {
-        this.cpu.ProgramCounter = from_addr;
-        while(this.cpu._halt === false) {
+        this.CPUProgramCounter = from_addr;
+        while(this.CPUHalt === false) {
             this.cpu.ExecuteNextInstruction();
         }
     }

@@ -1324,37 +1324,37 @@ class i8080 {
     }
 
     XTHL() {
-        const lowByteAddr = this.bus.ReadRAM(this._stackPointer);
-        const highByteAddr = this.bus.ReadRAM(this._stackPointer + 1);
+        const lowByte = this.bus.ReadRAM(this._stackPointer);
+        const highByte = this.bus.ReadRAM(this._stackPointer + 1);
 
         this.bus.WriteRAM(this._registers['L'], this._stackPointer);
         this.bus.WriteRAM(this._registers['H'], this._stackPointer + 1);
 
-        this._registers['L'] = lowByteAddr;
-        this._registers['H'] = highByteAddr;
+        this._registers['L'] = lowByte;
+        this._registers['H'] = highByte;
 
         this._clock += 18;
     }
 
     XCHG() {
-        const highByteData = this._registers['H'];
-        const lowByteData = this._registers['L'];
+        const highByte = this._registers['H'];
+        const lowByte = this._registers['L'];
         
         this._registers['H'] = this._registers['D'];
         this._registers['L'] = this._registers['E'];
-        this._registers['D'] = highByteData
-        this._registers['E'] = lowByteData
+        this._registers['D'] = highByte
+        this._registers['E'] = lowByte
         
         this._clock += 5;
     }
 
     SPHL() {
-        this._stackPointer = this._registers['H'] << 8 | this._registers['L'];
+        this._stackPointer = this._getRegisterPairWord('H', 'L');
         this._clock += 5;
     }
 
     PCHL() {
-        this._programCounter = this._registers['H'] << 8 | this._registers['L']
+        this._programCounter = this._getRegisterPairWord('H', 'L');
         this._clock += 5;
     }
 
@@ -1385,9 +1385,9 @@ class i8080 {
     * counter (mainly used for debug/disassembly).
     */
     _peekNextWord() {
-        const lowerByte = this.bus.ReadRAM(this._programCounter);
-        const upperByte = this.bus.ReadRAM(this._programCounter + 1);
-        return (upperByte << 8) | lowerByte;
+        const lowByte = this.bus.ReadRAM(this._programCounter);
+        const highByte = this.bus.ReadRAM(this._programCounter + 1);
+        return (highByte << 8) | lowByte;
     }
 
     /**
@@ -1397,9 +1397,9 @@ class i8080 {
     * by 2 bytes (mainly used for debug/disassembly).
     */
     _getNextWord() {
-        const lowerByte = this._getNextByte();
-        const upperByte = this._getNextByte();
-        return (upperByte << 8) | lowerByte;
+        const lowByte = this._getNextByte();
+        const highByte = this._getNextByte();
+        return (highByte << 8) | lowByte;
     }
 
     /**
