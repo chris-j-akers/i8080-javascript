@@ -21,12 +21,12 @@ describe('XCHG', () => {
 		c.InjectProgram(program);
 		c.ExecuteProgram();
 		
-		assert.equal(c.cpu.registers['D'], 0);
-		assert.equal(c.cpu.registers['E'], 255);
-		assert.equal(c.cpu.registers['H'], 51);
-		assert.equal(c.cpu.registers['L'], 85);
+		assert.equal(c.cpu.Registers['D'], 0);
+		assert.equal(c.cpu.Registers['E'], 255);
+		assert.equal(c.cpu.Registers['H'], 51);
+		assert.equal(c.cpu.Registers['L'], 85);
 		
-		assert.equal(c.cpu.clock, 40);
+		assert.equal(c.cpu.Clock, 40);
 		
 		});
 		

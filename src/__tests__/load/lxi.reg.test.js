@@ -20,9 +20,9 @@ describe('LXI Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.registers.B, (word >> 8) & 0xFF);
-		  assert.equal(c.cpu.registers.C, word & 0xFF);
-		  assert.equal(word, (c.cpu.registers.B << 8) | c.cpu.registers.C);
+		  assert.equal(c.cpu.Registers.B, (word >> 8) & 0xFF);
+		  assert.equal(c.cpu.Registers.C, word & 0xFF);
+		  assert.equal(word, (c.cpu.Registers.B << 8) | c.cpu.Registers.C);
 		  
 		  assert.equal(c.cpu.Clock, 17);
 		  c.Reset();
@@ -48,9 +48,9 @@ describe('LXI Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.registers.D, (word >> 8) & 0xFF);
-		  assert.equal(c.cpu.registers.E, word & 0xFF);
-		  assert.equal(word, (c.cpu.registers.D << 8) | c.cpu.registers.E);
+		  assert.equal(c.cpu.Registers.D, (word >> 8) & 0xFF);
+		  assert.equal(c.cpu.Registers.E, word & 0xFF);
+		  assert.equal(word, (c.cpu.Registers.D << 8) | c.cpu.Registers.E);
 		  
 		  assert.equal(c.cpu.Clock, 17);
 		  c.Reset();
@@ -76,9 +76,9 @@ describe('LXI Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.registers.H, (word >> 8) & 0xFF);
-		  assert.equal(c.cpu.registers.L, word & 0xFF);
-		  assert.equal(word, (c.cpu.registers.H << 8) | c.cpu.registers.L);
+		  assert.equal(c.cpu.Registers.H, (word >> 8) & 0xFF);
+		  assert.equal(c.cpu.Registers.L, word & 0xFF);
+		  assert.equal(word, (c.cpu.Registers.H << 8) | c.cpu.Registers.L);
 		  
 		  assert.equal(c.cpu.Clock, 17);
 		  c.Reset();

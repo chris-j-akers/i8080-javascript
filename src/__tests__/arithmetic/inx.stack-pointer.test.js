@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('INX', () => {
 	it('Increment Stack pointer 4 times from 65533', () => {
 		const c = new Computer();
-		const FlagType = c.cpu._flag_manager.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
 		
 		
 		const program = [
@@ -18,19 +18,19 @@ describe('INX', () => {
 		
 		c.InjectProgram(program);
 		c.ExecuteProgram();
-		assert.equal(c.cpu.stack_pointer, 65534);
+		assert.equal(c.cpu.StackPointer, 65534);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x03);
-		assert.equal(c.cpu.stack_pointer, 65535);
+		assert.equal(c.cpu.StackPointer, 65535);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x03);
-		assert.equal(c.cpu.stack_pointer, 0);
+		assert.equal(c.cpu.StackPointer, 0);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x03);
-		assert.equal(c.cpu.stack_pointer, 1);
+		assert.equal(c.cpu.StackPointer, 1);
 		
 		assert.equal(c.cpu.Clock, 58);
 		

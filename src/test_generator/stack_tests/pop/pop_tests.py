@@ -6,21 +6,21 @@ def generate_pop(boilerplate, test):
 
 
 def generate_pop_psw(boilerplate, test):
-    return boilerplate.format(set_carry = "c.cpu._flag_manager.SetFlag(FlagType.Carry);\nassert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);\n" 
+    return boilerplate.format(set_carry = "c.cpu.FlagManager.SetFlag(FlagType.Carry);\nassert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);\n" 
                                 if test['set_carry'] 
-                                else "assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);\n",
-                              set_parity = "c.cpu._flag_manager.SetFlag(FlagType.Parity);\nassert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), true);\n" 
+                                else "assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);\n",
+                              set_parity = "c.cpu.FlagManager.SetFlag(FlagType.Parity);\nassert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), true);\n" 
                                 if test['set_parity'] 
-                                else "assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), false);\n",
-                              set_auxillary_carry = "c.cpu._flag_manager.SetFlag(FlagType.AuxillaryCarry);\nassert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), true);\n" 
+                                else "assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), false);\n",
+                              set_auxillary_carry = "c.cpu.FlagManager.SetFlag(FlagType.AuxillaryCarry);\nassert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);\n" 
                                 if test['set_auxillary_carry'] 
-                                else "assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);\n",
-                              set_zero = "c.cpu._flag_manager.SetFlag(FlagType.Zero);\nassert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), true);\n" 
+                                else "assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);\n",
+                              set_zero = "c.cpu.FlagManager.SetFlag(FlagType.Zero);\nassert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), true);\n" 
                                 if test['set_zero'] 
-                                else "assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);\n",
-                              set_sign = "c.cpu._flag_manager.SetFlag(FlagType.Sign);\nassert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);\n" 
+                                else "assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);\n",
+                              set_sign = "c.cpu.FlagManager.SetFlag(FlagType.Sign);\nassert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), true);\n" 
                                 if test['set_sign'] 
-                                else "assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);\n",
+                                else "assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);\n",
                               carry=str(test['carry']).lower(),
                               parity=str(test['parity']).lower(),
                               auxillary_carry=str(test['auxillary_carry']).lower(),

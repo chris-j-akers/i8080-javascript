@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('CMA', () => {
 	it('0xFF becomes 0x00', () => {
 		const c = new Computer();
-		const FlagType = c.cpu._flag_manager.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
 		
 		
 		let program = [
@@ -18,14 +18,14 @@ describe('CMA', () => {
 		c.InjectProgram(program);
 		c.ExecuteProgram();
 		
-		assert.equal(c.cpu.registers['A'], 0);
+		assert.equal(c.cpu.Registers['A'], 0);
 		assert.equal(c.cpu.Clock, 18);
 		
 		});
 		
 	it('0x00 becomes 0xFF', () => {
 		const c = new Computer();
-		const FlagType = c.cpu._flag_manager.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
 		
 		
 		let program = [
@@ -38,7 +38,7 @@ describe('CMA', () => {
 		c.InjectProgram(program);
 		c.ExecuteProgram();
 		
-		assert.equal(c.cpu.registers['A'], 255);
+		assert.equal(c.cpu.Registers['A'], 255);
 		assert.equal(c.cpu.Clock, 18);
 		
 		});

@@ -13,7 +13,7 @@ test_suite:
     });
   boilerplate: |
     const c = new Computer();
-    const FlagType = c.cpu._flag_manager.FlagType;
+    const FlagType = c.cpu.FlagManager.FlagType;
     
     let program = [
       0x26,                   // MVI into Register H...
@@ -48,18 +48,18 @@ test_suite:
 
       assert.equal(c.bus.ReadRAM({mem_addr_high_byte} << 8 | {mem_addr_low_byte}), {mem_first_byte});
       assert.equal(c.bus.ReadRAM({mem_addr_high_byte} << 8 | {mem_addr_low_byte} + 1), {mem_second_byte});
-      assert.equal(c.cpu.registers['H'], 0x0B);
-      assert.equal(c.cpu.registers['L'], 0x3C);
+      assert.equal(c.cpu.Registers['H'], 0x0B);
+      assert.equal(c.cpu.Registers['L'], 0x3C);
       
       // Now execute the test
 
-      c.cpu.halt = false;
+      c.cpu.Halt = false;
       c.ExecuteProgram(18);
 
       assert.equal(c.bus.ReadRAM({mem_addr_high_byte} << 8 | {mem_addr_low_byte}), {l_register});
       assert.equal(c.bus.ReadRAM({mem_addr_high_byte} << 8 | {mem_addr_low_byte} + 1), {h_register});
-      assert.equal(c.cpu.registers['H'], {mem_second_byte});
-      assert.equal(c.cpu.registers['L'], {mem_first_byte});
+      assert.equal(c.cpu.Registers['H'], {mem_second_byte});
+      assert.equal(c.cpu.Registers['L'], {mem_first_byte});
 
     }});
 

@@ -14,93 +14,99 @@ const opcode_lookup = {
 describe('DAD SP', () => {
 	it('Carry unset and not set', () => {
 		const c = new Computer();
-		const FlagType = c.cpu._flag_manager.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
 		
 		
 		let program = [
-		  0x26,          // MVI into H...
-		  117,       // ... this data
-		  0x2E,          // MVI into L...
-		  48,       // ...this data
-		  0x39,          // Call relevant DAD command
-		  0x76           // HALT
+		  0x31,                             // Set stack pointer to...
+		  30000 & 0xFF,           // ...this low-byte....
+		  30000 >> 8 & 0xFF,      // ...this high-byte
+		  0x26,                             // MVI into H...
+		  117,                          // ... this data
+		  0x2E,                             // MVI into L...
+		  48,                          // ...this data
+		  0x39,                             // Call relevant DAD command
+		  0x76                              // HALT
 		]
 		
 		  c.InjectProgram(program);
-		  c.cpu.stack_pointer = 30000;
 		  c.ExecuteProgram();
 		
-		  assert.equal((c.cpu.registers['H'] << 8 | c.cpu.registers['L']) & 0xFFFF, 60000)
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false)
+		  assert.equal((c.cpu.Registers['H'] << 8 | c.cpu.Registers['L']) & 0xFFFF, 60000)
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false)
 		
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),false);
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c.cpu.Clock, 31);
+		  assert.equal(c.cpu.Clock, 41);
 		  
 		  c.Reset();
 		});
 		
 	it('Carry unset and set', () => {
 		const c = new Computer();
-		const FlagType = c.cpu._flag_manager.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
 		
 		
 		let program = [
-		  0x26,          // MVI into H...
-		  255,       // ... this data
-		  0x2E,          // MVI into L...
-		  255,       // ...this data
-		  0x39,          // Call relevant DAD command
-		  0x76           // HALT
+		  0x31,                             // Set stack pointer to...
+		  1 & 0xFF,           // ...this low-byte....
+		  1 >> 8 & 0xFF,      // ...this high-byte
+		  0x26,                             // MVI into H...
+		  255,                          // ... this data
+		  0x2E,                             // MVI into L...
+		  255,                          // ...this data
+		  0x39,                             // Call relevant DAD command
+		  0x76                              // HALT
 		]
 		
 		  c.InjectProgram(program);
-		  c.cpu.stack_pointer = 1;
 		  c.ExecuteProgram();
 		
-		  assert.equal((c.cpu.registers['H'] << 8 | c.cpu.registers['L']) & 0xFFFF, 0)
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true)
+		  assert.equal((c.cpu.Registers['H'] << 8 | c.cpu.Registers['L']) & 0xFFFF, 0)
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true)
 		
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),false);
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c.cpu.Clock, 31);
+		  assert.equal(c.cpu.Clock, 41);
 		  
 		  c.Reset();
 		});
 		
 	it('Carry set then unset', () => {
 		const c = new Computer();
-		const FlagType = c.cpu._flag_manager.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
 		
 		
 		let program = [
-		  0x26,          // MVI into H...
-		  64,       // ... this data
-		  0x2E,          // MVI into L...
-		  1,       // ...this data
-		  0x39,          // Call relevant DAD command
-		  0x76           // HALT
+		  0x31,                             // Set stack pointer to...
+		  16385 & 0xFF,           // ...this low-byte....
+		  16385 >> 8 & 0xFF,      // ...this high-byte
+		  0x26,                             // MVI into H...
+		  64,                          // ... this data
+		  0x2E,                             // MVI into L...
+		  1,                          // ...this data
+		  0x39,                             // Call relevant DAD command
+		  0x76                              // HALT
 		]
 		
 		  c.InjectProgram(program);
-		  c.cpu.stack_pointer = 16385;
 		  c.ExecuteProgram();
 		
-		  assert.equal((c.cpu.registers['H'] << 8 | c.cpu.registers['L']) & 0xFFFF, 32770)
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false)
+		  assert.equal((c.cpu.Registers['H'] << 8 | c.cpu.Registers['L']) & 0xFFFF, 32770)
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false)
 		
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),false);
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c.cpu.Clock, 31);
+		  assert.equal(c.cpu.Clock, 41);
 		  
 		  c.Reset();
 		});

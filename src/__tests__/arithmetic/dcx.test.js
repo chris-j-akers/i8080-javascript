@@ -15,7 +15,7 @@ const mvi_opcode_lookup = {
 describe('DCX', () => {
 	it('Decrement 5 times from 4 and confirm B/C register rolls to 65535 when decremented at 0', () => {
 		const c = new Computer();
-		const FlagType = c.cpu._flag_manager.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
 		
 		
 		const program = [
@@ -29,23 +29,23 @@ describe('DCX', () => {
 		
 		c.InjectProgram(program);
 		c.ExecuteProgram();
-		assert.equal((c.cpu.registers.B << 8) | c.cpu.registers.C, 3);
+		assert.equal((c.cpu.Registers.B << 8) | c.cpu.Registers.C, 3);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x04);
-		assert.equal((c.cpu.registers.B  << 8) | c.cpu.registers.C, 2);
+		assert.equal((c.cpu.Registers.B  << 8) | c.cpu.Registers.C, 2);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x04);
-		assert.equal((c.cpu.registers.B  << 8) | c.cpu.registers.C, 1);
+		assert.equal((c.cpu.Registers.B  << 8) | c.cpu.Registers.C, 1);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x04);
-		assert.equal((c.cpu.registers.B  << 8) | c.cpu.registers.C, 0);
+		assert.equal((c.cpu.Registers.B  << 8) | c.cpu.Registers.C, 0);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x04);
-		assert.equal((c.cpu.registers.B  << 8) | c.cpu.registers.C, 65535);
+		assert.equal((c.cpu.Registers.B  << 8) | c.cpu.Registers.C, 65535);
 		
 		assert.equal(c.cpu.Clock, 74);
 		
@@ -53,7 +53,7 @@ describe('DCX', () => {
 		
 	it('Decrement 5 times from 65533 and confirm D/E register rolls to 65535 when decremented at 0', () => {
 		const c = new Computer();
-		const FlagType = c.cpu._flag_manager.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
 		
 		
 		const program = [
@@ -67,23 +67,23 @@ describe('DCX', () => {
 		
 		c.InjectProgram(program);
 		c.ExecuteProgram();
-		assert.equal((c.cpu.registers.D << 8) | c.cpu.registers.E, 3);
+		assert.equal((c.cpu.Registers.D << 8) | c.cpu.Registers.E, 3);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x04);
-		assert.equal((c.cpu.registers.D  << 8) | c.cpu.registers.E, 2);
+		assert.equal((c.cpu.Registers.D  << 8) | c.cpu.Registers.E, 2);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x04);
-		assert.equal((c.cpu.registers.D  << 8) | c.cpu.registers.E, 1);
+		assert.equal((c.cpu.Registers.D  << 8) | c.cpu.Registers.E, 1);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x04);
-		assert.equal((c.cpu.registers.D  << 8) | c.cpu.registers.E, 0);
+		assert.equal((c.cpu.Registers.D  << 8) | c.cpu.Registers.E, 0);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x04);
-		assert.equal((c.cpu.registers.D  << 8) | c.cpu.registers.E, 65535);
+		assert.equal((c.cpu.Registers.D  << 8) | c.cpu.Registers.E, 65535);
 		
 		assert.equal(c.cpu.Clock, 74);
 		
@@ -91,7 +91,7 @@ describe('DCX', () => {
 		
 	it('Decrement 5 times from 65533 and confirm H/L register rolls to 65535 when decremented at 0', () => {
 		const c = new Computer();
-		const FlagType = c.cpu._flag_manager.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
 		
 		
 		const program = [
@@ -105,23 +105,23 @@ describe('DCX', () => {
 		
 		c.InjectProgram(program);
 		c.ExecuteProgram();
-		assert.equal((c.cpu.registers.H << 8) | c.cpu.registers.L, 3);
+		assert.equal((c.cpu.Registers.H << 8) | c.cpu.Registers.L, 3);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x04);
-		assert.equal((c.cpu.registers.H  << 8) | c.cpu.registers.L, 2);
+		assert.equal((c.cpu.Registers.H  << 8) | c.cpu.Registers.L, 2);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x04);
-		assert.equal((c.cpu.registers.H  << 8) | c.cpu.registers.L, 1);
+		assert.equal((c.cpu.Registers.H  << 8) | c.cpu.Registers.L, 1);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x04);
-		assert.equal((c.cpu.registers.H  << 8) | c.cpu.registers.L, 0);
+		assert.equal((c.cpu.Registers.H  << 8) | c.cpu.Registers.L, 0);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x04);
-		assert.equal((c.cpu.registers.H  << 8) | c.cpu.registers.L, 65535);
+		assert.equal((c.cpu.Registers.H  << 8) | c.cpu.Registers.L, 65535);
 		
 		assert.equal(c.cpu.Clock, 74);
 		

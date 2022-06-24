@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('DCX', () => {
 	it('Decrement Stack pointer 5 times from 4 and ensure it rolls to 65535 when decremented at 0.', () => {
 		const c = new Computer();
-		const FlagType = c.cpu._flag_manager.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
 		
 		
 		const program = [
@@ -18,23 +18,23 @@ describe('DCX', () => {
 		
 		c.InjectProgram(program);
 		c.ExecuteProgram();
-		assert.equal(c.cpu.stack_pointer, 3);
+		assert.equal(c.cpu.StackPointer, 3);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x03);
-		assert.equal(c.cpu.stack_pointer, 2);
+		assert.equal(c.cpu.StackPointer, 2);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x03);
-		assert.equal(c.cpu.stack_pointer, 1);
+		assert.equal(c.cpu.StackPointer, 1);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x03);
-		assert.equal(c.cpu.stack_pointer, 0);
+		assert.equal(c.cpu.StackPointer, 0);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x03);
-		assert.equal(c.cpu.stack_pointer, 65535);
+		assert.equal(c.cpu.StackPointer, 65535);
 		
 		assert.equal(c.cpu.Clock, 70);
 		

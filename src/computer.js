@@ -81,7 +81,7 @@ class Computer {
      * This is used for diagnostic purposes.
      */
     get CPURegisters() {
-        return this.cpu.registers;
+        return this.cpu._registers;
     }
 
     /**
@@ -121,7 +121,7 @@ class Computer {
      * addr)
      */
     ExecuteNextInstruction() {
-        if (this.cpu.halt == false) {
+        if (this.cpu._halt == false) {
             const instruction = `${this.cpu.ProgramCounter.toString(16).padStart(4,'0')}\t${this.cpu.ExecuteNextInstruction()}`;
             return instruction;
         }
@@ -152,7 +152,7 @@ class Computer {
      */
     ExecuteProgram(from_addr=0x0) {
         this.cpu.ProgramCounter = from_addr;
-        while(this.cpu.halt === false) {
+        while(this.cpu._halt === false) {
             this.cpu.ExecuteNextInstruction();
         }
     }

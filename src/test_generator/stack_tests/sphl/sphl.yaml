@@ -13,7 +13,7 @@ test_suite:
     });
   boilerplate: |
     const c = new Computer();
-    const FlagType = c.cpu._flag_manager.FlagType;
+    const FlagType = c.cpu.FlagManager.FlagType;
     
     let program = [
       0x26,                   // MVI into Register H...
@@ -29,8 +29,8 @@ test_suite:
 
       // Check we're set-up correctly
 
-      assert.equal(c.cpu.stack_pointer, {h_register} << 8 | {l_register});
-      assert.equal(c.cpu.clock, 26);
+      assert.equal(c.cpu.StackPointer, {h_register} << 8 | {l_register});
+      assert.equal(c.cpu.Clock, 26);
 
     }});
 

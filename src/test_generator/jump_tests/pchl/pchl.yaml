@@ -13,7 +13,7 @@ test_suite:
     });
   boilerplate: |
     const c = new Computer();
-    const FlagType = c.cpu._flag_manager.FlagType;
+    const FlagType = c.cpu.FlagManager.FlagType;
     
     let program = [
       0x26,                   // MVI into Register H...
@@ -31,8 +31,8 @@ test_suite:
       // Check we're set-up correctly
 
       // + 1 on Program Counter because the HALT command would have been executed
-      assert.equal(c.cpu.program_counter, {h_register} << 8 | {l_register} + 1);
-      assert.equal(c.cpu.clock, 36);
+      assert.equal(c.cpu.ProgramCounter, {h_register} << 8 | {l_register} + 1);
+      assert.equal(c.cpu.Clock, 36);
 
     }});
 

@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('CNC', () => {
 	it('Carry is set, call not made', () => {
 		const c = new Computer();
-		const FlagType = c.cpu._flag_manager.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
 		
 		let program = [
 		
@@ -55,17 +55,17 @@ describe('CNC', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.registers['A'], 9);
-		  assert.equal(c.cpu.stack_pointer, 65535);
+		  assert.equal(c.cpu.Registers['A'], 9);
+		  assert.equal(c.cpu.StackPointer, 65535);
 		  
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), true);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
 		  assert.equal(c.cpu.Clock, 83);
 		
 		  });
 		
 	it('Carry is not set, call is made', () => {
 		const c = new Computer();
-		const FlagType = c.cpu._flag_manager.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
 		
 		let program = [
 		
@@ -115,10 +115,10 @@ describe('CNC', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.registers['A'], 16);
-		  assert.equal(c.cpu.stack_pointer, 65535);
+		  assert.equal(c.cpu.Registers['A'], 16);
+		  assert.equal(c.cpu.StackPointer, 65535);
 		  
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
 		  assert.equal(c.cpu.Clock, 104);
 		
 		  });

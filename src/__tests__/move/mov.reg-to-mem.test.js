@@ -35,7 +35,7 @@ describe('MOV to Register to Memory', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.registers.B);
+		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers.B);
 		
 		  assert.equal(c.cpu.Clock, 35);
 		
@@ -66,7 +66,7 @@ describe('MOV to Register to Memory', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.registers.C);
+		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers.C);
 		
 		  assert.equal(c.cpu.Clock, 35);
 		
@@ -97,7 +97,7 @@ describe('MOV to Register to Memory', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.registers.D);
+		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers.D);
 		
 		  assert.equal(c.cpu.Clock, 35);
 		
@@ -128,7 +128,7 @@ describe('MOV to Register to Memory', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.registers.E);
+		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers.E);
 		
 		  assert.equal(c.cpu.Clock, 35);
 		
@@ -159,7 +159,7 @@ describe('MOV to Register to Memory', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.registers.H);
+		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers.H);
 		
 		  assert.equal(c.cpu.Clock, 35);
 		
@@ -190,7 +190,7 @@ describe('MOV to Register to Memory', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.registers.L);
+		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers.L);
 		
 		  assert.equal(c.cpu.Clock, 35);
 		
@@ -221,7 +221,7 @@ describe('MOV to Register to Memory', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.registers.A);
+		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers.A);
 		
 		  assert.equal(c.cpu.Clock, 35);
 		

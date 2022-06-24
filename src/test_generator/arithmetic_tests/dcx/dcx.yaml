@@ -22,7 +22,7 @@ test_suite:
     });
   boilerplate: |
     const c = new Computer();
-    const FlagType = c.cpu._flag_manager.FlagType;
+    const FlagType = c.cpu.FlagManager.FlagType;
 
 
     const program = [
@@ -36,23 +36,23 @@ test_suite:
 
     c.InjectProgram(program);
     c.ExecuteProgram();
-    assert.equal((c.cpu.registers.{register_high_byte} << 8) | c.cpu.registers.{register_low_byte}, 3);
+    assert.equal((c.cpu.Registers.{register_high_byte} << 8) | c.cpu.Registers.{register_low_byte}, 3);
 
-    c.cpu.halt = false;
+    c.cpu.Halt = false;
     c.ExecuteProgram(0x04);
-    assert.equal((c.cpu.registers.{register_high_byte}  << 8) | c.cpu.registers.{register_low_byte}, 2);
+    assert.equal((c.cpu.Registers.{register_high_byte}  << 8) | c.cpu.Registers.{register_low_byte}, 2);
 
-    c.cpu.halt = false;
+    c.cpu.Halt = false;
     c.ExecuteProgram(0x04);
-    assert.equal((c.cpu.registers.{register_high_byte}  << 8) | c.cpu.registers.{register_low_byte}, 1);
+    assert.equal((c.cpu.Registers.{register_high_byte}  << 8) | c.cpu.Registers.{register_low_byte}, 1);
 
-    c.cpu.halt = false;
+    c.cpu.Halt = false;
     c.ExecuteProgram(0x04);
-    assert.equal((c.cpu.registers.{register_high_byte}  << 8) | c.cpu.registers.{register_low_byte}, 0);
+    assert.equal((c.cpu.Registers.{register_high_byte}  << 8) | c.cpu.Registers.{register_low_byte}, 0);
 
-    c.cpu.halt = false;
+    c.cpu.Halt = false;
     c.ExecuteProgram(0x04);
-    assert.equal((c.cpu.registers.{register_high_byte}  << 8) | c.cpu.registers.{register_low_byte}, 65535);
+    assert.equal((c.cpu.Registers.{register_high_byte}  << 8) | c.cpu.Registers.{register_low_byte}, 65535);
     
     assert.equal(c.cpu.Clock, 74);
 

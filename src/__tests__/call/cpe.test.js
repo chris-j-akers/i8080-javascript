@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('CPE', () => {
 	it('Parity is set (Even Parity), call is made', () => {
 		const c = new Computer();
-		const FlagType = c.cpu._flag_manager.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
 		
 		let program = [
 		
@@ -55,18 +55,18 @@ describe('CPE', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.registers['A'], 21);
-		  assert.equal(c.cpu.stack_pointer, 65535);
+		  assert.equal(c.cpu.Registers['A'], 21);
+		  assert.equal(c.cpu.StackPointer, 65535);
 		  
 		  // Note that when we're testing Parity, the INC operation we execute in the CALL will reset
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), false);
 		  assert.equal(c.cpu.Clock, 104);
 		
 		  });
 		
 	it('Parity is not set (Odd Parity), call is not made', () => {
 		const c = new Computer();
-		const FlagType = c.cpu._flag_manager.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
 		
 		let program = [
 		
@@ -116,11 +116,11 @@ describe('CPE', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.registers['A'], 19);
-		  assert.equal(c.cpu.stack_pointer, 65535);
+		  assert.equal(c.cpu.Registers['A'], 19);
+		  assert.equal(c.cpu.StackPointer, 65535);
 		  
 		  // Note that when we're testing Parity, the INC operation we execute in the CALL will reset
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), false);
 		  assert.equal(c.cpu.Clock, 83);
 		
 		  });

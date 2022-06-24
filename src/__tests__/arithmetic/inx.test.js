@@ -31,7 +31,7 @@ const mvi_opcode_lookup = {
 describe('INX', () => {
 	it('Increment 5 times from 65533 and confirm B/C register rolls over to 0 once 8-bit max limit reached', () => {
 		const c = new Computer();
-		const FlagType = c.cpu._flag_manager.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
 		
 		
 		const program = [
@@ -45,19 +45,19 @@ describe('INX', () => {
 		
 		c.InjectProgram(program);
 		c.ExecuteProgram();
-		assert.equal((c.cpu.registers.B << 8) | c.cpu.registers.C, 65534);
+		assert.equal((c.cpu.Registers.B << 8) | c.cpu.Registers.C, 65534);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x04);
-		assert.equal((c.cpu.registers.B  << 8) | c.cpu.registers.C, 65535);
+		assert.equal((c.cpu.Registers.B  << 8) | c.cpu.Registers.C, 65535);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x04);
-		assert.equal((c.cpu.registers.B  << 8) | c.cpu.registers.C, 0);
+		assert.equal((c.cpu.Registers.B  << 8) | c.cpu.Registers.C, 0);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x04);
-		assert.equal((c.cpu.registers.B  << 8) | c.cpu.registers.C, 1);
+		assert.equal((c.cpu.Registers.B  << 8) | c.cpu.Registers.C, 1);
 		
 		assert.equal(c.cpu.Clock, 62);
 		
@@ -65,7 +65,7 @@ describe('INX', () => {
 		
 	it('Increment 5 times from 65533 and confirm D/E register rolls over to 0 once 8-bit max limit reached', () => {
 		const c = new Computer();
-		const FlagType = c.cpu._flag_manager.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
 		
 		
 		const program = [
@@ -79,19 +79,19 @@ describe('INX', () => {
 		
 		c.InjectProgram(program);
 		c.ExecuteProgram();
-		assert.equal((c.cpu.registers.D << 8) | c.cpu.registers.E, 65534);
+		assert.equal((c.cpu.Registers.D << 8) | c.cpu.Registers.E, 65534);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x04);
-		assert.equal((c.cpu.registers.D  << 8) | c.cpu.registers.E, 65535);
+		assert.equal((c.cpu.Registers.D  << 8) | c.cpu.Registers.E, 65535);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x04);
-		assert.equal((c.cpu.registers.D  << 8) | c.cpu.registers.E, 0);
+		assert.equal((c.cpu.Registers.D  << 8) | c.cpu.Registers.E, 0);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x04);
-		assert.equal((c.cpu.registers.D  << 8) | c.cpu.registers.E, 1);
+		assert.equal((c.cpu.Registers.D  << 8) | c.cpu.Registers.E, 1);
 		
 		assert.equal(c.cpu.Clock, 62);
 		
@@ -99,7 +99,7 @@ describe('INX', () => {
 		
 	it('Increment 5 times from 65533 and confirm H/L register rolls over to 0 once 8-bit max limit reached', () => {
 		const c = new Computer();
-		const FlagType = c.cpu._flag_manager.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
 		
 		
 		const program = [
@@ -113,19 +113,19 @@ describe('INX', () => {
 		
 		c.InjectProgram(program);
 		c.ExecuteProgram();
-		assert.equal((c.cpu.registers.H << 8) | c.cpu.registers.L, 65534);
+		assert.equal((c.cpu.Registers.H << 8) | c.cpu.Registers.L, 65534);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x04);
-		assert.equal((c.cpu.registers.H  << 8) | c.cpu.registers.L, 65535);
+		assert.equal((c.cpu.Registers.H  << 8) | c.cpu.Registers.L, 65535);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x04);
-		assert.equal((c.cpu.registers.H  << 8) | c.cpu.registers.L, 0);
+		assert.equal((c.cpu.Registers.H  << 8) | c.cpu.Registers.L, 0);
 		
-		c.cpu.halt = false;
+		c.cpu.Halt = false;
 		c.ExecuteProgram(0x04);
-		assert.equal((c.cpu.registers.H  << 8) | c.cpu.registers.L, 1);
+		assert.equal((c.cpu.Registers.H  << 8) | c.cpu.Registers.L, 1);
 		
 		assert.equal(c.cpu.Clock, 62);
 		

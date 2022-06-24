@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('CZ', () => {
 	it('Return is 0, call is made', () => {
 		const c = new Computer();
-		const FlagType = c.cpu._flag_manager.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
 		
 		let program = [
 		
@@ -55,18 +55,18 @@ describe('CZ', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.registers['A'], 1);
-		  assert.equal(c.cpu.stack_pointer, 65535);
+		  assert.equal(c.cpu.Registers['A'], 1);
+		  assert.equal(c.cpu.StackPointer, 65535);
 		  
 		  // The increment operation will clear the Zero flag, as expected
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu.Clock, 104);
 		
 		  });
 		
 	it('Return is not 0, call is not made', () => {
 		const c = new Computer();
-		const FlagType = c.cpu._flag_manager.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
 		
 		let program = [
 		
@@ -116,11 +116,11 @@ describe('CZ', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.registers['A'], 5);
-		  assert.equal(c.cpu.stack_pointer, 65535);
+		  assert.equal(c.cpu.Registers['A'], 5);
+		  assert.equal(c.cpu.StackPointer, 65535);
 		  
 		  // The increment operation will clear the Zero flag, as expected
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
 		  assert.equal(c.cpu.Clock, 83);
 		
 		  });

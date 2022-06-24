@@ -35,7 +35,7 @@ test_suite:
 
       assert.equal(c.cpu.Clock, 38);
 
-      assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.registers.{reg_destination});
+      assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers.{reg_destination});
       c.Reset();
     }}
     }});

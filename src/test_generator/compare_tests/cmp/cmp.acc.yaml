@@ -12,7 +12,7 @@ test_suite:
     });
   boilerplate: |
     const c = new Computer();
-    const FlagType = c.cpu._flag_manager.FlagType;
+    const FlagType = c.cpu.FlagManager.FlagType;
 
 
     const program = [
@@ -25,12 +25,12 @@ test_suite:
     c.InjectProgram(program);
     c.ExecuteProgram();
 
-    assert.equal(c.cpu.registers.A, {expected_result});
-    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), {carry});
-    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),{parity});
-    assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), {auxillary_carry});
-    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), {zero});
-    assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), {sign});
+    assert.equal(c.cpu.Registers.A, {expected_result});
+    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), {carry});
+    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),{parity});
+    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), {auxillary_carry});
+    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), {zero});
+    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), {sign});
     
     assert.equal(c.cpu.Clock, 18);
 

@@ -22,31 +22,33 @@ test_suite:
     });
   boilerplate: |
     const c = new Computer();
-    const FlagType = c.cpu._flag_manager.FlagType;
+    const FlagType = c.cpu.FlagManager.FlagType;
 
 
     let program = [
-      0x26,          // MVI into H...
-      {h_reg},       // ... this data
-      0x2E,          // MVI into L...
-      {l_reg},       // ...this data
-      0x39,          // Call relevant DAD command
-      0x76           // HALT
+      0x31,                             // Set stack pointer to...
+      {stack_pointer} & 0xFF,           // ...this low-byte....
+      {stack_pointer} >> 8 & 0xFF,      // ...this high-byte
+      0x26,                             // MVI into H...
+      {h_reg},                          // ... this data
+      0x2E,                             // MVI into L...
+      {l_reg},                          // ...this data
+      0x39,                             // Call relevant DAD command
+      0x76                              // HALT
     ]
 
       c.InjectProgram(program);
-      c.cpu.stack_pointer = {stack_pointer};
       c.ExecuteProgram();
 
-      assert.equal((c.cpu.registers['H'] << 8 | c.cpu.registers['L']) & 0xFFFF, {expected_result})
-      assert.equal(c.cpu._flag_manager.IsSet(FlagType.Carry), {carry})
+      assert.equal((c.cpu.Registers['H'] << 8 | c.cpu.Registers['L']) & 0xFFFF, {expected_result})
+      assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), {carry})
 
-      assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity),false);
-      assert.equal(c.cpu._flag_manager.IsSet(FlagType.AuxillaryCarry), false);
-      assert.equal(c.cpu._flag_manager.IsSet(FlagType.Zero), false);
-      assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
+      assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
+      assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+      assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
+      assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
 
-      assert.equal(c.cpu.Clock, 31);
+      assert.equal(c.cpu.Clock, 41);
       
       c.Reset();
     }});

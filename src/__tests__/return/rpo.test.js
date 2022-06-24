@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('RPO', () => {
 	it('Parity is set (Even Parity), program counter is not modified', () => {
 		const c = new Computer();
-		const FlagType = c.cpu._flag_manager.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
 		
 		let program = [
 		
@@ -52,16 +52,16 @@ describe('RPO', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.registers['A'], 20)
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), true);
-		  assert.equal(c.cpu.program_counter, 20);
+		  assert.equal(c.cpu.Registers['A'], 20)
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), true);
+		  assert.equal(c.cpu.ProgramCounter, 20);
 		  assert.equal(c.cpu.Clock, 85);
 		
 		});
 		
 	it('Parity is not set (Odd Parity), program counter is modified', () => {
 		const c = new Computer();
-		const FlagType = c.cpu._flag_manager.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
 		
 		let program = [
 		
@@ -108,9 +108,9 @@ describe('RPO', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.registers['A'], 19)
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), false);
-		  assert.equal(c.cpu.program_counter, 43691);
+		  assert.equal(c.cpu.Registers['A'], 19)
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), false);
+		  assert.equal(c.cpu.ProgramCounter, 43691);
 		  assert.equal(c.cpu.Clock, 91);
 		
 		});

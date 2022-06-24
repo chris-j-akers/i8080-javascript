@@ -14,7 +14,7 @@ test_suite:
     });
   boilerplate: |
     const c = new Computer();
-    const FlagType = c.cpu._flag_manager.FlagType;
+    const FlagType = c.cpu.FlagManager.FlagType;
     
     let program = [
 
@@ -64,11 +64,11 @@ test_suite:
       c.InjectProgram(program);
       c.ExecuteProgram();
 
-      assert.equal(c.cpu.registers['A'], {expected_result});
-      assert.equal(c.cpu.stack_pointer, {expected_stack_pointer});
+      assert.equal(c.cpu.Registers['A'], {expected_result});
+      assert.equal(c.cpu.StackPointer, {expected_stack_pointer});
       
       // Note that when we're testing Parity, the INC operation we execute in the CALL will reset
-      assert.equal(c.cpu._flag_manager.IsSet(FlagType.Parity), {parity});
+      assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), {parity});
       assert.equal(c.cpu.Clock, {expected_clock});
 
       }});

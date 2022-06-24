@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('CM', () => {
 	it('Sign is set, call is made', () => {
 		const c = new Computer();
-		const FlagType = c.cpu._flag_manager.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
 		
 		let program = [
 		
@@ -55,17 +55,17 @@ describe('CM', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.registers['A'], 188);
-		  assert.equal(c.cpu.stack_pointer, 65535);
+		  assert.equal(c.cpu.Registers['A'], 188);
+		  assert.equal(c.cpu.StackPointer, 65535);
 		  
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), true);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), true);
 		  assert.equal(c.cpu.Clock, 104);
 		
 		  });
 		
 	it('Sign bit is set, call is not made', () => {
 		const c = new Computer();
-		const FlagType = c.cpu._flag_manager.FlagType;
+		const FlagType = c.cpu.FlagManager.FlagType;
 		
 		let program = [
 		
@@ -115,10 +115,10 @@ describe('CM', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.registers['A'], 20);
-		  assert.equal(c.cpu.stack_pointer, 65535);
+		  assert.equal(c.cpu.Registers['A'], 20);
+		  assert.equal(c.cpu.StackPointer, 65535);
 		  
-		  assert.equal(c.cpu._flag_manager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
 		  assert.equal(c.cpu.Clock, 83);
 		
 		  });
