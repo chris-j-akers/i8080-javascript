@@ -36,8 +36,8 @@ describe('LDA', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers['A']);
-		  assert.equal(c.cpu.Clock, 44)
+		  assert.equal(c.Bus.ReadRAM(mem_addr), c._cpu.Registers['A']);
+		  assert.equal(c._cpu.Clock, 44)
 		  c.Reset();
 		}
 		});

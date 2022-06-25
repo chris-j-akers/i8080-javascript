@@ -25,9 +25,9 @@ describe('MOV Memory to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Clock, 38);
+		  assert.equal(c._cpu.Clock, 38);
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers.B);
+		  assert.equal(c.Bus.ReadRAM(mem_addr), c._cpu.Registers.B);
 		  c.Reset();
 		}
 		});
@@ -55,9 +55,9 @@ describe('MOV Memory to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Clock, 38);
+		  assert.equal(c._cpu.Clock, 38);
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers.C);
+		  assert.equal(c.Bus.ReadRAM(mem_addr), c._cpu.Registers.C);
 		  c.Reset();
 		}
 		});
@@ -85,9 +85,9 @@ describe('MOV Memory to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Clock, 38);
+		  assert.equal(c._cpu.Clock, 38);
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers.D);
+		  assert.equal(c.Bus.ReadRAM(mem_addr), c._cpu.Registers.D);
 		  c.Reset();
 		}
 		});
@@ -115,9 +115,9 @@ describe('MOV Memory to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Clock, 38);
+		  assert.equal(c._cpu.Clock, 38);
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers.E);
+		  assert.equal(c.Bus.ReadRAM(mem_addr), c._cpu.Registers.E);
 		  c.Reset();
 		}
 		});
@@ -145,9 +145,9 @@ describe('MOV Memory to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Clock, 38);
+		  assert.equal(c._cpu.Clock, 38);
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers.H);
+		  assert.equal(c.Bus.ReadRAM(mem_addr), c._cpu.Registers.H);
 		  c.Reset();
 		}
 		});
@@ -175,9 +175,9 @@ describe('MOV Memory to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Clock, 38);
+		  assert.equal(c._cpu.Clock, 38);
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers.L);
+		  assert.equal(c.Bus.ReadRAM(mem_addr), c._cpu.Registers.L);
 		  c.Reset();
 		}
 		});
@@ -205,9 +205,9 @@ describe('MOV Memory to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Clock, 38);
+		  assert.equal(c._cpu.Clock, 38);
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers.A);
+		  assert.equal(c.Bus.ReadRAM(mem_addr), c._cpu.Registers.A);
 		  c.Reset();
 		}
 		});

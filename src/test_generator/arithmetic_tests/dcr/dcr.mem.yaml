@@ -19,7 +19,7 @@ test_suite:
   boilerplate: |
     const max_mem_addr = {max_mem_addr};
     const c = new Computer();
-    const FlagType = c.cpu.FlagManager.FlagType;
+    const FlagType = c._cpu.FlagManager.FlagType;
 
 
     const data = {data};
@@ -40,21 +40,21 @@ test_suite:
       program[1] = (mem_addr >> 8) & 0xFF;
       program[3] = mem_addr & 0xFF;
 
-      carry_set = c.cpu.FlagManager.IsSet(FlagType.Carry);
+      carry_set = c._cpu.FlagManager.IsSet(FlagType.Carry);
 
       c.InjectProgram(program);
       c.ExecuteProgram();
 
       // Here, we're just checking the carry flag hasn't been touched.
-      assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), carry_set);
+      assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), carry_set);
 
-      assert.equal(c.bus.ReadRAM(mem_addr),{expected_result});
-      assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), {parity});
-      assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), {auxillary_carry});
-      assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), {zero});
-      assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), {sign});
+      assert.equal(c.Bus.ReadRAM(mem_addr),{expected_result});
+      assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity), {parity});
+      assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), {auxillary_carry});
+      assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), {zero});
+      assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), {sign});
       
-      assert.equal(c.cpu.Clock, 41);
+      assert.equal(c._cpu.Clock, 41);
       
       c.Reset();
       }}

@@ -29,12 +29,12 @@ test_suite:
     c.InjectProgram(program);
     c.ExecuteProgram();
 
-    assert.equal(c.cpu.Registers['D'], {h_register});
-    assert.equal(c.cpu.Registers['E'], {l_register});
-    assert.equal(c.cpu.Registers['H'], {d_register});
-    assert.equal(c.cpu.Registers['L'], {e_register});
+    assert.equal(c._cpu.Registers['D'], {h_register});
+    assert.equal(c._cpu.Registers['E'], {l_register});
+    assert.equal(c._cpu.Registers['H'], {d_register});
+    assert.equal(c._cpu.Registers['L'], {e_register});
 
-    assert.equal(c.cpu.Clock, 40);
+    assert.equal(c._cpu.Clock, 40);
 
     }});
 

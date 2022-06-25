@@ -25,8 +25,8 @@ test_suite:
       c.InjectProgram(program);
       c.ExecuteProgram();
 
-      assert.equal(c.cpu.Registers.{reg_destination}, byte);
-      assert.equal(c.cpu.Clock, 14);
+      assert.equal(c._cpu.Registers.{reg_destination}, byte);
+      assert.equal(c._cpu.Clock, 14);
       c.Reset();
     }}
     }});

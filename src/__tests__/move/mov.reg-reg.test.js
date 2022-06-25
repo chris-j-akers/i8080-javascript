@@ -28,9 +28,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.B, byte);
+		  assert.equal(c._cpu.Registers.B, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -52,9 +52,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.B, byte);
+		  assert.equal(c._cpu.Registers.B, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -76,9 +76,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.B, byte);
+		  assert.equal(c._cpu.Registers.B, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -100,9 +100,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.B, byte);
+		  assert.equal(c._cpu.Registers.B, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -124,9 +124,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.B, byte);
+		  assert.equal(c._cpu.Registers.B, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -148,9 +148,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.B, byte);
+		  assert.equal(c._cpu.Registers.B, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -172,9 +172,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.B, byte);
+		  assert.equal(c._cpu.Registers.B, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -196,9 +196,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.C, byte);
+		  assert.equal(c._cpu.Registers.C, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -220,9 +220,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.C, byte);
+		  assert.equal(c._cpu.Registers.C, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -244,9 +244,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.C, byte);
+		  assert.equal(c._cpu.Registers.C, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -268,9 +268,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.C, byte);
+		  assert.equal(c._cpu.Registers.C, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -292,9 +292,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.C, byte);
+		  assert.equal(c._cpu.Registers.C, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -316,9 +316,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.C, byte);
+		  assert.equal(c._cpu.Registers.C, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -340,9 +340,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.C, byte);
+		  assert.equal(c._cpu.Registers.C, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -364,9 +364,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.D, byte);
+		  assert.equal(c._cpu.Registers.D, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -388,9 +388,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.D, byte);
+		  assert.equal(c._cpu.Registers.D, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -412,9 +412,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.D, byte);
+		  assert.equal(c._cpu.Registers.D, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -436,9 +436,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.D, byte);
+		  assert.equal(c._cpu.Registers.D, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -460,9 +460,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.D, byte);
+		  assert.equal(c._cpu.Registers.D, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -484,9 +484,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.D, byte);
+		  assert.equal(c._cpu.Registers.D, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -508,9 +508,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.D, byte);
+		  assert.equal(c._cpu.Registers.D, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -532,9 +532,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.E, byte);
+		  assert.equal(c._cpu.Registers.E, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -556,9 +556,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.E, byte);
+		  assert.equal(c._cpu.Registers.E, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -580,9 +580,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.E, byte);
+		  assert.equal(c._cpu.Registers.E, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -604,9 +604,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.E, byte);
+		  assert.equal(c._cpu.Registers.E, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -628,9 +628,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.E, byte);
+		  assert.equal(c._cpu.Registers.E, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -652,9 +652,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.E, byte);
+		  assert.equal(c._cpu.Registers.E, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -676,9 +676,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.E, byte);
+		  assert.equal(c._cpu.Registers.E, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -700,9 +700,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.H, byte);
+		  assert.equal(c._cpu.Registers.H, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -724,9 +724,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.H, byte);
+		  assert.equal(c._cpu.Registers.H, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -748,9 +748,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.H, byte);
+		  assert.equal(c._cpu.Registers.H, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -772,9 +772,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.H, byte);
+		  assert.equal(c._cpu.Registers.H, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -796,9 +796,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.H, byte);
+		  assert.equal(c._cpu.Registers.H, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -820,9 +820,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.H, byte);
+		  assert.equal(c._cpu.Registers.H, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -844,9 +844,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.A, byte);
+		  assert.equal(c._cpu.Registers.A, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -868,9 +868,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.L, byte);
+		  assert.equal(c._cpu.Registers.L, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -892,9 +892,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.L, byte);
+		  assert.equal(c._cpu.Registers.L, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -916,9 +916,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.L, byte);
+		  assert.equal(c._cpu.Registers.L, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -940,9 +940,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.L, byte);
+		  assert.equal(c._cpu.Registers.L, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -964,9 +964,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.L, byte);
+		  assert.equal(c._cpu.Registers.L, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -988,9 +988,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.L, byte);
+		  assert.equal(c._cpu.Registers.L, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -1012,9 +1012,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.A, byte);
+		  assert.equal(c._cpu.Registers.A, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -1036,9 +1036,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.A, byte);
+		  assert.equal(c._cpu.Registers.A, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -1060,9 +1060,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.A, byte);
+		  assert.equal(c._cpu.Registers.A, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -1084,9 +1084,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.A, byte);
+		  assert.equal(c._cpu.Registers.A, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -1108,9 +1108,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.A, byte);
+		  assert.equal(c._cpu.Registers.A, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -1132,9 +1132,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.A, byte);
+		  assert.equal(c._cpu.Registers.A, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -1156,9 +1156,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.A, byte);
+		  assert.equal(c._cpu.Registers.A, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}
@@ -1180,9 +1180,9 @@ describe('MOV Register to Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.A, byte);
+		  assert.equal(c._cpu.Registers.A, byte);
 		
-		  assert.equal(c.cpu.Clock, 19);
+		  assert.equal(c._cpu.Clock, 19);
 		
 		  c.Reset();
 		}

@@ -14,7 +14,7 @@ test_suite:
     });
   boilerplate: |
     const c = new Computer();
-    const FlagType = c.cpu.FlagManager.FlagType;
+    const FlagType = c._cpu.FlagManager.FlagType;
 
     let program = [
       0x26,                               // MVI into Register H...
@@ -29,8 +29,8 @@ test_suite:
       c.InjectProgram(program, 0x100);
       c.ExecuteProgram(0x100);
 
-      assert.equal(c.cpu.ProgramCounter, {expected_program_counter});
-      assert.equal(c.cpu.Clock, 42);
+      assert.equal(c._cpu.ProgramCounter, {expected_program_counter});
+      assert.equal(c._cpu.Clock, 42);
 
     }});
     

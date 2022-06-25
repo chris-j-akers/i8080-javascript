@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('ADC Accumulator', () => {
 	it('No Flags Set (With Carry Unset)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		
 		const program = [
@@ -16,25 +16,25 @@ describe('ADC Accumulator', () => {
 		]
 		
 		c.InjectProgram(program);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
 		
 		c.ExecuteProgram();
 		
-		assert.equal(c.cpu.Registers.A, 4);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		assert.equal(c._cpu.Registers.A, 4);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c.cpu.Clock, 18);
+		assert.equal(c._cpu.Clock, 18);
 		
 		c.Reset();
 		});
 		
 	it('Set Parity and Zero Flag (With Carry Unset)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		
 		const program = [
@@ -45,25 +45,25 @@ describe('ADC Accumulator', () => {
 		]
 		
 		c.InjectProgram(program);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
 		
 		c.ExecuteProgram();
 		
-		assert.equal(c.cpu.Registers.A, 0);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), true);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		assert.equal(c._cpu.Registers.A, 0);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),true);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), true);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c.cpu.Clock, 18);
+		assert.equal(c._cpu.Clock, 18);
 		
 		c.Reset();
 		});
 		
 	it('Set Parity and Zero Flag (With Carry Unset)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		
 		const program = [
@@ -74,25 +74,25 @@ describe('ADC Accumulator', () => {
 		]
 		
 		c.InjectProgram(program);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
 		
 		c.ExecuteProgram();
 		
-		assert.equal(c.cpu.Registers.A, 0);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), true);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		assert.equal(c._cpu.Registers.A, 0);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),true);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), true);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c.cpu.Clock, 18);
+		assert.equal(c._cpu.Clock, 18);
 		
 		c.Reset();
 		});
 		
 	it('Set Parity (With Carry Set)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		
 		const program = [
@@ -103,26 +103,26 @@ describe('ADC Accumulator', () => {
 		]
 		
 		c.InjectProgram(program);
-		c.cpu.FlagManager.SetFlag(FlagType.Carry);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
+		c._cpu.FlagManager.SetFlag(FlagType.Carry);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), true);
 		
 		c.ExecuteProgram();
 		
-		assert.equal(c.cpu.Registers.A, 15);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		assert.equal(c._cpu.Registers.A, 15);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),true);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c.cpu.Clock, 18);
+		assert.equal(c._cpu.Clock, 18);
 		
 		c.Reset();
 		});
 		
 	it('Set Parity and Aux Carry Flags (With Carry Unset)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		
 		const program = [
@@ -133,25 +133,25 @@ describe('ADC Accumulator', () => {
 		]
 		
 		c.InjectProgram(program);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
 		
 		c.ExecuteProgram();
 		
-		assert.equal(c.cpu.Registers.A, 18);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		assert.equal(c._cpu.Registers.A, 18);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),true);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c.cpu.Clock, 18);
+		assert.equal(c._cpu.Clock, 18);
 		
 		c.Reset();
 		});
 		
 	it('Set Parity and Aux Carry Flags (With Carry Set)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		
 		const program = [
@@ -162,26 +162,26 @@ describe('ADC Accumulator', () => {
 		]
 		
 		c.InjectProgram(program);
-		c.cpu.FlagManager.SetFlag(FlagType.Carry);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
+		c._cpu.FlagManager.SetFlag(FlagType.Carry);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), true);
 		
 		c.ExecuteProgram();
 		
-		assert.equal(c.cpu.Registers.A, 17);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		assert.equal(c._cpu.Registers.A, 17);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),true);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c.cpu.Clock, 18);
+		assert.equal(c._cpu.Clock, 18);
 		
 		c.Reset();
 		});
 		
 	it('Set Parity, Aux Carry and Sign Flags (With Carry Unset)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		
 		const program = [
@@ -192,25 +192,25 @@ describe('ADC Accumulator', () => {
 		]
 		
 		c.InjectProgram(program);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
 		
 		c.ExecuteProgram();
 		
-		assert.equal(c.cpu.Registers.A, 178);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), true);
+		assert.equal(c._cpu.Registers.A, 178);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),true);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), true);
 		
-		assert.equal(c.cpu.Clock, 18);
+		assert.equal(c._cpu.Clock, 18);
 		
 		c.Reset();
 		});
 		
 	it('Set Parity, Aux Carry and Sign Flags (With Carry Set)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		
 		const program = [
@@ -221,26 +221,26 @@ describe('ADC Accumulator', () => {
 		]
 		
 		c.InjectProgram(program);
-		c.cpu.FlagManager.SetFlag(FlagType.Carry);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
+		c._cpu.FlagManager.SetFlag(FlagType.Carry);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), true);
 		
 		c.ExecuteProgram();
 		
-		assert.equal(c.cpu.Registers.A, 177);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), true);
+		assert.equal(c._cpu.Registers.A, 177);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),true);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), true);
 		
-		assert.equal(c.cpu.Clock, 18);
+		assert.equal(c._cpu.Clock, 18);
 		
 		c.Reset();
 		});
 		
 	it('Set Carry, Parity and Sign Flags (With Carry Unset)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		
 		const program = [
@@ -251,25 +251,25 @@ describe('ADC Accumulator', () => {
 		]
 		
 		c.InjectProgram(program);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
 		
 		c.ExecuteProgram();
 		
-		assert.equal(c.cpu.Registers.A, 226);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), true);
+		assert.equal(c._cpu.Registers.A, 226);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), true);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),true);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), true);
 		
-		assert.equal(c.cpu.Clock, 18);
+		assert.equal(c._cpu.Clock, 18);
 		
 		c.Reset();
 		});
 		
 	it('Set Carry, Parity and Sign Flags (With Carry Set)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		
 		const program = [
@@ -280,19 +280,19 @@ describe('ADC Accumulator', () => {
 		]
 		
 		c.InjectProgram(program);
-		c.cpu.FlagManager.SetFlag(FlagType.Carry);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
+		c._cpu.FlagManager.SetFlag(FlagType.Carry);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), true);
 		
 		c.ExecuteProgram();
 		
-		assert.equal(c.cpu.Registers.A, 225);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), true);
+		assert.equal(c._cpu.Registers.A, 225);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), true);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),true);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
+		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), true);
 		
-		assert.equal(c.cpu.Clock, 18);
+		assert.equal(c._cpu.Clock, 18);
 		
 		c.Reset();
 		});

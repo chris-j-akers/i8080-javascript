@@ -15,7 +15,7 @@ const opcode_lookup = {
 describe('PUSH (R)', () => {
 	it('Push data in B & C onto the Stack', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		let program = [
 		    0x31,                                             // LXI into Stack pointer
@@ -32,15 +32,15 @@ describe('PUSH (R)', () => {
 		    c.InjectProgram(program);
 		    c.ExecuteProgram();
 		
-		    assert.equal(c.bus.ReadRAM(0xFFFF-1), 0x8F);
-		    assert.equal(c.bus.ReadRAM(0xFFFF-2), 0x9D);
-		    assert.equal(c.cpu.StackPointer, 0xFFFF-2);
-		    assert.equal(c.cpu.Clock, 42);
+		    assert.equal(c.Bus.ReadRAM(0xFFFF-1), 0x8F);
+		    assert.equal(c.Bus.ReadRAM(0xFFFF-2), 0x9D);
+		    assert.equal(c._cpu.StackPointer, 0xFFFF-2);
+		    assert.equal(c._cpu.Clock, 42);
 		});
 		
 	it('Push data in D & E onto the Stack', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		let program = [
 		    0x31,                                             // LXI into Stack pointer
@@ -57,15 +57,15 @@ describe('PUSH (R)', () => {
 		    c.InjectProgram(program);
 		    c.ExecuteProgram();
 		
-		    assert.equal(c.bus.ReadRAM(0xFFFF-1), 0x8F);
-		    assert.equal(c.bus.ReadRAM(0xFFFF-2), 0x9D);
-		    assert.equal(c.cpu.StackPointer, 0xFFFF-2);
-		    assert.equal(c.cpu.Clock, 42);
+		    assert.equal(c.Bus.ReadRAM(0xFFFF-1), 0x8F);
+		    assert.equal(c.Bus.ReadRAM(0xFFFF-2), 0x9D);
+		    assert.equal(c._cpu.StackPointer, 0xFFFF-2);
+		    assert.equal(c._cpu.Clock, 42);
 		});
 		
 	it('Push data in H & L onto the Stack', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		let program = [
 		    0x31,                                             // LXI into Stack pointer
@@ -82,10 +82,10 @@ describe('PUSH (R)', () => {
 		    c.InjectProgram(program);
 		    c.ExecuteProgram();
 		
-		    assert.equal(c.bus.ReadRAM(0xFFFF-1), 0x8F);
-		    assert.equal(c.bus.ReadRAM(0xFFFF-2), 0x9D);
-		    assert.equal(c.cpu.StackPointer, 0xFFFF-2);
-		    assert.equal(c.cpu.Clock, 42);
+		    assert.equal(c.Bus.ReadRAM(0xFFFF-1), 0x8F);
+		    assert.equal(c.Bus.ReadRAM(0xFFFF-2), 0x9D);
+		    assert.equal(c._cpu.StackPointer, 0xFFFF-2);
+		    assert.equal(c._cpu.Clock, 42);
 		});
 		
 });

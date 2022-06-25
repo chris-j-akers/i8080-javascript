@@ -35,9 +35,9 @@ describe('MOV to Register to Memory', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers.B);
+		  assert.equal(c.Bus.ReadRAM(mem_addr), c._cpu.Registers.B);
 		
-		  assert.equal(c.cpu.Clock, 35);
+		  assert.equal(c._cpu.Clock, 35);
 		
 		  c.Reset();
 		}
@@ -66,9 +66,9 @@ describe('MOV to Register to Memory', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers.C);
+		  assert.equal(c.Bus.ReadRAM(mem_addr), c._cpu.Registers.C);
 		
-		  assert.equal(c.cpu.Clock, 35);
+		  assert.equal(c._cpu.Clock, 35);
 		
 		  c.Reset();
 		}
@@ -97,9 +97,9 @@ describe('MOV to Register to Memory', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers.D);
+		  assert.equal(c.Bus.ReadRAM(mem_addr), c._cpu.Registers.D);
 		
-		  assert.equal(c.cpu.Clock, 35);
+		  assert.equal(c._cpu.Clock, 35);
 		
 		  c.Reset();
 		}
@@ -128,9 +128,9 @@ describe('MOV to Register to Memory', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers.E);
+		  assert.equal(c.Bus.ReadRAM(mem_addr), c._cpu.Registers.E);
 		
-		  assert.equal(c.cpu.Clock, 35);
+		  assert.equal(c._cpu.Clock, 35);
 		
 		  c.Reset();
 		}
@@ -159,9 +159,9 @@ describe('MOV to Register to Memory', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers.H);
+		  assert.equal(c.Bus.ReadRAM(mem_addr), c._cpu.Registers.H);
 		
-		  assert.equal(c.cpu.Clock, 35);
+		  assert.equal(c._cpu.Clock, 35);
 		
 		  c.Reset();
 		}
@@ -190,9 +190,9 @@ describe('MOV to Register to Memory', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers.L);
+		  assert.equal(c.Bus.ReadRAM(mem_addr), c._cpu.Registers.L);
 		
-		  assert.equal(c.cpu.Clock, 35);
+		  assert.equal(c._cpu.Clock, 35);
 		
 		  c.Reset();
 		}
@@ -221,9 +221,9 @@ describe('MOV to Register to Memory', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers.A);
+		  assert.equal(c.Bus.ReadRAM(mem_addr), c._cpu.Registers.A);
 		
-		  assert.equal(c.cpu.Clock, 35);
+		  assert.equal(c._cpu.Clock, 35);
 		
 		  c.Reset();
 		}

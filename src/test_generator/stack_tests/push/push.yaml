@@ -23,7 +23,7 @@ test_suite:
     });
   boilerplate: |
     const c = new Computer();
-    const FlagType = c.cpu.FlagManager.FlagType;
+    const FlagType = c._cpu.FlagManager.FlagType;
 
     let program = [
         0x31,                                             // LXI into Stack pointer
@@ -40,10 +40,10 @@ test_suite:
         c.InjectProgram(program);
         c.ExecuteProgram();
 
-        assert.equal(c.bus.ReadRAM(0xFFFF-1), 0x8F);
-        assert.equal(c.bus.ReadRAM(0xFFFF-2), 0x9D);
-        assert.equal(c.cpu.StackPointer, 0xFFFF-2);
-        assert.equal(c.cpu.Clock, 42);
+        assert.equal(c.Bus.ReadRAM(0xFFFF-1), 0x8F);
+        assert.equal(c.Bus.ReadRAM(0xFFFF-2), 0x9D);
+        assert.equal(c._cpu.StackPointer, 0xFFFF-2);
+        assert.equal(c._cpu.Clock, 42);
     }});
   tests:
 

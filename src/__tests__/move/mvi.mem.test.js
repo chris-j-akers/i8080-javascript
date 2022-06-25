@@ -24,9 +24,9 @@ describe('MVI Memory', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr), data);
+		  assert.equal(c.Bus.ReadRAM(mem_addr), data);
 		
-		  assert.equal(c.cpu.Clock, 31);
+		  assert.equal(c._cpu.Clock, 31);
 		  c.Reset();
 		}
 		});

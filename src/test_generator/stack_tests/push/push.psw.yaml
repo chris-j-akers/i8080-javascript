@@ -14,7 +14,7 @@ test_suite:
     });
   boilerplate: |
     const c = new Computer();
-    const FlagType = c.cpu.FlagManager.FlagType;
+    const FlagType = c._cpu.FlagManager.FlagType;
 
     let program = [
         0x31,                                             // LXI into Stack pointer
@@ -38,23 +38,23 @@ test_suite:
     c.ExecuteProgram();
     
     // No Op-Code for this, so set it here
-    c.cpu.flags = 0x0;
+    c._cpu.flags = 0x0;
     
-    assert.equal(c.cpu.flags, 0);
-    assert.equal(c.cpu.Registers['A'], 0);
+    assert.equal(c._cpu.flags, 0);
+    assert.equal(c._cpu.Registers['A'], 0);
     
     // We assign it back to flags so we can use the FlagManager code to check flag status
-    c.cpu.flags = c.bus.ReadRAM(c.cpu.StackPointer);
+    c._cpu.flags = c.Bus.ReadRAM(c._cpu.StackPointer);
     
-    assert.equal(c.bus.ReadRAM(c.cpu.StackPointer+1), 0xFF);
+    assert.equal(c.Bus.ReadRAM(c._cpu.StackPointer+1), 0xFF);
 
-    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), {carry});
-    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), {parity});
-    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), {auxillary_carry});
-    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), {zero});
-    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), {sign});
+    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), {carry});
+    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity), {parity});
+    assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), {auxillary_carry});
+    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), {zero});
+    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), {sign});
     
-    assert.equal(c.cpu.Clock, 42);
+    assert.equal(c._cpu.Clock, 42);
 
     c.Reset();
     }});

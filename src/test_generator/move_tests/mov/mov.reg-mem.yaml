@@ -44,9 +44,9 @@ test_suite:
       c.InjectProgram(program);
       c.ExecuteProgram();
 
-      assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers.{reg_source});
+      assert.equal(c.Bus.ReadRAM(mem_addr), c._cpu.Registers.{reg_source});
 
-      assert.equal(c.cpu.Clock, 35);
+      assert.equal(c._cpu.Clock, 35);
 
       c.Reset();
     }}

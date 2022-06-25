@@ -20,11 +20,11 @@ describe('LXI Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.B, (word >> 8) & 0xFF);
-		  assert.equal(c.cpu.Registers.C, word & 0xFF);
-		  assert.equal(word, (c.cpu.Registers.B << 8) | c.cpu.Registers.C);
+		  assert.equal(c._cpu.Registers.B, (word >> 8) & 0xFF);
+		  assert.equal(c._cpu.Registers.C, word & 0xFF);
+		  assert.equal(word, (c._cpu.Registers.B << 8) | c._cpu.Registers.C);
 		  
-		  assert.equal(c.cpu.Clock, 17);
+		  assert.equal(c._cpu.Clock, 17);
 		  c.Reset();
 		
 		}
@@ -48,11 +48,11 @@ describe('LXI Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.D, (word >> 8) & 0xFF);
-		  assert.equal(c.cpu.Registers.E, word & 0xFF);
-		  assert.equal(word, (c.cpu.Registers.D << 8) | c.cpu.Registers.E);
+		  assert.equal(c._cpu.Registers.D, (word >> 8) & 0xFF);
+		  assert.equal(c._cpu.Registers.E, word & 0xFF);
+		  assert.equal(word, (c._cpu.Registers.D << 8) | c._cpu.Registers.E);
 		  
-		  assert.equal(c.cpu.Clock, 17);
+		  assert.equal(c._cpu.Clock, 17);
 		  c.Reset();
 		
 		}
@@ -76,11 +76,11 @@ describe('LXI Register', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers.H, (word >> 8) & 0xFF);
-		  assert.equal(c.cpu.Registers.L, word & 0xFF);
-		  assert.equal(word, (c.cpu.Registers.H << 8) | c.cpu.Registers.L);
+		  assert.equal(c._cpu.Registers.H, (word >> 8) & 0xFF);
+		  assert.equal(c._cpu.Registers.L, word & 0xFF);
+		  assert.equal(word, (c._cpu.Registers.H << 8) | c._cpu.Registers.L);
 		  
-		  assert.equal(c.cpu.Clock, 17);
+		  assert.equal(c._cpu.Clock, 17);
 		  c.Reset();
 		
 		}

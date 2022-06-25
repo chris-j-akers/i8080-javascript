@@ -42,17 +42,17 @@ describe('LHLD', () => {
 		  c.ExecuteProgram();
 		
 		  // Program pauses at this point so we can check we zero'd H & L
-		  assert.equal(c.cpu.Registers['H'], 0);
-		  assert.equal(c.cpu.Registers['L'], 0);
+		  assert.equal(c._cpu.Registers['H'], 0);
+		  assert.equal(c._cpu.Registers['L'], 0);
 		
 		  // Continue program from byte 12 (the LHLD test)
-		  c.cpu.Halt = false; 
+		  c._cpu.Halt = false; 
 		  c.ExecuteProgram(12);
 		
-		  assert.equal(c.cpu.Registers['H'], 0xE);
-		  assert.equal(c.cpu.Registers['L'], 0x71);
+		  assert.equal(c._cpu.Registers['H'], 0xE);
+		  assert.equal(c._cpu.Registers['L'], 0x71);
 		
-		  assert.equal(c.cpu.Clock, 74);
+		  assert.equal(c._cpu.Clock, 74);
 		
 		  c.Reset();
 		}

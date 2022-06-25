@@ -13,7 +13,7 @@ test_suite:
   boilerplate: |
     const max_mem_addr = {max_mem_addr};
     const c = new Computer();
-    const FlagType = c.cpu.FlagManager.FlagType;
+    const FlagType = c._cpu.FlagManager.FlagType;
 
 
     const data = {data};
@@ -38,14 +38,14 @@ test_suite:
       c.InjectProgram(program);
       c.ExecuteProgram();
 
-      assert.equal(c.cpu.Registers.A,{expected_result});
-      assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), {carry});
-      assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), {parity});
-      assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), {auxillary_carry});
-      assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), {zero});
-      assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), {sign});
+      assert.equal(c._cpu.Registers.A,{expected_result});
+      assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), {carry});
+      assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity), {parity});
+      assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), {auxillary_carry});
+      assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), {zero});
+      assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), {sign});
       
-      assert.equal(c.cpu.Clock, 45);
+      assert.equal(c._cpu.Clock, 45);
       
       c.Reset();
       }}

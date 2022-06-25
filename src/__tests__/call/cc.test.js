@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('CC', () => {
 	it('Carry is set, call is made', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		let program = [
 		
@@ -55,18 +55,18 @@ describe('CC', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers['A'], 10);
-		  assert.equal(c.cpu.StackPointer, 65535);
+		  assert.equal(c._cpu.Registers['A'], 10);
+		  assert.equal(c._cpu.StackPointer, 65535);
 		  
 		  // INR operations don't touch the carry flag
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
-		  assert.equal(c.cpu.Clock, 104);
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), true);
+		  assert.equal(c._cpu.Clock, 104);
 		
 		  });
 		
 	it('Carry is not set, call is not made', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		let program = [
 		
@@ -116,12 +116,12 @@ describe('CC', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers['A'], 15);
-		  assert.equal(c.cpu.StackPointer, 65535);
+		  assert.equal(c._cpu.Registers['A'], 15);
+		  assert.equal(c._cpu.StackPointer, 65535);
 		  
 		  // INR operations don't touch the carry flag
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		  assert.equal(c.cpu.Clock, 83);
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c._cpu.Clock, 83);
 		
 		  });
 		

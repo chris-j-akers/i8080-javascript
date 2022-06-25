@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('RZ', () => {
 	it('Return is 0, program counter is modified', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		let program = [
 		
@@ -52,10 +52,10 @@ describe('RZ', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers['A'], 0)
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), true);
-		  assert.equal(c.cpu.ProgramCounter, 43691);
-		  assert.equal(c.cpu.Clock, 91);
+		  assert.equal(c._cpu.Registers['A'], 0)
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), true);
+		  assert.equal(c._cpu.ProgramCounter, 43691);
+		  assert.equal(c._cpu.Clock, 91);
 		
 		  c.Reset();
 		
@@ -63,7 +63,7 @@ describe('RZ', () => {
 		
 	it('Return is not 0, program counter is not modified', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		let program = [
 		
@@ -110,10 +110,10 @@ describe('RZ', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers['A'], 5)
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c.cpu.ProgramCounter, 20);
-		  assert.equal(c.cpu.Clock, 85);
+		  assert.equal(c._cpu.Registers['A'], 5)
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c._cpu.ProgramCounter, 20);
+		  assert.equal(c._cpu.Clock, 85);
 		
 		  c.Reset();
 		

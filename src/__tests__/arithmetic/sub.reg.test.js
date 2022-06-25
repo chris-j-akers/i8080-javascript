@@ -20,7 +20,7 @@ const opcode_lookup = {
 describe('SUB Register', () => {
 	it('No Flags Set', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		let program = [
 		    0x3E,           // MVI into Accumulator...
@@ -31,21 +31,21 @@ describe('SUB Register', () => {
 		    0x76            // HALT
 		]
 		
-		for (let reg of Object.keys(c.cpu.Registers).filter((register) => register != 'A')) {
+		for (let reg of Object.keys(c._cpu.Registers).filter((register) => register != 'A')) {
 		    program[2] = opcode_lookup[reg].MVI;
 		    program[4] = opcode_lookup[reg].SUB;
 		
 		    c.InjectProgram(program);
 		    c.ExecuteProgram();
 		
-		    assert.equal(c.cpu.Registers.A, 31);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		    assert.equal(c._cpu.Registers.A, 31);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),false);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
-		    assert.equal(c.cpu.Clock, 25);
+		    assert.equal(c._cpu.Clock, 25);
 		
 		    c.Reset();
 		};
@@ -53,7 +53,7 @@ describe('SUB Register', () => {
 		
 	it('Parity, Aux Carry and Zero Flag Set', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		let program = [
 		    0x3E,           // MVI into Accumulator...
@@ -64,21 +64,21 @@ describe('SUB Register', () => {
 		    0x76            // HALT
 		]
 		
-		for (let reg of Object.keys(c.cpu.Registers).filter((register) => register != 'A')) {
+		for (let reg of Object.keys(c._cpu.Registers).filter((register) => register != 'A')) {
 		    program[2] = opcode_lookup[reg].MVI;
 		    program[4] = opcode_lookup[reg].SUB;
 		
 		    c.InjectProgram(program);
 		    c.ExecuteProgram();
 		
-		    assert.equal(c.cpu.Registers.A, 0);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		    assert.equal(c._cpu.Registers.A, 0);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),true);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), true);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
-		    assert.equal(c.cpu.Clock, 25);
+		    assert.equal(c._cpu.Clock, 25);
 		
 		    c.Reset();
 		};
@@ -86,7 +86,7 @@ describe('SUB Register', () => {
 		
 	it('Parity Flag Set', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		let program = [
 		    0x3E,           // MVI into Accumulator...
@@ -97,21 +97,21 @@ describe('SUB Register', () => {
 		    0x76            // HALT
 		]
 		
-		for (let reg of Object.keys(c.cpu.Registers).filter((register) => register != 'A')) {
+		for (let reg of Object.keys(c._cpu.Registers).filter((register) => register != 'A')) {
 		    program[2] = opcode_lookup[reg].MVI;
 		    program[4] = opcode_lookup[reg].SUB;
 		
 		    c.InjectProgram(program);
 		    c.ExecuteProgram();
 		
-		    assert.equal(c.cpu.Registers.A, 30);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		    assert.equal(c._cpu.Registers.A, 30);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),true);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
-		    assert.equal(c.cpu.Clock, 25);
+		    assert.equal(c._cpu.Clock, 25);
 		
 		    c.Reset();
 		};
@@ -119,7 +119,7 @@ describe('SUB Register', () => {
 		
 	it('Aux Carry Flag Set', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		let program = [
 		    0x3E,           // MVI into Accumulator...
@@ -130,21 +130,21 @@ describe('SUB Register', () => {
 		    0x76            // HALT
 		]
 		
-		for (let reg of Object.keys(c.cpu.Registers).filter((register) => register != 'A')) {
+		for (let reg of Object.keys(c._cpu.Registers).filter((register) => register != 'A')) {
 		    program[2] = opcode_lookup[reg].MVI;
 		    program[4] = opcode_lookup[reg].SUB;
 		
 		    c.InjectProgram(program);
 		    c.ExecuteProgram();
 		
-		    assert.equal(c.cpu.Registers.A, 124);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		    assert.equal(c._cpu.Registers.A, 124);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),false);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
 		
-		    assert.equal(c.cpu.Clock, 25);
+		    assert.equal(c._cpu.Clock, 25);
 		
 		    c.Reset();
 		};
@@ -152,7 +152,7 @@ describe('SUB Register', () => {
 		
 	it('Sign Flag Set', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		let program = [
 		    0x3E,           // MVI into Accumulator...
@@ -163,21 +163,21 @@ describe('SUB Register', () => {
 		    0x76            // HALT
 		]
 		
-		for (let reg of Object.keys(c.cpu.Registers).filter((register) => register != 'A')) {
+		for (let reg of Object.keys(c._cpu.Registers).filter((register) => register != 'A')) {
 		    program[2] = opcode_lookup[reg].MVI;
 		    program[4] = opcode_lookup[reg].SUB;
 		
 		    c.InjectProgram(program);
 		    c.ExecuteProgram();
 		
-		    assert.equal(c.cpu.Registers.A, 254);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), true);
+		    assert.equal(c._cpu.Registers.A, 254);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),false);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), true);
 		
-		    assert.equal(c.cpu.Clock, 25);
+		    assert.equal(c._cpu.Clock, 25);
 		
 		    c.Reset();
 		};
@@ -185,7 +185,7 @@ describe('SUB Register', () => {
 		
 	it('Carry and Sign Flags Set', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		let program = [
 		    0x3E,           // MVI into Accumulator...
@@ -196,21 +196,21 @@ describe('SUB Register', () => {
 		    0x76            // HALT
 		]
 		
-		for (let reg of Object.keys(c.cpu.Registers).filter((register) => register != 'A')) {
+		for (let reg of Object.keys(c._cpu.Registers).filter((register) => register != 'A')) {
 		    program[2] = opcode_lookup[reg].MVI;
 		    program[4] = opcode_lookup[reg].SUB;
 		
 		    c.InjectProgram(program);
 		    c.ExecuteProgram();
 		
-		    assert.equal(c.cpu.Registers.A, 251);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), true);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity),false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), true);
+		    assert.equal(c._cpu.Registers.A, 251);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), true);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),false);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
+		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), true);
 		
-		    assert.equal(c.cpu.Clock, 25);
+		    assert.equal(c._cpu.Clock, 25);
 		
 		    c.Reset();
 		};

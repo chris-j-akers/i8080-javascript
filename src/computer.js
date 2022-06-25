@@ -6,32 +6,32 @@ import { Bus } from './bus.js';
 
 class Computer {
     constructor() {
-        this.cpu = new i8080();
-        this.mmu = new MMU();
-        this.bus = new Bus();
+        this._cpu = new i8080();
+        this._mmu = new MMU();
+        this._bus = new Bus();
 
         // Connect the Bus to the CPU and vice versa
-        this.cpu.ConnectBus(this.bus);
-        this.bus.ConnectCPU(this.cpu);
+        this._cpu.ConnectBus(this._bus);
+        this._bus.ConnectCPU(this._cpu);
 
         // Connect the bus to the MMU and vice versa
-        this.mmu.ConnectBus(this.bus);
-        this.bus.ConnectMMU(this.mmu);
+        this._mmu.ConnectBus(this._bus);
+        this._bus.ConnectMMU(this._mmu);
     }
 
     /**
      * Get the current Bus
      */
     get Bus() {
-        return this.bus;
+        return this._bus;
     }
 
     /**
      * Reset the computer's components
      */
     Reset() {
-        this.cpu.Reset();
-        this.mmu.Reset();
+        this._cpu.Reset();
+        this._mmu.Reset();
     }
 
     //  Now we expose some internal CPU structures and Operations that may need
@@ -45,7 +45,7 @@ class Computer {
      * of an expected syscall. If so, then we can emulate it in the ROM code.
      */
     get CPUProgramCounter() {
-        return this.cpu.ProgramCounter;
+        return this._cpu.ProgramCounter;
     }
 
     /**
@@ -58,7 +58,7 @@ class Computer {
      * @param {number} addr Address to load into program counter
      */
     set CPUProgramCounter(val) {
-        this.cpu.ProgramCounter = val;
+        this._cpu.ProgramCounter = val;
     }
 
     /**
@@ -66,14 +66,14 @@ class Computer {
      * executing the Code.
      */
     get CPUHalt() {
-        return this.cpu.Halt;
+        return this._cpu.Halt;
     }
 
     /**
      * Set the Halt status of the CPU.
      */
     set CPUHalt(val) {
-        this.cpu.Halt = val;
+        this._cpu.Halt = val;
     }
 
     /**
@@ -82,28 +82,28 @@ class Computer {
      * This is used for diagnostic purposes.
      */
     get CPURegisters() {
-        return this.cpu.Registers;
+        return this._cpu.Registers;
     }
 
     /**
      * Expose the CPU's FlagManager and its associated functions
      */
     get CPUFlagManager() {
-        return this.cpu.FlagManager;
+        return this._cpu.FlagManager;
     }
 
     /**
      * Get CPU's internal stack pointer field.
      */
     get CPUStackPointer() {
-        return this.cpu.StackPointer;
+        return this._cpu.StackPointer;
     }
 
     /**
      * Get CPU's internal Clock field.
      */
     get CPUClock() {
-        return this.cpu.Clock;
+        return this._cpu.Clock;
     }
 
     /**
@@ -113,7 +113,7 @@ class Computer {
      * has completed.
      */
     CPU_RET() {
-        this.cpu.RET();
+        this._cpu.RET();
     }
 
     /**
@@ -125,7 +125,7 @@ class Computer {
      */
     ExecuteNextInstruction() {
         if (this.CPUHalt == false) {
-            const instruction = `${this.CPUProgramCounter.toString(16).padStart(4,'0')}\t${this.cpu.ExecuteNextInstruction()}`;
+            const instruction = `${this.CPUProgramCounter.toString(16).padStart(4,'0')}\t${this._cpu.ExecuteNextInstruction()}`;
             return instruction;
         }
     }
@@ -140,7 +140,7 @@ class Computer {
      */
     InjectProgram(program, at_addr=0x0) {
         for (let i=0; i<program.length; i++) {
-            this.bus.WriteRAM(program[i], at_addr + i);
+            this._bus.WriteRAM(program[i], at_addr + i);
         }
     }
 
@@ -156,7 +156,7 @@ class Computer {
     ExecuteProgram(from_addr=0x0) {
         this.CPUProgramCounter = from_addr;
         while(this.CPUHalt === false) {
-            this.cpu.ExecuteNextInstruction();
+            this._cpu.ExecuteNextInstruction();
         }
     }
 }

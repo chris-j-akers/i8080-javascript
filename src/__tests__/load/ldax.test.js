@@ -48,8 +48,8 @@ describe('LDAX', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers['A']);
-		  assert.equal(c.cpu.Clock, 52)
+		  assert.equal(c.Bus.ReadRAM(mem_addr), c._cpu.Registers['A']);
+		  assert.equal(c._cpu.Clock, 52)
 		  c.Reset();
 		}
 		});
@@ -93,8 +93,8 @@ describe('LDAX', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr), c.cpu.Registers['A']);
-		  assert.equal(c.cpu.Clock, 52)
+		  assert.equal(c.Bus.ReadRAM(mem_addr), c._cpu.Registers['A']);
+		  assert.equal(c._cpu.Clock, 52)
 		  c.Reset();
 		}
 		});

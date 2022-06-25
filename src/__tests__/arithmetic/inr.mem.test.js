@@ -6,7 +6,7 @@ describe('INR Memory', () => {
 	it('Set no flags', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		
 		const data = 0;
@@ -32,21 +32,21 @@ describe('INR Memory', () => {
 		  program[1] = (mem_addr >> 8) & 0xFF;
 		  program[3] = mem_addr & 0xFF;
 		
-		  carry_set = c.cpu.FlagManager.IsSet(FlagType.Carry);
+		  carry_set = c._cpu.FlagManager.IsSet(FlagType.Carry);
 		
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
 		  // Here, we're just checking the carry flag hasn't been touched.
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), carry_set);
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), carry_set);
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr),1);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.Bus.ReadRAM(mem_addr),1);
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity), false);
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
 		  
-		  assert.equal(c.cpu.Clock, 41);
+		  assert.equal(c._cpu.Clock, 41);
 		  
 		  c.Reset();
 		  }
@@ -55,7 +55,7 @@ describe('INR Memory', () => {
 	it('Rollover from 255 (Set Parity, AC and Zero flags)', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		
 		const data = 255;
@@ -81,21 +81,21 @@ describe('INR Memory', () => {
 		  program[1] = (mem_addr >> 8) & 0xFF;
 		  program[3] = mem_addr & 0xFF;
 		
-		  carry_set = c.cpu.FlagManager.IsSet(FlagType.Carry);
+		  carry_set = c._cpu.FlagManager.IsSet(FlagType.Carry);
 		
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
 		  // Here, we're just checking the carry flag hasn't been touched.
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), carry_set);
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), carry_set);
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr),0);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), true);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), true);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.Bus.ReadRAM(mem_addr),0);
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity), true);
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), true);
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
 		  
-		  assert.equal(c.cpu.Clock, 41);
+		  assert.equal(c._cpu.Clock, 41);
 		  
 		  c.Reset();
 		  }
@@ -104,7 +104,7 @@ describe('INR Memory', () => {
 	it('Set Parity Flag', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		
 		const data = 84;
@@ -130,21 +130,21 @@ describe('INR Memory', () => {
 		  program[1] = (mem_addr >> 8) & 0xFF;
 		  program[3] = mem_addr & 0xFF;
 		
-		  carry_set = c.cpu.FlagManager.IsSet(FlagType.Carry);
+		  carry_set = c._cpu.FlagManager.IsSet(FlagType.Carry);
 		
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
 		  // Here, we're just checking the carry flag hasn't been touched.
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), carry_set);
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), carry_set);
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr),85);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), true);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.Bus.ReadRAM(mem_addr),85);
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity), true);
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
 		  
-		  assert.equal(c.cpu.Clock, 41);
+		  assert.equal(c._cpu.Clock, 41);
 		  
 		  c.Reset();
 		  }
@@ -153,7 +153,7 @@ describe('INR Memory', () => {
 	it('Set Sign Flag', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		
 		const data = 175;
@@ -179,21 +179,21 @@ describe('INR Memory', () => {
 		  program[1] = (mem_addr >> 8) & 0xFF;
 		  program[3] = mem_addr & 0xFF;
 		
-		  carry_set = c.cpu.FlagManager.IsSet(FlagType.Carry);
+		  carry_set = c._cpu.FlagManager.IsSet(FlagType.Carry);
 		
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
 		  // Here, we're just checking the carry flag hasn't been touched.
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Carry), carry_set);
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), carry_set);
 		
-		  assert.equal(c.bus.ReadRAM(mem_addr),176);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Parity), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), true);
+		  assert.equal(c.Bus.ReadRAM(mem_addr),176);
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity), false);
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), true);
 		  
-		  assert.equal(c.cpu.Clock, 41);
+		  assert.equal(c._cpu.Clock, 41);
 		  
 		  c.Reset();
 		  }

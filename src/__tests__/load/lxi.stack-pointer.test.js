@@ -20,9 +20,9 @@ describe('LXI Stack Pointer', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(word, c.cpu.StackPointer);
+		  assert.equal(word, c._cpu.StackPointer);
 		
-		  assert.equal(c.cpu.Clock, 17);
+		  assert.equal(c._cpu.Clock, 17);
 		
 		  c.Reset();
 		

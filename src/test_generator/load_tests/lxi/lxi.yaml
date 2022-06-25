@@ -27,11 +27,11 @@ test_suite:
       c.InjectProgram(program);
       c.ExecuteProgram();
 
-      assert.equal(c.cpu.Registers.{msb_register}, (word >> 8) & 0xFF);
-      assert.equal(c.cpu.Registers.{lsb_register}, word & 0xFF);
-      assert.equal(word, (c.cpu.Registers.{msb_register} << 8) | c.cpu.Registers.{lsb_register});
+      assert.equal(c._cpu.Registers.{msb_register}, (word >> 8) & 0xFF);
+      assert.equal(c._cpu.Registers.{lsb_register}, word & 0xFF);
+      assert.equal(word, (c._cpu.Registers.{msb_register} << 8) | c._cpu.Registers.{lsb_register});
       
-      assert.equal(c.cpu.Clock, 17);
+      assert.equal(c._cpu.Clock, 17);
       c.Reset();
 
     }}

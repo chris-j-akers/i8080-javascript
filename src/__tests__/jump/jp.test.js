@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('JP', () => {
 	it('Sign is set, program counter is not modified', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		let program = [
 		  0x3E,                   // MVI into accumulator
@@ -27,16 +27,16 @@ describe('JP', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers['A'], 187)
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), true);
-		  assert.equal(c.cpu.ProgramCounter, 14);
-		  assert.equal(c.cpu.Clock, 48);
+		  assert.equal(c._cpu.Registers['A'], 187)
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), true);
+		  assert.equal(c._cpu.ProgramCounter, 14);
+		  assert.equal(c._cpu.Clock, 48);
 		
 		});
 		
 	it('Sign bit is set, program counter is modified', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		let program = [
 		  0x3E,                   // MVI into accumulator
@@ -58,10 +58,10 @@ describe('JP', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers['A'], 20)
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Sign), false);
-		  assert.equal(c.cpu.ProgramCounter, 65535);
-		  assert.equal(c.cpu.Clock, 55);
+		  assert.equal(c._cpu.Registers['A'], 20)
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c._cpu.ProgramCounter, 65535);
+		  assert.equal(c._cpu.Clock, 55);
 		
 		});
 		

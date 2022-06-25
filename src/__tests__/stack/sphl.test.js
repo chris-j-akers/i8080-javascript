@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('SPHL', () => {
 	it('Standard SPHL (taken from 8080 programmers manual)', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		let program = [
 		  0x26,                   // MVI into Register H...
@@ -21,8 +21,8 @@ describe('SPHL', () => {
 		
 		  // Check we're set-up correctly
 		
-		  assert.equal(c.cpu.StackPointer, 80 << 8 | 108);
-		  assert.equal(c.cpu.Clock, 26);
+		  assert.equal(c._cpu.StackPointer, 80 << 8 | 108);
+		  assert.equal(c._cpu.Clock, 26);
 		
 		});
 		

@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('CNZ', () => {
 	it('Return is 0, call not made', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		let program = [
 		
@@ -55,17 +55,17 @@ describe('CNZ', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers['A'], 0);
-		  assert.equal(c.cpu.StackPointer, 65535);
+		  assert.equal(c._cpu.Registers['A'], 0);
+		  assert.equal(c._cpu.StackPointer, 65535);
 		  
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), true);
-		  assert.equal(c.cpu.Clock, 83);
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), true);
+		  assert.equal(c._cpu.Clock, 83);
 		
 		  });
 		
 	it('Return is not 0, call is made and extra INC op is made', () => {
 		const c = new Computer();
-		const FlagType = c.cpu.FlagManager.FlagType;
+		const FlagType = c._cpu.FlagManager.FlagType;
 		
 		let program = [
 		
@@ -115,11 +115,11 @@ describe('CNZ', () => {
 		  c.InjectProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.cpu.Registers['A'], 6);
-		  assert.equal(c.cpu.StackPointer, 65535);
+		  assert.equal(c._cpu.Registers['A'], 6);
+		  assert.equal(c._cpu.StackPointer, 65535);
 		  
-		  assert.equal(c.cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c.cpu.Clock, 104);
+		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c._cpu.Clock, 104);
 		
 		  });
 		
