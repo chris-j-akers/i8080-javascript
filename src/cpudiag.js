@@ -42,27 +42,28 @@ class CpuDiag extends ArcadeMachine {
      * @returns 
      */
     ExecuteNextLine(output) {
-        switch(this.computer.CPUProgramCounter) {
+        switch(this.computer.CPUState.ProgramCounter) {
             case 5:
-                switch(this.computer.CPURegisters['C']) {
+                switch(this.computer.CPUState.Registers.C) {
                     case 0:
-                        this.computer.CPUHalt = true;
-                        return '   \tHALTED';
-                    case 9:
+                        this.computer.HaltCPU();
+                        return {...this.computer.CPUState, Disassemble: 'HALTED', Ticks: 0 };
+                    case 9: {
                         const outputStr = this._getMemString();
-                        console.log(`String is: ${outputStr}`);
                         if (typeof output != undefined) {
                             output.textContent += outputStr;
                         }
-                        this.computer.CPU_RET();
-                        return '0005\tC_WRITESTR (CP/M SYSCALL)\n    \tRET';
-                    case 2:
-                        if (typeof output != undefined) {
-                            output.textContent += String.fromCharCode(this.computer.CPURegisters['E']);
+                        const ticks = this.computer.OpCodeDirectCall('RET');
+                        return {...this.computer.CPUState, Disassemble: '0005\tC_WRITESTR (CP/M SYSCALL)\n    \tRET', Ticks: ticks };
                         }
-                        this.computer.CPU_RET();
-                        return '0005\tC_WRITE (CP/M SYSCALL)\n    \tRET';
-                    }
+                    case 2: {
+                        if (typeof output != undefined) {
+                            output.textContent += String.fromCharCode(this.computer.CPUState.E);
+                        }
+                        ticks = this.computer.OpCodeDirectCall('RET');
+                        return {...this.computer.CPUState, Disassemble: '0005\tC_WRITE (CP/M SYSCALL)\n    \tRET', Ticks: ticks };
+                        }
+                }
                 return;
             case 0:
                 this.computer.CPUHalt = true;

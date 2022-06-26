@@ -33,89 +33,34 @@ class Computer {
         this._cpu.Reset();
         this._mmu.Reset();
     }
+    
+    /**
+     * Stop the current program from running.
+     */
+    HaltCPU() {
+        this._cpu.Halt = true;
+    }
+
+    CPUGoto(addr) {
+        this._cpu.ProgramCounter = addr;
+    }
 
     //  Now we expose some internal CPU structures and Operations that may need
     //  to be available to ROM emulators and for diagnostics.
 
+    get CPUState() {
+        return this._cpu.State;
+    }
+
     /**
-     * Get the CPU's internal program counter.
+     * Call an internal CPU OpCode directly.
      *
-     * If a particular ROM requires some OS syscalls, we need a way of checking
-     * the Program Counter so we can see whether it is currently at the address
-     * of an expected syscall. If so, then we can emulate it in the ROM code.
+     * Useful for some emulation tasks - for instance OC syscalls will need a
+     * RET() call when they're complete.
      */
-    get CPUProgramCounter() {
-        return this._cpu.ProgramCounter;
+    OpCodeDirectCall(f) {
+        return this._cpu[f]();
     }
-
-    /**
-     * Set the CPU's internal program counter to a specific address.
-     *
-     * ROM code does not necessarily start at 0x0. We need a way of making sure
-     * the ProgramCoutner is set at the correct start address before running
-     * code.
-     *
-     * @param {number} addr Address to load into program counter
-     */
-    set CPUProgramCounter(val) {
-        this._cpu.ProgramCounter = val;
-    }
-
-    /**
-     * Get the Halt status of the CPU. Required so we know when to stop
-     * executing the Code.
-     */
-    get CPUHalt() {
-        return this._cpu.Halt;
-    }
-
-    /**
-     * Set the Halt status of the CPU.
-     */
-    set CPUHalt(val) {
-        this._cpu.Halt = val;
-    }
-
-    /**
-     * Get read-only set of registers from the CPU.
-     * 
-     * This is used for diagnostic purposes.
-     */
-    get CPURegisters() {
-        return this._cpu.Registers;
-    }
-
-    /**
-     * Expose the CPU's FlagManager and its associated functions
-     */
-    get CPUFlagManager() {
-        return this._cpu.FlagManager;
-    }
-
-    /**
-     * Get CPU's internal stack pointer field.
-     */
-    get CPUStackPointer() {
-        return this._cpu.StackPointer;
-    }
-
-    /**
-     * Get CPU's internal Clock field.
-     */
-    get CPUClock() {
-        return this._cpu.Clock;
-    }
-
-    /**
-     * Call the CPU's RET function (POP address off the stack, then set program
-     * counter to that address). This is used when emulating syscalls and to
-     * make sure we can return to the correct place in the code once the syscall
-     * has completed.
-     */
-    CPU_RET() {
-        this._cpu.RET();
-    }
-
     /**
      * Instruct the CPU to execute the next instruction at the current program
      * counter.
