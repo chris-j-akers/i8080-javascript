@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('CALL', () => {
 	it('Call is made', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		let program = [
 		
@@ -48,12 +48,12 @@ describe('CALL', () => {
 		  0x76,                   // HALT
 		]
 		
-		  c.InjectProgram(program);
+		  c.LoadProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c._cpu.Registers['A'], 11);
-		  assert.equal(c._cpu.StackPointer, 65535);
-		  assert.equal(c._cpu.Clock, 97);
+		  assert.equal(c.CPUState.Registers['A'], 11);
+		  assert.equal(c.CPUState.StackPointer, 65535);
+		  assert.equal(c.CPUState.Clock, 97);
 		
 		  });
 		

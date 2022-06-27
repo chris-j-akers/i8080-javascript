@@ -14,7 +14,7 @@ const opcode_lookup = {
 describe('DAD (H & L)', () => {
 	it('Carry unset and not set', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		
 		let program = [
@@ -26,25 +26,25 @@ describe('DAD (H & L)', () => {
 		  0x76           // HALT
 		]
 		
-		  c.InjectProgram(program);
+		  c.LoadProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal((c._cpu.Registers['H'] << 8 | c._cpu.Registers['L']) & 0xFFFF, 60000)
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false)
+		  assert.equal((c.CPUState.Registers['H'] << 8 | c.CPUState.Registers['L']) & 0xFFFF, 60000)
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), false)
 		
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c._cpu.Clock, 31);
+		  assert.equal(c.CPUState.Clock, 31);
 		  
 		  c.Reset();
 		});
 		
 	it('Carry unset and set', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		
 		let program = [
@@ -56,25 +56,25 @@ describe('DAD (H & L)', () => {
 		  0x76           // HALT
 		]
 		
-		  c.InjectProgram(program);
+		  c.LoadProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal((c._cpu.Registers['H'] << 8 | c._cpu.Registers['L']) & 0xFFFF, 0)
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), true)
+		  assert.equal((c.CPUState.Registers['H'] << 8 | c.CPUState.Registers['L']) & 0xFFFF, 0)
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), true)
 		
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c._cpu.Clock, 31);
+		  assert.equal(c.CPUState.Clock, 31);
 		  
 		  c.Reset();
 		});
 		
 	it('Carry set then unset', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		
 		let program = [
@@ -86,18 +86,18 @@ describe('DAD (H & L)', () => {
 		  0x76           // HALT
 		]
 		
-		  c.InjectProgram(program);
+		  c.LoadProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal((c._cpu.Registers['H'] << 8 | c._cpu.Registers['L']) & 0xFFFF, 32770)
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false)
+		  assert.equal((c.CPUState.Registers['H'] << 8 | c.CPUState.Registers['L']) & 0xFFFF, 32770)
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), false)
 		
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c._cpu.Clock, 31);
+		  assert.equal(c.CPUState.Clock, 31);
 		  
 		  c.Reset();
 		});

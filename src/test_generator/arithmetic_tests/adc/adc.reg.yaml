@@ -27,7 +27,7 @@ test_suite:
     });
   boilerplate: |
     const c = new Computer();
-    const FlagType = c._cpu.FlagManager.FlagType;
+    const FlagType = c._cpu._flagManager.FlagType;
 
 
     let program = [
@@ -39,22 +39,22 @@ test_suite:
         0x76            // HALT
     ]
 
-    for (let reg of Object.keys(c._cpu.Registers).filter((register) => register != 'A')) {{
+    for (let reg of Object.keys(c.CPUState.Registers).filter((register) => register != 'A')) {{
         program[2] = opcode_lookup[reg].MVI;
         program[4] = opcode_lookup[reg].ADC;
 
-        c.InjectProgram(program);
+        c.LoadProgram(program);
         {set_carry}
         c.ExecuteProgram();
 
-        assert.equal(c._cpu.Registers.A, {expected_result});
-        assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), {carry});
-        assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),{parity});
-        assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), {auxillary_carry});
-        assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), {zero});
-        assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), {sign});
+        assert.equal(c.CPUState.Registers.A, {expected_result});
+        assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), {carry});
+        assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),{parity});
+        assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), {auxillary_carry});
+        assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), {zero});
+        assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), {sign});
 
-        assert.equal(c._cpu.Clock, 25);
+        assert.equal(c.CPUState.Clock, 25);
 
         c.Reset();
     }};

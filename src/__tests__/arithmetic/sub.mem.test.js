@@ -6,7 +6,7 @@ describe('SUB Memory', () => {
 	it('No Flags Set', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		
 		const data = 1;
@@ -33,17 +33,17 @@ describe('SUB Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.InjectProgram(program);
+		  c.LoadProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c._cpu.Registers.A,31);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.CPUState.Registers.A,31);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), false);
 		  
-		  assert.equal(c._cpu.Clock, 45);
+		  assert.equal(c.CPUState.Clock, 45);
 		  
 		  c.Reset();
 		  }
@@ -52,7 +52,7 @@ describe('SUB Memory', () => {
 	it('Parity, Aux Carry and Zero Flags Set', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		
 		const data = 1;
@@ -79,17 +79,17 @@ describe('SUB Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.InjectProgram(program);
+		  c.LoadProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c._cpu.Registers.A,0);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity), true);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), true);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.CPUState.Registers.A,0);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity), true);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), true);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), true);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), false);
 		  
-		  assert.equal(c._cpu.Clock, 45);
+		  assert.equal(c.CPUState.Clock, 45);
 		  
 		  c.Reset();
 		  }
@@ -98,7 +98,7 @@ describe('SUB Memory', () => {
 	it('Parity Flag Set', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		
 		const data = 2;
@@ -125,17 +125,17 @@ describe('SUB Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.InjectProgram(program);
+		  c.LoadProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c._cpu.Registers.A,30);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity), true);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.CPUState.Registers.A,30);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity), true);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), false);
 		  
-		  assert.equal(c._cpu.Clock, 45);
+		  assert.equal(c.CPUState.Clock, 45);
 		  
 		  c.Reset();
 		  }
@@ -144,7 +144,7 @@ describe('SUB Memory', () => {
 	it('Aux Carry Flag Set', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		
 		const data = 3;
@@ -171,17 +171,17 @@ describe('SUB Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.InjectProgram(program);
+		  c.LoadProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c._cpu.Registers.A,124);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.CPUState.Registers.A,124);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), true);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), false);
 		  
-		  assert.equal(c._cpu.Clock, 45);
+		  assert.equal(c.CPUState.Clock, 45);
 		  
 		  c.Reset();
 		  }
@@ -190,7 +190,7 @@ describe('SUB Memory', () => {
 	it('Sign Flag Set', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		
 		const data = 1;
@@ -217,17 +217,17 @@ describe('SUB Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.InjectProgram(program);
+		  c.LoadProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c._cpu.Registers.A,254);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), true);
+		  assert.equal(c.CPUState.Registers.A,254);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), true);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), true);
 		  
-		  assert.equal(c._cpu.Clock, 45);
+		  assert.equal(c.CPUState.Clock, 45);
 		  
 		  c.Reset();
 		  }
@@ -236,7 +236,7 @@ describe('SUB Memory', () => {
 	it('Carry Flag Set', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		
 		const data = 10;
@@ -263,17 +263,17 @@ describe('SUB Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.InjectProgram(program);
+		  c.LoadProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c._cpu.Registers.A,251);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), true);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), true);
+		  assert.equal(c.CPUState.Registers.A,251);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), true);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), true);
 		  
-		  assert.equal(c._cpu.Clock, 45);
+		  assert.equal(c.CPUState.Clock, 45);
 		  
 		  c.Reset();
 		  }

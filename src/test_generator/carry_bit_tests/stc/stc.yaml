@@ -13,7 +13,7 @@ test_suite:
     });
   boilerplate: |
     const c = new Computer();
-    const FlagType = c._cpu.FlagManager.FlagType;
+    const FlagType = c._cpu._flagManager.FlagType;
 
 
     const program = [
@@ -23,11 +23,11 @@ test_suite:
 
       {set_carry};
 
-      c.InjectProgram(program);
+      c.LoadProgram(program);
       c.ExecuteProgram();
 
-      assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), true);
-      assert.equal(c._cpu.Clock, 11);
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), true);
+      assert.equal(c.CPUState.Clock, 11);
 
       c.Reset();
     }});

@@ -20,7 +20,7 @@ const opcode_lookup = {
 describe('DCR Register', () => {
 	it('No Flags Set', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		let program = [
 		    null,           // MVI into Register (opcode added, below)...
@@ -30,25 +30,25 @@ describe('DCR Register', () => {
 		]
 		
 		let carry_set;
-		for (let reg of Object.keys(c._cpu.Registers).filter((register) => register != 'A')) {
+		for (let reg of Object.keys(c.CPUState.Registers).filter((register) => register != 'A')) {
 		    program[0] = opcode_lookup[reg].MVI;
 		    program[2] = opcode_lookup[reg].DCR;
 		
-		    carry_set = c._cpu.FlagManager.IsSet(FlagType.Carry);
+		    carry_set = c._cpu._flagManager.IsSet(FlagType.Carry);
 		
-		    c.InjectProgram(program);
+		    c.LoadProgram(program);
 		    c.ExecuteProgram();
 		
 		    // Here, we're just checking the carry flag hasn't been touched.
-		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), carry_set);
+		    assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), carry_set);
 		
-		    assert.equal(c._cpu.Registers[reg], 31);
-		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),false);
-		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
+		    assert.equal(c.CPUState.Registers[reg], 31);
+		    assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),false);
+		    assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), false);
+		    assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), false);
+		    assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), false);
 		
-		    assert.equal(c._cpu.Clock, 19);
+		    assert.equal(c.CPUState.Clock, 19);
 		    
 		    c.Reset();
 		};
@@ -56,7 +56,7 @@ describe('DCR Register', () => {
 		
 	it('Parity, Aux Carry and Zero Flag Set', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		let program = [
 		    null,           // MVI into Register (opcode added, below)...
@@ -66,25 +66,25 @@ describe('DCR Register', () => {
 		]
 		
 		let carry_set;
-		for (let reg of Object.keys(c._cpu.Registers).filter((register) => register != 'A')) {
+		for (let reg of Object.keys(c.CPUState.Registers).filter((register) => register != 'A')) {
 		    program[0] = opcode_lookup[reg].MVI;
 		    program[2] = opcode_lookup[reg].DCR;
 		
-		    carry_set = c._cpu.FlagManager.IsSet(FlagType.Carry);
+		    carry_set = c._cpu._flagManager.IsSet(FlagType.Carry);
 		
-		    c.InjectProgram(program);
+		    c.LoadProgram(program);
 		    c.ExecuteProgram();
 		
 		    // Here, we're just checking the carry flag hasn't been touched.
-		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), carry_set);
+		    assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), carry_set);
 		
-		    assert.equal(c._cpu.Registers[reg], 0);
-		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),true);
-		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), true);
-		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
+		    assert.equal(c.CPUState.Registers[reg], 0);
+		    assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),true);
+		    assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), true);
+		    assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), true);
+		    assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), false);
 		
-		    assert.equal(c._cpu.Clock, 19);
+		    assert.equal(c.CPUState.Clock, 19);
 		    
 		    c.Reset();
 		};
@@ -92,7 +92,7 @@ describe('DCR Register', () => {
 		
 	it('Parity Flag and Auxillary Carry Set', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		let program = [
 		    null,           // MVI into Register (opcode added, below)...
@@ -102,25 +102,25 @@ describe('DCR Register', () => {
 		]
 		
 		let carry_set;
-		for (let reg of Object.keys(c._cpu.Registers).filter((register) => register != 'A')) {
+		for (let reg of Object.keys(c.CPUState.Registers).filter((register) => register != 'A')) {
 		    program[0] = opcode_lookup[reg].MVI;
 		    program[2] = opcode_lookup[reg].DCR;
 		
-		    carry_set = c._cpu.FlagManager.IsSet(FlagType.Carry);
+		    carry_set = c._cpu._flagManager.IsSet(FlagType.Carry);
 		
-		    c.InjectProgram(program);
+		    c.LoadProgram(program);
 		    c.ExecuteProgram();
 		
 		    // Here, we're just checking the carry flag hasn't been touched.
-		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), carry_set);
+		    assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), carry_set);
 		
-		    assert.equal(c._cpu.Registers[reg], 30);
-		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),true);
-		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
+		    assert.equal(c.CPUState.Registers[reg], 30);
+		    assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),true);
+		    assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), true);
+		    assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), false);
+		    assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), false);
 		
-		    assert.equal(c._cpu.Clock, 19);
+		    assert.equal(c.CPUState.Clock, 19);
 		    
 		    c.Reset();
 		};
@@ -128,7 +128,7 @@ describe('DCR Register', () => {
 		
 	it('Aux Carry Flag Set', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		let program = [
 		    null,           // MVI into Register (opcode added, below)...
@@ -138,25 +138,25 @@ describe('DCR Register', () => {
 		]
 		
 		let carry_set;
-		for (let reg of Object.keys(c._cpu.Registers).filter((register) => register != 'A')) {
+		for (let reg of Object.keys(c.CPUState.Registers).filter((register) => register != 'A')) {
 		    program[0] = opcode_lookup[reg].MVI;
 		    program[2] = opcode_lookup[reg].DCR;
 		
-		    carry_set = c._cpu.FlagManager.IsSet(FlagType.Carry);
+		    carry_set = c._cpu._flagManager.IsSet(FlagType.Carry);
 		
-		    c.InjectProgram(program);
+		    c.LoadProgram(program);
 		    c.ExecuteProgram();
 		
 		    // Here, we're just checking the carry flag hasn't been touched.
-		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), carry_set);
+		    assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), carry_set);
 		
-		    assert.equal(c._cpu.Registers[reg], 124);
-		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),false);
-		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
+		    assert.equal(c.CPUState.Registers[reg], 124);
+		    assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),false);
+		    assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), true);
+		    assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), false);
+		    assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), false);
 		
-		    assert.equal(c._cpu.Clock, 19);
+		    assert.equal(c.CPUState.Clock, 19);
 		    
 		    c.Reset();
 		};
@@ -164,7 +164,7 @@ describe('DCR Register', () => {
 		
 	it('Sign Flag Set', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		let program = [
 		    null,           // MVI into Register (opcode added, below)...
@@ -174,25 +174,25 @@ describe('DCR Register', () => {
 		]
 		
 		let carry_set;
-		for (let reg of Object.keys(c._cpu.Registers).filter((register) => register != 'A')) {
+		for (let reg of Object.keys(c.CPUState.Registers).filter((register) => register != 'A')) {
 		    program[0] = opcode_lookup[reg].MVI;
 		    program[2] = opcode_lookup[reg].DCR;
 		
-		    carry_set = c._cpu.FlagManager.IsSet(FlagType.Carry);
+		    carry_set = c._cpu._flagManager.IsSet(FlagType.Carry);
 		
-		    c.InjectProgram(program);
+		    c.LoadProgram(program);
 		    c.ExecuteProgram();
 		
 		    // Here, we're just checking the carry flag hasn't been touched.
-		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), carry_set);
+		    assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), carry_set);
 		
-		    assert.equal(c._cpu.Registers[reg], 254);
-		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),false);
-		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
-		    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), true);
+		    assert.equal(c.CPUState.Registers[reg], 254);
+		    assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),false);
+		    assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), true);
+		    assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), false);
+		    assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), true);
 		
-		    assert.equal(c._cpu.Clock, 19);
+		    assert.equal(c.CPUState.Clock, 19);
 		    
 		    c.Reset();
 		};

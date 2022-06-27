@@ -37,16 +37,13 @@ class Computer {
     /**
      * Stop the current program from running.
      */
-    HaltCPU() {
-        this._cpu.Halt = true;
+    Stop() {
+        this._cpu.Stop();
     }
 
     CPUGoto(addr) {
         this._cpu.ProgramCounter = addr;
     }
-
-    //  Now we expose some internal CPU structures and Operations that may need
-    //  to be available to ROM emulators and for diagnostics.
 
     get CPUState() {
         return this._cpu.State;
@@ -57,8 +54,9 @@ class Computer {
      *
      * Useful for some emulation tasks - for instance OC syscalls will need a
      * RET() call when they're complete.
+     * 
      */
-    OpCodeDirectCall(f) {
+    DirectExecOpCode(f) {
         return this._cpu[f]();
     }
     /**
@@ -70,9 +68,16 @@ class Computer {
      */
     ExecuteNextInstruction() {
         if (this.CPUHalt == false) {
-            const instruction = `${this.CPUProgramCounter.toString(16).padStart(4,'0')}\t${this._cpu.ExecuteNextInstruction()}`;
-            return instruction;
+            return this._cpu.ExecuteNextInstruction();
         }
+    }
+
+    _dbgGetMemMap() {
+        let str = '';
+        for (let i=0; i<(2**16); i++) {
+            str += `${i.toString(16).padStart(4,'0')}\t${this._bus.ReadRAM(i).toString(16).padStart(2,'0')}\n`
+        }
+        return str;
     }
 
     /**
@@ -80,13 +85,15 @@ class Computer {
      * execution. 
      *
      * @param {array[number]} program Program to insert
-     * @param {number} at_addr Memory address at which to insert (default is
+     * @param {number} atAddr Memory address at which to insert (default is
      * 0x0)
      */
-    InjectProgram(program, at_addr=0x0) {
+    LoadProgram(program, atAddr=0x0) {
         for (let i=0; i<program.length; i++) {
-            this._bus.WriteRAM(program[i], at_addr + i);
+            this._bus.WriteRAM(program[i], atAddr + i);
         }
+        this._cpu.ProgramCounter = atAddr;
+        return this._mmu.BytesUsed;
     }
 
     /**
@@ -99,8 +106,8 @@ class Computer {
      * @param {number} from_addr Address of program in memory
      */
     ExecuteProgram(from_addr=0x0) {
-        this.CPUProgramCounter = from_addr;
-        while(this.CPUHalt === false) {
+        this.CPUGoto(from_addr);
+        while(this.CPUState.Halt == false) {
             this._cpu.ExecuteNextInstruction();
         }
     }

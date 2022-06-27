@@ -11,6 +11,10 @@ class MMU {
         return this._bytesUsed;
     }
 
+    get RAM() {
+        return this._ram;
+    }
+
     ConnectBus(bus) {
         this._bus = bus;
     }

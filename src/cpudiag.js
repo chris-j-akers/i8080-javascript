@@ -5,7 +5,7 @@ import { ArcadeMachine } from "./cabinet.js";
 class CpuDiag extends ArcadeMachine {
 
     get Stopped() {
-        return this.computer.CPUHalt;
+        return this._computer.CPUState.Halt;
     }
 
     /**
@@ -16,14 +16,14 @@ class CpuDiag extends ArcadeMachine {
      * and E
      */
     _getMemString() {
-        let straddr = this.computer.CPURegisters['D'] << 8 | this.computer.CPURegisters['E'] & 0xFF;
+        let straddr = this._computer.CPURegisters['D'] << 8 | this._computer.CPURegisters['E'] & 0xFF;
         console.log(`straddr: ${straddr}`);
         let ret_str = ''
-        let next_char = String.fromCharCode(this.computer.Bus.ReadRAM(straddr));
+        let next_char = String.fromCharCode(this._computer.Bus.ReadRAM(straddr));
         while(next_char != '$') {
             ret_str += next_char;
             straddr++;
-            next_char = String.fromCharCode(this.computer.Bus.ReadRAM(straddr))
+            next_char = String.fromCharCode(this._computer.Bus.ReadRAM(straddr))
         }
         return ret_str;
     }
@@ -41,35 +41,29 @@ class CpuDiag extends ArcadeMachine {
      * @param {string} output Disassembly of line just executed
      * @returns 
      */
-    ExecuteNextLine(output) {
-        switch(this.computer.CPUState.ProgramCounter) {
+    ExecuteNextLine() {
+        switch(this._computer.CPUState.ProgramCounter) {
             case 5:
-                switch(this.computer.CPUState.Registers.C) {
+                switch(this._computer.CPUState.Registers.C) {
                     case 0:
-                        this.computer.HaltCPU();
-                        return {...this.computer.CPUState, Disassemble: 'HALTED', Ticks: 0 };
+                        this._computer.Stop();
+                        return { Disassemble: 'HALTED', Ticks: 0 };
                     case 9: {
                         const outputStr = this._getMemString();
-                        if (typeof output != undefined) {
-                            output.textContent += outputStr;
-                        }
-                        const ticks = this.computer.OpCodeDirectCall('RET');
-                        return {...this.computer.CPUState, Disassemble: '0005\tC_WRITESTR (CP/M SYSCALL)\n    \tRET', Ticks: ticks };
+                        const ticks = this._computer.DirectExecOpCode('RET');
+                        return { Disassemble: '0005\tC_WRITESTR (CP/M SYSCALL)\n    \tRET', Ticks: ticks, Output: outputStr };
                         }
                     case 2: {
-                        if (typeof output != undefined) {
-                            output.textContent += String.fromCharCode(this.computer.CPUState.E);
-                        }
-                        ticks = this.computer.OpCodeDirectCall('RET');
-                        return {...this.computer.CPUState, Disassemble: '0005\tC_WRITE (CP/M SYSCALL)\n    \tRET', Ticks: ticks };
+                        ticks = this._computer.DirectExecOpCode('RET');
+                        return { Disassemble: '0005\tC_WRITE (CP/M SYSCALL)\n    \tRET', Ticks: ticks, Output: String.fromCharCode(this._computer.CPUState.E) };
                         }
                 }
                 return;
             case 0:
-                this.computer.CPUHalt = true;
-                return '   \tHALTED';
+                this._computer.Stop();
+                return { Disassemble: 'HALTED', Ticks: 0 };
             default:
-                return this.computer.ExecuteNextInstruction();
+                return this._computer.ExecuteNextInstruction();
         }
     }
 

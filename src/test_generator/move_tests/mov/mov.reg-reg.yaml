@@ -34,12 +34,12 @@ test_suite:
     for (let byte = 0x00; byte <= 0xFF; byte++) {{
       program[1] = byte;
 
-      c.InjectProgram(program);
+      c.LoadProgram(program);
       c.ExecuteProgram();
 
-      assert.equal(c._cpu.Registers.{reg_destination}, byte);
+      assert.equal(c.CPUState.Registers.{reg_destination}, byte);
 
-      assert.equal(c._cpu.Clock, 19);
+      assert.equal(c.CPUState.Clock, 19);
 
       c.Reset();
     }}

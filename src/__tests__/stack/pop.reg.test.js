@@ -14,7 +14,7 @@ const opcode_lookup = {
 describe('POP (R)', () => {
 	it('Pop data into B & C from the Stack', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		let program = [
 		    0x31,                                             // LXI into Stack pointer
@@ -38,30 +38,30 @@ describe('POP (R)', () => {
 		
 		  ]
 		
-		    c.InjectProgram(program);
+		    c.LoadProgram(program);
 		    c.ExecuteProgram();
 		
-		    assert.equal(c._cpu.Registers['B'], 0);
-		    assert.equal(c._cpu.Registers['C'], 0);
+		    assert.equal(c.CPUState.Registers['B'], 0);
+		    assert.equal(c.CPUState.Registers['C'], 0);
 		
 		    assert.equal(c.Bus.ReadRAM(0xFFFF-1), 0x8F);
 		    assert.equal(c.Bus.ReadRAM(0xFFFF-2), 0x9D);
-		    assert.equal(c._cpu.StackPointer, 0xFFFF-2);
+		    assert.equal(c.CPUState.StackPointer, 0xFFFF-2);
 		
-		    c._cpu.Halt = false;
+		    c._cpu._halt = false;
 		    c.ExecuteProgram(13);
 		
-		    assert.equal(c._cpu.Registers['B'], 0x8f);
-		    assert.equal(c._cpu.Registers['C'], 0x9D);
+		    assert.equal(c.CPUState.Registers['B'], 0x8f);
+		    assert.equal(c.CPUState.Registers['C'], 0x9D);
 		
-		    assert.equal(c._cpu.Clock, 73);  
+		    assert.equal(c.CPUState.Clock, 73);  
 		
 		    c.Reset();
 		});
 		
 	it('Pop data into D & E from the Stack', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		let program = [
 		    0x31,                                             // LXI into Stack pointer
@@ -85,30 +85,30 @@ describe('POP (R)', () => {
 		
 		  ]
 		
-		    c.InjectProgram(program);
+		    c.LoadProgram(program);
 		    c.ExecuteProgram();
 		
-		    assert.equal(c._cpu.Registers['D'], 0);
-		    assert.equal(c._cpu.Registers['E'], 0);
+		    assert.equal(c.CPUState.Registers['D'], 0);
+		    assert.equal(c.CPUState.Registers['E'], 0);
 		
 		    assert.equal(c.Bus.ReadRAM(0xFFFF-1), 0x8F);
 		    assert.equal(c.Bus.ReadRAM(0xFFFF-2), 0x9D);
-		    assert.equal(c._cpu.StackPointer, 0xFFFF-2);
+		    assert.equal(c.CPUState.StackPointer, 0xFFFF-2);
 		
-		    c._cpu.Halt = false;
+		    c._cpu._halt = false;
 		    c.ExecuteProgram(13);
 		
-		    assert.equal(c._cpu.Registers['D'], 0x8f);
-		    assert.equal(c._cpu.Registers['E'], 0x9D);
+		    assert.equal(c.CPUState.Registers['D'], 0x8f);
+		    assert.equal(c.CPUState.Registers['E'], 0x9D);
 		
-		    assert.equal(c._cpu.Clock, 73);  
+		    assert.equal(c.CPUState.Clock, 73);  
 		
 		    c.Reset();
 		});
 		
 	it('Pop data into H & L from the Stack', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		let program = [
 		    0x31,                                             // LXI into Stack pointer
@@ -132,23 +132,23 @@ describe('POP (R)', () => {
 		
 		  ]
 		
-		    c.InjectProgram(program);
+		    c.LoadProgram(program);
 		    c.ExecuteProgram();
 		
-		    assert.equal(c._cpu.Registers['H'], 0);
-		    assert.equal(c._cpu.Registers['L'], 0);
+		    assert.equal(c.CPUState.Registers['H'], 0);
+		    assert.equal(c.CPUState.Registers['L'], 0);
 		
 		    assert.equal(c.Bus.ReadRAM(0xFFFF-1), 0x8F);
 		    assert.equal(c.Bus.ReadRAM(0xFFFF-2), 0x9D);
-		    assert.equal(c._cpu.StackPointer, 0xFFFF-2);
+		    assert.equal(c.CPUState.StackPointer, 0xFFFF-2);
 		
-		    c._cpu.Halt = false;
+		    c._cpu._halt = false;
 		    c.ExecuteProgram(13);
 		
-		    assert.equal(c._cpu.Registers['H'], 0x8f);
-		    assert.equal(c._cpu.Registers['L'], 0x9D);
+		    assert.equal(c.CPUState.Registers['H'], 0x8f);
+		    assert.equal(c.CPUState.Registers['L'], 0x9D);
 		
-		    assert.equal(c._cpu.Clock, 73);  
+		    assert.equal(c.CPUState.Clock, 73);  
 		
 		    c.Reset();
 		});

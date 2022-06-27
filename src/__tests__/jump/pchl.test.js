@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('PCHL', () => {
 	it('Standard PCHL (taken from 8080 programmers manual)', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		let program = [
 		  0x26,                   // MVI into Register H...
@@ -17,14 +17,14 @@ describe('PCHL', () => {
 		  0xE9,                   // PCHL
 		]
 		
-		  c.InjectProgram(program);
+		  c.LoadProgram(program);
 		  c.ExecuteProgram();
 		
 		  // Check we're set-up correctly
 		
 		  // + 1 on Program Counter because the HALT command would have been executed
-		  assert.equal(c._cpu.ProgramCounter, 65 << 8 | 62 + 1);
-		  assert.equal(c._cpu.Clock, 36);
+		  assert.equal(c.CPUState.ProgramCounter, 65 << 8 | 62 + 1);
+		  assert.equal(c.CPUState.Clock, 36);
 		
 		});
 		

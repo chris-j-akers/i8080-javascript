@@ -24,12 +24,12 @@ test_suite:
       program[1] = word & 0xFF;
       program[2] = (word >> 8) & 0xFF;
 
-      c.InjectProgram(program);
+      c.LoadProgram(program);
       c.ExecuteProgram();
 
-      assert.equal(word, c._cpu.StackPointer);
+      assert.equal(word, c.CPUState.StackPointer);
 
-      assert.equal(c._cpu.Clock, 17);
+      assert.equal(c.CPUState.Clock, 17);
 
       c.Reset();
 

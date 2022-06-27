@@ -12,7 +12,7 @@ test_suite:
     });
   boilerplate: |
     const c = new Computer();
-    const FlagType = c._cpu.FlagManager.FlagType;
+    const FlagType = c._cpu._flagManager.FlagType;
 
 
     const program = [
@@ -22,28 +22,28 @@ test_suite:
       0x76            // Halt
     ]
 
-    c._cpu.FlagManager.SetFlag(FlagType.Parity);
-    c._cpu.FlagManager.SetFlag(FlagType.AuxillaryCarry);
-    c._cpu.FlagManager.SetFlag(FlagType.Zero);
-    c._cpu.FlagManager.SetFlag(FlagType.Sign);
+    c._cpu._flagManager.SetFlag(FlagType.Parity);
+    c._cpu._flagManager.SetFlag(FlagType.AuxillaryCarry);
+    c._cpu._flagManager.SetFlag(FlagType.Zero);
+    c._cpu._flagManager.SetFlag(FlagType.Sign);
 
-    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),true);
-    assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), true);
-    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), true);
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),true);
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), true);
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), true);
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), true);
 
-    c.InjectProgram(program);
+    c.LoadProgram(program);
     {set_carry}
     c.ExecuteProgram();
 
-    assert.equal(c._cpu.Registers.A, {expected_result});
-    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), {carry});
-    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),{parity});
-    assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), {auxillary_carry});
-    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), {zero});
-    assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), {sign});
+    assert.equal(c.CPUState.Registers.A, {expected_result});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), {carry});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),{parity});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), {auxillary_carry});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), {zero});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), {sign});
 
-    assert.equal(c._cpu.Clock, 18);
+    assert.equal(c.CPUState.Clock, 18);
     c.Reset();
     }});
 

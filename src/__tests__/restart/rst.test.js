@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('RST', () => {
 	it('RST 0', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		let program = [
 		  0x26,                               // MVI into Register H...
@@ -17,17 +17,17 @@ describe('RST', () => {
 		  199                            // Call relevant reset
 		]
 		
-		  c.InjectProgram(program, 0x100);
+		  c.LoadProgram(program, 0x100);
 		  c.ExecuteProgram(0x100);
 		
-		  assert.equal(c._cpu.ProgramCounter, 1);
-		  assert.equal(c._cpu.Clock, 42);
+		  assert.equal(c.CPUState.ProgramCounter, 1);
+		  assert.equal(c.CPUState.Clock, 42);
 		
 		});
 		
 	it('RST 1', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		let program = [
 		  0x26,                               // MVI into Register H...
@@ -39,17 +39,17 @@ describe('RST', () => {
 		  207                            // Call relevant reset
 		]
 		
-		  c.InjectProgram(program, 0x100);
+		  c.LoadProgram(program, 0x100);
 		  c.ExecuteProgram(0x100);
 		
-		  assert.equal(c._cpu.ProgramCounter, 9);
-		  assert.equal(c._cpu.Clock, 42);
+		  assert.equal(c.CPUState.ProgramCounter, 9);
+		  assert.equal(c.CPUState.Clock, 42);
 		
 		});
 		
 	it('RST 2', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		let program = [
 		  0x26,                               // MVI into Register H...
@@ -61,17 +61,17 @@ describe('RST', () => {
 		  215                            // Call relevant reset
 		]
 		
-		  c.InjectProgram(program, 0x100);
+		  c.LoadProgram(program, 0x100);
 		  c.ExecuteProgram(0x100);
 		
-		  assert.equal(c._cpu.ProgramCounter, 17);
-		  assert.equal(c._cpu.Clock, 42);
+		  assert.equal(c.CPUState.ProgramCounter, 17);
+		  assert.equal(c.CPUState.Clock, 42);
 		
 		});
 		
 	it('RST 3', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		let program = [
 		  0x26,                               // MVI into Register H...
@@ -83,17 +83,17 @@ describe('RST', () => {
 		  223                            // Call relevant reset
 		]
 		
-		  c.InjectProgram(program, 0x100);
+		  c.LoadProgram(program, 0x100);
 		  c.ExecuteProgram(0x100);
 		
-		  assert.equal(c._cpu.ProgramCounter, 25);
-		  assert.equal(c._cpu.Clock, 42);
+		  assert.equal(c.CPUState.ProgramCounter, 25);
+		  assert.equal(c.CPUState.Clock, 42);
 		
 		});
 		
 	it('RST 4', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		let program = [
 		  0x26,                               // MVI into Register H...
@@ -105,17 +105,17 @@ describe('RST', () => {
 		  231                            // Call relevant reset
 		]
 		
-		  c.InjectProgram(program, 0x100);
+		  c.LoadProgram(program, 0x100);
 		  c.ExecuteProgram(0x100);
 		
-		  assert.equal(c._cpu.ProgramCounter, 33);
-		  assert.equal(c._cpu.Clock, 42);
+		  assert.equal(c.CPUState.ProgramCounter, 33);
+		  assert.equal(c.CPUState.Clock, 42);
 		
 		});
 		
 	it('RST 5', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		let program = [
 		  0x26,                               // MVI into Register H...
@@ -127,17 +127,17 @@ describe('RST', () => {
 		  239                            // Call relevant reset
 		]
 		
-		  c.InjectProgram(program, 0x100);
+		  c.LoadProgram(program, 0x100);
 		  c.ExecuteProgram(0x100);
 		
-		  assert.equal(c._cpu.ProgramCounter, 41);
-		  assert.equal(c._cpu.Clock, 42);
+		  assert.equal(c.CPUState.ProgramCounter, 41);
+		  assert.equal(c.CPUState.Clock, 42);
 		
 		});
 		
 	it('RST 6', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		let program = [
 		  0x26,                               // MVI into Register H...
@@ -149,17 +149,17 @@ describe('RST', () => {
 		  247                            // Call relevant reset
 		]
 		
-		  c.InjectProgram(program, 0x100);
+		  c.LoadProgram(program, 0x100);
 		  c.ExecuteProgram(0x100);
 		
-		  assert.equal(c._cpu.ProgramCounter, 49);
-		  assert.equal(c._cpu.Clock, 42);
+		  assert.equal(c.CPUState.ProgramCounter, 49);
+		  assert.equal(c.CPUState.Clock, 42);
 		
 		});
 		
 	it('RST 7', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		let program = [
 		  0x26,                               // MVI into Register H...
@@ -171,11 +171,11 @@ describe('RST', () => {
 		  255                            // Call relevant reset
 		]
 		
-		  c.InjectProgram(program, 0x100);
+		  c.LoadProgram(program, 0x100);
 		  c.ExecuteProgram(0x100);
 		
-		  assert.equal(c._cpu.ProgramCounter, 57);
-		  assert.equal(c._cpu.Clock, 42);
+		  assert.equal(c.CPUState.ProgramCounter, 57);
+		  assert.equal(c.CPUState.Clock, 42);
 		
 		});
 		

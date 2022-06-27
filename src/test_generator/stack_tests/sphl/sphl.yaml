@@ -13,7 +13,7 @@ test_suite:
     });
   boilerplate: |
     const c = new Computer();
-    const FlagType = c._cpu.FlagManager.FlagType;
+    const FlagType = c._cpu._flagManager.FlagType;
     
     let program = [
       0x26,                   // MVI into Register H...
@@ -24,13 +24,13 @@ test_suite:
       0x76,                   // HALT
     ]
     
-      c.InjectProgram(program);
+      c.LoadProgram(program);
       c.ExecuteProgram();
 
       // Check we're set-up correctly
 
-      assert.equal(c._cpu.StackPointer, {h_register} << 8 | {l_register});
-      assert.equal(c._cpu.Clock, 26);
+      assert.equal(c.CPUState.StackPointer, {h_register} << 8 | {l_register});
+      assert.equal(c.CPUState.Clock, 26);
 
     }});
 

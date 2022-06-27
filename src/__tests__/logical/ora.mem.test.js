@@ -6,7 +6,7 @@ describe('ORA Memory', () => {
 	it('Reset Carry Flag', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		
 		const data = 4;
@@ -28,20 +28,20 @@ describe('ORA Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.InjectProgram(program);
-		  c._cpu.FlagManager.SetFlag(FlagType.Carry);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), true);
+		  c.LoadProgram(program);
+		  c._cpu._flagManager.SetFlag(FlagType.Carry);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), true);
 		
 		  c.ExecuteProgram();
 		
-		  assert.equal(c._cpu.Registers.A, 5);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),true);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.CPUState.Registers.A, 5);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),true);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c._cpu.Clock, 45);
+		  assert.equal(c.CPUState.Clock, 45);
 		
 		  c.Reset();
 		  }
@@ -50,7 +50,7 @@ describe('ORA Memory', () => {
 	it('Set Zero Flag', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		
 		const data = 0;
@@ -72,19 +72,19 @@ describe('ORA Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.InjectProgram(program);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
+		  c.LoadProgram(program);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), false);
 		
 		  c.ExecuteProgram();
 		
-		  assert.equal(c._cpu.Registers.A, 0);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),true);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), true);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.CPUState.Registers.A, 0);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),true);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), true);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c._cpu.Clock, 45);
+		  assert.equal(c.CPUState.Clock, 45);
 		
 		  c.Reset();
 		  }
@@ -93,7 +93,7 @@ describe('ORA Memory', () => {
 	it('Set Sign Flag', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		
 		const data = 255;
@@ -115,19 +115,19 @@ describe('ORA Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.InjectProgram(program);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
+		  c.LoadProgram(program);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), false);
 		
 		  c.ExecuteProgram();
 		
-		  assert.equal(c._cpu.Registers.A, 255);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),true);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), true);
+		  assert.equal(c.CPUState.Registers.A, 255);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),true);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), true);
 		
-		  assert.equal(c._cpu.Clock, 45);
+		  assert.equal(c.CPUState.Clock, 45);
 		
 		  c.Reset();
 		  }
@@ -136,7 +136,7 @@ describe('ORA Memory', () => {
 	it('Set Parity Flag', () => {
 		const max_mem_addr = 4095;
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		
 		const data = 81;
@@ -158,19 +158,19 @@ describe('ORA Memory', () => {
 		  program[3] = (mem_addr >> 8) & 0xFF;
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.InjectProgram(program);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
+		  c.LoadProgram(program);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), false);
 		
 		  c.ExecuteProgram();
 		
-		  assert.equal(c._cpu.Registers.A, 85);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),true);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c.CPUState.Registers.A, 85);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),true);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c._cpu.Clock, 45);
+		  assert.equal(c.CPUState.Clock, 45);
 		
 		  c.Reset();
 		  }

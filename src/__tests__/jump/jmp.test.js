@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('JMP', () => {
 	it('Jump, program counter is modified', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		let program = [
 		  0x26,                   // MVI into Register H...
@@ -19,11 +19,11 @@ describe('JMP', () => {
 		  0xFF                    // ...and this high-byte
 		]
 		
-		  c.InjectProgram(program);
+		  c.LoadProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c._cpu.ProgramCounter, 65535);
-		  assert.equal(c._cpu.Clock, 41);
+		  assert.equal(c.CPUState.ProgramCounter, 65535);
+		  assert.equal(c.CPUState.Clock, 41);
 		
 		});
 		

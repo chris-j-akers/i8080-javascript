@@ -21,13 +21,13 @@ describe('SHLD', () => {
 		  program[5] = mem_addr & 0xFF;
 		  program[6] = (mem_addr >> 8) & 0xFF;
 		
-		  c.InjectProgram(program);
+		  c.LoadProgram(program);
 		  c.ExecuteProgram();
 		
 		  assert.equal(c.Bus.ReadRAM(mem_addr), 0x71);
 		  assert.equal(c.Bus.ReadRAM(mem_addr + 1), 0xE);
 		
-		  assert.equal(c._cpu.Clock, 37);
+		  assert.equal(c.CPUState.Clock, 37);
 		
 		  c.Reset();
 		}

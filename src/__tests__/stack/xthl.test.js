@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('XTHL', () => {
 	it('Standard exchange (taken from 8080 programmers manual)', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		let program = [
 		  0x26,                   // MVI into Register H...
@@ -33,25 +33,25 @@ describe('XTHL', () => {
 		  0x76                   // HALT
 		]
 		
-		  c.InjectProgram(program);
+		  c.LoadProgram(program);
 		  c.ExecuteProgram();
 		
 		  // Check we're set-up correctly
 		
 		  assert.equal(c.Bus.ReadRAM(16 << 8 | 173), 240);
 		  assert.equal(c.Bus.ReadRAM(16 << 8 | 173 + 1), 13);
-		  assert.equal(c._cpu.Registers['H'], 0x0B);
-		  assert.equal(c._cpu.Registers['L'], 0x3C);
+		  assert.equal(c.CPUState.Registers['H'], 0x0B);
+		  assert.equal(c.CPUState.Registers['L'], 0x3C);
 		  
 		  // Now execute the test
 		
-		  c._cpu.Halt = false;
+		  c._cpu._halt = false;
 		  c.ExecuteProgram(18);
 		
 		  assert.equal(c.Bus.ReadRAM(16 << 8 | 173), 60);
 		  assert.equal(c.Bus.ReadRAM(16 << 8 | 173 + 1), 11);
-		  assert.equal(c._cpu.Registers['H'], 13);
-		  assert.equal(c._cpu.Registers['L'], 240);
+		  assert.equal(c.CPUState.Registers['H'], 13);
+		  assert.equal(c.CPUState.Registers['L'], 240);
 		
 		});
 		

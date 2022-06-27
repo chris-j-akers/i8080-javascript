@@ -41,12 +41,12 @@ test_suite:
       program[3] = (mem_addr >> 8) & 0xff;
       program[5] = mem_addr & 0xFF;
 
-      c.InjectProgram(program);
+      c.LoadProgram(program);
       c.ExecuteProgram();
 
-      assert.equal(c.Bus.ReadRAM(mem_addr), c._cpu.Registers.{reg_source});
+      assert.equal(c.Bus.ReadRAM(mem_addr), c.CPUState.Registers.{reg_source});
 
-      assert.equal(c._cpu.Clock, 35);
+      assert.equal(c.CPUState.Clock, 35);
 
       c.Reset();
     }}

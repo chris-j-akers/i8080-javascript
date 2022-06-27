@@ -14,7 +14,7 @@ test_suite:
     });
   boilerplate: |
     const c = new Computer();
-    const FlagType = c._cpu.FlagManager.FlagType;
+    const FlagType = c._cpu._flagManager.FlagType;
     
     let program = [
 
@@ -61,14 +61,14 @@ test_suite:
       0x76,                   // HALT
     ]
     
-      c.InjectProgram(program);
+      c.LoadProgram(program);
       c.ExecuteProgram();
 
-      assert.equal(c._cpu.Registers['A'], {expected_result});
-      assert.equal(c._cpu.StackPointer, {expected_stack_pointer});
+      assert.equal(c.CPUState.Registers['A'], {expected_result});
+      assert.equal(c.CPUState.StackPointer, {expected_stack_pointer});
       
-      assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), {carry});
-      assert.equal(c._cpu.Clock, {expected_clock});
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), {carry});
+      assert.equal(c.CPUState.Clock, {expected_clock});
 
       }});
     

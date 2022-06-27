@@ -17,14 +17,14 @@ describe('LXI Register', () => {
 		  program[1] = word & 0xFF;
 		  program[2] = (word >> 8) & 0xFF;
 		
-		  c.InjectProgram(program);
+		  c.LoadProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c._cpu.Registers.B, (word >> 8) & 0xFF);
-		  assert.equal(c._cpu.Registers.C, word & 0xFF);
-		  assert.equal(word, (c._cpu.Registers.B << 8) | c._cpu.Registers.C);
+		  assert.equal(c.CPUState.Registers.B, (word >> 8) & 0xFF);
+		  assert.equal(c.CPUState.Registers.C, word & 0xFF);
+		  assert.equal(word, (c.CPUState.Registers.B << 8) | c.CPUState.Registers.C);
 		  
-		  assert.equal(c._cpu.Clock, 17);
+		  assert.equal(c.CPUState.Clock, 17);
 		  c.Reset();
 		
 		}
@@ -45,14 +45,14 @@ describe('LXI Register', () => {
 		  program[1] = word & 0xFF;
 		  program[2] = (word >> 8) & 0xFF;
 		
-		  c.InjectProgram(program);
+		  c.LoadProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c._cpu.Registers.D, (word >> 8) & 0xFF);
-		  assert.equal(c._cpu.Registers.E, word & 0xFF);
-		  assert.equal(word, (c._cpu.Registers.D << 8) | c._cpu.Registers.E);
+		  assert.equal(c.CPUState.Registers.D, (word >> 8) & 0xFF);
+		  assert.equal(c.CPUState.Registers.E, word & 0xFF);
+		  assert.equal(word, (c.CPUState.Registers.D << 8) | c.CPUState.Registers.E);
 		  
-		  assert.equal(c._cpu.Clock, 17);
+		  assert.equal(c.CPUState.Clock, 17);
 		  c.Reset();
 		
 		}
@@ -73,14 +73,14 @@ describe('LXI Register', () => {
 		  program[1] = word & 0xFF;
 		  program[2] = (word >> 8) & 0xFF;
 		
-		  c.InjectProgram(program);
+		  c.LoadProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c._cpu.Registers.H, (word >> 8) & 0xFF);
-		  assert.equal(c._cpu.Registers.L, word & 0xFF);
-		  assert.equal(word, (c._cpu.Registers.H << 8) | c._cpu.Registers.L);
+		  assert.equal(c.CPUState.Registers.H, (word >> 8) & 0xFF);
+		  assert.equal(c.CPUState.Registers.L, word & 0xFF);
+		  assert.equal(word, (c.CPUState.Registers.H << 8) | c.CPUState.Registers.L);
 		  
-		  assert.equal(c._cpu.Clock, 17);
+		  assert.equal(c.CPUState.Clock, 17);
 		  c.Reset();
 		
 		}

@@ -13,7 +13,7 @@ test_suite:
     });
   boilerplate: |
     const c = new Computer();
-    const FlagType = c._cpu.FlagManager.FlagType;
+    const FlagType = c._cpu._flagManager.FlagType;
     
     let program = [
       0x26,                   // MVI into Register H...
@@ -25,14 +25,14 @@ test_suite:
       0xE9,                   // PCHL
     ]
     
-      c.InjectProgram(program);
+      c.LoadProgram(program);
       c.ExecuteProgram();
 
       // Check we're set-up correctly
 
       // + 1 on Program Counter because the HALT command would have been executed
-      assert.equal(c._cpu.ProgramCounter, {h_register} << 8 | {l_register} + 1);
-      assert.equal(c._cpu.Clock, 36);
+      assert.equal(c.CPUState.ProgramCounter, {h_register} << 8 | {l_register} + 1);
+      assert.equal(c.CPUState.Clock, 36);
 
     }});
 

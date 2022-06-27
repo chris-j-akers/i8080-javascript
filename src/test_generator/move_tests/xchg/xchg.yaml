@@ -26,15 +26,15 @@ test_suite:
       0x76           // HALT
     ]
 
-    c.InjectProgram(program);
+    c.LoadProgram(program);
     c.ExecuteProgram();
 
-    assert.equal(c._cpu.Registers['D'], {h_register});
-    assert.equal(c._cpu.Registers['E'], {l_register});
-    assert.equal(c._cpu.Registers['H'], {d_register});
-    assert.equal(c._cpu.Registers['L'], {e_register});
+    assert.equal(c.CPUState.Registers['D'], {h_register});
+    assert.equal(c.CPUState.Registers['E'], {l_register});
+    assert.equal(c.CPUState.Registers['H'], {d_register});
+    assert.equal(c.CPUState.Registers['L'], {e_register});
 
-    assert.equal(c._cpu.Clock, 40);
+    assert.equal(c.CPUState.Clock, 40);
 
     }});
 

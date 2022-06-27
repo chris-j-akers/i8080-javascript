@@ -38,21 +38,21 @@ describe('LHLD', () => {
 		  program[13] = mem_addr & 0xFF;
 		  program[14] = (mem_addr >> 8) & 0xFF;
 		
-		  c.InjectProgram(program);
+		  c.LoadProgram(program);
 		  c.ExecuteProgram();
 		
 		  // Program pauses at this point so we can check we zero'd H & L
-		  assert.equal(c._cpu.Registers['H'], 0);
-		  assert.equal(c._cpu.Registers['L'], 0);
+		  assert.equal(c.CPUState.Registers['H'], 0);
+		  assert.equal(c.CPUState.Registers['L'], 0);
 		
 		  // Continue program from byte 12 (the LHLD test)
-		  c._cpu.Halt = false; 
+		  c._cpu._halt = false; 
 		  c.ExecuteProgram(12);
 		
-		  assert.equal(c._cpu.Registers['H'], 0xE);
-		  assert.equal(c._cpu.Registers['L'], 0x71);
+		  assert.equal(c.CPUState.Registers['H'], 0xE);
+		  assert.equal(c.CPUState.Registers['L'], 0x71);
 		
-		  assert.equal(c._cpu.Clock, 74);
+		  assert.equal(c.CPUState.Clock, 74);
 		
 		  c.Reset();
 		}

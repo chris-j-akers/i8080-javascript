@@ -30,11 +30,11 @@ describe('STAX', () => {
 		  program[4] = mvi_opcode_lookup.C
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.InjectProgram(program);
+		  c.LoadProgram(program);
 		  c.ExecuteProgram();
 		
 		  assert.equal(c.Bus.ReadRAM(mem_addr), 0xFF);
-		  assert.equal(c._cpu.Clock, 35);
+		  assert.equal(c.CPUState.Clock, 35);
 		
 		  c.Reset();
 		
@@ -62,11 +62,11 @@ describe('STAX', () => {
 		  program[4] = mvi_opcode_lookup.E
 		  program[5] = mem_addr & 0xFF;
 		
-		  c.InjectProgram(program);
+		  c.LoadProgram(program);
 		  c.ExecuteProgram();
 		
 		  assert.equal(c.Bus.ReadRAM(mem_addr), 0xFF);
-		  assert.equal(c._cpu.Clock, 35);
+		  assert.equal(c.CPUState.Clock, 35);
 		
 		  c.Reset();
 		

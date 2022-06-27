@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('JC', () => {
 	it('Carry is set, program counter is modified', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		let program = [
 		  0x3E,                   // MVI into accumulator
@@ -24,13 +24,13 @@ describe('JC', () => {
 		  0x76,                   // HALT
 		]
 		
-		  c.InjectProgram(program);
+		  c.LoadProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c._cpu.Registers['A'], 9)
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), true);
-		  assert.equal(c._cpu.ProgramCounter, 65535);
-		  assert.equal(c._cpu.Clock, 55);
+		  assert.equal(c.CPUState.Registers['A'], 9)
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), true);
+		  assert.equal(c.CPUState.ProgramCounter, 65535);
+		  assert.equal(c.CPUState.Clock, 55);
 		
 		  c.Reset();
 		
@@ -38,7 +38,7 @@ describe('JC', () => {
 		
 	it('Carry is not set, program counter is not modified', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		let program = [
 		  0x3E,                   // MVI into accumulator
@@ -57,13 +57,13 @@ describe('JC', () => {
 		  0x76,                   // HALT
 		]
 		
-		  c.InjectProgram(program);
+		  c.LoadProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c._cpu.Registers['A'], 15)
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
-		  assert.equal(c._cpu.ProgramCounter, 14);
-		  assert.equal(c._cpu.Clock, 48);
+		  assert.equal(c.CPUState.Registers['A'], 15)
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.CPUState.ProgramCounter, 14);
+		  assert.equal(c.CPUState.Clock, 48);
 		
 		  c.Reset();
 		

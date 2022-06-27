@@ -33,11 +33,11 @@ describe('LDA', () => {
 		  program[7] = mem_addr & 0xFF;
 		  program[8] = (mem_addr >> 8) & 0xFF;
 		 
-		  c.InjectProgram(program);
+		  c.LoadProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c.Bus.ReadRAM(mem_addr), c._cpu.Registers['A']);
-		  assert.equal(c._cpu.Clock, 44)
+		  assert.equal(c.Bus.ReadRAM(mem_addr), c.CPUState.Registers['A']);
+		  assert.equal(c.CPUState.Clock, 44)
 		  c.Reset();
 		}
 		});

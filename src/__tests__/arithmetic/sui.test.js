@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('SUI', () => {
 	it('No Flags Set', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		
 		const program = [
@@ -16,23 +16,23 @@ describe('SUI', () => {
 		  0x76                // HALT
 		]
 		
-		c.InjectProgram(program);
+		c.LoadProgram(program);
 		c.ExecuteProgram();
 		
-		assert.equal(c._cpu.Registers.A,31);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity), false);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
+		assert.equal(c.CPUState.Registers.A,31);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), false);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity), false);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), false);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), false);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c._cpu.Clock, 21);
+		assert.equal(c.CPUState.Clock, 21);
 		
 		});
 		
 	it('Parity, Aux Carry and Zero Flag Set', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		
 		const program = [
@@ -43,23 +43,23 @@ describe('SUI', () => {
 		  0x76                // HALT
 		]
 		
-		c.InjectProgram(program);
+		c.LoadProgram(program);
 		c.ExecuteProgram();
 		
-		assert.equal(c._cpu.Registers.A,0);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity), true);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), true);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
+		assert.equal(c.CPUState.Registers.A,0);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), false);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity), true);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), true);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), true);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c._cpu.Clock, 21);
+		assert.equal(c.CPUState.Clock, 21);
 		
 		});
 		
 	it('Parity Flag Set', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		
 		const program = [
@@ -70,23 +70,23 @@ describe('SUI', () => {
 		  0x76                // HALT
 		]
 		
-		c.InjectProgram(program);
+		c.LoadProgram(program);
 		c.ExecuteProgram();
 		
-		assert.equal(c._cpu.Registers.A,30);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity), true);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
+		assert.equal(c.CPUState.Registers.A,30);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), false);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity), true);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), false);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), false);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c._cpu.Clock, 21);
+		assert.equal(c.CPUState.Clock, 21);
 		
 		});
 		
 	it('Aux Carry Flag Set', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		
 		const program = [
@@ -97,23 +97,23 @@ describe('SUI', () => {
 		  0x76                // HALT
 		]
 		
-		c.InjectProgram(program);
+		c.LoadProgram(program);
 		c.ExecuteProgram();
 		
-		assert.equal(c._cpu.Registers.A,124);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity), false);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
+		assert.equal(c.CPUState.Registers.A,124);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), false);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity), false);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), true);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), false);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c._cpu.Clock, 21);
+		assert.equal(c.CPUState.Clock, 21);
 		
 		});
 		
 	it('Sign Flag Set', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		
 		const program = [
@@ -124,23 +124,23 @@ describe('SUI', () => {
 		  0x76                // HALT
 		]
 		
-		c.InjectProgram(program);
+		c.LoadProgram(program);
 		c.ExecuteProgram();
 		
-		assert.equal(c._cpu.Registers.A,254);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity), false);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), true);
+		assert.equal(c.CPUState.Registers.A,254);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), false);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity), false);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), true);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), false);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), true);
 		
-		assert.equal(c._cpu.Clock, 21);
+		assert.equal(c.CPUState.Clock, 21);
 		
 		});
 		
 	it('Carry and Sign Flags Set', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		
 		const program = [
@@ -151,17 +151,17 @@ describe('SUI', () => {
 		  0x76                // HALT
 		]
 		
-		c.InjectProgram(program);
+		c.LoadProgram(program);
 		c.ExecuteProgram();
 		
-		assert.equal(c._cpu.Registers.A,251);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), true);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity), false);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), true);
+		assert.equal(c.CPUState.Registers.A,251);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), true);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity), false);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), false);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), false);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), true);
 		
-		assert.equal(c._cpu.Clock, 21);
+		assert.equal(c.CPUState.Clock, 21);
 		
 		});
 		

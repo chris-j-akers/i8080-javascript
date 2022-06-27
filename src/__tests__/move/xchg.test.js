@@ -18,15 +18,15 @@ describe('XCHG', () => {
 		  0x76           // HALT
 		]
 		
-		c.InjectProgram(program);
+		c.LoadProgram(program);
 		c.ExecuteProgram();
 		
-		assert.equal(c._cpu.Registers['D'], 0);
-		assert.equal(c._cpu.Registers['E'], 255);
-		assert.equal(c._cpu.Registers['H'], 51);
-		assert.equal(c._cpu.Registers['L'], 85);
+		assert.equal(c.CPUState.Registers['D'], 0);
+		assert.equal(c.CPUState.Registers['E'], 255);
+		assert.equal(c.CPUState.Registers['H'], 51);
+		assert.equal(c.CPUState.Registers['L'], 85);
 		
-		assert.equal(c._cpu.Clock, 40);
+		assert.equal(c.CPUState.Clock, 40);
 		
 		});
 		

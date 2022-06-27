@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('RAR (Multishift)', () => {
 	it('Accumulator shifts right from 170 3 times', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		
 		let program = [
@@ -15,40 +15,40 @@ describe('RAR (Multishift)', () => {
 		  0x76,           // HALT
 		]
 		
-		  c.InjectProgram(program);
+		  c.LoadProgram(program);
 		  c.ExecuteProgram();
 		
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
-		  assert.equal(c._cpu.Registers['A'], 85)
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.CPUState.Registers['A'], 85)
 		
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), false);
 		
-		  c._cpu.Halt = false;
+		  c._cpu._halt = false;
 		  c.ExecuteProgram(0x02);
 		
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), true);
-		  assert.equal(c._cpu.Registers['A'], 42)
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), true);
+		  assert.equal(c.CPUState.Registers['A'], 42)
 		
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), false);
 		
-		  c._cpu.Halt = false;
+		  c._cpu._halt = false;
 		  c.ExecuteProgram(0x02);
 		
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
-		  assert.equal(c._cpu.Registers['A'], 149)
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), false);
+		  assert.equal(c.CPUState.Registers['A'], 149)
 		
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), false);
-		  assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), false);
+		  assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), false);
 		
-		  assert.equal(c._cpu.Clock, 40);
+		  assert.equal(c.CPUState.Clock, 40);
 		
 		  c.Reset();
 		

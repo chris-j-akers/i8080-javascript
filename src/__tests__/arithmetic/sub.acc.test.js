@@ -5,7 +5,7 @@ import { strict as assert } from 'assert'
 describe('SUB Accumulator Flag', () => {
 	it('Zero, AuxCarry, Parity Flags Set', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		
 		const program = [
@@ -15,17 +15,17 @@ describe('SUB Accumulator Flag', () => {
 		  0x76            // HALT
 		]
 		
-		c.InjectProgram(program);
+		c.LoadProgram(program);
 		c.ExecuteProgram();
 		
-		assert.equal(c._cpu.Registers.A, 0);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),true);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), true);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
+		assert.equal(c.CPUState.Registers.A, 0);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), false);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),true);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), true);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), true);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c._cpu.Clock, 18);
+		assert.equal(c.CPUState.Clock, 18);
 		
 		
 		c.Reset();
@@ -33,7 +33,7 @@ describe('SUB Accumulator Flag', () => {
 		
 	it('Carry, Sign Flags Set', () => {
 		const c = new Computer();
-		const FlagType = c._cpu.FlagManager.FlagType;
+		const FlagType = c._cpu._flagManager.FlagType;
 		
 		
 		const program = [
@@ -43,17 +43,17 @@ describe('SUB Accumulator Flag', () => {
 		  0x76            // HALT
 		]
 		
-		c.InjectProgram(program);
+		c.LoadProgram(program);
 		c.ExecuteProgram();
 		
-		assert.equal(c._cpu.Registers.A, 0);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), false);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity),true);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), true);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), true);
-		assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), false);
+		assert.equal(c.CPUState.Registers.A, 0);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), false);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),true);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), true);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), true);
+		assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), false);
 		
-		assert.equal(c._cpu.Clock, 18);
+		assert.equal(c.CPUState.Clock, 18);
 		
 		
 		c.Reset();

@@ -13,7 +13,7 @@ test_suite:
   boilerplate: |
     const max_mem_addr = {max_mem_addr};
     const c = new Computer();
-    const FlagType = c._cpu.FlagManager.FlagType;
+    const FlagType = c._cpu._flagManager.FlagType;
 
 
     const data = {data};
@@ -40,18 +40,18 @@ test_suite:
       program[3] = (mem_addr >> 8) & 0xFF;
       program[5] = mem_addr & 0xFF;
 
-      c.InjectProgram(program);
+      c.LoadProgram(program);
       {set_carry}
       c.ExecuteProgram();
 
-      assert.equal(c._cpu.Registers.A,{expected_result});
-      assert.equal(c._cpu.FlagManager.IsSet(FlagType.Carry), {carry});
-      assert.equal(c._cpu.FlagManager.IsSet(FlagType.Parity), {parity});
-      assert.equal(c._cpu.FlagManager.IsSet(FlagType.AuxillaryCarry), {auxillary_carry});
-      assert.equal(c._cpu.FlagManager.IsSet(FlagType.Zero), {zero});
-      assert.equal(c._cpu.FlagManager.IsSet(FlagType.Sign), {sign});
+      assert.equal(c.CPUState.Registers.A,{expected_result});
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), {carry});
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity), {parity});
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), {auxillary_carry});
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), {zero});
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), {sign});
 
-      assert.equal(c._cpu.Clock, 45);
+      assert.equal(c.CPUState.Clock, 45);
 
       c.Reset();
       }}

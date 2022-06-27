@@ -67,20 +67,22 @@ btnMadness.addEventListener('click', () => {
 });
 
 btnInit.addEventListener('click',() => {
-    cabinet.Initialise(ramOutput);
+    const state = cabinet.Initialise();
+    ramOutput.textContent = state.MemoryMap;
 });
 
 btnUpto.addEventListener('click', () => {
     const addr =parseInt(inpUpto.value);
     console.log(addr.toString(16));
-    while (cabinet.Stopped == false && cabinet.computer.CPUProgramCounter != addr) {
-        dis.textContent += `\n${cabinet.ExecuteNextLine(output)}`;
-        refreshControls();
+    while (cabinet.Stopped == false && cabinet._computer.CPUProgramCounter != addr) {
+        const state = cabinet.ExecuteNextLine();
+        dis.textContent += state.Disassemble;
+        output.textContent += state.Output;
+        //refreshControls(state);
     }
-
 })
 
-function refreshControls() {
+function refreshControls(state) {
     register_table.A_DEC.textContent = `${cabinet.Computer.CPURegisters['A'].toString().padStart(3,'0')}`
     register_table.A_HEX.textContent = `0x${cabinet.Computer.CPURegisters['A'].toString(16).padStart(2,'0)')}`;
 

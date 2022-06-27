@@ -15,8 +15,9 @@ class Cabinet {
         if (new.target === 'Cabinet') {
             throw new TypeError('Cannot construct Cabinet object directly.')
         }
-        this.startAddr = startAddr;
-        this.computer = null;
+        this._startAddr = startAddr;
+        this._computer = null;
+        this._code = null;
     }
 
     get Code() {
@@ -24,21 +25,12 @@ class Cabinet {
     }
 
     get Computer() {
-        return this.computer;
+        return this._computer;
     }
 
-    Initialise(ramOutput) {
-        this.computer = new Computer();
-        this.computer.InjectProgram(this.Code, this.startAddr);
-        this.computer.CPUProgramCounter = this.startAddr;
-
-        if(typeof ramOutput != undefined) {
-            let str = '';
-            for (let i=0; i<(2**16); i++) {
-                str += `${i.toString(16).padStart(4,'0')}\t${this.computer.Bus.ReadRAM(i).toString(16).padStart(2,'0')}\n`
-            }
-            ramOutput.textContent = str;
-        }
+    Initialise() {
+        this._computer = new Computer();
+        return this._computer.LoadProgram(this._code, this._startAddr);
     }
 
     /**

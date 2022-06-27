@@ -21,12 +21,12 @@ describe('MVI Memory', () => {
 		  program[1] = (mem_addr >> 8) & 0xff;
 		  program[3] = mem_addr & 0xFF;
 		
-		  c.InjectProgram(program);
+		  c.LoadProgram(program);
 		  c.ExecuteProgram();
 		
 		  assert.equal(c.Bus.ReadRAM(mem_addr), data);
 		
-		  assert.equal(c._cpu.Clock, 31);
+		  assert.equal(c.CPUState.Clock, 31);
 		  c.Reset();
 		}
 		});
