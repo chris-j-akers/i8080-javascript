@@ -33,6 +33,10 @@ class Cabinet {
         return this._computer.LoadProgram(this._code, this._startAddr);
     }
 
+    ResetComputer() {
+        this._computer.Reset();
+    }
+
     /**
      * Execute the next line of code, according to the location of the Program
      * Counter.
@@ -47,7 +51,7 @@ class Cabinet {
      * @param {string} output Disassembly of line just executed
      * @returns 
      */
-    ExecuteNextLine() {
+    ExecuteNextInstruction() {
         throw new TypeError('ExecuteNextLine() not implemented in empty Cabinet.')
     }
 }

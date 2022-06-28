@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>i8080 Emulator</title>
+    <title>CPU DIAG (1980)</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
@@ -10,121 +10,156 @@
     <script type="module" src="src/mmu.js"></script>
     <script type="module" src="src/bus.js"></script>
     <script type="module" src="src/i8080.js"></script>
-    <script type="module" src="src/scratch.js"></script>
-    <!-- <script type="module" src="index.js"></script> -->
+    <!-- <script type="module" src="src/scratch.js"></script> -->
+    <script type="module" src="index.js"></script>
   </head>
-    <body>
-      <section id="diagnostics">
-          <div class="diagnosticLayout">
-            <div class="registerLayout">
-              <table class="registerTable">
-                  <thead>
-                    <tr>
-                      <th>Register</th>
-                      <th>Dec</th>
-                      <th>Hex</th>
-                      <th>Bin</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>A(ccumulator)</td>
-                      <td id="reg_table_A_dec">000</td>
-                      <td id="reg_table_A_hex">0x00</td>
-                      <td id="reg_table_A_bin">00000000</td>
-                    </tr>
-                    <tr>
-                      <td>B</td>
-                      <td id="reg_table_B_dec">000</td>
-                      <td id="reg_table_B_hex">0x00</td>
-                      <td id="reg_table_B_bin">00000000</td>                  </tr>
-                    <tr>
-                      <td>C</td>
-                      <td id="reg_table_C_dec">000</td>
-                      <td id="reg_table_C_hex">0x00</td>
-                      <td id="reg_table_C_bin">00000000</td>                  </tr>
-                    <tr>
-                      <td>D</td>
-                      <td id="reg_table_D_dec">000</td>
-                      <td id="reg_table_D_hex">0x00</td>
-                      <td id="reg_table_D_bin">00000000</td>                  </tr>
-                    <tr>
-                      <td>E</td>
-                      <td id="reg_table_E_dec">000</td>
-                      <td id="reg_table_E_hex">0x00</td>
-                      <td id="reg_table_E_bin">00000000</td>                  </tr>
-                    <tr>
-                      <td>H</td>
-                      <td id="reg_table_H_dec">000</td>
-                      <td id="reg_table_H_hex">0x00</td>
-                      <td id="reg_table_H_bin">00000000</td>                  </tr>
-                    <tr>
-                      <td>L</td>
-                      <td id="reg_table_L_dec">000</td>
-                      <td id="reg_table_L_hex">0x00</td>
-                      <td id="reg_table_L_bin">00000000</td>                  </tr>
-                  </tbody>
-              </table>
-            </div>
-            </p>
-            <div class="miscDiagLayout">
-              <table class="registerTable">
-                <thead>
-                    <tr>
-                    <th>Carry</th>
-                    <th>Parity</th>
-                    <th>Auxillary Carry</th>
-                    <th>Zero</th>
-                    <th>Sign</th>
-                    </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                      <td id="flag_table_C">0</td>
-                      <td id="flag_table_P">0</td>
-                      <td id="flag_table_A">0</td>
-                      <td id="flag_table_Z">0</td>
-                      <td id="flag_table_S">0</td>
-                  </tr>
-                </tbody>
-              </table>
-            </p>
-            <table class="registerTable">
+  <body>
+    <section id="diagnostics">
+      <div class="diagnosticsPanel">
+        <div class="panel registersPanel">
+          <h2>Registers</h2>
+          <table class="diagnosticTable">
               <thead>
-                  <tr>
-                  <th>Program Counter</th>
-                  <th>Stack Pointer</th>
-                  <th>Clock</th>
-                  <th>Halt</th>
-                  </tr>
+                <tr>
+                  <th>Register</th>
+                  <th>Dec</th>
+                  <th>Hex</th>
+                  <th>Bin</th>
+                </tr>
               </thead>
               <tbody>
                 <tr>
-                    <td id="misc_table_PC">0</td>
-                    <td id="misc_table_SP">0</td>
-                    <td id="misc_table_C">0</td>
-                    <td id="misc_table_H">0</td>
+                  <td>A(ccumulator)</td>
+                  <td id="tdARegDecElem">000</td>
+                  <td id="tdARegHexElem">0x00</td>
+                  <td id="tdARegBinElem">00000000</td>              
+                </tr>
+                <tr>
+                  <td>B</td>
+                  <td id="tdBRegDecElem">000</td>
+                  <td id="tdBRegHexElem">0x00</td>
+                  <td id="tdBRegBinElem">00000000</td>              
+                </tr>
+                <tr>
+                  <td>C</td>
+                  <td id="tdCRegDecElem">000</td>
+                  <td id="tdCRegHexElem">0x00</td>
+                  <td id="tdCRegBinElem">00000000</td>              
+                </tr> 
+                <tr>
+                  <td>D</td>
+                  <td id="tdDRegDecElem">000</td>
+                  <td id="tdDRegHexElem">0x00</td>
+                  <td id="tdDRegBinElem">00000000</td>              
+                </tr>
+                <tr>
+                  <td>E</td>
+                  <td id="tdERegDecElem">000</td>
+                  <td id="tdERegHexElem">0x00</td>
+                  <td id="tdERegBinElem">00000000</td>              
+                </tr>
+                <tr>
+                  <td>H</td>
+                  <td id="tdHRegDecElem">000</td>
+                  <td id="tdHRegHexElem">0x00</td>
+                  <td id="tdHRegBinElem">00000000</td>              
+                </tr>
+                <tr>
+                  <td>L</td>
+                  <td id="tdLRegDecElem">000</td>
+                  <td id="tdLRegHexElem">0x00</td>
+                  <td id="tdLRegBinElem">00000000</td>              
                 </tr>
               </tbody>
-            </table>
+          </table>
+        </div>
+        <div class="panel flagsPanel">
+          <h2>Flags</h2>
+          <table class="diagnosticTable">
+            <thead>
+              <tr>
+                <th>Flag</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Carry</td>
+                <td id="tdCarryFlagVal">0x00</td>             
+              </tr>
+              <tr>
+                <td>Parity</td>
+                <td id="tdParityFlagVal">0x00</td>             
+              </tr>
+              <tr>
+                <td>Auxillary Carry</td>
+                <td id="tdAuxCarryFlagVal">0x00</td>             
+              </tr>
+              <tr>
+                <td>Zero</td>
+                <td id="tdZeroFlagVal">0x00</td>             
+              </tr>
+              <tr>
+                <td>Sign</td>
+                <td id="tdSignFlagVal">0x00</td>             
+              </tr>
+          </table>
+        </div>
+        <div class="fieldsPanel">
+          <h2>Fields</h2>
+          <table class="diagnosticTable">
+            <thead>
+              <tr>
+                <th>Field</th>
+                <th>Dec</th>
+                <th>Hex</th>
+                <th>Bin</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Program Counter</td>
+                <td id="tdProgramCounterDec">000</td>
+                <td id="tdProgramCounterHex">0x00</td>
+                <td id="tdProgramCounterBin">00000000</td>              
+              </tr>
+              <tr>
+                <td>Stack Pointer</td>
+                <td id="tdStackPointerDec">000</td>
+                <td id="tdStackPointerHex">0x00</td>
+                <td id="tdStackPointerBin">00000000</td>              
+              </tr>
+              <tr>
+                <td>Clock</td>
+                <td id="tdClockDec">000</td>
+                <td id="tdClockHex">0x00</td>
+                <td id="tdClockBin">00000000</td>              
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-      </section>
-      </p>
-      <section>
-          <button id="init">INITIALISE ROM</button>
-          <button id="next">RUN NEXT INSTRUCTION ONLY</button>
-          <button id="madness">RUN ALL</button>
-          <button id="upto">RUN UP TO:</button>
-          <input id="inpUpto">
-      </section>
-      <div class="output">
-        <div id="disassemble" class="disassemble">
+    </section>
+    <section id="controls">
+      <div class="controlPanel">
+        <button id="btnLoadRomElem">Load ROM</button>
+        <button id="btnExecuteNext">Execute Next Instruction</button>
+        <button id="btnRunAll">Run All</button>
+        <button id="btnRunToBreakPoint">Run to Breakpoint:</button>
+        <input id="txtBreakpoint"/>
+        <button id="btnReset">Reset</button>
+      </div>
+    </section>
+    <section id="execution">
+      <h2>Execution</h3>
+      <div class="executionPanel">
+        <div class="outputPanel" id="tracePanel">
         </div>
-        <div id = "output" class="machineOutput">
+        <div class="outputPanel" id="consolePanel">
         </div>
-        <div id = "ramOutput" class="ramOutput">
+        <div class="outputPanel" id="ramPanel">
         </div>
       </div>
-    </body>
+    </section>
+  </body>
 </html>

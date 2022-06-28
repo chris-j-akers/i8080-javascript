@@ -4,10 +4,6 @@ import { ArcadeMachine } from "./cabinet.js";
 
 class CpuDiag extends ArcadeMachine {
 
-    get Stopped() {
-        return this._computer.CPUState.Halt;
-    }
-
     /**
      * Helper function to emulate the C_WRITESTR CP/M syscall which simply
      * writes text to screen.
@@ -16,8 +12,7 @@ class CpuDiag extends ArcadeMachine {
      * and E
      */
     _getMemString() {
-        let straddr = this._computer.CPURegisters['D'] << 8 | this._computer.CPURegisters['E'] & 0xFF;
-        console.log(`straddr: ${straddr}`);
+        let straddr = this._computer.CPUState.Registers.D << 8 | this._computer.CPUState.Registers['E'];
         let ret_str = ''
         let next_char = String.fromCharCode(this._computer.Bus.ReadRAM(straddr));
         while(next_char != '$') {
@@ -28,40 +23,27 @@ class CpuDiag extends ArcadeMachine {
         return ret_str;
     }
 
-    /**
-     * Execute the next line of code, according to the location of the Program
-     * Counter.
-     *
-     * This method should call ExecuteNextLine() of its Computer object which, in
-     * turn, calls the ExecuteNextLine() of its CPU object. This allows us a
-     * couple of layers of abstractions.
-     *
-     * Here is where any extra emulation requires is placed
-     *
-     * @param {string} output Disassembly of line just executed
-     * @returns 
-     */
-    ExecuteNextLine() {
+    ExecuteNextInstruction() {
         switch(this._computer.CPUState.ProgramCounter) {
             case 5:
                 switch(this._computer.CPUState.Registers.C) {
                     case 0:
-                        this._computer.Stop();
-                        return { Disassemble: 'HALTED', Ticks: 0 };
-                    case 9: {
+                        return { Disassemble: 'HALT', 
+                                 Ticks: this._computer.DirectExecOpCode('HALT') };
+                    case 9: 
                         const outputStr = this._getMemString();
-                        const ticks = this._computer.DirectExecOpCode('RET');
-                        return { Disassemble: '0005\tC_WRITESTR (CP/M SYSCALL)\n    \tRET', Ticks: ticks, Output: outputStr };
-                        }
-                    case 2: {
-                        ticks = this._computer.DirectExecOpCode('RET');
-                        return { Disassemble: '0005\tC_WRITE (CP/M SYSCALL)\n    \tRET', Ticks: ticks, Output: String.fromCharCode(this._computer.CPUState.E) };
-                        }
+                        return { LastInstructionDisassembly: '0005\tC_WRITESTR (CP/M SYSCALL)\n    \tRET', 
+                                 LastInstructionTicks: this._computer.DirectExecOpCode('RET'), 
+                                 ConsoleOut: outputStr };
+                    case 2:
+                        return { LastInstructionDisassembly: '0005\tC_WRITE (CP/M SYSCALL)\n    \tRET', 
+                                 LastInstructionTicks: this._computer.DirectExecOpCode('RET'), 
+                                 ConsoleOut: String.fromCharCode(this._computer.CPUState.Registers.E) };
                 }
                 return;
             case 0:
-                this._computer.Stop();
-                return { Disassemble: 'HALTED', Ticks: 0 };
+                return { LastInstructionDisassembly: 'HALT', 
+                         LastInstructionTicks: this._computer.DirectExecOpCode('HALT') };
             default:
                 return this._computer.ExecuteNextInstruction();
         }

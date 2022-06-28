@@ -1,41 +1,65 @@
-table.registerTable {
-    font-family: courier;
-    font-size: 12px;
-    background-color: #FFFFFF;
-    border-collapse: collapse;
-    border-width: 1px;
-    border-color: #000000;
-    border-style: solid;
-    color: #000000;
-  }
-  
-table.registerTable td, table.registerTable th {
+table.diagnosticTable {
+  font-family: courier;
+  font-size: 12px;
+  background-color: #FFFFFF;
+  border-collapse: collapse;
   border-width: 1px;
   border-color: #000000;
   border-style: solid;
+  color: #000000;
+
+}
+
+div.panel {
+  margin-right: 10px;
+}
+
+table.diagnosticTable thead {
+  background-color: #7EA8F8;
+  border-bottom: 1px solid #000000;  
+}
+
+table.diagnosticTable td {
+  border-bottom: 1px solid #000000;
+  border-right: 1px solid #000000;
   padding-left: 3px;
   padding-right: 3px;
 }
 
-table.registerTable thead {
-  background-color: #7EA8F8;
-}
-
-.diagnosticLayout {
+div.diagnosticsPanel {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  justify-content: left;
+  justify-content: left; 
+  margin-bottom: 20px;
 }
 
-.registerLayout {
+div.executionPanel {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  justify-content: left;
+  justify-content: left; 
 }
 
-.miscDiagLayout {
+
+div.outputPanel {
+  margin-right: 10px;
+  white-space: pre;
+  font-family: courier;
+  font-size: 12px;
+  padding: 0px;
+  border: solid;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 800px;
+  width: 350px;
+}
+
+
+
+
+
+/* .miscDiagLayout {
   margin-left: 10px;
   display: flex;
   flex-direction: column;
@@ -84,4 +108,4 @@ table.registerTable thead {
   overflow-y: auto;
   overflow-x: hidden;
   height: 800px;
-}
+} */

@@ -67,7 +67,7 @@ class Computer {
      * addr)
      */
     ExecuteNextInstruction() {
-        if (this.CPUHalt == false) {
+        if (this.CPUState.Halt == false) {
             return this._cpu.ExecuteNextInstruction();
         }
     }

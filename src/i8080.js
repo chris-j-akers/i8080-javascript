@@ -769,7 +769,7 @@ class i8080 {
         if ((this._registers['A'] & 0x0F) > 9 || this._flagManager.IsSet(this._flagManager.FlagType.AuxillaryCarry)) {
             const val = this._registers['A'] + 0x06;
             this._flagManager.CheckAndSet.AuxillaryCarry(this._registers['A'], 0x06);
-            this._registers['A'] = val & 0xFF;
+            this._registers['A'] = val +1 & 0xFF;
         }
 
         if ((this._registers['A'] & 0xF0) > 0x90 || this._flagManager.IsSet(this._flagManager.FlagType.Carry)) {
@@ -1387,6 +1387,11 @@ class i8080 {
         this._programCounter = this._getRegisterPairWord('H', 'L');
         
         return 5;
+    }
+
+    HALT() {
+        this._halt = true;
+        return 7;
     }
 
     // PROGRAM EXECUTION
@@ -2156,8 +2161,7 @@ class i8080 {
                 break;
             case 0x76:
                 disassemble = `HALT`;
-                ticks = 7;
-                this._halt = true;
+                ticks = this.HALT();
                 break;
             case 0x80:
                 disassemble = `ADD\tB`;

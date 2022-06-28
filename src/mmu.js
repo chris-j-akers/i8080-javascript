@@ -4,7 +4,7 @@ class MMU {
     constructor() {
         this._ram = new Array(2**16);
         this._bus = null;
-        this._bytesUsed;
+        this._bytesUsed = 0;
     }
 
     get BytesUsed() {
@@ -24,7 +24,7 @@ class MMU {
     }
 
     Write(val, addr) {
-        if (typeof this._ram[addr] == undefined) {
+        if (typeof this._ram[addr] == 'undefined') {
             this._bytesUsed++;
         }
         this._ram[addr] = val;
