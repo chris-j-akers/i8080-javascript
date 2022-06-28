@@ -769,7 +769,7 @@ class i8080 {
         if ((this._registers['A'] & 0x0F) > 9 || this._flagManager.IsSet(this._flagManager.FlagType.AuxillaryCarry)) {
             const val = this._registers['A'] + 0x06;
             this._flagManager.CheckAndSet.AuxillaryCarry(this._registers['A'], 0x06);
-            this._registers['A'] = val +1 & 0xFF;
+            this._registers['A'] = val & 0xFF;
         }
 
         if ((this._registers['A'] & 0xF0) > 0x90 || this._flagManager.IsSet(this._flagManager.FlagType.Carry)) {

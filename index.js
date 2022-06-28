@@ -85,6 +85,8 @@ const buttons = {
 
     btnReset: document.getElementById('btnReset').addEventListener( 'click', () => {
         cpuDiagCabinet.ResetComputer();
+        outputs.divConsolePanel.textContent = '';
+        outputs.divTracePanel.textContent = '';
     }),
 }
 
