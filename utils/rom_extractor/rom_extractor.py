@@ -1,9 +1,6 @@
-
-
-from ctypes.wintypes import BYTE
 import sys
 
-def extract(rom_path, output_directory):
+def extract(rom_path):
 
     BYTE_COUNT_PER_LINE = 10
 

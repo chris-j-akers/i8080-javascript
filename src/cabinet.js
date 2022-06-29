@@ -1,13 +1,11 @@
 import { Computer } from "./computer.js";
 
 /**
- * An abstract class which emulates a full Cabinet.
+ * An abstract class which emulates a Cabinet.
  *
- * A cabinet containes a Computer and a code-set. Code is stored in an array of
- * bytes called `_code`.
+ * A cabinet containes a Computer, a display and a code-set. Code is stored in
+ * an array of bytes called `_code`.
  *
- * A cabinet runs the code, but can hook into certain CPU operations and
- * structures to cope with things like OS syscalls etc.
  */
 class Cabinet {
 
@@ -18,7 +16,6 @@ class Cabinet {
         this._startAddr = startAddr;
         this._computer = null;
         this._code = null;
-
     }
 
     get Code() {
@@ -45,9 +42,9 @@ class Cabinet {
      * This method should call ExecuteNextLine() of the Cabinet's Computer
      * object which, in turn, will call the ExecuteNextLine() of its own CPU
      * object. This gives us a couple of layers of abstraction. The CPU is
-     * completley ignorant of what we're acually using it for.
+     * ignorant of what we're acually using it for.
      *
-     * Here is where any extra emulation requires is placed
+     * Any extra emulation should be placed here (e.g. OS syscalls)
      *
      * @param {string} output Disassembly of line just executed
      * @returns 

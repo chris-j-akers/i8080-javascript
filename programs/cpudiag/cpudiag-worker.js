@@ -22,4 +22,4 @@ setInterval( () => {
         close();
     }
     ExecuteNextInstruction();
-}, 30);
+}, 100);

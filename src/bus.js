@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * The bus links the CPU and other 'periphials' together. This is usually just
- * memory, but could also be a video display buffer or similar.
+ * The bus links the CPU and other 'peripherals' together. This is usually just
+ * memory, but could also be a video display or something similar.
  */
  class Bus {
     constructor() {

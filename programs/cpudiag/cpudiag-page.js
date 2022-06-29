@@ -108,7 +108,7 @@ const buttons = {
         outputs.divTracePanel.textContent += '\n';
     
         if (typeof state.ConsoleOut != 'undefined') {
-            outputs.divConsolePanel.textContent += `${e.data.ConsoleOut}\n`;
+            outputs.divConsolePanel.textContent += `${state.ConsoleOut}\n`;
         }
         
         updateRegisterFields(cpuDiagCabinet.Computer.CPUState.Registers);

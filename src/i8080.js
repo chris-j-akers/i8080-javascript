@@ -1517,7 +1517,7 @@ class i8080 {
                 ticks = this.CALL(this._flagManager.IsSet(this._flagManager.FlagType.Parity), this._getNextWord());
                 break;
             case 0xDC:
-                disassemble = `CC\t${this._peekNextWord().toString(16)}`
+                disassemble = `CC\t0x${this._peekNextWord().toString(16)}`
                 ticks = this.CALL(this._flagManager.IsSet(this._flagManager.FlagType.Carry), this._getNextWord());
                 break;
             case 0xCC:
