@@ -129,9 +129,7 @@ class i8080 {
     constructor() {
         this.Reset();
         this._bus = null;
-        this._overClock = false;
     }
-
 
     /**
      * Connect a `Bus` object to this CPU. A bus is used to access memory and
@@ -149,8 +147,7 @@ class i8080 {
             Clock: this._clock,
             Halt: this._halt,
             InterruptsEnabled: this._interruptsEnabled,
-            // We want a read-only copy of registers, not a reference to the
-            // internal field.
+
             Registers: {
                 A: this._registers.A,
                 B: this._registers.B,
@@ -160,6 +157,7 @@ class i8080 {
                 H: this._registers.H,
                 L: this._registers.L,
             },
+
             Flags: {
                 Carry: this._flagManager.IsSet(this._flagManager.FlagType.Carry),
                 Parity: this._flagManager.IsSet(this._flagManager.FlagType.Parity),
@@ -168,14 +166,6 @@ class i8080 {
                 Sign: this._flagManager.IsSet(this._flagManager.FlagType.Sign),
             }
         }
-    }
-
-    set OverClock(val) {
-        this._overClock = val;
-    }
-
-    get OverClock() {
-        return this._overClock;
     }
 
     /**
@@ -519,7 +509,6 @@ class i8080 {
      */
     SUB_R(register) {
         this._registers['A'] = this._sub(this._registers['A'], this._registers[register]);
-        
         return 4;
     }
 
@@ -537,7 +526,6 @@ class i8080 {
      */
     SUB_M() {      
         this._registers['A'] = this._sub(this._registers['A'], this._bus.ReadRAM(this._getRegisterPairWord('H','L')));
-        
         return 7;
     }
 

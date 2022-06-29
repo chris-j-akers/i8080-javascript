@@ -57,4 +57,4 @@ class Cabinet {
     }
 }
 
-export { Cabinet as ArcadeMachine }
+export { Cabinet }

@@ -1,5 +1,4 @@
-import { CpuDiag } from './src/cpudiag.js';
-
+import { CpuDiag } from './cpudiag.js';
 
 const registerTableElem = {
     decA: document.getElementById('tdARegDecElem'),
@@ -26,26 +25,21 @@ const registerTableElem = {
 }
 
 function updateRegisterFields(registers) {
-    
     registerTableElem.decA.textContent = `${registers.A.toString().padStart(3,'0')}`
     registerTableElem.hexA.textContent  = `0x${registers.A.toString(16).padStart(2,'0')}`
     registerTableElem.binA.textContent  = `${registers.A.toString(2).padStart(8,'0')}`
-
 
     registerTableElem.decB.textContent  = `${registers.B.toString().padStart(3,'0')}`
     registerTableElem.hexB.textContent  = `0x${registers.B.toString(16).padStart(2,'0')}`
     registerTableElem.binB.textContent  = `${registers.B.toString(2).padStart(8,'0')}`
 
-
     registerTableElem.decC.textContent  = `${registers.C.toString().padStart(3,'0')}`
     registerTableElem.hexC.textContent  = `0x${registers.C.toString(16).padStart(2,'0')}`
     registerTableElem.binC.textContent  = `${registers.C.toString(2).padStart(8,'0')}`
 
-
     registerTableElem.decD.textContent  = `${registers.D.toString().padStart(3,'0')}`
     registerTableElem.hexD.textContent  = `0x${registers.D.toString(16).padStart(2,'0')}`
     registerTableElem.binD.textContent  = `${registers.D.toString(2).padStart(8,'0')}`
-
 
     registerTableElem.decE.textContent  = `${registers.E.toString().padStart(3,'0')}`
     registerTableElem.hexE.textContent  = `0x${registers.E.toString(16).padStart(2,'0')}`
@@ -74,7 +68,6 @@ function updateFlagsFields(flags) {
     flagsTableElem.AuxCarry.textContent = flags.AuxillaryCarry ? '0x01' : '0x00';
     flagsTableElem.Zero.textContent = flags.Zero ? '0x01' : '0x00';
     flagsTableElem.Sign.textContent = flags.Sign ? '0x01' : '0x00';
-
 }
 
 const fieldsTableElem = {
@@ -107,43 +100,64 @@ function updateFields(lastOperationTicks, cpuState) {
 }
 
 const buttons = {
-    btnLoadROM: document.getElementById('btnLoadRomElem').addEventListener( 'click', () => {
-        const bytesLoaded = cpuDiagCabinet.Initialise();
-        outputs.divConsolePanel.textContent += `LOADED ${bytesLoaded} BYTES STARTING AT ADDRESS 0x${cpuDiagCabinet._startAddr.toString(16)}`; 
-
-    }),
     btnExecuteNext: document.getElementById('btnExecuteNext').addEventListener( 'click', () => {
         const addr = cpuDiagCabinet.Computer.CPUState.ProgramCounter;
         const state = cpuDiagCabinet.ExecuteNextInstruction();
+
         outputs.divTracePanel.textContent += `0x${addr.toString(16)}\t${state.LastInstructionDisassembly}`;
         outputs.divTracePanel.textContent += '\n';
-        //RefreshControls();
+    
+        if (typeof state.ConsoleOut != 'undefined') {
+            outputs.divConsolePanel.textContent += `${e.data.ConsoleOut}\n`;
+        }
+        
+        updateRegisterFields(cpuDiagCabinet.Computer.CPUState.Registers);
+        updateFlagsFields(cpuDiagCabinet.Computer.CPUState.Flags);
+        updateFields(state.LastInstructionTicks, cpuDiagCabinet.Computer.CPUState);
+
     }),
     btnRunAll: document.getElementById('btnRunAll').addEventListener( 'click', () => {
-        const worker = new Worker('worker.js', {type: 'module'});
-        worker.onmessage = onInstructionComplete;
+        outputs.divTracePanel.textContent = '';
+        outputs.divConsolePanel.textContent = '';
+        const worker = new Worker('cpudiag-worker.js', {type: 'module'});
+        worker.onmessage = OnInstructionComplete;
     }),
     btnRunToBreakPoint: document.getElementById('btnRunToBreakPoint').addEventListener('click', () => {
+        let addr;
         while(cpuDiagCabinet.Computer.CPUState.Halt == false & cpuDiagCabinet.Computer.CPUState.ProgramCounter != inputs.txtBreakpoint.value) {
+            addr = cpuDiagCabinet.Computer.CPUState.ProgramCounter;
             const state = cpuDiagCabinet.ExecuteNextInstruction();
-            outputs.divTracePanel.textContent += state.LastInstructionDisassembly;
+            outputs.divTracePanel.textContent += `0x${addr.toString(16)}\t${state.LastInstructionDisassembly}`;
             outputs.divTracePanel.textContent += '\n';
-
+        
             if (typeof state.ConsoleOut != 'undefined') {
-                outputs.divConsolePanel.textContent += state.ConsoleOut;
+                outputs.divConsolePanel.textContent += `${state.ConsoleOut}\n`;
             }
+
+            updateRegisterFields(cpuDiagCabinet.Computer.CPUState.Registers);
+            updateFlagsFields(cpuDiagCabinet.Computer.CPUState.Flags);
+            updateFields(state.LastInstructionTicks, cpuDiagCabinet.Computer.CPUState);
         }
     }),
-
     btnReset: document.getElementById('btnReset').addEventListener( 'click', () => {
-        cpuDiagCabinet.ResetComputer();
-        outputs.divConsolePanel.textContent = '';
-        outputs.divTracePanel.textContent = '';
+        reset();
     }),
+    btnRunAllUnclocked: document.getElementById('btnRunAllUnclocked').addEventListener( 'click', () => {
+        let addr;
+        while(cpuDiagCabinet.Computer.CPUState.Halt == false) {
+            addr = cpuDiagCabinet.Computer.CPUState.ProgramCounter;
+            const state = cpuDiagCabinet.ExecuteNextInstruction();
+            outputs.divTracePanel.textContent += `0x${addr.toString(16)}\t${state.LastInstructionDisassembly}`;
+            outputs.divTracePanel.textContent += '\n';
+        
+            if (typeof state.ConsoleOut != 'undefined') {
+                outputs.divConsolePanel.textContent += `${state.ConsoleOut}\n`;
+            }
 
-    btnClocked: document.getElementById('btnClocked').addEventListener('click', () => {
-        const addr = cpuDiagCabinet.Computer.CPUState.ProgramCounter;
-        const state = cpuDiagCabinet.clocked();
+            updateRegisterFields(cpuDiagCabinet.Computer.CPUState.Registers);
+            updateFlagsFields(cpuDiagCabinet.Computer.CPUState.Flags);
+            updateFields(state.LastInstructionTicks, cpuDiagCabinet.Computer.CPUState);
+        }
     })
 }
 
@@ -156,20 +170,7 @@ const outputs = {
     divConsolePanel: document.getElementById('consolePanel'),
 }
 
-const cpuDiagCabinet = new CpuDiag(0x100); 
-cpuDiagCabinet.Initialise();
-outputs.divTracePanel.textContent = '';
-outputs.divConsolePanel.textContent = '';
-
-window.addEventListener('instructionCompleteEvent', (e) => {
-    outputs.divTracePanel.textContent += e.detail.LastInstructionDisassembly;
-    outputs.divTracePanel.textContent += '\n';
-    updateRegisterFields();
-    updateFlagsFields();
-    updateFields(e.detail.LastInstructionTicks);
-});
-
-function onInstructionComplete(e) {
+function OnInstructionComplete(e) {
     outputs.divTracePanel.textContent += `0x${e.data.LastInstructionAddress.toString(16)}\t${e.data.LastInstructionDisassembly}`;
     outputs.divTracePanel.textContent += '\n';
 
@@ -181,89 +182,14 @@ function onInstructionComplete(e) {
     updateFlagsFields(e.data.CPUState.Flags);
     updateFields(e.data.LastInstructionTicks, e.data.CPUState);
 }
-// const tracePanelElem = document.getElementById('tracePanel');
 
+function reset() {
+    outputs.divTracePanel.textContent = '';
+    outputs.divConsolePanel.textContent = '';
+    const bytesLoaded = cpuDiagCabinet.Initialise();
+    outputs.divConsolePanel.textContent += `LOADED ${bytesLoaded} BYTES STARTING AT ADDRESS 0x${cpuDiagCabinet._startAddr.toString(16)}`; 
+}
 
-// const btnNext = document.getElementById('next');
-// const btnMadness = document.getElementById('madness');
-// const btnInit = document.getElementById('init');
-// const dis = document.getElementById('disassemble');
-// dis.textContent = ''
-
-// const output = document.getElementById('output');
-// output.textContent = '';
-// const ramOutput = document.getElementById('ramOutput');
-// ramOutput.textContent = '';
-
-// const inpUpto = document.getElementById('inpUpto');
-// const btnUpto = document.getElementById('upto');
-
-// btnNext.addEventListener('click', () => {
-//     dis.textContent += `\n${cabinet.ExecuteNextLine()}`;
-//     refreshControls();
-// });
-
-// btnMadness.addEventListener('click', () => {
-//     while (cabinet.Stopped == false) {
-//         dis.textContent += `\n${cabinet.ExecuteNextLine(output)}`;
-//         refreshControls();
-//     }
-//     return;
-// });
-
-// btnInit.addEventListener('click',() => {
-//     cabinet.Initialise();
-//     let str ='';
-
-// });
-
-// btnUpto.addEventListener('click', () => {
-//     const addr =parseInt(inpUpto.value);
-//     console.log(addr.toString(16));
-//     while (cabinet.Stopped == false && cabinet._computer.CPUProgramCounter != addr) {
-//         const state = cabinet.ExecuteNextLine();
-//         dis.textContent += state.Disassemble;
-//         output.textContent += state.Output;
-//         //refreshControls(state);
-//     }
-// })
-
-// function refreshControls(state) {
-//     register_table.A_DEC.textContent = `${cabinet.Computer.CPURegisters['A'].toString().padStart(3,'0')}`
-//     register_table.A_HEX.textContent = `0x${cabinet.Computer.CPURegisters['A'].toString(16).padStart(2,'0)')}`;
-
-//     register_table.B_DEC.textContent = `${cabinet.Computer.CPURegisters['B'].toString().padStart(3,'0')}`
-//     register_table.B_HEX.textContent = `0x${cabinet.Computer.CPURegisters['B'].toString(16).padStart(2,'0)')}`;
-
-//     register_table.C_DEC.textContent = `${cabinet.Computer.CPURegisters['C'].toString().padStart(3,'0')}`
-//     register_table.C_HEX.textContent = `0x${cabinet.Computer.CPURegisters['C'].toString(16).padStart(2,'0)')}`;
-
-//     register_table.D_DEC.textContent = `${cabinet.Computer.CPURegisters['D'].toString().padStart(3,'0')}`
-//     register_table.D_HEX.textContent = `0x${cabinet.Computer.CPURegisters['D'].toString(16).padStart(2,'0)')}`;
-
-//     register_table.E_DEC.textContent = `${cabinet.Computer.CPURegisters['E'].toString().padStart(3,'0')}`
-//     register_table.E_HEX.textContent = `0x${cabinet.Computer.CPURegisters['E'].toString(16).padStart(2,'0)')}`;
-
-//     register_table.H_DEC.textContent = `${cabinet.Computer.CPURegisters['H'].toString().padStart(3,'0')}`
-//     register_table.H_HEX.textContent = `0x${cabinet.Computer.CPURegisters['H'].toString(16).padStart(2,'0)')}`;
-
-//     register_table.L_DEC.textContent = `${cabinet.Computer.CPURegisters['L'].toString().padStart(3,'0')}`
-//     register_table.L_HEX.textContent = `0x${cabinet.Computer.CPURegisters['L'].toString(16).padStart(2,'0)')}`;
-
-//     flags_table.C.textContent = `${cabinet.Computer.CPUFlagManager.IsSet(cabinet.Computer.CPUFlagManager.FlagType.Carry) ? '1' : '0'}`;
-//     flags_table.P.textContent = `${cabinet.Computer.CPUFlagManager.IsSet(cabinet.Computer.CPUFlagManager.FlagType.Parity) ? '1' : '0'}`;
-//     flags_table.A.textContent = `${cabinet.Computer.CPUFlagManager.IsSet(cabinet.Computer.CPUFlagManager.FlagType.AuxillaryCarry) ? '1' : '0'}`;
-//     flags_table.Z.textContent = `${cabinet.Computer.CPUFlagManager.IsSet(cabinet.Computer.CPUFlagManager.FlagType.Zero) ? '1' : '0'}`;
-//     flags_table.S.textContent = `${cabinet.Computer.CPUFlagManager.IsSet(cabinet.Computer.CPUFlagManager.FlagType.Sign) ? '1' : '0'}`;
-
-//     misc_table.PC.textContent = `${cabinet.Computer.CPUProgramCounter.toString(16)}`;
-//     misc_table.SP.textContent = `${cabinet.Computer.CPUStackPointer.toString(16)}`;
-//     misc_table.C.textContent = `${cabinet.Computer.CPUClock.toString(16)}`;
-//     misc_table.H.textContent = `${cabinet.Computer.CPUHalt ? '1' : '0'}`;
-// }
-
-
-// const cabinet = new CpuDiag(0x100);
-
-
-
+// We want this available to everyone!
+const cpuDiagCabinet = new CpuDiag(0x100); 
+reset();

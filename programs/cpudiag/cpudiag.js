@@ -1,8 +1,8 @@
 'use strict'
 
-import { ArcadeMachine } from "./cabinet.js";
+import { Cabinet } from "./cabinet.js";
 
-class CpuDiag extends ArcadeMachine {
+class CpuDiag extends Cabinet {
 
     /**
      * Helper function to emulate the C_WRITESTR CP/M syscall which simply
