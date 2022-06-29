@@ -3,26 +3,51 @@ import { CpuDiag } from './src/cpudiag.js';
 
 const registerTableElem = {
     decA: document.getElementById('tdARegDecElem'),
-    hexA: document.getElementById('tdARegDecElem'),
+    hexA: document.getElementById('tdARegHexElem'),
     binA: document.getElementById('tdARegDecElem'),
     decB: document.getElementById('tdBRegDecElem'),
-    hexB: document.getElementById('tdBRegDecElem'),
+    hexB: document.getElementById('tdBRegHexElem'),
     binB: document.getElementById('tdBRegDecElem'),
     decC: document.getElementById('tdCRegDecElem'),
-    hexC: document.getElementById('tdCRegDecElem'),
+    hexC: document.getElementById('tdCRegHexElem'),
     binC: document.getElementById('tdCRegDecElem'),
     decD: document.getElementById('tdDRegDecElem'),
-    hexD: document.getElementById('tdDRegDecElem'),
+    hexD: document.getElementById('tdDRegHexElem'),
     binD: document.getElementById('tdDRegDecElem'),
     decE: document.getElementById('tdERegDecElem'),
-    hexE: document.getElementById('tdERegDecElem'),
+    hexE: document.getElementById('tdERegHexElem'),
     binE: document.getElementById('tdERegDecElem'),
     decH: document.getElementById('tdHRegDecElem'),
-    hexH: document.getElementById('tdHRegDecElem'),
+    hexH: document.getElementById('tdHRegHexElem'),
     binH: document.getElementById('tdHRegDecElem'),
     decL: document.getElementById('tdLRegDecElem'),
-    hexL: document.getElementById('tdLRegDecElem'),
+    hexL: document.getElementById('tdLRegHexElem'),
     binL: document.getElementById('tdLRegDecElem'),
+}
+
+function updateRegisterFields() {
+    const registers = cpuDiagCabinet.Computer.CPUState.Registers;
+
+    registerTableElem.decA.textContent = `${registers.A.toString().padStart(3,'0')}`
+    registerTableElem.hexA.textContent  = `0x${registers.A.toString(16).padStart(2,'0')}`
+
+    registerTableElem.decB.textContent  = `${registers.B.toString().padStart(3,'0')}`
+    registerTableElem.hexB.textContent  = `0x${registers.B.toString(16).padStart(2,'0')}`
+
+    registerTableElem.decC.textContent  = `${registers.C.toString().padStart(3,'0')}`
+    registerTableElem.hexC.textContent  = `0x${registers.C.toString(16).padStart(2,'0')}`
+
+    registerTableElem.decD.textContent  = `${registers.D.toString().padStart(3,'0')}`
+    registerTableElem.hexD.textContent  = `0x${registers.D.toString(16).padStart(2,'0')}`
+
+    registerTableElem.decE.textContent  = `${registers.E.toString().padStart(3,'0')}`
+    registerTableElem.hexE.textContent  = `0x${registers.E.toString(16).padStart(2,'0')}`
+
+    registerTableElem.decH.textContent  = `${registers.H.toString().padStart(3,'0')}`
+    registerTableElem.hexH.textContent  = `0x${registers.H.toString(16).padStart(2,'0')}`
+
+    registerTableElem.decL.textContent  = `${registers.L.toString().padStart(3,'0')}`
+    registerTableElem.hexL.textContent  = `0x${registers.L.toString(16).padStart(2,'0')}`
 }
 
 const flagsTableElem = {
@@ -31,6 +56,16 @@ const flagsTableElem = {
     AuxCarry: document.getElementById('tdAuxCarryFlagVal'),
     Zero: document.getElementById('tdZeroFlagVal'),
     Sign: document.getElementById('tdSignFlagVal'),
+}
+
+function updateFlagsFields() {
+    const flags = cpuDiagCabinet.Computer.CPUState.Flags;
+    flagsTableElem.Carry.textContent = flags.Carry ? '0x01' : '0x00';
+    flagsTableElem.Parity.textContent = flags.Parity ? '0x01' : '0x00';
+    flagsTableElem.AuxCarry.textContent = flags.AuxillaryCarry ? '0x01' : '0x00';
+    flagsTableElem.Zero.textContent = flags.Zero ? '0x01' : '0x00';
+    flagsTableElem.Sign.textContent = flags.Sign ? '0x01' : '0x00';
+
 }
 
 const fieldsTableElem = {
@@ -43,6 +78,20 @@ const fieldsTableElem = {
     decClock: document.getElementById('tdClockDec'),
     hexClock: document.getElementById('tdClockHex'),
     binClock: document.getElementById('tdClockBin'),
+    decTicks: document.getElementById('tdTicksDec'),
+}
+
+function updateFields(lastOperationTicks) {
+    fieldsTableElem.decProgramCounter.textContent = `${cpuDiagCabinet.Computer.CPUState.ProgramCounter.toString().padStart(3, '0')}`;
+    fieldsTableElem.hexProgramCounter.textContent = `0x${cpuDiagCabinet.Computer.CPUState.ProgramCounter.toString(16).padStart(4, '0')}`;
+
+    fieldsTableElem.decStackPointer.textContent = `${cpuDiagCabinet.Computer.CPUState.StackPointer.toString().padStart(3, '0')}`;
+    fieldsTableElem.hexStackPointer.textContent = `0x${cpuDiagCabinet.Computer.CPUState.StackPointer.toString(16).padStart(4, '0')}`;
+
+    fieldsTableElem.decClock.textContent = `${cpuDiagCabinet.Computer.CPUState.Clock.toString().padStart(3, '0')}`;
+    fieldsTableElem.hexClock.textContent = `0x${cpuDiagCabinet.Computer.CPUState.Clock.toString(16).padStart(4, '0')}`;
+
+    fieldsTableElem.decTicks.textContent = `${lastOperationTicks.toString().padStart(3,'0')}`;
 }
 
 const buttons = {
@@ -88,6 +137,11 @@ const buttons = {
         outputs.divConsolePanel.textContent = '';
         outputs.divTracePanel.textContent = '';
     }),
+
+    btnClocked: document.getElementById('btnClocked').addEventListener('click', () => {
+        const addr = cpuDiagCabinet.Computer.CPUState.ProgramCounter;
+        const state = cpuDiagCabinet.clocked();
+    })
 }
 
 const inputs = {
@@ -103,6 +157,14 @@ const cpuDiagCabinet = new CpuDiag(0x100);
 cpuDiagCabinet.Initialise();
 outputs.divTracePanel.textContent = '';
 outputs.divConsolePanel.textContent = '';
+
+window.addEventListener('instructionCompleteEvent', (e) => {
+    outputs.divTracePanel.textContent += e.detail.LastInstructionDisassembly;
+    outputs.divTracePanel.textContent += '\n';
+    updateRegisterFields();
+    updateFlagsFields();
+    updateFields(e.detail.LastInstructionTicks);
+});
 
 // const tracePanelElem = document.getElementById('tracePanel');
 

@@ -18,6 +18,7 @@ class Cabinet {
         this._startAddr = startAddr;
         this._computer = null;
         this._code = null;
+
     }
 
     get Code() {

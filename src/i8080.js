@@ -129,6 +129,7 @@ class i8080 {
     constructor() {
         this.Reset();
         this._bus = null;
+        this._overClock = false;
     }
 
 
@@ -146,7 +147,6 @@ class i8080 {
             ProgramCounter: this._programCounter,
             StackPointer: this._stackPointer,
             Clock: this._clock,
-            Flags: this._flags,
             Halt: this._halt,
             InterruptsEnabled: this._interruptsEnabled,
             // We want a read-only copy of registers, not a reference to the
@@ -160,7 +160,22 @@ class i8080 {
                 H: this._registers.H,
                 L: this._registers.L,
             },
+            Flags: {
+                Carry: this._flagManager.IsSet(this._flagManager.FlagType.Carry),
+                Parity: this._flagManager.IsSet(this._flagManager.FlagType.Parity),
+                AuxillaryCarry: this._flagManager.IsSet(this._flagManager.FlagType.AuxillaryCarry),
+                Zero: this._flagManager.IsSet(this._flagManager.FlagType.Zero),
+                Sign: this._flagManager.IsSet(this._flagManager.FlagType.Sign),
+            }
         }
+    }
+
+    set OverClock(val) {
+        this._overClock = val;
+    }
+
+    get OverClock() {
+        return this._overClock;
     }
 
     /**
@@ -2417,7 +2432,7 @@ class i8080 {
                 break;
         }
         this._clock += ticks;
-        return { LastInstructionTicks: ticks, LastInstructionDisassembly: disassemble };
+        return { LastInstructionDisassembly: disassemble, LastInstructionTicks: ticks }; 
     }
 }
 
