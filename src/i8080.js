@@ -404,11 +404,11 @@ class i8080 {
      * @param {number} carry Carry-bit (defaults to 0, if absent)
      * @returns {number} Result of the operation
      */
-         _add(lhs, rhs, carry = 0) {
-            const raw_result = lhs + (rhs + carry);
-            this._setFlagsOnArithmeticOp(lhs, rhs + carry, raw_result);
-            return raw_result & 0xFF;
-        }
+    _add(lhs, rhs, carry = 0) {
+        const raw_result = lhs + (rhs + carry);
+        this._setFlagsOnArithmeticOp(lhs, rhs + carry, raw_result);
+        return raw_result & 0xFF;
+    }
 
     /**
      * Internal method used to perform a subtract operation. Note that two's
@@ -425,9 +425,9 @@ class i8080 {
      * 0)
      * @returns 
      */
-         _sub(lhs, rhs, carry = 0) {
-            return this._add(lhs, ~(rhs + carry) + 1);
-        }
+    _sub(lhs, rhs, carry = 0) {
+        return this._add(lhs, ~(rhs + carry) + 1);
+    }
 
     /**
      * Sets flags accordingly for the results of an ADD/SUB arithmetic
@@ -1198,6 +1198,9 @@ class i8080 {
         return 7;
     }
 
+    // DIRECT ADDRESSING OPCODES
+    // ------------------------------
+
     /**
      * Store contents of `H` and `L` registers in memory. Contents of `H`
      * register are stored at `addr` and contents of `L` register are stored at
@@ -1221,8 +1224,16 @@ class i8080 {
         return 13;
     }
     
-    // 8-BIT LOAD OPCODES
-    // ------------------
+    /**
+     * Load into accumulator byte from memory location
+     * 
+     * @param {number} val Address of data to load into Accumulator
+     */
+    LDA(addr) {
+        this._registers['A'] = this._bus.ReadRAM(addr);
+        this._clock += 13;
+        return 13;
+    }
 
     /**
      * The byte at the memory address replaces the contents of the L register.
@@ -1236,18 +1247,6 @@ class i8080 {
         this._registers['H'] = this._bus.ReadRAM(addr+1);
         this._clock += 16;
         return 16;
-    }
-
-
-    /**
-     * Load into accumulator byte from memory location
-     * 
-     * @param {number} val Address of data to load into Accumulator
-     */
-    LSA(addr) {
-        this._registers['A'] = this._bus.ReadRAM(addr);
-        this._clock += 13;
-        return 13;
     }
 
     // ACCUMULATOR ROTATE OPCODES
@@ -1338,7 +1337,7 @@ class i8080 {
         return 4;
     }
 
-    // SINGLE REGISTER OPERATIONS
+    // SINGLE REGISTER OPCODES
 
     /** 
      * Complement Accumulator
@@ -1350,6 +1349,13 @@ class i8080 {
         return 4;
     }
 
+    /**
+     * Add 16-bit number in register pair to 16-bit number in register pair H and L.
+     * 
+     * @param {char} highByteRegister Register containing high-byte of number to add
+     * @param {char} lowByteRegister Registers containing low-byte of number to add
+     * @returns 
+     */
     DAD(highByteRegister, lowByteRegister) {
         let result = ((this._registers['H'] << 8 | this._registers['L']) & 0xFFFF) + ((this._registers[highByteRegister] << 8 | this._registers[lowByteRegister]) & 0xFFFF);
         (result > 0xFFFF | result < 0) ? this._flagManager.SetFlag(this._flagManager.FlagType.Carry) : this._flagManager.ClearFlag(this._flagManager.FlagType.Carry);
@@ -1360,6 +1366,9 @@ class i8080 {
         return 10;
     }
     
+    /**
+     * Add Stack Pointer to 16-bit number stored in register pair H and L.
+     */
     DAD_SP() {
         let result = (this._registers['H'] << 8 | this._registers['L']) + this._stackPointer;
         (result > 0xFFFF | result < 0) ? this._flagManager.SetFlag(this._flagManager.FlagType.Carry) : this._flagManager.ClearFlag(this._flagManager.FlagType.Carry);
@@ -1370,6 +1379,15 @@ class i8080 {
         return 10
     }
 
+    /**
+     * The contents of the memory location addressed by registers B and C, or by
+     * registers D and E, replace the contents of the accumulator.
+     * 
+     * @param {char} highByteRegister Register containing high-byte of number to
+     * use
+     * @param {*} lowByteRegister 
+     * @returns 
+     */
     LDAX(highByteRegister, lowByteRegister) {
         this._registers['A'] = this._bus.ReadRAM(this._registers[highByteRegister] << 8 | this._registers[lowByteRegister] & 0xFF);
         this._clock += 7;
@@ -1379,6 +1397,12 @@ class i8080 {
     // RESTART INSTRUCTIONS
     // --------------------
 
+    /**
+     * Special-purpose sub-routine jump that only occupies one byte (usually used for interrupt service routines)
+     * 
+     * @param {number} vector Address to jump to (depends onf middle-three bits of OpCode)
+     * @returns 
+     */
     RST(vector) {
         this._pushWordToStack(this._programCounter);
         this._programCounter = vector;
@@ -1389,12 +1413,25 @@ class i8080 {
     // BRANCH AND RETURN INSTRUCTIONS
     // ------------------------------
 
+    /**
+     * A return operation is performed unconditionally.
+     * 
+     * @returns Number of clock cycles used
+     */
     RET() {
         this._programCounter = this._popWordFromStack();
         this._clock += 10;
         return 10;
     }
 
+    /**
+     * A return operation is performed if `expr` evaluates to true.
+     * 
+     * Used for OpCodes: RC, RNC, RZ, RNZ, RM, RP, RPE, RPO 
+     * 
+     * @param {boolean} expr An expression that evaluates to true/false
+     * @returns 
+     */
     RETURN(expr) {
         if (expr) {
             this._programCounter = this._popWordFromStack();
@@ -1405,6 +1442,16 @@ class i8080 {
         return 5;
     }
 
+    /**
+     * Program execution continues from memory address `addr`, depending on the
+     * `expr` evaluation
+     *
+     * Used for OpCodes: JMP, JC, JNC, JZ, JNZ, JM, JP, JPO, JPE
+     *
+     * @param {boolean} expr An expression that evaluates to true/false
+     * @param {number} addr Address in memory to jump to
+     * @returns Number of clock cycles used
+     */
     JUMP(expr, addr) {
         if (expr) {
             this._programCounter = addr;
@@ -1415,6 +1462,14 @@ class i8080 {
         return 3;
     }
 
+    /**
+     * A return address is pushed onto the Stack, then program execution
+     * continues from address `addr`.
+     *
+     * @param {expr} expr An expression that evaluates to true/false
+     * @param {addr} addr Address in memory to jump to
+     * @returns Number of clock cycles used
+     */
     CALL(expr, addr) {
         if (expr) {
             this._pushWordToStack(this._programCounter);
@@ -1426,6 +1481,14 @@ class i8080 {
         return 11;
     }
 
+    /**
+     * The contents of the `L` register are exchanged with the contents of the
+     * memory byte whose address is held in the Stack Pointer. The contents of
+     * the `H` registers are exchanged with the contents of the memory byte
+     * whose address is one greater than that held in the Stack Pointer.
+     *
+     * @returns Number of clock cycles used
+     */
     XTHL() {
         const lowByte = this._bus.ReadRAM(this._stackPointer);
         const highByte = this._bus.ReadRAM(this._stackPointer + 1);
@@ -1440,6 +1503,13 @@ class i8080 {
         return 18;
     }
 
+
+    /**
+     * The 16-bits of data held in the `H` and `L` registers are exchanged with
+     * the 16-bits of data held in the `D` and `E` registers.
+     *
+     * @returns Number of clock cycles used
+     */
     XCHG() {
         const highByte = this._registers['H'];
         const lowByte = this._registers['L'];
@@ -1453,18 +1523,37 @@ class i8080 {
         return 5;
     }
 
+    /**
+     * The 16 bits of data held in the Hand L registers replace the contents of
+     * the stack pointer SP. The contents of the Hand L registers are unchanged.
+     * 
+     * @returns Number of clock cycles used
+     */
     SPHL() {
         this._stackPointer = this._getRegisterPairWord('H', 'L');
         this._clock += 5;
         return 5;
     }
 
+    /**
+     * The contents of the H register replace the most significant 8 bits of the
+     * program counter, and the contents of the L register replace the least
+     * significant 8 bits of the program counter. This causes program execution
+     * to continue at the address contained in the Hand L registers.
+     *
+     * @returns Number of clock cycles used
+     */
     PCHL() {
         this._programCounter = this._getRegisterPairWord('H', 'L');
         this._clock += 5;
         return 5;
     }
 
+    /**
+     * Sets the CPU's internal `_halt` flag to `True`.
+     * 
+     * @returns Number of clock cycles used
+     */
     HALT() {
         this._halt = true;
         this._clock += 7;
@@ -1472,48 +1561,6 @@ class i8080 {
     }
 
     // PROGRAM EXECUTION
-
-    /**
-     * @returns The next 8-bits of memory from the current program counter
-     * position. Does not increment the program counter (mainly used for
-     * debug/disassembly)
-     */
-     _peekNextByte() {
-        return this._bus.ReadRAM(this._programCounter);
-}
-    /**
-     * @returns The next 8-bits of memory from the current program counter
-     * position, then increments the program counter by 1 byte.
-     */
-    _getNextByte() {
-        const nextByte = this._peekNextByte();
-        this._programCounter++;
-        return nextByte;
-    }
-
-    /**
-    * @returns The next 16-bits of memory from the current program counter
-    * position. The first byte forms the lower-byte of the word and the second
-    * byte forms the upper-byte (little endian). Does not increment the program
-    * counter (mainly used for debug/disassembly).
-    */
-    _peekNextWord() {
-        const lowByte = this._bus.ReadRAM(this._programCounter);
-        const highByte = this._bus.ReadRAM(this._programCounter + 1);
-        return (highByte << 8) | lowByte;
-    }
-
-    /**
-    * @returns The next 16-bits of memory from the current program counter
-    * position. The first byte forms the lower-byte of the word and the second
-    * byte forms the upper-byte (little endian). Program counter is incremented
-    * by 2 bytes (mainly used for debug/disassembly).
-    */
-    _getNextWord() {
-        const lowByte = this._getNextByte();
-        const highByte = this._getNextByte();
-        return (highByte << 8) | lowByte;
-    }
 
     /**
      * Get the next opcode from the program counter location then execute it.
@@ -1765,8 +1812,8 @@ class i8080 {
                 ticks = this.CMP_R('A');
                 break;
             case 0x3A:
-                disassemble = `LSA\t0x${this._peekNextWord().toString(16)}`;
-                ticks = this.LSA(this._getNextWord());
+                disassemble = `LDA\t0x${this._peekNextWord().toString(16)}`;
+                ticks = this.LDA(this._getNextWord());
                 break;
             case 0x2A:
                 disassemble = `LHLD\t0x${this._peekNextWord().toString(16)}`;
