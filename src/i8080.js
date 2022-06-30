@@ -6,6 +6,7 @@
 class i8080 {
 
     // DEBUG AND HELPER FUNCTIONS
+    // --------------------------
      
     /**
      * Returns a string representation of an an 8-bit (byte) number in binary.
@@ -107,6 +108,7 @@ class i8080 {
     }
 
     // INTERNAL METHODS AND PROPERTIES
+    // -------------------------------
 
     /**
      * Reset the CPU, setting all registers, the program counter, clock and
@@ -140,6 +142,10 @@ class i8080 {
         this._bus = bus;
     }
 
+    /**
+     * Get internal CPU fields wrapped in an object.
+     *
+     */
     get State() {
         return {
             ProgramCounter: this._programCounter,
@@ -169,29 +175,26 @@ class i8080 {
     }
 
     /**
-     * Set the value of the CPU's internal program_counter. Usually used to set
-     * the address from which to start executing an in-memory program (JMP calls
-     * access the field directly).
+     * Set the value of the CPU's internal program_counter. 
+     *
+     * Usually used to set the address from which to start executing an
+     * in-memory program, but also used in the JPM/CALL/RET OpCode functions.
      */
     set ProgramCounter(addr) {
         this._programCounter = addr;
     }
 
     /**
-     * Stop the currently executing program. NOTE: This will not take affect
-     * until the CPUState.Halt field is tested.
+     * Stop the currently executing program. 
+     *
+     * NOTE: This just sets the internal `_halt` field of the CPU object.
      */
     Stop() {
         this._halt = true;
     }
 
     /**
-     * Get a 16-bit memory address stored in a pair of 8-bit registers.
-     *
-     * Operations that *retrieve* data from memory get the relevant address from
-     * one of the register pairs (BC, DE, HL). The first register in the pair
-     * stores the high-byte of the address and the second register stores the
-     * low-byte. 
+     * Get a 16-bit word stored in a pair of 8-bit registers.
      *
      * @param {character} The register which stores the high-byte of the address 
      * @param {character} The register which stores the low-byte of the address
@@ -202,11 +205,7 @@ class i8080 {
     }
 
     /**
-     * Load a 16-bit memory address into a pair of 8-bit registers.
-     *
-     * Operations that *store* data in memory get the relevant address from one
-     * of the register pairs (BC, DE, HL). The first register in the pair stores
-     * the high-byte of the address and the second register stores the low-byte.
+     * Store a 16-bit word into a pair of 8-bit registers.
      *
      * @param {number} addr The address that needs to be loaded
      * @param {character} reg_highbyte The register which will store the
@@ -222,9 +221,12 @@ class i8080 {
 
     /**
      * Test whether the number of bits set to `1` in `val` is even. If so, then
-     * returns `True`, else returns `False`. Used for setting the `Parity` flag.
-     * @param {number} val to check
-     * @returns `True` if number of bits set is even (or 0) or `False`if odd.
+     * returns `True`, else returns `False`. 
+     * 
+     * Used for setting the `Parity` flag.
+     * 
+     * @param {number} val Value to check
+     * @returns `True` if number of bits set is even (or 0) or `False` if odd.
      */
     _parity(val) {
         let bit_count = 0;
@@ -295,85 +297,138 @@ class i8080 {
         */
         CheckAndSet:  {
             Carry: (result) => {
-                /*
-                 * Carry Flag: Maximum storage size of any value in a 8080 register is
-                 * 1-byte (8-bits), so 255. Any higher result than that must mean a
-                 * Carry out of the 7th bit occured.
-                 */
                 result > 255 || result < 0 ? this._flagManager.SetFlag(this._flagManager.FlagType.Carry) : this._flagManager.ClearFlag(this._flagManager.FlagType.Carry);
             },
             Parity: (result) => {
-                /*
-                 * Parity Flag: Set if the number of 1's is even.
-                 */
                 this._parity(result) ? this._flagManager.SetFlag(this._flagManager.FlagType.Parity) : this._flagManager.ClearFlag(this._flagManager.FlagType.Parity);
             },
             AuxillaryCarry: (lhs, rhs) => {
-                /*
-                * Auxillary Carry Flag
-                *
-                * Add the LSB nibbles of each byte together. If the result includes a
-                * bit carried into position 4, then an auxillary (or half) carry will
-                * occur during this operation and the flag must be set.
-                *
-                * In the example below, we can see that adding the two least significant
-                * nibbles of numbers 159 and 165 together results in a 1 being carried
-                * to bit position 4. This means an auxillary carry (or half-carry) will
-                * occur during this add operation and the flag must be set accordingly.
-                *
-                * +---------------+
-                * | 159: 10011111 |
-                * |+--------------|
-                * | 165: 10100101 |
-                * +---------------+
-                *
-                * Take least significant nibbles only, and sum.
-                *
-                * +----------+
-                * | 00001111 |
-                * |+---------|
-                * | 00000101 |
-                * +==========+
-                * | 00010100 |
-                * +----------+
-                *
-                * Result has meant a carry out of bit-3 to bit-4, so we set Aux Carry in
-                * this case.
-                *
-                */
+                //
+                // Auxillary Carry Flag
+                //
+                // Add the LSB nibbles of each byte together. If the result
+                // includes a bit carried into position 4, then an auxillary (or
+                // half) carry will occur during this operation and the flag
+                // must be set.
+                //
+                // In the example below, we can see that adding the two least
+                // significant nibbles of numbers 159 and 165 together results
+                // in a 1 being carried to bit position 4. This means an
+                // auxillary carry (or half-carry) will occur during this add
+                // operation and the flag must be set accordingly.
+                //
+                // +---------------+
+                // | 159: 10011111 |
+                // |+--------------|
+                // | 165: 10100101 |
+                // +---------------+
+                //
+                // Take least significant nibbles only, and sum.
+                //
+                // +----------+
+                // | 00001111 |
+                // |+---------|
+                // | 00000101 |
+                // +==========+
+                // | 00010100 |
+                // +----------+
+                //
+                // Result has meant a carry out of bit-3 to bit-4, so we set Aux
+                // Carry in this case.
                 ((lhs & 0x0f) + (rhs & 0x0f)) & (1 << 4) ? this._flagManager.SetFlag(this._flagManager.FlagType.AuxillaryCarry) : this._flagManager.ClearFlag(this._flagManager.FlagType.AuxillaryCarry);
             },
             Zero: (result) => {
-                /*
-                 * Zero Flag: Set if the operation result is 0
-                 */
                  (result & 0xFF) === 0 ? this._flagManager.SetFlag(this._flagManager.FlagType.Zero) : this._flagManager.ClearFlag(this._flagManager.FlagType.Zero);
             },
             Sign: (result) => {
-                /*
-                 * Sign Flag: Set if bit 7 of the result is 1. It is up to the 8080
-                 * programmer to decide whether or not to treat a number with bit-7 set
-                 * as negative. All the 8080 does is detect that bit-7 is set in the
-                 * result of some operation and sets the sign flag accordingly. It
-                 * doesn't care what the number actually is.
-                 */
                  result & (1 << 7) ? this._flagManager.SetFlag(this._flagManager.FlagType.Sign) : this._flagManager.ClearFlag(this._flagManager.FlagType.Sign)
             }
         }
     }
-  
-    // NOP
-    
+
+    // INTERNAL STACK FUNCTIONS
+    // -------------------------
+
     /**
-     * No Operation
+     * Pushes an 8-bit value to the top of the stack and decreases the stack
+     * pointer by 1.
+     *
+     * @param {number} val Value to push
      */
-     NOP() {
-        this._clock += 4;
-        return 4;
+     _pushByteToStack(val) {
+        this._bus.WriteRAM(val, --this._stackPointer);
     }
 
-    // ARITHMETIC OPERATIONS
- 
+    /**
+     * @returns byte from the top of the stack and increases the stack-pointer
+     * by 1
+     */
+    _popByteFromStack() {
+        return this._bus.ReadRAM(this._stackPointer++);
+    }
+
+    /**
+     * Pushes a 16-bit value onto the top of the stack and decreases the stack
+     * pointer by 2.
+     *
+     * @param {val} val 16-bit value to be pushed
+     */
+    _pushWordToStack(val) {
+        this._pushByteToStack(val >> 8 & 0xFF);
+        this._pushByteToStack(val & 0xFF);
+    }
+
+    /**
+     *
+     * @returns 16-bit word from the top of the stack and increases the stack
+     * pointer by 2.
+     */
+    _popWordFromStack() {
+        const wordLowByte = this._popByteFromStack();
+        const wordHighByte = this._popByteFromStack();
+        return (wordHighByte << 8 | wordLowByte) & 0xFFFF
+    }
+
+    // INTERNAL ARITHMETIC FUNCTIONS
+    // ------------------------------
+
+    /**
+     * Internal method to perform an ADD operation and set flags accordingly.
+     * NOTE: This method is also used by the `sub()` method to carry-out
+     * subtraction using two's complement. When called by the `sub()` method,
+     * the `carry` parameter is always passed as 0 because it is folded into the
+     * two's complement calculation of the `rhs` before `add()` is called.
+     *
+     * @param {number} lhs Left-hand side of expression used in operation
+     * @param {number} rhs Right-hand side of expression used in operation
+     * @param {number} carry Carry-bit (defaults to 0, if absent)
+     * @returns {number} Result of the operation
+     */
+         _add(lhs, rhs, carry = 0) {
+            const raw_result = lhs + (rhs + carry);
+            this._setFlagsOnArithmeticOp(lhs, rhs + carry, raw_result);
+            return raw_result & 0xFF;
+        }
+
+    /**
+     * Internal method used to perform a subtract operation. Note that two's
+     * complement is used to perform all subtraction operations in the 8080, so
+     * this method actually calls the `add` method above, but with the `rhs`
+     * value converted to its two's complement representation. Additionally, as
+     * mentioned in the description of the `add()` method, calls to `add()` from
+     * here always set the `carry` parameter to 0 because the carry bit is
+     * already factored into the two's complement conversion.
+     *
+     * @param {number} lhs Left-hand side of expression used in operation
+     * @param {number} rhs Right-hand side of expression used in operation
+     * @param {number} carry 1 or 0, depending if Carry but is set (default is
+     * 0)
+     * @returns 
+     */
+         _sub(lhs, rhs, carry = 0) {
+            return this._add(lhs, ~(rhs + carry) + 1);
+        }
+
     /**
      * Sets flags accordingly for the results of an ADD/SUB arithmetic
      * operation.
@@ -391,25 +446,99 @@ class i8080 {
         this._flagManager.CheckAndSet.Zero(rawResult & 0xFF);
     }
 
-    // ADD ARITHMETIC OPERATIONS
+    /**
+     * Adjust relevant flags according to the result of an increment or
+     * decrement operation.
+     *
+     * @param {number} lhs Result of the left-hand side of the operation
+     * @param {number} rhs Result of the right-hand side of the operatiom
+     * @param {number} rawResult Result of the operation
+     */
+    _setFlagsOnIncDecOp(lhs, rhs, rawResult) {
+        this._flagManager.CheckAndSet.AuxillaryCarry(lhs, rhs);
+        this._flagManager.CheckAndSet.Parity(rawResult);
+        this._flagManager.CheckAndSet.Sign(rawResult);
+        this._flagManager.CheckAndSet.Zero(rawResult);
+    }
+    
+    // INTERNAL LOGICAL BITWISE FUNCTIONS
+    // ----------------------------------
 
     /**
-     * Internal method to perform an ADD operation and set flags accordingly.
-     * NOTE: This method is also used by the `sub()` method to carry-out
-     * subtraction using two's complement. When called by the `sub()` method,
-     * the `carry` parameter is always passed as 0 because it is folded into the
-     * two's complement calculation of the `rhs` before `add()` is called.
+     * Adjust relevant flags depending on the result of a logical bit-wise
+     * operation.
      *
-     * @param {number} lhs Left-hand side of expression used in operation
-     * @param {number} rhs Right-hand side of expression used in operation
-     * @param {number} carry Carry-bit (defaults to 0, if absent)
-     * @returns {number} Result of the operation
+     * @param {number} raw_result Result of the operation
      */
-    _add(lhs, rhs, carry = 0) {
-        const raw_result = lhs + (rhs + carry);
-        this._setFlagsOnArithmeticOp(lhs, rhs + carry, raw_result);
-        return raw_result & 0xFF;
+    _setFlagsOnLogicalOp(raw_result) {
+        this._flagManager.ClearFlag(this._flagManager.FlagType.Carry);
+        this._flagManager.ClearFlag(this._flagManager.FlagType.AuxillaryCarry);
+        this._flagManager.CheckAndSet.Zero(raw_result & 0xFF);
+        this._flagManager.CheckAndSet.Sign(raw_result);
+        this._flagManager.CheckAndSet.Parity(raw_result);
     }
+
+    // PROGRAM EXECUTION INTERNAL OPERATIONS
+    // -------------------------------------
+
+    /**
+     * @returns The next 8-bits of memory from the current program counter
+     * position. Does not increment the program counter (mainly used for
+     * debug/disassembly)
+     */
+     _peekNextByte() {
+        return this._bus.ReadRAM(this._programCounter);
+}
+    /**
+     * @returns The next 8-bits of memory from the current program counter
+     * position, then increments the program counter by 1 byte.
+     */
+    _getNextByte() {
+        const nextByte = this._peekNextByte();
+        this._programCounter++;
+        return nextByte;
+    }
+
+    /**
+    * @returns The next 16-bits of memory from the current program counter
+    * position. The first byte forms the lower-byte of the word and the second
+    * byte forms the upper-byte (little endian). Does not increment the program
+    * counter (mainly used for debug/disassembly).
+    */
+    _peekNextWord() {
+        const lowByte = this._bus.ReadRAM(this._programCounter);
+        const highByte = this._bus.ReadRAM(this._programCounter + 1);
+        return (highByte << 8) | lowByte;
+    }
+
+    /**
+    * @returns The next 16-bits of memory from the current program counter
+    * position. The first byte forms the lower-byte of the word and the second
+    * byte forms the upper-byte (little endian). Program counter is incremented
+    * by 2 bytes (mainly used for debug/disassembly).
+    */
+    _getNextWord() {
+        const lowByte = this._getNextByte();
+        const highByte = this._getNextByte();
+        return (highByte << 8) | lowByte;
+    }
+
+    // OPCODES
+    // -------
+
+    // NOP
+    // ---
+    
+    /**
+     * No Operation
+     */
+     NOP() {
+        this._clock += 4;
+        return 4;
+    }
+
+    // ADD ARITHMETIC OPCODES
+    // -------------------------
 
     /**
      * Add the value stored in register `register` to the Accumulator.
@@ -479,26 +608,64 @@ class i8080 {
         return 7;
     }
 
-    // SUBTRACT ARITHMETIC OPERATIONS
+    /**
+     * The 16-bit number stored in the specified register pair (BC, DE, HL) is
+     * incremented by 1.
+     * .
+     * @param {char} highByteRegister First register of the pair (B, D, H)
+     */
+    INX_R(highByteRegister, lowByteRegister) {
+        const word = ((this._registers[highByteRegister] << 8) | this._registers[lowByteRegister]) + 1;
+        this._registers[highByteRegister] = (word >> 8) & 0xFF;
+        this._registers[lowByteRegister] = word & 0xFF;     
+        this._clock += 5;   
+        return 5;
+    }
+    
+    /**
+     * The stack pointer is incremented by 1.
+     */
+    INX_SP() {
+        this._stackPointer = (this._stackPointer + 1) & 0xFFFF;
+        this._clock += 5;
+        return 5;
+    }
+
+   /**
+     * The named register is incremented by 1.
+     * 
+     * Flags affected: P, Z, AC, S.
+     * 
+     * @param {char} reg Name of the register to incremement.
+     */
+    INR_R(reg) {
+        const lhs = this._registers[reg];
+        const rawResult = lhs + 1;
+        this._setFlagsOnIncDecOp(lhs, 1, rawResult);
+        this._registers[reg] = rawResult & 0xFF;
+        this._clock += 5;
+        return 5;
+    }
 
     /**
-     * Internal method used to perform a subtract operation. Note that two's
-     * complement is used to perform all subtraction operations in the 8080, so
-     * this method actually calls the `add` method above, but with the `rhs`
-     * value converted to its two's complement representation. Additionally, as
-     * mentioned in the description of the `add()` method, calls to `add()` from
-     * here always set the `carry` parameter to 0 because the carry bit is
-     * already factored into the two's complement conversion.
+     * The memory location specified by the address in register pair HL is
+     * incremented by 1.
      *
-     * @param {number} lhs Left-hand side of expression used in operation
-     * @param {number} rhs Right-hand side of expression used in operation
-     * @param {number} carry 1 or 0, depending if Carry but is set (default is
-     * 0)
-     * @returns 
+     * Flags affected: P, Z, AC, S.
      */
-    _sub(lhs, rhs, carry = 0) {
-        return this._add(lhs, ~(rhs + carry) + 1);
+    INR_M() {
+        const addr = this._getRegisterPairWord('H','L');
+        const lhs = this._bus.ReadRAM(addr);
+        const rawResult = lhs + 1;
+        this._setFlagsOnIncDecOp(lhs, 1, rawResult);
+        this._bus.WriteRAM(rawResult & 0xFF, addr);
+        this._clock += 10;
+        return 10;
     }
+
+
+    // SUBTRACT ARITHMETIC OPCODES
+    // ------------------------------
 
     /**
      *  Subtract value held in register `reg` from the current value in the
@@ -583,7 +750,67 @@ class i8080 {
         return 7;
     }
 
-    // COMPARISON OPERATIONS
+    /**
+     * The 16-bit number stored in the specified register pair (BC, DE, HL) is
+     * decremented by 1 (uses two's complement addition).
+     * 
+     * @param {char} highByteRegister First register of the pair (B, D, H)
+     * @param {char} lowByteRegister Second register of the pair (C, E, L)
+     */
+    DCX_R(highByteRegister, lowByteRegister) {
+        const word = ((this._registers[highByteRegister] << 8) | this._registers[lowByteRegister]) + 0xFFFF;
+        this._registers[highByteRegister] = (word >> 8) & 0xFF;
+        this._registers[lowByteRegister] = word & 0xFF;
+        this._clock += 5;
+        return 5;
+    }
+
+    /**
+    * The stack pointer is decremented by 1 (uses two's complement)
+    */
+    DCX_SP() {
+        this._stackPointer = (this._stackPointer + 0xFFFF) & 0xFFFF;
+        this._clock += 5;
+        return 5;
+    }
+    
+    /**
+     * The named register is decremented by 1 (uses two's complement addition).
+     * 
+     * Flags affected: P, Z, AC, S.
+     * 
+     * @param {char} reg Name of the register to decrement.
+     */
+    DCR_R(reg) {
+        const lhs = this._registers[reg];
+        // 0xFF is the 8-bit two's complement of 1.
+        const rawResult = lhs + 0xFF;
+        this._setFlagsOnIncDecOp(lhs, 0xFF, rawResult);
+        this._registers[reg] = rawResult & 0xFF;
+        this._clock += 5;
+        return 5;
+
+    }
+
+    /**
+     * The memory location specified by the address in register pair HL is
+     * decremented by 1 (uses two's complement addition).
+     *
+     * Flags affected: P, Z, AC, S.
+     */
+    DCR_M() {
+        const addr = this._getRegisterPairWord('H','L');
+        const lhs = this._bus.ReadRAM(addr);
+        // 0xFF is the 8-bit two's complement of 1.
+        const rawResult = lhs + 0xFF;
+        this._setFlagsOnIncDecOp(lhs, 0xFF, rawResult);
+        this._bus.WriteRAM(rawResult & 0xFF, addr);
+        this._clock += 10;
+        return 10;
+    }
+
+    // COMPARISON OPCODES
+    // ---------------------
 
     /**
      * Compares value in Accumulator with value in `register`. 
@@ -626,47 +853,8 @@ class i8080 {
         return 7;
     }
 
-    // STACK POINTER OPERATIONS (STACK GROWS DOWN)
-
-    /**
-     * Pushes an 8-bit value to the top of the stack and decreases the stack
-     * pointer by 1.
-     *
-     * @param {number} val Value to push
-     */
-    _pushByteToStack(val) {
-        this._bus.WriteRAM(val, --this._stackPointer);
-    }
-
-    /**
-     * @returns byte from the top of the stack and increases the stack-pointer
-     * by 1
-     */
-    _popByteFromStack() {
-        return this._bus.ReadRAM(this._stackPointer++);
-    }
-
-    /**
-     * Pushes a 16-bit value onto the top of the stack and decreases the stack
-     * pointer by 2.
-     *
-     * @param {val} val 16-bit value to be pushed
-     */
-    _pushWordToStack(val) {
-        this._pushByteToStack(val >> 8 & 0xFF);
-        this._pushByteToStack(val & 0xFF);
-    }
-
-    /**
-     *
-     * @returns 16-bit word from the top of the stack and increases the stack
-     * pointer by 2.
-     */
-    _popWordFromStack() {
-        const wordLowByte = this._popByteFromStack();
-        const wordHighByte = this._popByteFromStack();
-        return (wordHighByte << 8 | wordLowByte) & 0xFFFF
-    }
+    // STACK POINTER OPCODES (NOTE: STACK GROWS DOWN)
+    // -------------------------------------------
 
     /**
     * Push a 16-bit value onto the stack from one of the register pairs (BC, DE,
@@ -724,7 +912,7 @@ class i8080 {
         return 10;
     }
 
-    // 16-BIT LOAD IMMEDIATE OPERATIONS
+    // 16-BIT LOAD IMMEDIATE OPCODES
    
     /**
      * Load a 16-bit immediate value into one of the register pairs (BC, DE, HL).
@@ -751,6 +939,8 @@ class i8080 {
         return 10;
     }
 
+    // DECIMAL ADJUST ACCUMULATOR OPCODE
+    // ----------------------------------
 
     /**
      * This is a weird instruction and barely used, but in for a penny ....
@@ -794,6 +984,8 @@ class i8080 {
         return 4;
     }
 
+    // DATA MOVE/COPY OPCODES
+    // ----------------------
 
     /**
      * Move value from one register to another.
@@ -859,21 +1051,7 @@ class i8080 {
         return 10;
     }
 
-    // LOGICAL BITWISE OPERATIONS
-
-    /**
-     * Adjust relevant flags depending on the result of a logical bit-wise
-     * operation.
-     *
-     * @param {number} raw_result Result of the operation
-     */
-    _setFlagsOnLogicalOp(raw_result) {
-        this._flagManager.ClearFlag(this._flagManager.FlagType.Carry);
-        this._flagManager.ClearFlag(this._flagManager.FlagType.AuxillaryCarry);
-        this._flagManager.CheckAndSet.Zero(raw_result & 0xFF);
-        this._flagManager.CheckAndSet.Sign(raw_result);
-        this._flagManager.CheckAndSet.Parity(raw_result);
-    }
+    // LOGICAL BITWISE OPCODES
        
     /**
      * AND contents of the Accumulator with contents of a register. Result is
@@ -1003,6 +1181,9 @@ class i8080 {
         return 4;
     }
 
+    // STORAGE OPCODES
+    // ---------------
+
     /**
      * Store the current value in the Accumulator to a location in memory.
      *
@@ -1031,7 +1212,20 @@ class i8080 {
     }
 
     /**
-     * The byte at the memory address replaces the con- tents of the L register.
+     * Store contents of the accumulator in memory address, `addr`.
+     * @param {number} addr 16-bit memory address of storage location
+     */
+    STA(addr) {
+        this._bus.WriteRAM(this._registers.A, addr);
+        this._clock += 13;
+        return 13;
+    }
+    
+    // 8-BIT LOAD OPCODES
+    // ------------------
+
+    /**
+     * The byte at the memory address replaces the contents of the L register.
      * The byte at the next higher memory address replaces the contents of the H
      * register.
      *
@@ -1044,15 +1238,6 @@ class i8080 {
         return 16;
     }
 
-    /**
-     * Store contents of the accumulator in memory address, `addr`.
-     * @param {number} addr 16-bit memory address of storage location
-     */
-    STA(addr) {
-        this._bus.WriteRAM(this._registers.A, addr);
-        this._clock += 13;
-        return 13;
-    }
 
     /**
      * Load into accumulator byte from memory location
@@ -1065,141 +1250,8 @@ class i8080 {
         return 13;
     }
 
-
-    /*------------------------------------------------------------------------
-                        INCREMENT AND DECREMENT OPERATIONS                    
-    ------------------------------------------------------------------------*/
-
-    /**
-     * Adjust relevant flags according to the result of an increment or
-     * decrement operation.
-     *
-     * @param {number} lhs Result of the left-hand side of the operation
-     * @param {number} rhs Result of the right-hand side of the operatiom
-     * @param {number} rawResult Result of the operation
-     */
-    _setFlagsOnIncDecOp(lhs, rhs, rawResult) {
-        this._flagManager.CheckAndSet.AuxillaryCarry(lhs, rhs);
-        this._flagManager.CheckAndSet.Parity(rawResult);
-        this._flagManager.CheckAndSet.Sign(rawResult);
-        this._flagManager.CheckAndSet.Zero(rawResult);
-    }
-    
-    /**
-     * The 16-bit number stored in the specified register pair (BC, DE, HL) is
-     * incremented by 1.
-     * .
-     * @param {char} highByteRegister First register of the pair (B, D, H)
-     */
-    INX_R(highByteRegister, lowByteRegister) {
-        const word = ((this._registers[highByteRegister] << 8) | this._registers[lowByteRegister]) + 1;
-        this._registers[highByteRegister] = (word >> 8) & 0xFF;
-        this._registers[lowByteRegister] = word & 0xFF;     
-        this._clock += 5;   
-        return 5;
-    }
-    
-    /**
-     * The stack pointer is incremented by 1.
-     */
-    INX_SP() {
-        this._stackPointer = (this._stackPointer + 1) & 0xFFFF;
-        this._clock += 5;
-        return 5;
-    }
-
-    /**
-     * The 16-bit number stored in the specified register pair (BC, DE, HL) is
-     * decremented by 1 (uses two's complement addition).
-     * 
-     * @param {char} highByteRegister First register of the pair (B, D, H)
-     * @param {char} lowByteRegister Second register of the pair (C, E, L)
-     */
-    DCX_R(highByteRegister, lowByteRegister) {
-        const word = ((this._registers[highByteRegister] << 8) | this._registers[lowByteRegister]) + 0xFFFF;
-        this._registers[highByteRegister] = (word >> 8) & 0xFF;
-        this._registers[lowByteRegister] = word & 0xFF;
-        this._clock += 5;
-        return 5;
-    }
-
-    /**
-    * The stack pointer is decremented by 1 (uses two's complement)
-    */
-    DCX_SP() {
-        this._stackPointer = (this._stackPointer + 0xFFFF) & 0xFFFF;
-        this._clock += 5;
-        return 5;
-    }
-    
-    /**
-     * The named register is incremented by 1.
-     * 
-     * Flags affected: P, Z, AC, S.
-     * 
-     * @param {char} reg Name of the register to incremement.
-     */
-    INR_R(reg) {
-        const lhs = this._registers[reg];
-        const rawResult = lhs + 1;
-        this._setFlagsOnIncDecOp(lhs, 1, rawResult);
-        this._registers[reg] = rawResult & 0xFF;
-        this._clock += 5;
-        return 5;
-    }
-
-    /**
-     * The memory location specified by the address in register pair HL is
-     * incremented by 1.
-     *
-     * Flags affected: P, Z, AC, S.
-     */
-    INR_M() {
-        const addr = this._getRegisterPairWord('H','L');
-        const lhs = this._bus.ReadRAM(addr);
-        const rawResult = lhs + 1;
-        this._setFlagsOnIncDecOp(lhs, 1, rawResult);
-        this._bus.WriteRAM(rawResult & 0xFF, addr);
-        this._clock += 10;
-        return 10;
-    }
-
-    /**
-     * The named register is decremented by 1 (uses two's complement addition).
-     * 
-     * Flags affected: P, Z, AC, S.
-     * 
-     * @param {char} reg Name of the register to decrement.
-     */
-    DCR_R(reg) {
-        const lhs = this._registers[reg];
-        // 0xFF is the 8-bit two's complement of 1.
-        const rawResult = lhs + 0xFF;
-        this._setFlagsOnIncDecOp(lhs, 0xFF, rawResult);
-        this._registers[reg] = rawResult & 0xFF;
-        this._clock += 5;
-        return 5;
-
-    }
-
-    /**
-     * The memory location specified by the address in register pair HL is
-     * decremented by 1 (uses two's complement addition).
-     *
-     * Flags affected: P, Z, AC, S.
-     */
-    DCR_M() {
-        const addr = this._getRegisterPairWord('H','L');
-        const lhs = this._bus.ReadRAM(addr);
-        // 0xFF is the 8-bit two's complement of 1.
-        const rawResult = lhs + 0xFF;
-        this._setFlagsOnIncDecOp(lhs, 0xFF, rawResult);
-        this._bus.WriteRAM(rawResult & 0xFF, addr);
-        this._clock += 10;
-        return 10;
-    }
-
-    // ACCUMULATOR ROTATE OPERATIONS
+    // ACCUMULATOR ROTATE OPCODES
+    // --------------------------
    
     /**
      * Rotate Accumulator Left.
@@ -1251,6 +1303,11 @@ class i8080 {
         return 4;
     }
 
+    /**
+     * Rotae Accumulator Right Through Carry
+     * 
+     * @returns Clock cycles used 
+     */
     RAR() {
         const carry_bit = this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0;
         this._registers['A'] & 0x01 ? this._flagManager.SetFlag(i8080.Carry) : this._flagManager.ClearFlag(i8080.Carry);
@@ -1320,6 +1377,7 @@ class i8080 {
     }
 
     // RESTART INSTRUCTIONS
+    // --------------------
 
     RST(vector) {
         this._pushWordToStack(this._programCounter);
@@ -1328,7 +1386,8 @@ class i8080 {
         return 11;
     }
 
-    // RETURN INSTRUCTIONS
+    // BRANCH AND RETURN INSTRUCTIONS
+    // ------------------------------
 
     RET() {
         this._programCounter = this._popWordFromStack();
