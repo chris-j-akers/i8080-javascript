@@ -23,20 +23,6 @@ class CpuDiag extends Cabinet {
         return ret_str;
     }
 
-    clocked() {
-        setTimeout( () => {
-            const result = this.ExecuteNextInstruction();
-            const instructionCompleteEvent = new CustomEvent('instructionCompleteEvent', { detail: result });
-            console.log(instructionCompleteEvent);
-            dispatchEvent(instructionCompleteEvent);
-        }, 1000);
-        // dispatch ExecuteNextInstruction()
-        // wait 1000
-
-        // Execute Next instruction fires a completion event with ticks/disaseembly.
-        // Page event listener updates thec ontrols.
-    }
-
     ExecuteNextInstruction() {
         switch(this._computer.CPUState.ProgramCounter) {
             case 5:

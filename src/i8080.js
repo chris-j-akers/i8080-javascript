@@ -368,6 +368,7 @@ class i8080 {
      * No Operation
      */
      NOP() {
+        this._clock += 4;
         return 4;
     }
 
@@ -418,6 +419,7 @@ class i8080 {
      */
     ADD_R(register) {
         this._registers['A'] = this._add(this._registers['A'], this._registers[register]);
+        this._clock += 4;
         return 4;
     }
 
@@ -427,6 +429,7 @@ class i8080 {
      */
     ADD_M() {
         this._registers['A'] = this._add(this._registers['A'], this._bus.ReadRAM(this._getRegisterPairWord('H','L')));
+        this._clock += 7;
         return 7;
     }
 
@@ -439,6 +442,7 @@ class i8080 {
      */
     ADC_R(register) {
         this._registers['A'] = this._add(this._registers['A'], this._registers[register], this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0 );
+        this._clock += 4;
         return 4;
     }
 
@@ -448,7 +452,7 @@ class i8080 {
      */
     ADC_M() {
         this._registers['A'] = this._add(this._registers['A'], this._bus.ReadRAM(this._getRegisterPairWord('H','L')), this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
-        
+        this._clock += 7;
         return 7;
     }
 
@@ -459,6 +463,7 @@ class i8080 {
      */
     ADI(val) {
         this._registers['A'] = this._add(this._registers['A'], val);
+        this._clock += 7;
         return 7;
     }
 
@@ -470,6 +475,7 @@ class i8080 {
      */
     ACI(val) {
         this._registers['A'] = this._add(this._registers['A'], val, this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
+        this._clock += 7;
         return 7;
     }
 
@@ -509,6 +515,7 @@ class i8080 {
      */
     SUB_R(register) {
         this._registers['A'] = this._sub(this._registers['A'], this._registers[register]);
+        this._clock += 4;
         return 4;
     }
 
@@ -526,6 +533,7 @@ class i8080 {
      */
     SUB_M() {      
         this._registers['A'] = this._sub(this._registers['A'], this._bus.ReadRAM(this._getRegisterPairWord('H','L')));
+        this._clock += 7;
         return 7;
     }
 
@@ -538,7 +546,7 @@ class i8080 {
      */
     SBB_R(register) {               
         this._registers['A'] = this._sub(this._registers['A'], this._registers[register], this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
-        
+        this._clock += 4
         return 4;
     }
 
@@ -549,7 +557,7 @@ class i8080 {
      */
     SBB_M() {
         this._registers['A'] = this._sub(this._registers['A'], this._bus.ReadRAM(this._getRegisterPairWord('H','L')), this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
-        
+        this._clock += 7;
         return 7;
     }
 
@@ -560,7 +568,7 @@ class i8080 {
      */
     SUI(val) {
         this._registers['A'] = this._sub(this._registers['A'], val);
-        
+        this._clock += 7;
         return 7;        
     }
 
@@ -571,7 +579,7 @@ class i8080 {
      */
     SBI(val) {
         this._registers['A'] = this._sub(this._registers['A'], val, this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
-        
+        this._clock += 7;
         return 7;
     }
 
@@ -587,7 +595,7 @@ class i8080 {
      */
     CMP_R(register) {
         const result = this._sub(this._registers['A'], this._registers[register]);
-        
+        this._clock += 4;
         return 4;
     }
 
@@ -600,7 +608,7 @@ class i8080 {
      */
     CMP_M() {
         const result = this._sub(this._registers['A'], this._bus.ReadRAM(this._getRegisterPairWord('H','L')));
-        
+        this._clock += 7;
         return 7;
     }
 
@@ -614,7 +622,7 @@ class i8080 {
      */
     CPI(val) {
         const result = this._sub(this._registers['A'], val & 0xFF);
-        
+        this._clock += 7;
         return 7;
     }
 
@@ -672,6 +680,7 @@ class i8080 {
     PUSH_R(highByteRegister, lowByteRegister) {
         this._pushByteToStack(this._registers[highByteRegister]);
         this._pushByteToStack(this._registers[lowByteRegister]);
+        this._clock += 11;
         return 11;
     }
 
@@ -682,6 +691,7 @@ class i8080 {
     PUSH_PSW() {
         this._pushByteToStack(this._registers['A']);
         this._pushByteToStack(this._flags);
+        this._clock += 11;
         return 11;
     }
     
@@ -699,7 +709,7 @@ class i8080 {
     POP_R(highByteRegister, lowByteRegister) {
         this._registers[lowByteRegister] = this._bus.ReadRAM(this._stackPointer++);
         this._registers[highByteRegister] = this._bus.ReadRAM(this._stackPointer++);
-        
+        this._clock += 10;
         return 10;
     }
     
@@ -710,7 +720,7 @@ class i8080 {
     POP_PSW() {
         this._flags = this._bus.ReadRAM(this._stackPointer++);
         this._registers['A'] = this._bus.ReadRAM(this._stackPointer++);
-        
+        this._clock += 10;
         return 10;
     }
 
@@ -728,7 +738,7 @@ class i8080 {
     LXI_R(highByteRegister, lowByteRegister, val) {
         this._registers[highByteRegister] = (val >> 8) & 0xFF;
         this._registers[lowByteRegister] = val & 0xFF;
-        
+        this._clock += 10;
         return 10;
     }
     
@@ -737,7 +747,7 @@ class i8080 {
      */
     LXI_SP(val) {
         this._stackPointer = val & 0xFFFF;
-        
+        this._clock += 10;
         return 10;
     }
 
@@ -780,7 +790,7 @@ class i8080 {
             if (val > 255 || val < 0) this._flagManager.SetFlag(this._flagManager.FlagType.Carry);
             this._registers['A'] = val & 0xFF;
         }
-        
+        this._clock += 4;
         return 4;
     }
 
@@ -794,7 +804,7 @@ class i8080 {
      */
     MOV_R(regDestination, regSource) {
         this._registers[regDestination] = this._registers[regSource];
-        
+        this._clock += 5;
         return 5;
     }
 
@@ -806,7 +816,7 @@ class i8080 {
      */
     MOV_TO_MEM(regSource) {
         this._bus.WriteRAM(this._registers[regSource], this._getRegisterPairWord('H', 'L'));
-        
+        this._clock += 7;
         return 7;
     }
 
@@ -819,7 +829,7 @@ class i8080 {
      */
     MOV_FROM_MEM(regDestination) {
         this._registers[regDestination] = this._bus.ReadRAM(this._getRegisterPairWord('H', 'L'));
-        
+        this._clock += 7;
         return 7;
     }
 
@@ -832,7 +842,7 @@ class i8080 {
      */
     MVI_R(regDestination, val) {
         this._registers[regDestination] = (val & 0xFF);
-        
+        this._clock += 7;
         return 7;
     }
 
@@ -845,7 +855,7 @@ class i8080 {
     MVI_TO_MEM(val) {
         const addr = this._getRegisterPairWord('H', 'L');
         this._bus.WriteRAM(val, addr);
-        
+        this._clock += 10;
         return 10;
     }
 
@@ -875,7 +885,7 @@ class i8080 {
         const raw_result = this._registers['A'] & this._registers[register];
         this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
-        
+        this._clock += 4;
         return 4;
     }
 
@@ -889,7 +899,7 @@ class i8080 {
         const raw_result = this._registers['A'] & this._bus.ReadRAM(this._getRegisterPairWord('H','L'));
         this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
-        
+        this._clock += 7;
         return 7;
     }
 
@@ -903,7 +913,7 @@ class i8080 {
         const raw_result = this._registers['A'] & val;
         this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
-        
+        this._clock += 4;
         return 4;
     }
 
@@ -917,7 +927,7 @@ class i8080 {
         const raw_result = this._registers['A'] ^ this._registers[reg];
         this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
-        
+        this._clock += 4;
         return 4;
     }
 
@@ -932,7 +942,7 @@ class i8080 {
         const raw_result = this._registers['A'] ^ this._bus.ReadRAM(this._getRegisterPairWord('H', 'L'));
         this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
-        
+        this._clock += 7;
         return 7;
     }
 
@@ -946,7 +956,7 @@ class i8080 {
         const raw_result = this._registers['A'] ^ val;
         this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
-        
+        this._clock += 4;
         return 4;
     }
 
@@ -960,7 +970,7 @@ class i8080 {
         const raw_result = this._registers['A'] | this._registers[register];
         this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
-        
+        this._clock += 4;
         return 4;
     }
 
@@ -975,7 +985,7 @@ class i8080 {
         const raw_result = this._registers['A'] | this._bus.ReadRAM(this._getRegisterPairWord('H','L'));
         this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
-        
+        this._clock += 7;
         return 7;
     }
 
@@ -989,7 +999,7 @@ class i8080 {
         const raw_result = this._registers['A'] | val;
         this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
-        
+        this._clock += 4;
         return 4;
     }
 
@@ -1003,7 +1013,7 @@ class i8080 {
     STAX(high_byte_register, low_byte_register) {
         const addr = this._getRegisterPairWord(high_byte_register, low_byte_register);
         this._bus.WriteRAM(this._registers['A'], addr);
-        
+        this._clock += 7;
         return 7;
     }
 
@@ -1016,7 +1026,7 @@ class i8080 {
     SHLD(addr) {
         this._bus.WriteRAM(this._registers.L, addr);
         this._bus.WriteRAM(this._registers.H, addr + 1);
-        
+        this._clock += 16;
         return 16;
     }
 
@@ -1030,7 +1040,7 @@ class i8080 {
     LHLD(addr) {
         this._registers['L'] = this._bus.ReadRAM(addr);
         this._registers['H'] = this._bus.ReadRAM(addr+1);
-        
+        this._clock += 16;
         return 16;
     }
 
@@ -1040,7 +1050,7 @@ class i8080 {
      */
     STA(addr) {
         this._bus.WriteRAM(this._registers.A, addr);
-        
+        this._clock += 13;
         return 13;
     }
 
@@ -1051,7 +1061,7 @@ class i8080 {
      */
     LSA(addr) {
         this._registers['A'] = this._bus.ReadRAM(addr);
-        
+        this._clock += 13;
         return 13;
     }
 
@@ -1085,7 +1095,7 @@ class i8080 {
         const word = ((this._registers[highByteRegister] << 8) | this._registers[lowByteRegister]) + 1;
         this._registers[highByteRegister] = (word >> 8) & 0xFF;
         this._registers[lowByteRegister] = word & 0xFF;     
-           
+        this._clock += 5;   
         return 5;
     }
     
@@ -1094,7 +1104,7 @@ class i8080 {
      */
     INX_SP() {
         this._stackPointer = (this._stackPointer + 1) & 0xFFFF;
-        
+        this._clock += 5;
         return 5;
     }
 
@@ -1109,7 +1119,7 @@ class i8080 {
         const word = ((this._registers[highByteRegister] << 8) | this._registers[lowByteRegister]) + 0xFFFF;
         this._registers[highByteRegister] = (word >> 8) & 0xFF;
         this._registers[lowByteRegister] = word & 0xFF;
-           
+        this._clock += 5;
         return 5;
     }
 
@@ -1118,7 +1128,7 @@ class i8080 {
     */
     DCX_SP() {
         this._stackPointer = (this._stackPointer + 0xFFFF) & 0xFFFF;
-        
+        this._clock += 5;
         return 5;
     }
     
@@ -1134,7 +1144,7 @@ class i8080 {
         const rawResult = lhs + 1;
         this._setFlagsOnIncDecOp(lhs, 1, rawResult);
         this._registers[reg] = rawResult & 0xFF;
-        
+        this._clock += 5;
         return 5;
     }
 
@@ -1150,7 +1160,7 @@ class i8080 {
         const rawResult = lhs + 1;
         this._setFlagsOnIncDecOp(lhs, 1, rawResult);
         this._bus.WriteRAM(rawResult & 0xFF, addr);
-        
+        this._clock += 10;
         return 10;
     }
 
@@ -1167,7 +1177,7 @@ class i8080 {
         const rawResult = lhs + 0xFF;
         this._setFlagsOnIncDecOp(lhs, 0xFF, rawResult);
         this._registers[reg] = rawResult & 0xFF;
-        
+        this._clock += 5;
         return 5;
 
     }
@@ -1185,7 +1195,7 @@ class i8080 {
         const rawResult = lhs + 0xFF;
         this._setFlagsOnIncDecOp(lhs, 0xFF, rawResult);
         this._bus.WriteRAM(rawResult & 0xFF, addr);
-        
+        this._clock += 10;
         return 10;
     }
 
@@ -1204,7 +1214,7 @@ class i8080 {
         this._registers['A'] <<= 1;
         this._registers['A'] |= (this._flags & 0x01);
         this._registers['A'] &= 0xFF;
-        
+        this._clock += 4;
         return 4;
     }
 
@@ -1221,7 +1231,7 @@ class i8080 {
         this._registers['A'] >>= 1;
         this._registers['A'] |= (this._flags << 7) & 0x80;
         this._registers['A'] &= 0xFF;
-        
+        this._clock += 4;
         return 4;
     }
 
@@ -1237,7 +1247,7 @@ class i8080 {
         this._registers['A'] <<= 1;
         this._registers['A'] |= carry_bit & 0x01;
         this._registers['A'] &= 0xFF;
-        
+        this._clock += 4;
         return 4;
     }
 
@@ -1247,7 +1257,7 @@ class i8080 {
         this._registers['A'] >>= 1;
         this._registers['A'] |= (carry_bit << 7) & 0x80;
         this._registers['A'] &= 0xFF;
-        
+        this._clock += 4;
         return 4;
     }
 
@@ -1258,7 +1268,7 @@ class i8080 {
      */
     STC() {
         this._flagManager.SetFlag(this._flagManager.FlagType.Carry);
-        
+        this._clock += 4;
         return 4;
     }
 
@@ -1267,7 +1277,7 @@ class i8080 {
      */
     CMC() {
         this._flagManager.IsSet(i8080.Carry) ? this._flagManager.ClearFlag(i8080.Carry) : this._flagManager.SetFlag(i8080.Carry);
-        
+        this._clock += 4;
         return 4;
     }
 
@@ -1279,7 +1289,7 @@ class i8080 {
     CMA() {
         this._registers['A'] = ~(this._registers['A']) & 0xFF;
         this._registers['A'] & 0xFF;
-        
+        this._clock += 4;
         return 4;
     }
 
@@ -1289,7 +1299,7 @@ class i8080 {
         result &= 0xFFFF;
         this._registers['H'] = (result >> 8) & 0xFF;
         this._registers['L'] = result & 0xFF;
-        
+        this._clock += 10;
         return 10;
     }
     
@@ -1299,13 +1309,13 @@ class i8080 {
         result &= 0xFFFF;
         this._registers['H'] = (result >> 8) & 0xFF;
         this._registers['L'] = result & 0xFF;
-        
+        this._clock += 10;
         return 10
     }
 
     LDAX(highByteRegister, lowByteRegister) {
         this._registers['A'] = this._bus.ReadRAM(this._registers[highByteRegister] << 8 | this._registers[lowByteRegister] & 0xFF);
-        
+        this._clock += 7;
         return 7;
     }
 
@@ -1314,7 +1324,7 @@ class i8080 {
     RST(vector) {
         this._pushWordToStack(this._programCounter);
         this._programCounter = vector;
-        ;
+        this._clock += 11;
         return 11;
     }
 
@@ -1322,26 +1332,27 @@ class i8080 {
 
     RET() {
         this._programCounter = this._popWordFromStack();
-        
+        this._clock += 10;
         return 10;
     }
 
     RETURN(expr) {
         if (expr) {
             this._programCounter = this._popWordFromStack();
-            ;
+            this._clock += 11;
             return 11;
         }
-        
+        this._clock += 5;
         return 5;
     }
 
     JUMP(expr, addr) {
         if (expr) {
             this._programCounter = addr;
-            
+            this._clock += 10;
             return 10;
         }
+        this._clock += 3;
         return 3;
     }
 
@@ -1349,9 +1360,10 @@ class i8080 {
         if (expr) {
             this._pushWordToStack(this._programCounter);
             this._programCounter = addr;
+            this._clock += 17;
             return 17;
         }
-        ;
+        this._clock += 11;
         return 11;
     }
 
@@ -1365,6 +1377,7 @@ class i8080 {
         this._registers['L'] = lowByte;
         this._registers['H'] = highByte;
 
+        this._clock += 18;
         return 18;
     }
 
@@ -1377,23 +1390,25 @@ class i8080 {
         this._registers['D'] = highByte
         this._registers['E'] = lowByte
         
+        this._clock += 5;
         return 5;
     }
 
     SPHL() {
         this._stackPointer = this._getRegisterPairWord('H', 'L');
-        
+        this._clock += 5;
         return 5;
     }
 
     PCHL() {
         this._programCounter = this._getRegisterPairWord('H', 'L');
-        
+        this._clock += 5;
         return 5;
     }
 
     HALT() {
         this._halt = true;
+        this._clock += 7;
         return 7;
     }
 
@@ -2419,7 +2434,6 @@ class i8080 {
                 ticks = this.ORI(this._getNextByte());
                 break;
         }
-        this._clock += ticks;
         return { LastInstructionDisassembly: disassemble, LastInstructionTicks: ticks }; 
     }
 }
