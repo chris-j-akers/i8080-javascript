@@ -41,10 +41,9 @@ class Computer {
         this._cpu.Stop();
     }
 
-    CPUGoto(addr) {
-        this._cpu.ProgramCounter = addr;
-    }
-
+    /**
+     * Forwards the CPU State object.
+     */
     get CPUState() {
         return this._cpu.State;
     }
@@ -106,7 +105,7 @@ class Computer {
      * @param {number} from_addr Address of program in memory
      */
     ExecuteProgram(from_addr=0x0) {
-        this.CPUGoto(from_addr);
+        this._cpu.ProgramCounter = from_addr;
         while(this.CPUState.Halt == false) {
             this._cpu.ExecuteNextInstruction();
         }

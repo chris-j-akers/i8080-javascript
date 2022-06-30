@@ -5,8 +5,8 @@
  */
 class i8080 {
 
-    // DEBUG AND HELPER FUNCTIONS
-    // --------------------------
+    // INTERNAL DEBUG AND HELPER FUNCTIONS
+    // -----------------------------------
      
     /**
      * Returns a string representation of an an 8-bit (byte) number in binary.
@@ -115,7 +115,7 @@ class i8080 {
      * stack-pointer to 0. Note, Flags are set to 0x2 because, according to the
      * 8080 Programmers Manual, bit-1 (unused) is always set to 1 as default.
      */
-     Reset() {
+    Reset() {
         this._registers = {A: 0x0, B:0x0, C:0x0, D:0x0, E:0x0, H:0x0, L:0x0};
         this._stackPointer = 0x0;
         this._programCounter = 0x0;
@@ -526,110 +526,33 @@ class i8080 {
     // OPCODES
     // -------
 
-    // NOP
-    // ---
-    
-    /**
-     * No Operation
-     */
-     NOP() {
-        this._clock += 4;
-        return 4;
-    }
-
-    // ADD ARITHMETIC OPCODES
-    // -------------------------
+    // CARRY BIT OPCODES
+    // -----------------
 
     /**
-     * Add the value stored in register `register` to the Accumulator.
-     *
-     * @param {char} register The name of the register which contains the value
-     * to be added.
-     */
-    ADD_R(register) {
-        this._registers['A'] = this._add(this._registers['A'], this._registers[register]);
-        this._clock += 4;
-        return 4;
-    }
-
-    /**
-     * Add the value stored in the memory address loaded into register's `H` and
-     * `L` to the Accumulator.
-     */
-    ADD_M() {
-        this._registers['A'] = this._add(this._registers['A'], this._bus.ReadRAM(this._getRegisterPairWord('H','L')));
-        this._clock += 7;
-        return 7;
-    }
-
-    /**
-     * Add the value stored in register `register` to the Accumulator, including
-     * the Carry bit, if set.
-     *
-     * @param {char} register The name of the register which contains the value
-     * to be added.
-     */
-    ADC_R(register) {
-        this._registers['A'] = this._add(this._registers['A'], this._registers[register], this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0 );
-        this._clock += 4;
-        return 4;
-    }
-
-    /**
-     * Add the value stored in the memory address loaded into register's `H` and
-     * `L` to the Accumulator, including the Carry bit, if set.
-     */
-    ADC_M() {
-        this._registers['A'] = this._add(this._registers['A'], this._bus.ReadRAM(this._getRegisterPairWord('H','L')), this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
-        this._clock += 7;
-        return 7;
-    }
-
-    /**
-     * Add an immediate (8-bit) value to the Accumulator.
+     * The Carry flag is set to 1.
      * 
-     * @param {number} val The immediate value to add.
+     * @returns Number of clock cycles used
      */
-    ADI(val) {
-        this._registers['A'] = this._add(this._registers['A'], val);
-        this._clock += 7;
-        return 7;
+    STC() {
+        this._flagManager.SetFlag(this._flagManager.FlagType.Carry);
+        this._clock += 4;
+        return 4;
     }
 
     /**
-     * Add an immediate (8-bit) value to the Accumulator, including the Carry
-     * bit, if set.
-     *
-     * @param {number} val The immediate value to add.
+     * Toggle Carry bit: If 1, set to 0 and if 0, set to 1.
+     * 
+     * @returns Number of clock cycles used
      */
-    ACI(val) {
-        this._registers['A'] = this._add(this._registers['A'], val, this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
-        this._clock += 7;
-        return 7;
+    CMC() {
+        this._flagManager.IsSet(i8080.Carry) ? this._flagManager.ClearFlag(i8080.Carry) : this._flagManager.SetFlag(i8080.Carry);
+        this._clock += 4;
+        return 4;
     }
 
-    /**
-     * The 16-bit number stored in the specified register pair (BC, DE, HL) is
-     * incremented by 1.
-     * .
-     * @param {char} highByteRegister First register of the pair (B, D, H)
-     */
-    INX_R(highByteRegister, lowByteRegister) {
-        const word = ((this._registers[highByteRegister] << 8) | this._registers[lowByteRegister]) + 1;
-        this._registers[highByteRegister] = (word >> 8) & 0xFF;
-        this._registers[lowByteRegister] = word & 0xFF;     
-        this._clock += 5;   
-        return 5;
-    }
-    
-    /**
-     * The stack pointer is incremented by 1.
-     */
-    INX_SP() {
-        this._stackPointer = (this._stackPointer + 1) & 0xFFFF;
-        this._clock += 5;
-        return 5;
-    }
+    // SINGLE REGISTER INSTRUCTIONS
+    // ----------------------------
 
    /**
      * The named register is incremented by 1.
@@ -637,6 +560,7 @@ class i8080 {
      * Flags affected: P, Z, AC, S.
      * 
      * @param {char} reg Name of the register to incremement.
+     * @returns Number of clock cycles used
      */
     INR_R(reg) {
         const lhs = this._registers[reg];
@@ -652,6 +576,8 @@ class i8080 {
      * incremented by 1.
      *
      * Flags affected: P, Z, AC, S.
+     * 
+     * @returns Number of clock cycles used
      */
     INR_M() {
         const addr = this._getRegisterPairWord('H','L');
@@ -663,123 +589,13 @@ class i8080 {
         return 10;
     }
 
-
-    // SUBTRACT ARITHMETIC OPCODES
-    // ------------------------------
-
-    /**
-     *  Subtract value held in register `reg` from the current value in the
-     *  Accumulator. Result is loaded to the Accumulator.
-     *
-     * e.g. If the value in the Accumulator is currently 10 and the value in
-     * register `B` is 5, then `sub_reg('B')` will subtract 5 from 10 and leave 5
-     * in the Accumulator.
-     * 
-     * Flags affected: C, P, AC, Z, S
-     *
-     * @param {character} register Name of register that contains value to be
-     * subtracted from the Accumulator (B,C,D,E,H,L)
-     */
-    SUB_R(register) {
-        this._registers['A'] = this._sub(this._registers['A'], this._registers[register]);
-        this._clock += 4;
-        return 4;
-    }
-
-    /**
-     * Subtract value held in the 16-bit memory address currently loaded into
-     * registers `H` and `L` from the Accumulator, leaving the result in the
-     * Accumulator.
-     *
-     * Flags affected: C, P, AC, Z, S
-     * 
-     * e.g. If the Accumulator currentyl holds the value 10 and `H` and `L` point
-     * to the memory location at address 0x100 which holds the value 5, then 5
-     * will be subtracted from 10, leaving 5 in the Accumulator.
-     *
-     */
-    SUB_M() {      
-        this._registers['A'] = this._sub(this._registers['A'], this._bus.ReadRAM(this._getRegisterPairWord('H','L')));
-        this._clock += 7;
-        return 7;
-    }
-
-    /**
-     *  Subtract value held in register `reg`, plus the value of the Carry bit,
-     *  from the current value in the Accumulator.
-     *
-     * @param {char} register Name of the register which holds the value to
-     * subtract.
-     */
-    SBB_R(register) {               
-        this._registers['A'] = this._sub(this._registers['A'], this._registers[register], this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
-        this._clock += 4
-        return 4;
-    }
-
-    /**
-     * Subtract value held in the 16-bit memory address currently loaded into
-     * registers `H` and `L` plus the value of the Carry bit from the
-     * Accumulator.
-     */
-    SBB_M() {
-        this._registers['A'] = this._sub(this._registers['A'], this._bus.ReadRAM(this._getRegisterPairWord('H','L')), this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
-        this._clock += 7;
-        return 7;
-    }
-
-    /**
-     * Subtract and immediate 8-bit value from the Accumulator.
-     * 
-     * @param {number} val Immediate value to subtract
-     */
-    SUI(val) {
-        this._registers['A'] = this._sub(this._registers['A'], val);
-        this._clock += 7;
-        return 7;        
-    }
-
-    /**
-     * Subtract and immediate 8-bit value, including the carry bit from the Accumulator.
-     *
-     * @param {number} val Immediate value to subtract
-     */
-    SBI(val) {
-        this._registers['A'] = this._sub(this._registers['A'], val, this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
-        this._clock += 7;
-        return 7;
-    }
-
-    /**
-     * The 16-bit number stored in the specified register pair (BC, DE, HL) is
-     * decremented by 1 (uses two's complement addition).
-     * 
-     * @param {char} highByteRegister First register of the pair (B, D, H)
-     * @param {char} lowByteRegister Second register of the pair (C, E, L)
-     */
-    DCX_R(highByteRegister, lowByteRegister) {
-        const word = ((this._registers[highByteRegister] << 8) | this._registers[lowByteRegister]) + 0xFFFF;
-        this._registers[highByteRegister] = (word >> 8) & 0xFF;
-        this._registers[lowByteRegister] = word & 0xFF;
-        this._clock += 5;
-        return 5;
-    }
-
-    /**
-    * The stack pointer is decremented by 1 (uses two's complement)
-    */
-    DCX_SP() {
-        this._stackPointer = (this._stackPointer + 0xFFFF) & 0xFFFF;
-        this._clock += 5;
-        return 5;
-    }
-    
     /**
      * The named register is decremented by 1 (uses two's complement addition).
      * 
      * Flags affected: P, Z, AC, S.
      * 
      * @param {char} reg Name of the register to decrement.
+     * @returns Number of clock cycles used.
      */
     DCR_R(reg) {
         const lhs = this._registers[reg];
@@ -797,6 +613,8 @@ class i8080 {
      * decremented by 1 (uses two's complement addition).
      *
      * Flags affected: P, Z, AC, S.
+     * 
+     * @returns Number of clock cycles used.
      */
     DCR_M() {
         const addr = this._getRegisterPairWord('H','L');
@@ -809,164 +627,48 @@ class i8080 {
         return 10;
     }
 
-    // COMPARISON OPCODES
-    // ---------------------
-
-    /**
-     * Compares value in Accumulator with value in `register`. 
-     *
-     * Performs a subtract operation and sets flags accordingly, but does not
-     * record the result.
+    /** 
+     * Complement Accumulator
      * 
-     * @param {char} register The name of the register to use.
-     */
-    CMP_R(register) {
-        const result = this._sub(this._registers['A'], this._registers[register]);
+     * @returns Number of clock cycles used.
+    */
+    CMA() {
+        this._registers['A'] = ~(this._registers['A']) & 0xFF;
+        this._registers['A'] & 0xFF;
         this._clock += 4;
         return 4;
     }
 
     /**
-     * Compares value in Accumulator with value at the memory address stored in
-     * register's H and L.
+     * Decimal Adjust Accumulator
      *
-     * Performs a subtract operation and sets flags accordingly, but does not
-     * record the result.
-     */
-    CMP_M() {
-        const result = this._sub(this._registers['A'], this._bus.ReadRAM(this._getRegisterPairWord('H','L')));
-        this._clock += 7;
-        return 7;
-    }
-
-    /**
-     * Compares value in accumulator with immediate 8-bit value.
+     * This instruction is not used much and many emulators leave it out (along
+     * with the Aux Carry flag).
      *
-     * Performs a subtract operation and sets flags accordingly, but does not
-     * record the result.
-     *
-     * @param {number} val The 8-bit value to use.
-     */
-    CPI(val) {
-        const result = this._sub(this._registers['A'], val & 0xFF);
-        this._clock += 7;
-        return 7;
-    }
-
-    // STACK POINTER OPCODES (NOTE: STACK GROWS DOWN)
-    // -------------------------------------------
-
-    /**
-    * Push a 16-bit value onto the stack from one of the register pairs (BC, DE,
-    * HL).
-    *
-    * @param {char} highByteRegister Register that contains high-byte of
-    * 16-bit value
-    * @param {char} lowByteRegister Register that contains low-byte of 16-bit
-    * value
-    */
-    PUSH_R(highByteRegister, lowByteRegister) {
-        this._pushByteToStack(this._registers[highByteRegister]);
-        this._pushByteToStack(this._registers[lowByteRegister]);
-        this._clock += 11;
-        return 11;
-    }
-
-    /**
-     * Push the contents of the accumulator, followed by the contents of the
-     * flags register to the top of the stack.
-     */
-    PUSH_PSW() {
-        this._pushByteToStack(this._registers['A']);
-        this._pushByteToStack(this._flags);
-        this._clock += 11;
-        return 11;
-    }
-    
-    /**
-     * Pop 2 bytes from the top of the stack and load them into one of the
-     * register pairs (BC, DE, HL). Note the little-endian storage means the
-     * first item popped is loaded into the low-byte-register and second item
-     * the high-byte-register.
-     *
-     * @param {char} highByteRegister Register to store the second byte popped
-     * from the stack
-     * @param {char} lowByteRegister Register to store the first byte popped
-     * from the stack
-     */
-    POP_R(highByteRegister, lowByteRegister) {
-        this._registers[lowByteRegister] = this._bus.ReadRAM(this._stackPointer++);
-        this._registers[highByteRegister] = this._bus.ReadRAM(this._stackPointer++);
-        this._clock += 10;
-        return 10;
-    }
-    
-    /**
-     * Pop 2 bytes from the top of the stack and load the first byte into the
-     * flags register and the second byte into the accumulator.
-     */
-    POP_PSW() {
-        this._flags = this._bus.ReadRAM(this._stackPointer++);
-        this._registers['A'] = this._bus.ReadRAM(this._stackPointer++);
-        this._clock += 10;
-        return 10;
-    }
-
-    // 16-BIT LOAD IMMEDIATE OPCODES
-   
-    /**
-     * Load a 16-bit immediate value into one of the register pairs (BC, DE, HL).
-     * The first-byte is loaded into the first register of the specified pair, while
-     * the second byte is loaded into the second register of the specified pair.
-     *
-     * @param {char} highByteRegister Name of the first register in the pair (B, D, H)
-     * @param {char} lowByteRegister Name of the second register in the pair (C, E, L)
-     * @param {number} val 16-bit immediate value to be stored
-     */
-    LXI_R(highByteRegister, lowByteRegister, val) {
-        this._registers[highByteRegister] = (val >> 8) & 0xFF;
-        this._registers[lowByteRegister] = val & 0xFF;
-        this._clock += 10;
-        return 10;
-    }
-    
-    /**
-     * Load a 16-bit immediate value into the stack pointer.
-     */
-    LXI_SP(val) {
-        this._stackPointer = val & 0xFFFF;
-        this._clock += 10;
-        return 10;
-    }
-
-    // DECIMAL ADJUST ACCUMULATOR OPCODE
-    // ----------------------------------
-
-    /**
-     * This is a weird instruction and barely used, but in for a penny ....
-     * 
      * Taken directly from the 8080 Programmers Guide:
-     * 
-     * The eight-bit hexadecimal number in the accumulator is adjusted to form two 
-     * four-bit binary-coded-decimal digits by the following two-step process:
      *
-     * (1) If the least significant four bits of the accumulator represents a number
-     * greater than 9, or if the Auxiliary Carry bit is equal to one, the 
+     * The eight-bit hexadecimal number in the accumulator is adjusted to form
+     * two four-bit binary-coded-decimal digits by the following two-step
+     * process:
+     *
+     * (1) If the least significant four bits of the accumulator represents a
+     * number greater than 9, or if the Auxiliary Carry bit is equal to one, the
      * accumulator is incremented by six. Otherwise, no incrementing occurs.
      *
-     * (2) If the most significant four bits of the accumulator now represent a 
-     * number greater than 9, or if the normal carry bit is equal to one, the most
-     * significant four bits of the accumulator are incremented by six. Otherwise, 
-     * no incrementing occurs.
+     * (2) If the most significant four bits of the accumulator now represent a
+     * number greater than 9, or if the normal carry bit is equal to one, the
+     * most significant four bits of the accumulator are incremented by six.
+     * Otherwise, no incrementing occurs.
      *
-     * If a carry out of the least significant four bits occurs during Step (1), 
-     * the Auxiliary Carry bit is set; otherwise it is reset. Likewise, if a carry 
-     * out of the most significant four bits occurs during Step (2). the normal 
-     * Carry bit is set; otherwise, it is unaffected:
+     * If a carry out of the least significant four bits occurs during Step (1),
+     * the Auxiliary Carry bit is set; otherwise it is reset. Likewise, if a
+     * carry out of the most significant four bits occurs during Step (2). the
+     * normal Carry bit is set; otherwise, it is unaffected:
      *
-     * This instruction is used when adding decimal numbers. It is the only 
+     * This instruction is used when adding decimal numbers. It is the only
      * instruction whose operation is affected by the Auxiliary Carry bit.
-     * 
+     *
+     * @returns Number of clock cycles used.
      */
     DAA() {
         if ((this._registers['A'] & 0x0F) > 9 || this._flagManager.IsSet(this._flagManager.FlagType.AuxillaryCarry)) {
@@ -984,8 +686,22 @@ class i8080 {
         return 4;
     }
 
-    // DATA MOVE/COPY OPCODES
-    // ----------------------
+
+    // NOP OPCODES
+    // -----------
+    
+    /**
+     * No Operation
+     * 
+     * @returns Number of clock cycles used.
+     */
+     NOP() {
+        this._clock += 4;
+        return 4;
+    }
+
+    // DATA TRANSFER INSTRUCTIONS
+    // --------------------------
 
     /**
      * Move value from one register to another.
@@ -993,8 +709,9 @@ class i8080 {
      * @param {char} regDestination The name of the destination register
      * (A,B,C,D,E,H,L)
      * @param {*} regSource The name of the source register (A,B,C,D,E,H,L)
+     * @returns Number of clock cycles used.
      */
-    MOV_R(regDestination, regSource) {
+     MOV_R(regDestination, regSource) {
         this._registers[regDestination] = this._registers[regSource];
         this._clock += 5;
         return 5;
@@ -1005,6 +722,7 @@ class i8080 {
      * destination should be loaded into the H and L registers.
      *
      * @param {char} regSource The name of the source register (A,B,C,D,E,H,L)
+     * @returns Number of clock cycles used.
      */
     MOV_TO_MEM(regSource) {
         this._bus.WriteRAM(this._registers[regSource], this._getRegisterPairWord('H', 'L'));
@@ -1018,6 +736,7 @@ class i8080 {
      *
      * @param {char} regDestination The name of the destination register
      * (A,B,C,D,E,H,L)
+     * @returns Number of clock cycles used.
      */
     MOV_FROM_MEM(regDestination) {
         this._registers[regDestination] = this._bus.ReadRAM(this._getRegisterPairWord('H', 'L'));
@@ -1026,38 +745,159 @@ class i8080 {
     }
 
     /**
-     * Move an immediate 8-bit value into a register.
+     * Store the current value in the Accumulator to a location in memory.
      *
-     * @param {char} regDestination Name of the destination register
-     * (A,B,C,D,E,H,L)
-     * @param {*} val The 8-bit immediate value to store
+     * @param {char} reg First register of the register pair that holds the
+     * relevant memory address. `B` = `B` & `C`, `D` = `D` & `E`. 
+     * @returns Number of clock cycles used.
      */
-    MVI_R(regDestination, val) {
-        this._registers[regDestination] = (val & 0xFF);
+    STAX(high_byte_register, low_byte_register) {
+        const addr = this._getRegisterPairWord(high_byte_register, low_byte_register);
+        this._bus.WriteRAM(this._registers['A'], addr);
         this._clock += 7;
         return 7;
     }
 
     /**
-     * Move an immediate 8-bit value into a memory location. The address of the
-     * location is loaded into the H and L registers.
+     * The contents of the memory location addressed by registers B and C, or by
+     * registers D and E, replace the contents of the accumulator.
      *
-     * @param {number} val The 8-bit immediate value to store
+     * @param {char} highByteRegister Register containing high-byte of number to
+     * use
+     * @param {*} lowByteRegister 
+     * @returns Number of clock cycles used.
      */
-    MVI_TO_MEM(val) {
-        const addr = this._getRegisterPairWord('H', 'L');
-        this._bus.WriteRAM(val, addr);
-        this._clock += 10;
-        return 10;
+    LDAX(highByteRegister, lowByteRegister) {
+        this._registers['A'] = this._bus.ReadRAM(this._registers[highByteRegister] << 8 | this._registers[lowByteRegister] & 0xFF);
+        this._clock += 7;
+        return 7;
     }
 
-    // LOGICAL BITWISE OPCODES
-       
+    // REGISTER OR MEMORY TO ACCUMULATOR INSTRUCTIONS
+    // ----------------------------------------------
+
+    /**
+     * Add the value stored in register `register` to the Accumulator.
+     *
+     * @param {char} register The name of the register which contains the value
+     * to be added.
+     * @returns Number of clock cycles used.
+     */
+    ADD_R(register) {
+        this._registers['A'] = this._add(this._registers['A'], this._registers[register]);
+        this._clock += 4;
+        return 4;
+    }
+
+    /**
+     * Add the value stored in the memory address loaded into register's `H` and
+     * `L` to the Accumulator.
+     * @returns Number of clock cycles used.
+     */
+    ADD_M() {
+        this._registers['A'] = this._add(this._registers['A'], this._bus.ReadRAM(this._getRegisterPairWord('H','L')));
+        this._clock += 7;
+        return 7;
+    }
+
+    /**
+     * Add the value stored in register `register` to the Accumulator, including
+     * the Carry bit, if set.
+     *
+     * @param {char} register The name of the register which contains the value
+     * to be added.
+     * @returns Number of clock cycles used.
+     */
+    ADC_R(register) {
+        this._registers['A'] = this._add(this._registers['A'], this._registers[register], this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0 );
+        this._clock += 4;
+        return 4;
+    }
+
+    /**
+     * Add the value stored in the memory address loaded into register's `H` and
+     * `L` to the Accumulator, including the Carry bit, if set.
+     * 
+     * @returns Number of clock cycles used.
+     */
+    ADC_M() {
+        this._registers['A'] = this._add(this._registers['A'], this._bus.ReadRAM(this._getRegisterPairWord('H','L')), this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
+        this._clock += 7;
+        return 7;
+    }
+
+    /**
+     *  Subtract value held in register `reg` from the current value in the
+     *  Accumulator. Result is loaded to the Accumulator.
+     *
+     * e.g. If the value in the Accumulator is currently 10 and the value in
+     * register `B` is 5, then `sub_reg('B')` will subtract 5 from 10 and leave 5
+     * in the Accumulator.
+     * 
+     * Flags affected: C, P, AC, Z, S
+     *
+     * @param {character} register Name of register that contains value to be
+     * subtracted from the Accumulator (B,C,D,E,H,L)
+     * @returns Number of clock cycles used.
+     */
+     SUB_R(register) {
+        this._registers['A'] = this._sub(this._registers['A'], this._registers[register]);
+        this._clock += 4;
+        return 4;
+    }
+
+    /**
+     * Subtract value held in the 16-bit memory address currently loaded into
+     * registers `H` and `L` from the Accumulator, leaving the result in the
+     * Accumulator.
+     *
+     * Flags affected: C, P, AC, Z, S
+     * 
+     * e.g. If the Accumulator currentyl holds the value 10 and `H` and `L` point
+     * to the memory location at address 0x100 which holds the value 5, then 5
+     * will be subtracted from 10, leaving 5 in the Accumulator.
+     *
+     * @returns Number of clock cycles used.
+     */
+    SUB_M() {      
+        this._registers['A'] = this._sub(this._registers['A'], this._bus.ReadRAM(this._getRegisterPairWord('H','L')));
+        this._clock += 7;
+        return 7;
+    }
+
+    /**
+     *  Subtract value held in register `reg`, plus the value of the Carry bit,
+     *  from the current value in the Accumulator.
+     *
+     * @param {char} register Name of the register which holds the value to
+     * subtract.
+     * @returns Number of clock cycles used.
+     */
+    SBB_R(register) {               
+        this._registers['A'] = this._sub(this._registers['A'], this._registers[register], this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
+        this._clock += 4
+        return 4;
+    }
+
+    /**
+     * Subtract value held in the 16-bit memory address currently loaded into
+     * registers `H` and `L` plus the value of the Carry bit from the
+     * Accumulator.
+     * 
+     * @returns Number of clock cycles used.
+     */
+    SBB_M() {
+        this._registers['A'] = this._sub(this._registers['A'], this._bus.ReadRAM(this._getRegisterPairWord('H','L')), this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
+        this._clock += 7;
+        return 7;
+    }
+
     /**
      * AND contents of the Accumulator with contents of a register. Result is
      * stored in the accumulator.
      *
      * @param {char} register The register to use.
+     * @returns Number of clock cycles used.
      */
     ANA_R(register) {
         const raw_result = this._registers['A'] & this._registers[register];
@@ -1072,6 +912,8 @@ class i8080 {
     * Result is stored in the accumulator.
     *
     * The 16-bit address of the memory location is loaded from register-pair HL.
+    * 
+    * @returns Number of clock cycles used.
     */
     ANA_M() {
         const raw_result = this._registers['A'] & this._bus.ReadRAM(this._getRegisterPairWord('H','L'));
@@ -1081,25 +923,13 @@ class i8080 {
         return 7;
     }
 
-    /**
-     * AND contents of the accumulator with an immediate 8-bit value. Result is
-     * stored in the accumulator.
-     *
-     * @param {number} val Immediate value to use.
-     */
-    ANI(val) {
-        const raw_result = this._registers['A'] & val;
-        this._setFlagsOnLogicalOp(raw_result);
-        this._registers['A'] = raw_result & 0xFF;
-        this._clock += 4;
-        return 4;
-    }
 
     /**
      * EXCLUSIVE OR contents of the Accumulator with the contents of a register.
      * Result is stored in the accumulator.
      *
      * @param {char} reg Register to use.
+     * @returns Number of clock cycles used.
      */
     XRA_R(reg) {
         const raw_result = this._registers['A'] ^ this._registers[reg];
@@ -1115,6 +945,8 @@ class i8080 {
     * 
     * The 16-bit address of the memory location is loaded from register-pair
     * HL.
+    * 
+    * @returns Number of clock cycles used.
     */
     XRA_M() {
         const raw_result = this._registers['A'] ^ this._bus.ReadRAM(this._getRegisterPairWord('H', 'L'));
@@ -1125,24 +957,11 @@ class i8080 {
     }
 
     /**
-     * EXCLUSIVE OR an immediate 8-bit value with the contents of the
-     * accumulator. Result is stored in the accumulator.
-     *
-     * @param {number} val Immediate value to use.
-     */
-    XRI(val) {
-        const raw_result = this._registers['A'] ^ val;
-        this._setFlagsOnLogicalOp(raw_result);
-        this._registers['A'] = raw_result & 0xFF;
-        this._clock += 4;
-        return 4;
-    }
-
-    /**
      * OR contents of a register with the contents of the accumulator. Result is
      * stored in the accumulator.
      *
      * @param {char} register Register to use
+     * @returns Number of clock cycles used.
      */
     ORA_R(register) {
         const raw_result = this._registers['A'] | this._registers[register];
@@ -1158,6 +977,8 @@ class i8080 {
      *
      * The 16-bit address of the memory location is loaded from register-pair
      * HL.
+     * 
+     * @returns Number of clock cycles used.
      */
     ORA_M() {
         const raw_result = this._registers['A'] | this._bus.ReadRAM(this._getRegisterPairWord('H','L'));
@@ -1168,96 +989,45 @@ class i8080 {
     }
 
     /**
-     * OR an immediate 8-bit value with the contents of the accumulator. Result
-     * is stored in the accumulator.
+     * Compares value in Accumulator with value in `register`. 
      *
-     * @param {number} val Immediate value to use.
+     * Performs a subtract operation and sets flags accordingly, but does not
+     * record the result.
+     * 
+     * @param {char} register The name of the register to use.
+     * @returns Number of clock cycles used.
      */
-    ORI(val) {
-        const raw_result = this._registers['A'] | val;
-        this._setFlagsOnLogicalOp(raw_result);
-        this._registers['A'] = raw_result & 0xFF;
+    CMP_R(register) {
+        const result = this._sub(this._registers['A'], this._registers[register]);
         this._clock += 4;
         return 4;
     }
 
-    // STORAGE OPCODES
-    // ---------------
-
     /**
-     * Store the current value in the Accumulator to a location in memory.
+     * Compares value in Accumulator with value at the memory address stored in
+     * register's H and L.
      *
-     * @param {char} reg First register of the register pair that holds
-     * the relevant memory address. `B` = `B` &
-     * `C`, `D` = `D` & `E`. 
+     * Performs a subtract operation and sets flags accordingly, but does not
+     * record the result.
+     * 
+     * @returns Number of clock cycles used.
      */
-    STAX(high_byte_register, low_byte_register) {
-        const addr = this._getRegisterPairWord(high_byte_register, low_byte_register);
-        this._bus.WriteRAM(this._registers['A'], addr);
+    CMP_M() {
+        const result = this._sub(this._registers['A'], this._bus.ReadRAM(this._getRegisterPairWord('H','L')));
         this._clock += 7;
         return 7;
     }
 
-    // DIRECT ADDRESSING OPCODES
-    // ------------------------------
+    // ROTATE ACCUMULATOR INSTRUCTIONS
 
-    /**
-     * Store contents of `H` and `L` registers in memory. Contents of `H`
-     * register are stored at `addr` and contents of `L` register are stored at
-     * the next higher memory address.
-     * @param {number} addr 16-bit memory address of storage location.
-     */
-    SHLD(addr) {
-        this._bus.WriteRAM(this._registers.L, addr);
-        this._bus.WriteRAM(this._registers.H, addr + 1);
-        this._clock += 16;
-        return 16;
-    }
-
-    /**
-     * Store contents of the accumulator in memory address, `addr`.
-     * @param {number} addr 16-bit memory address of storage location
-     */
-    STA(addr) {
-        this._bus.WriteRAM(this._registers.A, addr);
-        this._clock += 13;
-        return 13;
-    }
-    
-    /**
-     * Load into accumulator byte from memory location
-     * 
-     * @param {number} val Address of data to load into Accumulator
-     */
-    LDA(addr) {
-        this._registers['A'] = this._bus.ReadRAM(addr);
-        this._clock += 13;
-        return 13;
-    }
-
-    /**
-     * The byte at the memory address replaces the contents of the L register.
-     * The byte at the next higher memory address replaces the contents of the H
-     * register.
-     *
-     * @param {number} addr Memory address of data.
-     */
-    LHLD(addr) {
-        this._registers['L'] = this._bus.ReadRAM(addr);
-        this._registers['H'] = this._bus.ReadRAM(addr+1);
-        this._clock += 16;
-        return 16;
-    }
-
-    // ACCUMULATOR ROTATE OPCODES
-    // --------------------------
-   
     /**
      * Rotate Accumulator Left.
      *
      * The Carry bit is set to the MSB of the accumulator, the accumulator value
      * is shifted once left and the MSB bit is copied back to the LSB of the
      * Accumulator.
+     * 
+     * @returns Number of clock cycles used.
      */
     RLC() {
         this._flagManager.ClearFlag(this._flagManager.FlagType.Carry);
@@ -1275,6 +1045,8 @@ class i8080 {
      * The Carry bit is set to the LSB of the accumulator, the accumulator is
      * shifted once right and the LSB bit is copied back to the MSB of the
      * accumulator.
+     * 
+     * @returns Number of clock cycles used.
      */
     RRC() {
         this._flagManager.ClearFlag(this._flagManager.FlagType.Carry);
@@ -1291,6 +1063,8 @@ class i8080 {
      *
      * The accumulator is rotated left once with the carry bit being appended to
      * as the LSB and replaced with the MSB.
+     * 
+     * @returns Number of clock cycles used.
      */
     RAL() {
         const carry_bit = this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0;
@@ -1305,7 +1079,7 @@ class i8080 {
     /**
      * Rotae Accumulator Right Through Carry
      * 
-     * @returns Clock cycles used 
+     * @returns Number of clock cycles used.
      */
     RAR() {
         const carry_bit = this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0;
@@ -1317,36 +1091,69 @@ class i8080 {
         return 4;
     }
 
-    // CARRY-BIT OPERATIONS
+    // REGISTER PAIR INSTRUCTIONS
+    // --------------------------
 
     /**
-     * The Carry flag is set to 1.
-     */
-    STC() {
-        this._flagManager.SetFlag(this._flagManager.FlagType.Carry);
-        this._clock += 4;
-        return 4;
-    }
-
-    /**
-     * Toggle Carry bit: If 1, set to 0 and if 0, set to 1.
-     */
-    CMC() {
-        this._flagManager.IsSet(i8080.Carry) ? this._flagManager.ClearFlag(i8080.Carry) : this._flagManager.SetFlag(i8080.Carry);
-        this._clock += 4;
-        return 4;
-    }
-
-    // SINGLE REGISTER OPCODES
-
-    /** 
-     * Complement Accumulator
+    * Push a 16-bit value onto the stack from one of the register pairs (BC, DE,
+    * HL).
+    *
+    * @param {char} highByteRegister Register that contains high-byte of
+    * 16-bit value
+    * @param {char} lowByteRegister Register that contains low-byte of 16-bit
+    * value
+    * @returns Number of clock cycles used.
     */
-    CMA() {
-        this._registers['A'] = ~(this._registers['A']) & 0xFF;
-        this._registers['A'] & 0xFF;
-        this._clock += 4;
-        return 4;
+    PUSH_R(highByteRegister, lowByteRegister) {
+        this._pushByteToStack(this._registers[highByteRegister]);
+        this._pushByteToStack(this._registers[lowByteRegister]);
+        this._clock += 11;
+        return 11;
+    }
+
+    /**
+     * Push the contents of the accumulator, followed by the contents of the
+     * flags register to the top of the stack.
+     * 
+     * @returns Number of clock cycles used.
+     */
+    PUSH_PSW() {
+        this._pushByteToStack(this._registers['A']);
+        this._pushByteToStack(this._flags);
+        this._clock += 11;
+        return 11;
+    }
+
+    /**
+     * Pop 2 bytes from the top of the stack and load them into one of the
+     * register pairs (BC, DE, HL). Note the little-endian storage means the
+     * first item popped is loaded into the low-byte-register and second item
+     * the high-byte-register.
+     *
+     * @param {char} highByteRegister Register to store the second byte popped
+     * from the stack
+     * @param {char} lowByteRegister Register to store the first byte popped
+     * from the stack
+     * @returns Number of clock cycles used.
+     */
+    POP_R(highByteRegister, lowByteRegister) {
+        this._registers[lowByteRegister] = this._bus.ReadRAM(this._stackPointer++);
+        this._registers[highByteRegister] = this._bus.ReadRAM(this._stackPointer++);
+        this._clock += 10;
+        return 10;
+    }
+
+    /**
+     * Pop 2 bytes from the top of the stack and load the first byte into the
+     * flags register and the second byte into the accumulator.
+     * 
+     * @returns Number of clock cycles used.
+     */
+    POP_PSW() {
+        this._flags = this._bus.ReadRAM(this._stackPointer++);
+        this._registers['A'] = this._bus.ReadRAM(this._stackPointer++);
+        this._clock += 10;
+        return 10;
     }
 
     /**
@@ -1354,7 +1161,7 @@ class i8080 {
      * 
      * @param {char} highByteRegister Register containing high-byte of number to add
      * @param {char} lowByteRegister Registers containing low-byte of number to add
-     * @returns 
+     * @returns Number of clock cycles used.
      */
     DAD(highByteRegister, lowByteRegister) {
         let result = ((this._registers['H'] << 8 | this._registers['L']) & 0xFFFF) + ((this._registers[highByteRegister] << 8 | this._registers[lowByteRegister]) & 0xFFFF);
@@ -1368,6 +1175,8 @@ class i8080 {
     
     /**
      * Add Stack Pointer to 16-bit number stored in register pair H and L.
+     * 
+     * @returns Number of clock cycles used.
      */
     DAD_SP() {
         let result = (this._registers['H'] << 8 | this._registers['L']) + this._stackPointer;
@@ -1380,105 +1189,75 @@ class i8080 {
     }
 
     /**
-     * The contents of the memory location addressed by registers B and C, or by
-     * registers D and E, replace the contents of the accumulator.
-     * 
-     * @param {char} highByteRegister Register containing high-byte of number to
-     * use
-     * @param {*} lowByteRegister 
-     * @returns 
+     * The 16-bit number stored in the specified register pair (BC, DE, HL) is
+     * incremented by 1.
+     * .
+     * @param {char} highByteRegister First register of the pair (B, D, H).
+     * @returns Number of clock cycles used.
      */
-    LDAX(highByteRegister, lowByteRegister) {
-        this._registers['A'] = this._bus.ReadRAM(this._registers[highByteRegister] << 8 | this._registers[lowByteRegister] & 0xFF);
-        this._clock += 7;
-        return 7;
+    INX_R(highByteRegister, lowByteRegister) {
+        const word = ((this._registers[highByteRegister] << 8) | this._registers[lowByteRegister]) + 1;
+        this._registers[highByteRegister] = (word >> 8) & 0xFF;
+        this._registers[lowByteRegister] = word & 0xFF;     
+        this._clock += 5;   
+        return 5;
     }
-
-    // RESTART INSTRUCTIONS
-    // --------------------
-
+    
     /**
-     * Special-purpose sub-routine jump that only occupies one byte (usually used for interrupt service routines)
+     * The stack pointer is incremented by 1.
      * 
-     * @param {number} vector Address to jump to (depends onf middle-three bits of OpCode)
-     * @returns 
+     * @returns Number of clock cycles used.
      */
-    RST(vector) {
-        this._pushWordToStack(this._programCounter);
-        this._programCounter = vector;
-        this._clock += 11;
-        return 11;
-    }
-
-    // BRANCH AND RETURN INSTRUCTIONS
-    // ------------------------------
-
-    /**
-     * A return operation is performed unconditionally.
-     * 
-     * @returns Number of clock cycles used
-     */
-    RET() {
-        this._programCounter = this._popWordFromStack();
-        this._clock += 10;
-        return 10;
-    }
-
-    /**
-     * A return operation is performed if `expr` evaluates to true.
-     * 
-     * Used for OpCodes: RC, RNC, RZ, RNZ, RM, RP, RPE, RPO 
-     * 
-     * @param {boolean} expr An expression that evaluates to true/false
-     * @returns 
-     */
-    RETURN(expr) {
-        if (expr) {
-            this._programCounter = this._popWordFromStack();
-            this._clock += 11;
-            return 11;
-        }
+    INX_SP() {
+        this._stackPointer = (this._stackPointer + 1) & 0xFFFF;
         this._clock += 5;
         return 5;
     }
 
     /**
-     * Program execution continues from memory address `addr`, depending on the
-     * `expr` evaluation
-     *
-     * Used for OpCodes: JMP, JC, JNC, JZ, JNZ, JM, JP, JPO, JPE
-     *
-     * @param {boolean} expr An expression that evaluates to true/false
-     * @param {number} addr Address in memory to jump to
-     * @returns Number of clock cycles used
+     * The 16-bit number stored in the specified register pair (BC, DE, HL) is
+     * decremented by 1 (uses two's complement addition).
+     * 
+     * @param {char} highByteRegister First register of the pair (B, D, H)
+     * @param {char} lowByteRegister Second register of the pair (C, E, L)
+     * @returns Number of clock cycles used.
      */
-    JUMP(expr, addr) {
-        if (expr) {
-            this._programCounter = addr;
-            this._clock += 10;
-            return 10;
-        }
-        this._clock += 3;
-        return 3;
+    DCX_R(highByteRegister, lowByteRegister) {
+        const word = ((this._registers[highByteRegister] << 8) | this._registers[lowByteRegister]) + 0xFFFF;
+        this._registers[highByteRegister] = (word >> 8) & 0xFF;
+        this._registers[lowByteRegister] = word & 0xFF;
+        this._clock += 5;
+        return 5;
     }
 
     /**
-     * A return address is pushed onto the Stack, then program execution
-     * continues from address `addr`.
+    * The stack pointer is decremented by 1 (uses two's complement)
+    * 
+    * @returns Number of clock cycles used.
+    */
+    DCX_SP() {
+        this._stackPointer = (this._stackPointer + 0xFFFF) & 0xFFFF;
+        this._clock += 5;
+        return 5;
+    }
+
+    /**
+     * The 16-bits of data held in the `H` and `L` registers are exchanged with
+     * the 16-bits of data held in the `D` and `E` registers.
      *
-     * @param {expr} expr An expression that evaluates to true/false
-     * @param {addr} addr Address in memory to jump to
      * @returns Number of clock cycles used
      */
-    CALL(expr, addr) {
-        if (expr) {
-            this._pushWordToStack(this._programCounter);
-            this._programCounter = addr;
-            this._clock += 17;
-            return 17;
-        }
-        this._clock += 11;
-        return 11;
+    XCHG() {
+        const highByte = this._registers['H'];
+        const lowByte = this._registers['L'];
+        
+        this._registers['H'] = this._registers['D'];
+        this._registers['L'] = this._registers['E'];
+        this._registers['D'] = highByte
+        this._registers['E'] = lowByte
+        
+        this._clock += 5;
+        return 5;
     }
 
     /**
@@ -1503,26 +1282,6 @@ class i8080 {
         return 18;
     }
 
-
-    /**
-     * The 16-bits of data held in the `H` and `L` registers are exchanged with
-     * the 16-bits of data held in the `D` and `E` registers.
-     *
-     * @returns Number of clock cycles used
-     */
-    XCHG() {
-        const highByte = this._registers['H'];
-        const lowByte = this._registers['L'];
-        
-        this._registers['H'] = this._registers['D'];
-        this._registers['L'] = this._registers['E'];
-        this._registers['D'] = highByte
-        this._registers['E'] = lowByte
-        
-        this._clock += 5;
-        return 5;
-    }
-
     /**
      * The 16 bits of data held in the Hand L registers replace the contents of
      * the stack pointer SP. The contents of the Hand L registers are unchanged.
@@ -1534,6 +1293,237 @@ class i8080 {
         this._clock += 5;
         return 5;
     }
+
+    // IMMEDIATE INSTRUCTIONS
+    // ----------------------
+
+    /**
+     * Load a 16-bit immediate value into one of the register pairs (BC, DE, HL).
+     * The first-byte is loaded into the first register of the specified pair, while
+     * the second byte is loaded into the second register of the specified pair.
+     *
+     * @param {char} highByteRegister Name of the first register in the pair (B, D, H)
+     * @param {char} lowByteRegister Name of the second register in the pair (C, E, L)
+     * @param {number} val 16-bit immediate value to be stored
+     * @returns Number of clock cycles used.
+     */
+    LXI_R(highByteRegister, lowByteRegister, val) {
+        this._registers[highByteRegister] = (val >> 8) & 0xFF;
+        this._registers[lowByteRegister] = val & 0xFF;
+        this._clock += 10;
+        return 10;
+    }
+    
+    /**
+     * Load a 16-bit immediate value into the stack pointer.
+     * 
+     * @returns Number of clock cycles used.
+     */
+    LXI_SP(val) {
+        this._stackPointer = val & 0xFFFF;
+        this._clock += 10;
+        return 10;
+    }
+
+    /**
+     * Move an immediate 8-bit value into a register.
+     *
+     * @param {char} regDestination Name of the destination register
+     * (A,B,C,D,E,H,L)
+     * @param {number} val The 8-bit immediate value to store
+     * @returns Number of clock cycles used.
+     */
+    MVI_R(regDestination, val) {
+        this._registers[regDestination] = (val & 0xFF);
+        this._clock += 7;
+        return 7;
+    }
+
+    /**
+     * Move an immediate 8-bit value into a memory location. The address of the
+     * location is loaded into the H and L registers.
+     *
+     * @param {number} val The 8-bit immediate value to store
+     * @returns Number of clock cycles used.
+     */
+    MVI_TO_MEM(val) {
+        const addr = this._getRegisterPairWord('H', 'L');
+        this._bus.WriteRAM(val, addr);
+        this._clock += 10;
+        return 10;
+    }
+
+    /**
+     * Add an immediate (8-bit) value to the Accumulator.
+     * 
+     * @param {number} val The immediate value to add.
+     * @returns Number of clock cycles used.
+     */
+    ADI(val) {
+        this._registers['A'] = this._add(this._registers['A'], val);
+        this._clock += 7;
+        return 7;
+    }
+
+    /**
+     * Add an immediate (8-bit) value to the Accumulator, including the Carry
+     * bit, if set.
+     *
+     * @param {number} val The immediate value to add.
+     * @returns Number of clock cycles used.
+     */
+    ACI(val) {
+        this._registers['A'] = this._add(this._registers['A'], val, this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
+        this._clock += 7;
+        return 7;
+    }
+
+    /**
+     * Subtract and immediate 8-bit value from the Accumulator.
+     * 
+     * @param {number} val Immediate value to subtract
+     * @returns Number of clock cycles used.
+     */
+    SUI(val) {
+        this._registers['A'] = this._sub(this._registers['A'], val);
+        this._clock += 7;
+        return 7;        
+    }
+
+    /**
+     * Subtract and immediate 8-bit value, including the carry bit from the Accumulator.
+     *
+     * @param {number} val Immediate value to subtract
+     * @returns Number of clock cycles used.
+     */
+    SBI(val) {
+        this._registers['A'] = this._sub(this._registers['A'], val, this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
+        this._clock += 7;
+        return 7;
+    }
+
+    /**
+     * AND contents of the accumulator with an immediate 8-bit value. Result is
+     * stored in the accumulator.
+     *
+     * @param {number} val Immediate value to use.
+     * @returns Number of clock cycles used.
+     */
+    ANI(val) {
+        const raw_result = this._registers['A'] & val;
+        this._setFlagsOnLogicalOp(raw_result);
+        this._registers['A'] = raw_result & 0xFF;
+        this._clock += 4;
+        return 4;
+    }
+
+
+    /**
+     * EXCLUSIVE OR an immediate 8-bit value with the contents of the
+     * accumulator. Result is stored in the accumulator.
+     *
+     * @param {number} val Immediate value to use.
+     * @returns Number of clock cycles used.
+     */
+    XRI(val) {
+        const raw_result = this._registers['A'] ^ val;
+        this._setFlagsOnLogicalOp(raw_result);
+        this._registers['A'] = raw_result & 0xFF;
+        this._clock += 4;
+        return 4;
+    }
+
+
+    /**
+     * OR an immediate 8-bit value with the contents of the accumulator. Result
+     * is stored in the accumulator.
+     *
+     * @param {number} val Immediate value to use.
+     * @returns Number of clock cycles used.
+     */
+    ORI(val) {
+        const raw_result = this._registers['A'] | val;
+        this._setFlagsOnLogicalOp(raw_result);
+        this._registers['A'] = raw_result & 0xFF;
+        this._clock += 4;
+        return 4;
+    }
+
+    /**
+     * Compares value in accumulator with immediate 8-bit value.
+     *
+     * Performs a subtract operation and sets flags accordingly, but does not
+     * record the result.
+     *
+     * @param {number} val The 8-bit value to use.
+     * @returns Number of clock cycles used.
+     */
+    CPI(val) {
+        const result = this._sub(this._registers['A'], val & 0xFF);
+        this._clock += 7;
+        return 7;
+    }
+
+    // DIRECT ADDRESSING OPCODES
+    // --------------------------
+
+    /**
+     * Store contents of the accumulator in memory address, `addr`.
+     * 
+     * @param {number} addr 16-bit memory address of storage location
+     * @returns Number of clock cycles used.
+     */
+    STA(addr) {
+        this._bus.WriteRAM(this._registers.A, addr);
+        this._clock += 13;
+        return 13;
+    }
+    
+    /**
+     * Load into accumulator byte from memory location
+     * 
+     * @param {number} val Address of data to load into Accumulator
+     * @returns Number of clock cycles used.
+     */
+    LDA(addr) {
+        this._registers['A'] = this._bus.ReadRAM(addr);
+        this._clock += 13;
+        return 13;
+    }
+
+    /**
+     * Store contents of `H` and `L` registers in memory. Contents of `H`
+     * register are stored at `addr` and contents of `L` register are stored at
+     * the next higher memory address.
+     * 
+     * @param {number} addr 16-bit memory address of storage location.
+     * @returns Number of clock cycles used.
+     */
+    SHLD(addr) {
+        this._bus.WriteRAM(this._registers.L, addr);
+        this._bus.WriteRAM(this._registers.H, addr + 1);
+        this._clock += 16;
+        return 16;
+    }
+
+    /**
+     * The byte at the memory address replaces the contents of the L register.
+     * The byte at the next higher memory address replaces the contents of the H
+     * register.
+     *
+     * @param {number} addr Memory address of data.
+     * @returns Number of clock cycles used.
+     */
+    LHLD(addr) {
+        this._registers['L'] = this._bus.ReadRAM(addr);
+        this._registers['H'] = this._bus.ReadRAM(addr+1);
+        this._clock += 16;
+        return 16;
+    }
+
+
+    // JUMP INSTRUCTIONS
+    // -----------------
 
     /**
      * The contents of the H register replace the most significant 8 bits of the
@@ -1549,6 +1539,100 @@ class i8080 {
         return 5;
     }
 
+
+    /**
+     * Program execution continues from memory address `addr`, depending on the
+     * `expr` evaluation
+     *
+     * Used for OpCodes: JMP, JC, JNC, JZ, JNZ, JM, JP, JPO, JPE
+     *
+     * @param {boolean} expr An expression that evaluates to true/false
+     * @param {number} addr Address in memory to jump to
+     * @returns Number of clock cycles used
+     */
+    JUMP(expr, addr) {
+        if (expr) {
+            this._programCounter = addr;
+            this._clock += 10;
+            return 10;
+        }
+        this._clock += 3;
+        return 3;
+    }
+
+    // CALL SUBROUTINE INSTRUCTIONS
+    // ----------------------------
+
+    /**
+     * A return address is pushed onto the Stack, then program execution
+     * continues from address `addr`.
+     *
+     * @param {expr} expr An expression that evaluates to true/false
+     * @param {addr} addr Address in memory to jump to
+     * @returns Number of clock cycles used
+     */
+    CALL(expr, addr) {
+        if (expr) {
+            this._pushWordToStack(this._programCounter);
+            this._programCounter = addr;
+            this._clock += 17;
+            return 17;
+        }
+        this._clock += 11;
+        return 11;
+    }
+
+    // RETURN FROM SUBROUTINE INSTRUCTIONS
+    // -----------------------------------
+
+    /**
+     * A return operation is performed unconditionally.
+     * 
+     * @returns Number of clock cycles used.
+     */
+    RET() {
+        this._programCounter = this._popWordFromStack();
+        this._clock += 10;
+        return 10;
+    }
+
+    /**
+     * A return operation is performed if `expr` evaluates to true.
+     * 
+     * Used for OpCodes: RC, RNC, RZ, RNZ, RM, RP, RPE, RPO 
+     * 
+     * @param {boolean} expr An expression that evaluates to true/false
+     * @returns Number of clock cycles used
+     */
+    RETURN(expr) {
+        if (expr) {
+            this._programCounter = this._popWordFromStack();
+            this._clock += 11;
+            return 11;
+        }
+        this._clock += 5;
+        return 5;
+    }
+
+    // RESTART (RST) OPCODES
+    // -----------
+
+    /**
+     * Special-purpose sub-routine jump that only occupies one byte (usually used for interrupt service routines)
+     * 
+     * @param {number} vector Address to jump to (depends onf middle-three bits of OpCode)
+     * @returns Number of clock cycles used.
+     */
+    RST(vector) {
+        this._pushWordToStack(this._programCounter);
+        this._programCounter = vector;
+        this._clock += 11;
+        return 11;
+    }
+
+    // HALT INSTRUCTION
+    // ----------------
+
     /**
      * Sets the CPU's internal `_halt` flag to `True`.
      * 
@@ -1561,6 +1645,7 @@ class i8080 {
     }
 
     // PROGRAM EXECUTION
+    // -----------------
 
     /**
      * Get the next opcode from the program counter location then execute it.

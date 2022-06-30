@@ -6,6 +6,9 @@ import { Computer } from "./computer.js";
  * A cabinet containes a Computer, a display and a code-set. Code is stored in
  * an array of bytes called `_code`.
  *
+ * To convert a binary 8080 rom file into an array of bytes, see the
+ * `rom_generator.py` scrip in the `utils` folder of this repo.
+ *
  */
 class Cabinet {
 
