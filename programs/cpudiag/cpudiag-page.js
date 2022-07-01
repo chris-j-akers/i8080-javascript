@@ -1,5 +1,3 @@
-import { CpuDiag } from './cpudiag.js';
-
 const registerTableElem = {
     decA: document.getElementById('tdARegDecElem'),
     hexA: document.getElementById('tdARegHexElem'),
@@ -25,30 +23,31 @@ const registerTableElem = {
 }
 
 function updateRegisterFields(registers) {
+    // Register A
     registerTableElem.decA.textContent = `${registers.A.toString().padStart(3,'0')}`
     registerTableElem.hexA.textContent  = `0x${registers.A.toString(16).padStart(2,'0')}`
     registerTableElem.binA.textContent  = `${registers.A.toString(2).padStart(8,'0')}`
-
+    // Register B
     registerTableElem.decB.textContent  = `${registers.B.toString().padStart(3,'0')}`
     registerTableElem.hexB.textContent  = `0x${registers.B.toString(16).padStart(2,'0')}`
     registerTableElem.binB.textContent  = `${registers.B.toString(2).padStart(8,'0')}`
-
+    // Register C
     registerTableElem.decC.textContent  = `${registers.C.toString().padStart(3,'0')}`
     registerTableElem.hexC.textContent  = `0x${registers.C.toString(16).padStart(2,'0')}`
     registerTableElem.binC.textContent  = `${registers.C.toString(2).padStart(8,'0')}`
-
+    // Register D
     registerTableElem.decD.textContent  = `${registers.D.toString().padStart(3,'0')}`
     registerTableElem.hexD.textContent  = `0x${registers.D.toString(16).padStart(2,'0')}`
     registerTableElem.binD.textContent  = `${registers.D.toString(2).padStart(8,'0')}`
-
+    // Register E
     registerTableElem.decE.textContent  = `${registers.E.toString().padStart(3,'0')}`
     registerTableElem.hexE.textContent  = `0x${registers.E.toString(16).padStart(2,'0')}`
     registerTableElem.binE.textContent  = `${registers.E.toString(2).padStart(8,'0')}`
-
+    // Register H
     registerTableElem.decH.textContent  = `${registers.H.toString().padStart(3,'0')}`
     registerTableElem.hexH.textContent  = `0x${registers.H.toString(16).padStart(2,'0')}`
     registerTableElem.binH.textContent  = `${registers.H.toString(2).padStart(8,'0')}`
-
+    // Register L
     registerTableElem.decL.textContent  = `${registers.L.toString().padStart(3,'0')}`
     registerTableElem.hexL.textContent  = `0x${registers.L.toString(16).padStart(2,'0')}`
     registerTableElem.binL.textContent  = `${registers.L.toString(2).padStart(8,'0')}`
@@ -84,85 +83,45 @@ const fieldsTableElem = {
 }
 
 function updateFields(lastOperationTicks, cpuState) {
+    // Program Counter
     fieldsTableElem.decProgramCounter.textContent = `${cpuState.ProgramCounter.toString().padStart(5, '0')}`;
     fieldsTableElem.hexProgramCounter.textContent = `0x${cpuState.ProgramCounter.toString(16).padStart(4, '0')}`;
     fieldsTableElem.binProgramCounter.textContent = `${cpuState.ProgramCounter.toString(2).padStart(16, '0')}`;
-
+    // Stack Pointer
     fieldsTableElem.decStackPointer.textContent = `${cpuState.StackPointer.toString().padStart(5, '0')}`;
     fieldsTableElem.hexStackPointer.textContent = `0x${cpuState.StackPointer.toString(16).padStart(4, '0')}`;
     fieldsTableElem.binStackPointer.textContent = `${cpuState.StackPointer.toString(2).padStart(16, '0')}`;
-
+    // Clock
     fieldsTableElem.decClock.textContent = `${cpuState.Clock.toString().padStart(5, '0')}`;
     fieldsTableElem.hexClock.textContent = `0x${cpuState.Clock.toString(16).padStart(4, '0')}`;
     fieldsTableElem.binClock.textContent = `${cpuState.Clock.toString(2).padStart(16, '0')}`;
-
+    // Clock Cycles of Last Operation
     fieldsTableElem.decTicks.textContent = `${lastOperationTicks.toString().padStart(2,'0')}`;
 }
 
 const buttons = {
     btnExecuteNext: document.getElementById('btnExecuteNext').addEventListener( 'click', () => {
-        const addr = cpuDiagCabinet.Computer.CPUState.ProgramCounter;
-        const state = cpuDiagCabinet.ExecuteNextInstruction();
-
-        outputs.divTracePanel.textContent += `0x${addr.toString(16)}\t${state.LastInstructionDisassembly}`;
-        outputs.divTracePanel.textContent += '\n';
-    
-        if (typeof state.ConsoleOut != 'undefined') {
-            outputs.divConsolePanel.textContent += `${state.ConsoleOut}\n`;
-        }
-        
-        updateRegisterFields(cpuDiagCabinet.Computer.CPUState.Registers);
-        updateFlagsFields(cpuDiagCabinet.Computer.CPUState.Flags);
-        updateFields(state.LastInstructionTicks, cpuDiagCabinet.Computer.CPUState);
-
+        _cpuDiagWebWorker.postMessage({Type: 'EXECUTE_NEXT'});
     }),
     btnRunAll: document.getElementById('btnRunAll').addEventListener( 'click', () => {
-        outputs.divTracePanel.textContent = '';
-        outputs.divConsolePanel.textContent = '';
-        const worker = new Worker('cpudiag-worker.js', {type: 'module'});
-        worker.onmessage = OnInstructionComplete;
+        const clockSpeed = inputs.txtClockSpeed.value;
+        _cpuDiagWebWorker.postMessage({Type: 'EXECUTE_ALL_CLOCKED', ClockSpeed: clockSpeed});
     }),
     btnRunToBreakPoint: document.getElementById('btnRunToBreakPoint').addEventListener('click', () => {
-        let addr;
-        while(cpuDiagCabinet.Computer.CPUState.Halt == false & cpuDiagCabinet.Computer.CPUState.ProgramCounter != inputs.txtBreakpoint.value) {
-            addr = cpuDiagCabinet.Computer.CPUState.ProgramCounter;
-            const state = cpuDiagCabinet.ExecuteNextInstruction();
-            outputs.divTracePanel.textContent += `0x${addr.toString(16)}\t${state.LastInstructionDisassembly}`;
-            outputs.divTracePanel.textContent += '\n';
-        
-            if (typeof state.ConsoleOut != 'undefined') {
-                outputs.divConsolePanel.textContent += `${state.ConsoleOut}\n`;
-            }
-
-            updateRegisterFields(cpuDiagCabinet.Computer.CPUState.Registers);
-            updateFlagsFields(cpuDiagCabinet.Computer.CPUState.Flags);
-            updateFields(state.LastInstructionTicks, cpuDiagCabinet.Computer.CPUState);
-        }
+        const breakPointAddr = inputs.txtBreakpoint.value;
+        _cpuDiagWebWorker.postMessage({Type: 'RUN_TO_BREAKPOINT', BreakpointAddress: breakPointAddr})
     }),
     btnReset: document.getElementById('btnReset').addEventListener( 'click', () => {
-        reset();
+        _cpuDiagWebWorker.postMessage({Type: 'RESET'});
     }),
     btnRunAllUnclocked: document.getElementById('btnRunAllUnclocked').addEventListener( 'click', () => {
-        let addr;
-        while(cpuDiagCabinet.Computer.CPUState.Halt == false) {
-            addr = cpuDiagCabinet.Computer.CPUState.ProgramCounter;
-            const state = cpuDiagCabinet.ExecuteNextInstruction();
-            outputs.divTracePanel.textContent += `0x${addr.toString(16)}\t${state.LastInstructionDisassembly}`;
-            outputs.divTracePanel.textContent += '\n';
-        
-            if (typeof state.ConsoleOut != 'undefined') {
-                outputs.divConsolePanel.textContent += `${state.ConsoleOut}\n`;
-            }
-
-            updateRegisterFields(cpuDiagCabinet.Computer.CPUState.Registers);
-            updateFlagsFields(cpuDiagCabinet.Computer.CPUState.Flags);
-            updateFields(state.LastInstructionTicks, cpuDiagCabinet.Computer.CPUState);
-        }
+        _cpuDiagWebWorker.postMessage({Type: 'EXECUTE_ALL_UNCLOCKED'});
     })
 }
 
 const inputs = {
     txtBreakpoint: document.getElementById('txtBreakpoint'),
+    txtClockSpeed: document.getElementById('txtClockSpeed'),
 }
 
 const outputs = {
@@ -170,26 +129,38 @@ const outputs = {
     divConsolePanel: document.getElementById('consolePanel'),
 }
 
-function OnInstructionComplete(e) {
-    outputs.divTracePanel.textContent += `0x${e.data.LastInstructionAddress.toString(16)}\t${e.data.LastInstructionDisassembly}`;
-    outputs.divTracePanel.textContent += '\n';
+outputs.divConsolePanel.textContent = '';
+outputs.divTracePanel.textContent = '';
+inputs.txtClockSpeed.value = 30;
 
-    if (typeof e.data.ConsoleOut != 'undefined') {
-        outputs.divConsolePanel.textContent += `${e.data.ConsoleOut}\n`;
+// We use a web-worker to control the computer we're emulating because it allows
+// us to artifically slow down the clock speed without locking up the browser by
+// using the setInterval() call. It also keeps the UI separate from the actual
+// emulator.
+
+const _cpuDiagWebWorker = new Worker('cpudiag-worker.js', { type: "module" });
+_cpuDiagWebWorker.onmessage = onMessage;
+
+function onMessage(e) {
+    const msg = e.data;
+    switch(msg.Type) {
+        case 'RESET_ACK':
+            outputs.divConsolePanel.textContent = '';
+            outputs.divTracePanel.textContent = '';
+            outputs.divConsolePanel.textContent += msg.ConsoleOut;
+            break;
+        case 'EXECUTE_ALL_UNCLOCKED_ACK':
+        case 'EXECUTE_ALL_CLOCKED_ACK':
+        case 'EXECUTE_NEXT_ACK':
+            outputs.divTracePanel.textContent += `0x${msg.LastInstructionAddress.toString(16)}\t${msg.LastInstructionDisassembly}\n`;
+            if (typeof msg.ConsoleOut != 'undefined') {
+                outputs.divConsolePanel.textContent += `${msg.ConsoleOut}\n`;
+            }
+            updateRegisterFields(msg.CPUState.Registers);
+            updateFlagsFields(msg.CPUState.Flags);
+            updateFields(msg.LastInstructionTicks, msg.CPUState);
+            break;
+        }
+
     }
 
-    updateRegisterFields(e.data.CPUState.Registers);
-    updateFlagsFields(e.data.CPUState.Flags);
-    updateFields(e.data.LastInstructionTicks, e.data.CPUState);
-}
-
-function reset() {
-    outputs.divTracePanel.textContent = '';
-    outputs.divConsolePanel.textContent = '';
-    const bytesLoaded = cpuDiagCabinet.Initialise();
-    outputs.divConsolePanel.textContent += `LOADED ${bytesLoaded} BYTES STARTING AT ADDRESS 0x${cpuDiagCabinet._startAddr.toString(16)}`; 
-}
-
-// We want this available to everyone!
-const cpuDiagCabinet = new CpuDiag(0x100); 
-reset();

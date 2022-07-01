@@ -21,6 +21,7 @@ class MMU {
 
     Reset() {
         this._ram = new Array(2**16);
+        this._bytesUsed = 0;
     }
 
     Write(val, addr) {

@@ -6,10 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="stylesheet" href="cpudiag-styles.css">
-    <!-- <script type="module" src="src/computer.js"></script>
-    <script type="module" src="src/mmu.js"></script>
-    <script type="module" src="src/bus.js"></script>
-    <script type="module" src="src/i8080.js"></script> -->
     <script type="module" src="cpudiag-page.js"></script>
   </head>
   <body>
@@ -146,11 +142,12 @@
     <section id="controls">
       <div class="controlPanel">
         <button id="btnReset">Reset</button>
-        <button id="btnRunAll">Run All (Clocked)</button>
-        <button id="btnExecuteNext">Execute Next Single Instruction</button>
-        <button id="btnRunAllUnclocked">Execute Remainder of Instructions (Unclocked)</button>
+        <button id="btnRunAll">Run Clocked</button>
+        <input id="txtClockSpeed" placeholder="Clockspeed (MS)"/>
+        <button id="btnRunAllUnclocked">Run Unclocked</button>
+        <button id="btnExecuteNext">Run Next Single Instruction</button>
         <button id="btnRunToBreakPoint">Run to Breakpoint:</button>
-        <input id="txtBreakpoint"/>
+        <input id="txtBreakpoint" placeholder="Address in 0xNN format..."/>
       </div>
     </section>
     <section id="execution">
