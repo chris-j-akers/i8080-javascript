@@ -162,6 +162,21 @@ function resetFields() {
     fieldsTableElem.decTicks.textContent = '00';
 }
 
+const ramTableElem = {
+    bytesUsed: document.getElementById('tdBytesUsed'),
+    ramTotal: document.getElementById('tdRAMTotal'),
+}
+
+function updateRAMFields(bytesUsed, ramTotal) {
+    ramTableElem.bytesUsed.textContent = bytesUsed;
+    ramTableElem.ramTotal.textContent = ramTotal;
+}
+
+function resetRAMFields() {
+    ramTableElem.bytesUsed.textContent = '00000';
+    ramTableElem.ramTotal.textContent = '00000';
+}
+
 const buttons = {
     btnExecuteNext: document.getElementById('btnExecuteNext').addEventListener( 'click', () => {
         _cpuDiagWebWorker.postMessage({Type: 'EXECUTE_NEXT'});
@@ -203,9 +218,8 @@ inputs.txtClockSpeed.value = 30;
 
 // We use a web-worker to control the computer we're emulating because it allows
 // us to artifically slow down the clock speed without locking up the browser by
-// using the setInterval() call. It also keeps the UI separate from the actual
+// using the setInterval() call. It also decouples the UI code from the actual
 // emulator.
-
 const _cpuDiagWebWorker = new Worker('cpudiag-worker.js', { type: "module" });
 _cpuDiagWebWorker.onmessage = onMessage;
 
@@ -225,13 +239,13 @@ function onMessage(e) {
             resetFields();
             resetFlagsFields();
             resetRegisterFields();
+            resetRAMFields();
             _cpuDiagWebWorker.postMessage({Type: 'GET_MEMORY_MAP'});
-
             break;
         case 'EXECUTE_ALL_UNCLOCKED_ACK':
         case 'EXECUTE_ALL_CLOCKED_ACK':
         case 'EXECUTE_NEXT_ACK':
-            outputs.divTracePanel.textContent += `0x${msg.LastInstructionAddress.toString(16)}\t${msg.LastInstructionDisassembly}\n`;
+            outputs.divTracePanel.textContent += `0x${msg.LastInstructionAddress.toString(16).padStart(4,'0')}\t${msg.LastInstructionDisassembly}\n`;
             outputs.divTracePanel.scrollTop = outputs.divTracePanel.scrollHeight;
             if (typeof msg.ConsoleOut != 'undefined') {
                 outputs.divConsolePanel.textContent += `${msg.ConsoleOut}\n`;
@@ -239,6 +253,9 @@ function onMessage(e) {
             updateRegisterFields(msg.CPUState.Registers);
             updateFlagsFields(msg.CPUState.Flags);
             updateFields(msg.LastInstructionTicks, msg.CPUState);
+            if (typeof msg.RAMBytesUsed != 'undefined') {
+                updateRAMFields(msg.RAMBytesUsed, msg.RAMTotal);
+            }
             break;
         case 'GET_MEMORY_MAP_ACK':
             outputs.divRAMPanel.textContent = '';

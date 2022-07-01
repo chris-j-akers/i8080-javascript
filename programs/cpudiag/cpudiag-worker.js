@@ -80,7 +80,7 @@ function executeNextInstruction() {
 }
 
 /**
- * Listener for the postMessage() event posted from the main page (browser).
+ * Listener for the postMessage() event posted from the main page.
  * 
  * @param {Event} e The event passed in by the postMessage() from the browser.
  */
