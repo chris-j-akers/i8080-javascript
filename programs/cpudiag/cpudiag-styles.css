@@ -1,3 +1,9 @@
+/* * { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing:border-box; 
+} */
+
 table.diagnosticTable {
   font-family: courier;
   font-size: 12px;
@@ -55,6 +61,13 @@ div.outputPanel {
   width: 350px;
 }
 
+.consolePanel {
+  background-color: #000000;
+  border-color: black;
+  
+
+  color: lime;
+}
 
 
 

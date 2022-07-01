@@ -9,6 +9,7 @@
     <script type="module" src="cpudiag-page.js"></script>
   </head>
   <body>
+    <p>8080 Assembly Source Code: <a href="http://www.emulator101.com/files/cpudiag.asm">here</a></p>
     <section id="diagnostics">
       <div class="diagnosticsPanel">
         <div class="panel registersPanel">
@@ -142,22 +143,37 @@
     <section id="controls">
       <div class="controlPanel">
         <button id="btnReset">Reset</button>
-        <button id="btnRunAll">Run Clocked</button>
+        <button id="btnStop">Stop</button>
+        <button id="btnRunAll">Run Clocked at Speed:</button>
         <input id="txtClockSpeed" placeholder="Clockspeed (MS)"/>
         <button id="btnRunAllUnclocked">Run Unclocked</button>
-        <button id="btnExecuteNext">Run Next Single Instruction</button>
+        <button id="btnExecuteNext">Step Single Instruction</button>
         <button id="btnRunToBreakPoint">Run to Breakpoint:</button>
         <input id="txtBreakpoint" placeholder="Address in 0xNN format..."/>
       </div>
     </section>
-    <section id="execution">
-      <h2>Execution</h3>
+    <section id = "execution">
       <div class="executionPanel">
-        <div class="outputPanel" id="tracePanel">
+        <div id="trace">
+          <div id="traceTitle">
+            <h2>Trace</h2>
+          </div>
+          <div class="outputPanel" id = "tracePanel">
+          </div>
         </div>
-        <div class="outputPanel" id="consolePanel">
+        <div id="console">
+          <div id="consoleTitle">
+            <h2>Console</h2>
+          </div>
+          <div class="outputPanel consolePanel" id ="consolePanel">
+          </div>
         </div>
-        <div class="outputPanel" id="ramPanel">
+        <div id="ram">
+          <div id="ramTitle">
+            <h2>RAM</h2>
+          </div>
+          <div class="outputPanel" id ="ramPanel">
+          </div>
         </div>
       </div>
     </section>

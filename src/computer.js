@@ -62,12 +62,12 @@ class Computer {
      * Instruct the CPU to execute the next instruction at the current program
      * counter.
      *
-     * @returns Disassemble of line that was executed (with corresponding mem
-     * addr)
+     * @returns Enriches CPU return object with memory-related stats.
      */
     ExecuteNextInstruction() {
         if (this.CPUState.Halt == false) {
-            return this._cpu.ExecuteNextInstruction();
+            const newState = this._cpu.ExecuteNextInstruction();
+            return { ...newState, RAMTotal: this._mmu.Total, RAMBytesUsed: this._mmu.BytesUsed};
         }
     }
 

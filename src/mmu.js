@@ -2,7 +2,7 @@
 
 class MMU {
     constructor() {
-        this._ram = new Array(2**16);
+        this._ram = new Array(65536);
         this._bus = null;
         this._bytesUsed = 0;
     }
@@ -15,12 +15,16 @@ class MMU {
         return this._ram;
     }
 
+    get Total() {
+        return this._ram.length;
+    }
+
     ConnectBus(bus) {
         this._bus = bus;
     }
 
     Reset() {
-        this._ram = new Array(2**16);
+        this._ram = new Array(65536);
         this._bytesUsed = 0;
     }
 
