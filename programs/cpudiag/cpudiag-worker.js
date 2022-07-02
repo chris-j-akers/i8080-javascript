@@ -5,31 +5,33 @@ import { Code } from './cpudiag-code.js';
 
 // Global Variables
 const _computer = new Computer();
+
+// CPUDDiag start address
 const _startAddr = 0x100;
 
 // When the 'Run Clocked' buttons is clicked, the emulation uses calls to
 // setInterval() so we can slow down and more closely emulate the speed of a
 // computer running 8080. We need to keep the ID of the Interval, though, so we
 // can delete it when the program ends. If not, then it just keeps trying to run
-// code that doesn't exist.
+// code that doesn't exist. The id needs to be global, to keep it in scope for
+// subsequent calls.
 let _clockedRunIntervalId;
 
 /**
- * Switch the computer off and on again!
+ * Switch the computer off and on again, and automatically load the program.
  */
 function reset() {
     _computer.Stop();
     _computer.Reset();
     const bytesLoaded = _computer.LoadProgram(Code, _startAddr);
-    postMessage({Type: 'RESET_ACK', ConsoleOut: `LOADED ${bytesLoaded} BYTES STARTING AT ADDRESS 0x${_startAddr.toString(16)}`});
+    postMessage({Type: 'reset-complete', ConsoleOut: `LOADED ${bytesLoaded} BYTES STARTING AT ADDRESS 0x${_startAddr.toString(16)}`});
 }
 
 /**
- * Helper function to emulate the C_WRITESTR CP/M syscall which simply
- * writes text to screen.
+ * Emulate the C_WRITESTR CP/M syscall which simply writes text to screen.
  *
- * @returns $ terminated string located at 16-bit addr stored in Registers D
- * and E
+ * @returns `$` terminated string located at the 16-bit address stored in
+ * Registers D and E
  */
  function _getMemString() {
     let straddr = _computer.CPUState.Registers.D << 8 | _computer.CPUState.Registers.E;
@@ -45,8 +47,8 @@ function reset() {
 
 /**
  * A wrapper around the Computer.ExecuteNextInstruction(). The CPUDIAG program
- * uses a couple of CP/M syscalls to write to the screen. These have to be
- * emulated, here.
+ * uses a couple of CP/M syscalls to write to the screen. These are emulated,
+ * here. The return objects match the calls to Computer.ExecuteNextInstruction()
  *
  * If syscalls are not being used the call is passed directly to
  * Computer.ExecuteNextInstruction().
@@ -59,24 +61,92 @@ function executeNextInstruction() {
             switch(_computer.CPUState.Registers.C) {
                 case 0:
                     return { Disassemble: 'HALT', 
-                                Ticks: _computer.DirectExecOpCode('HALT') };
+                                Ticks: _computer.DirectExecOpCode('HALT'), 
+                                CPUState: _computer.CPUState };
                 case 9: 
                     const outputStr = _getMemString();
                     return { LastInstructionDisassembly: '0005\tC_WRITESTR (CP/M SYSCALL)\n    \tRET', 
                                 LastInstructionTicks: _computer.DirectExecOpCode('RET'), 
-                                ConsoleOut: outputStr };
+                                ConsoleOut: outputStr,
+                                CPUState: _computer.CPUState };
                 case 2:
                     return { LastInstructionDisassembly: '0005\tC_WRITE (CP/M SYSCALL)\n    \tRET', 
                                 LastInstructionTicks: _computer.DirectExecOpCode('RET'), 
-                                ConsoleOut: String.fromCharCode(_computer.CPUState.Registers.E) };
+                                ConsoleOut: String.fromCharCode(_computer.CPUState.Registers.E),
+                                CPUState: _computer.CPUState };
             }
             return;
         case 0:
             return { LastInstructionDisassembly: 'HALT', 
-                        LastInstructionTicks: _computer.DirectExecOpCode('HALT') };
+                        LastInstructionTicks: _computer.DirectExecOpCode('HALT'),
+                        CPUState: _computer.CPUState };
         default:
             return _computer.ExecuteNextInstruction();
     }
+}
+
+/**
+ * Run the next instruction and return
+ */
+function stepSingleInstruction() {
+    if (_computer.CPUState.Halt == false) {
+        const addr = _computer.CPUState.ProgramCounter;
+        const newState = executeNextInstruction();
+        postMessage({Type: 'step-single-instruction-complete', ...newState, LastInstructionAddress: addr });
+    }
+}
+
+/**
+ * Run all program instructions, but with an interval between each one. This
+ * allows us to slow down the emulator to a more realistic speed for 8080-based
+ * computers.
+ *
+ * @param {number} clockSpeed Number of ms between each program instruction
+ */
+function runAllClocked(clockSpeed) {
+    _clockedRunIntervalId = setInterval( () => {
+        if (_computer.CPUState.Halt == false) {
+            const addr = _computer.CPUState.ProgramCounter;
+            const newState = executeNextInstruction();
+            postMessage({Type: 'run-all-clocked-complete', ...newState, LastInstructionAddress: addr });
+        }
+        else {
+            clearInterval(_clockedRunIntervalId)
+        }
+    }, clockSpeed);
+}
+
+/**
+ * Runs through program without slowing down.
+ * 
+ * @param {number} breakpointAddr Address of break-point (optional)
+ */
+function runAllUnClocked(breakpointAddr =-1) {
+    let traceOutputStr = '';
+    let consoleOutputStr = '';
+    let lastInstructionAddr;
+    let newState;
+    while(_computer.CPUState.Halt == false && _computer.CPUState.ProgramCounter != breakpointAddr) {
+        lastInstructionAddr = _computer.CPUState.ProgramCounter;
+        newState = executeNextInstruction();
+        if (newState.ConsoleOut != undefined) {
+            consoleOutputStr += newState.ConsoleOut;
+        }
+        traceOutputStr += `0x${lastInstructionAddr.toString(16).padStart(4,'0')}\t${newState.LastInstructionDisassembly}\n`;
+    }
+    postMessage({Type: 'run-all-unclocked-complete', Trace: traceOutputStr, ...newState, LastInstructionAddress: lastInstructionAddr, ConsoleOut: consoleOutputStr });
+
+}
+
+/**
+ * Get a dump of RAM contents
+ */
+function getRAMDump() {
+    let str = '';
+    for (let i = 0; i<65536; i++) {
+        str += `0x${i.toString(16).padStart(4,'0')}\t0x${_computer.Bus.ReadRAM(i).toString(16).padStart(2,'0')}\n`;
+    }
+    postMessage({Type: 'get-ram-dump-complete', MemoryMap: str });
 }
 
 /**
@@ -86,51 +156,27 @@ function executeNextInstruction() {
  */
 function onMessage(e) {
     const msg = e.data;
-    let addr = 0x0;
     switch(msg.Type) {
-        case 'RESET':
+        case 'reset':
             reset();
             break;
-        case 'EXECUTE_NEXT':
-            const addr = _computer.CPUState.ProgramCounter;
-            const newState = executeNextInstruction();
-            postMessage({Type: 'EXECUTE_NEXT_ACK', ...newState, LastInstructionAddress: addr, CPUState: _computer.CPUState });
+        case 'step-single-instruction':
+            stepSingleInstruction();
             break;
-        case 'EXECUTE_ALL_CLOCKED':
-                _clockedRunIntervalId = setInterval( () => {
-                    if (_computer.CPUState.Halt == false) {
-                        const addr = _computer.CPUState.ProgramCounter;
-                        const newState = executeNextInstruction();
-                        postMessage({Type: 'EXECUTE_ALL_CLOCKED_ACK', ...newState, LastInstructionAddress: addr, CPUState: _computer.CPUState });
-                    }
-                    else {
-                        clearInterval(_clockedRunIntervalId)
-                    }
-                }, msg.ClockSpeed);
+        case 'run-all-clocked':
+            runAllClocked(msg.ClockSpeed);
             break;
-        case 'EXECUTE_ALL_UNCLOCKED':
-            while(_computer.CPUState.Halt == false) {
-                const addr = _computer.CPUState.ProgramCounter;
-                const newState = executeNextInstruction();
-                postMessage({Type: 'EXECUTE_ALL_UNCLOCKED_ACK', ...newState, LastInstructionAddress: addr, CPUState: _computer.CPUState });
-            }
+        case 'run-all-unclocked':
+            runAllUnClocked();
             break;
-        case 'RUN_TO_BREAKPOINT':
-            while(_computer.CPUState.Halt == false && _computer.CPUState.ProgramCounter != msg.BreakpointAddress) {
-                const addr = _computer.CPUState.ProgramCounter;
-                const newState = executeNextInstruction();
-                postMessage({Type: 'EXECUTE_ALL_UNCLOCKED_ACK', ...newState, LastInstructionAddress: addr, CPUState: _computer.CPUState });
-            }
+        case 'run-to-breakpoint':
+            runAllUnClocked(msg.BreakpointAddress);
             break;
-        case 'STOP':
+        case 'stop':
             clearInterval(_clockedRunIntervalId);
             break;
-        case 'GET_MEMORY_MAP':
-            let str = '';
-            for (let i = 0; i<65536; i++) {
-                str += `0x${i.toString(16).padStart(4,'0')}\t0x${_computer.Bus.ReadRAM(i).toString(16).padStart(2,'0')}\n`;
-            }
-            postMessage({Type: 'GET_MEMORY_MAP_ACK', MemoryMap: str });
+        case 'get-ram-dump':
+            getRAMDump();
             break;
         default:
             console.log('Invalid message sent to Worker.');
