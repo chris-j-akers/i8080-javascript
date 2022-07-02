@@ -1630,6 +1630,61 @@ class i8080 {
         return 11;
     }
 
+    // INTERRUPT FLIP-FLOP INSTRUCTIONS
+    // --------------------------------
+
+    /**
+     * Enable interrupts.
+     * 
+     * @returns Number of clock cycles used
+     */
+    EI() {
+        this._interruptsEnabled = true;
+        ticks += 4;
+        return 4;
+    }
+
+    /**
+     * Disable interrupts.
+     * 
+     * @returns Number of clock cycles used
+     */
+    DI() {
+        this._interruptsEnabled = false;
+        ticks += 4;
+        return 4;
+    }
+
+    // INPUT/OUTPUT INSTRUCTIONS
+    // -------------------------
+
+    /**
+     * A byte is read from the input device with id `deviceID` and loaded into
+     * the accumulator.
+     *
+     * @param {number} deviceID Id of device to receive data from
+     * @returns 
+     */
+    IN(deviceID) {
+        this._registers.A = this._bus.ReadDevice(deviceID);
+        this.clock += 10;
+        return 10;
+    }
+
+    /**
+     * Contents of the accumulator are sent to the output device with id
+     * `deviceID`.
+     *
+     * @param {number} deviceID Id of device to send to
+     * @returns 
+     */
+    OUT(deviceID) {
+        this._bus.WriteDevice(deviceID, this._registers.A);
+        this._clock += 10;
+        return 10;
+    }
+
+
     // HALT INSTRUCTION
     // ----------------
 
@@ -1676,10 +1731,18 @@ class i8080 {
                 disassemble = `NOP`;
                 ticks = this.NOP();
                 break;
+            case 0xDB:
+                disassemble = `IN\t0x${this._peekNextByte().toString(16)}`
+                ticks = this.IN(this._getNextByte());
+                break;
+            case 0xD3:
+                disassemble = `OUT\t0x${this._peekNextByte().toString(16)}`
+                ticks = this.OUT(this._getNextByte());
+                break;
             case 0x27:
                 disassemble = `DAA`;
                 ticks = this.DAA();
-                break;
+                break;                
             case 0xC7:
             case 0xD7:
             case 0xE7:
@@ -1689,7 +1752,7 @@ class i8080 {
             case 0xEF:
             case 0xFF:  
                 // Bits 3-5 of the OpCode hold the jump address
-                disassemble = `RST\t$0x{(opcode & 0x38).toString(16)}`;
+                disassemble = `RST\t0x${(opcode & 0x38).toString(16)}`;
                 ticks = this.RST(opcode & 0x38);
                 break;
             case 0xFE:
@@ -2625,7 +2688,7 @@ class i8080 {
                 ticks = this.ORI(this._getNextByte());
                 break;
         }
-        return { LastInstructionDisassembly: disassemble, LastInstructionTicks: ticks }; 
+        return { LastInstructionDisassembly: disassemble, LastInstructionTicks: ticks, CPUState: this.State }; 
     }
 }
 

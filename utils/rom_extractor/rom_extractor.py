@@ -21,13 +21,13 @@ def extract(rom_path):
         out_file.write('export { Code };')
 
 def usage():
-    print('USAGE: python3 rom_extractor.py [path-to-rom-file] [output-directory]')
+    print('USAGE: python3 rom_extractor.py [path-to-rom-file]')
 
 def main():
     if len(sys.argv) != 3:
         usage()
         exit()
-    extract(sys.argv[1], sys.argv[2])
+    extract(sys.argv[1])
 
 if __name__ == '__main__':
     main()

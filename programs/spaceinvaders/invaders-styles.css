@@ -1,0 +1,124 @@
+/* * { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing:border-box; 
+} */
+
+table.diagnosticTable {
+  font-family: courier;
+  font-size: 12px;
+  background-color: #FFFFFF;
+  border-collapse: collapse;
+  border-width: 1px;
+  border-color: #000000;
+  border-style: solid;
+  color: #000000;
+
+}
+
+div.panel {
+  margin-right: 10px;
+}
+
+table.diagnosticTable thead {
+  background-color: #7EA8F8;
+  border-bottom: 1px solid #000000;  
+}
+
+table.diagnosticTable td {
+  border-bottom: 1px solid #000000;
+  border-right: 1px solid #000000;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+div.diagnosticsPanel {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: left; 
+  margin-bottom: 20px;
+}
+
+div.executionPanel {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: left; 
+}
+
+
+div.outputPanel {
+  margin-right: 10px;
+  white-space: pre;
+  font-family: courier;
+  font-size: 12px;
+  padding: 0px;
+  border: solid;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 800px;
+  width: 350px;
+}
+
+.consolePanel {
+  background-color: #000000;
+  border-color: black;
+  
+
+  color: lime;
+}
+
+
+
+
+/* .miscDiagLayout {
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+}
+
+.output {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: left;
+}
+
+.disassemble {
+  white-space: pre;
+  font-family: courier;
+  font-size: 12px;
+  margin: 10px;
+  padding: 0px;
+  border: solid;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 800px;
+  width: 500px;
+}
+
+.machineOutput {
+  white-space: pre;
+  font-family: courier;
+  font-size: 12px;
+  margin: 10px;
+  width: 500px;
+  border: solid;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 800px;
+}
+
+.ramOutput {
+  white-space: pre;
+  font-family: courier;
+  font-size: 12px;
+  margin: 10px;
+  width: 500px;
+  border: solid;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 800px;
+} */

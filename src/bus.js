@@ -25,6 +25,10 @@
     ReadRAM(addr) {
         return this.mmu.Read(addr);
     }
+
+    WriteDevice(id, val) {
+        
+    }
 }
 
 export { Bus };
