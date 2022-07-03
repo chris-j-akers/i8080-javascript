@@ -209,6 +209,9 @@ const buttonElems = {
         _CPUDiagWorker.postMessage({Type: 'run-to-breakpoint', BreakpointAddress: breakPointAddr})
     }),
     btnReset: document.getElementById('btnReset').addEventListener( 'click', () => {
+        _CPUDiagWorker.terminate();
+        _CPUDiagWorker = new Worker('cpudiag-worker.js', { type: "module" });
+        _CPUDiagWorker.onmessage = onMessage;
         _CPUDiagWorker.postMessage({Type: 'reset'});
     }),
     btnRunAllUnclocked: document.getElementById('btnRunAllUnclocked').addEventListener( 'click', () => {
@@ -239,7 +242,7 @@ inputElems.txtClockSpeed.value = 30;
 // artifically slow down the clock speed without locking up the browser by using
 // the setInterval() call. It also decouples the UI code from the actual
 // emulator.
-const _CPUDiagWorker = new Worker('cpudiag-worker.js', { type: "module" });
+let _CPUDiagWorker = new Worker('cpudiag-worker.js', { type: "module" });
 _CPUDiagWorker.onmessage = onMessage;
 
 /**

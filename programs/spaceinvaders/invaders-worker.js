@@ -15,13 +15,6 @@ let _clockedRunIntervalId;
 
 /**
  * Switch the computer off and on again, and automatically load the program.
- * 
- * Program is loaded in following chunks
- * 
- *  // $0000-$07ff:    invaders.h         
- *  // $0800-$0fff:    invaders.g         
- *  // $1000-$17ff:    invaders.f         
- *  // $1800-$1fff:    invaders.e
  */
 function reset() {
     _computer.Stop()

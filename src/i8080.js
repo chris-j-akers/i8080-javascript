@@ -1675,11 +1675,11 @@ class i8080 {
      * Contents of the accumulator are sent to the output device with id
      * `deviceID`.
      *
-     * @param {number} deviceID Id of device to send to
+     * @param {number} port Id of device to send to
      * @returns 
      */
-    OUT(deviceID) {
-        this._bus.WriteDevice(deviceID, this._registers.A);
+    OUT(port) {
+        this._bus.WriteDevice(port, this._registers.A);
         this._clock += 10;
         return 10;
     }

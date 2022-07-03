@@ -244,7 +244,6 @@ inputElems.txtClockSpeed.value = 30;
 // the setInterval() call. It also decouples the UI code from the actual
 // emulator.
 let _invadersWorker = new Worker('invaders-worker.js', { type: "module" });
-
 _invadersWorker.onmessage = onMessage;
 
 /**

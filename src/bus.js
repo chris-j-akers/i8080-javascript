@@ -6,28 +6,37 @@
  */
  class Bus {
     constructor() {
-        this.mmu = null;
-        this.cpu = null;
+        this._mmu = null;
+        this._cpu = null;
+        this._devices = [];
+    }
+
+    ConnectDevice(port, device) {
+        this._devices[port] = device;
     }
 
     ConnectMMU(mmu) {
-        this.mmu = mmu;
+        this._mmu = mmu;
     }
 
     ConnectCPU(cpu) {
-        this.cpu = cpu;
+        this._cpu = cpu;
     }
 
     WriteRAM(val, addr) {
-        this.mmu.Write(val, addr);
+        this._mmu.Write(val, addr);
     }
 
     ReadRAM(addr) {
-        return this.mmu.Read(addr);
+        return this._mmu.Read(addr);
     }
 
-    WriteDevice(id, val) {
-        
+    WriteDevice(port, val) {
+        this._devices[port].Write(port, val);
+    }
+
+    ReadDevice(port) {
+        return this._devices[port].Read(port);
     }
 }
 

@@ -7,7 +7,6 @@ class CPUDiagComputer extends Computer {
 
     constructor() {
         super();
-        this._clockedRunIntervalId = null;
     }
 
     LoadProgram() {
