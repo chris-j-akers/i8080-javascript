@@ -1,9 +1,7 @@
 'use strict'
 
-import { InvadersComputer } from './invaders-computer.js';
-
 // Global Variables
-const _computer = new InvadersComputer();
+let _computer;
 
 // When the 'Run Clocked' buttons is clicked, the emulation uses calls to
 // setInterval() so we can slow down and more closely emulate the speed of a
@@ -13,25 +11,26 @@ const _computer = new InvadersComputer();
 // subsequent calls.
 let _clockedRunIntervalId;
 
+
+function initialise(computer) {
+    _computer = computer;    
+}
+
 /**
- * Switch the computer off and on again, and automatically load the program.
- * 
- * Program is loaded in following chunks
- * 
- *  // $0000-$07ff:    invaders.h         
- *  // $0800-$0fff:    invaders.g         
- *  // $1000-$17ff:    invaders.f         
- *  // $1800-$1fff:    invaders.e
+ * Switch the computer off and on again
  */
 function reset() {
-    _computer.Stop()
+    _computer.Stop();
     _computer.Reset();
     postMessage({Type: 'reset-complete'});
 }
 
+/**
+ * Load the CPUDIag code into memory
+ */
 function reload() {
-    const bytesLoaded =  _computer.LoadProgram();
-    postMessage({Type: 'program-load-complete', ConsoleOut: `LOADED ${bytesLoaded} BYTES`});
+    const bytesLoaded = _computer.LoadProgram();
+    postMessage({Type: 'program-load-complete', ConsoleOut: `LOADED ${bytesLoaded} BYTES.`});
 }
 
 /**
@@ -49,7 +48,7 @@ function stepSingleInstruction() {
  *
  * @param {number} clockSpeed Number of ms between each program instruction
  */
- function runAllClocked(clockSpeed) {
+function runAllClocked(clockSpeed) {
     _clockedRunIntervalId = setInterval( () => {
         const state = _computer.ExecuteNextInstruction();
         if (state.CPUState.Halt == true) {
@@ -64,7 +63,7 @@ function stepSingleInstruction() {
  * 
  * @param {number} breakpointAddr Address of break-point (optional)
  */
- function runAllUnClocked(breakpointAddr =-1) {
+function runAllUnClocked(breakpointAddr =-1) {
     let traceOutputStr = '';
     let consoleOutputStr = '';
     let state;
@@ -95,6 +94,8 @@ function getRAMDump() {
 function onMessage(e) {
     const msg = e.data;
     switch(msg.Type) {
+        case 'initialise':
+            initialise();
         case 'reset':
             reset();
             reload();

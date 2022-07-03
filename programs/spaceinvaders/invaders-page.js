@@ -209,7 +209,11 @@ const buttonElems = {
         _invadersWorker.postMessage({Type: 'run-to-breakpoint', BreakpointAddress: breakPointAddr})
     }),
     btnReset: document.getElementById('btnReset').addEventListener( 'click', () => {
+        _invadersWorker.terminate();
+        _invadersWorker = new Worker('invaders-worker.js', { type: "module" });
+        _invadersWorker.onmessage = onMessage;
         _invadersWorker.postMessage({Type: 'reset'});
+
     }),
     btnRunAllUnclocked: document.getElementById('btnRunAllUnclocked').addEventListener( 'click', () => {
         _invadersWorker.postMessage({Type: 'run-all-unclocked'});
@@ -239,7 +243,8 @@ inputElems.txtClockSpeed.value = 30;
 // artifically slow down the clock speed without locking up the browser by using
 // the setInterval() call. It also decouples the UI code from the actual
 // emulator.
-const _invadersWorker = new Worker('invaders-worker.js', { type: "module" });
+let _invadersWorker = new Worker('invaders-worker.js', { type: "module" });
+
 _invadersWorker.onmessage = onMessage;
 
 /**
@@ -258,19 +263,20 @@ function onMessage(e) {
             outputElems.divConsolePanel.textContent = '';
             outputElems.divTracePanel.textContent = '';
             outputElems.divRAMPanel.textContent = '';
-            outputElems.divConsolePanel.textContent += msgData.ConsoleOut;
             resetAllFields();
             _invadersWorker.postMessage({Type: 'get-ram-dump'});
             return;
+        case 'program-load-complete':
+            outputElems.divConsolePanel.textContent += msgData.ConsoleOut;
+            return;
         case 'run-all-unclocked-complete':
+        case 'run-to-breakpoint-complete':
             outputElems.divTracePanel.textContent += msgData.Trace;
-            //outputElems.divTracePanel.scrollTop = outputElems.divTracePanel.scrollHeight;
             break;
         case 'run-all-clocked-complete':
-        case 'run-to-breakpoint-complete':
         case 'step-single-instruction-complete':
             outputElems.divTracePanel.textContent += `0x${msgData.LastInstructionAddress.toString(16).padStart(4,'0')}\t${msgData.LastInstructionDisassembly}\n`;
-            //outputElems.divTracePanel.scrollTop = outputElems.divTracePanel.scrollHeight;
+            outputElems.divTracePanel.scrollTop = outputElems.divTracePanel.scrollHeight;
             break;
         }
         refreshUI(msgData);

@@ -47,7 +47,6 @@ class Computer {
     get CPUState() {
         return this._cpu.State;
     }
-
     
     /**
      * Call an internal CPU OpCode directly.

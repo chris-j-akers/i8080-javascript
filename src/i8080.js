@@ -1717,8 +1717,11 @@ class i8080 {
         // Diagnostic info to return
         let disassemble;
         let ticks;
+        const opcodeAddress = this._programCounter;
 
         const opcode = this._getNextByte();
+        // Get the address of this OpCode so we can return it as part of the
+        // diganostic information.
         switch(opcode) {
             case 0x00:
             case 0x08:
@@ -2688,7 +2691,10 @@ class i8080 {
                 ticks = this.ORI(this._getNextByte());
                 break;
         }
-        return { LastInstructionDisassembly: disassemble, LastInstructionTicks: ticks, CPUState: this.State }; 
+        return { LastInstructionDisassembly: disassemble, 
+                 LastInstructionTicks: ticks, 
+                 LastInstructionAddress: opcodeAddress,
+                 CPUState: this.State }; 
     }
 }
 

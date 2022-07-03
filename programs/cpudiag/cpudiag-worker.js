@@ -1,13 +1,9 @@
 'use strict'
 
-import { Computer } from './computer.js';
-import { Code } from './cpudiag-code.js';
+import { CPUDiagComputer } from './cpudiag-computer.js'
 
 // Global Variables
-const _computer = new Computer();
-
-// CPUDDiag start address
-const _startAddr = 0x100;
+const _computer = new CPUDiagComputer();
 
 // When the 'Run Clocked' buttons is clicked, the emulation uses calls to
 // setInterval() so we can slow down and more closely emulate the speed of a
@@ -18,82 +14,28 @@ const _startAddr = 0x100;
 let _clockedRunIntervalId;
 
 /**
- * Switch the computer off and on again, and automatically load the program.
+ * Switch the computer off and on again
  */
 function reset() {
     _computer.Stop();
     _computer.Reset();
-    const bytesLoaded = _computer.LoadProgram(Code, _startAddr);
-    postMessage({Type: 'reset-complete', ConsoleOut: `LOADED ${bytesLoaded} BYTES STARTING AT ADDRESS 0x${_startAddr.toString(16)}`});
+    postMessage({Type: 'reset-complete'});
 }
 
 /**
- * Emulate the C_WRITESTR CP/M syscall which simply writes text to screen.
- *
- * @returns `$` terminated string located at the 16-bit address stored in
- * Registers D and E
+ * Load the CPUDIag code into memory
  */
- function _getMemString() {
-    let straddr = _computer.CPUState.Registers.D << 8 | _computer.CPUState.Registers.E;
-    let ret_str = ''
-    let next_char = String.fromCharCode(_computer.Bus.ReadRAM(straddr));
-    while(next_char != '$') {
-        ret_str += next_char;
-        straddr++;
-        next_char = String.fromCharCode(_computer.Bus.ReadRAM(straddr))
-    }
-    return ret_str;
-}
-
-/**
- * A wrapper around the Computer.ExecuteNextInstruction(). The CPUDIAG program
- * uses a couple of CP/M syscalls to write to the screen. These are emulated,
- * here. The return objects match the calls to Computer.ExecuteNextInstruction()
- *
- * If syscalls are not being used the call is passed directly to
- * Computer.ExecuteNextInstruction().
- *
- * @returns Literal object with data about the instruction just executed.
- */
-function executeNextInstruction() {
-    switch(_computer.CPUState.ProgramCounter) {
-        case 5:
-            switch(_computer.CPUState.Registers.C) {
-                case 0:
-                    return { Disassemble: 'HALT', 
-                                Ticks: _computer.DirectExecOpCode('HALT'), 
-                                CPUState: _computer.CPUState };
-                case 9: 
-                    const outputStr = _getMemString();
-                    return { LastInstructionDisassembly: '0005\tC_WRITESTR (CP/M SYSCALL)\n    \tRET', 
-                                LastInstructionTicks: _computer.DirectExecOpCode('RET'), 
-                                ConsoleOut: outputStr,
-                                CPUState: _computer.CPUState };
-                case 2:
-                    return { LastInstructionDisassembly: '0005\tC_WRITE (CP/M SYSCALL)\n    \tRET', 
-                                LastInstructionTicks: _computer.DirectExecOpCode('RET'), 
-                                ConsoleOut: String.fromCharCode(_computer.CPUState.Registers.E),
-                                CPUState: _computer.CPUState };
-            }
-            return;
-        case 0:
-            return { LastInstructionDisassembly: 'HALT', 
-                        LastInstructionTicks: _computer.DirectExecOpCode('HALT'),
-                        CPUState: _computer.CPUState };
-        default:
-            return _computer.ExecuteNextInstruction();
-    }
+function reload() {
+    const bytesLoaded = _computer.LoadProgram();
+    postMessage({Type: 'program-load-complete', ConsoleOut: `LOADED ${bytesLoaded} BYTES.`});
 }
 
 /**
  * Run the next instruction and return
  */
 function stepSingleInstruction() {
-    if (_computer.CPUState.Halt == false) {
-        const addr = _computer.CPUState.ProgramCounter;
-        const newState = executeNextInstruction();
-        postMessage({Type: 'step-single-instruction-complete', ...newState, LastInstructionAddress: addr });
-    }
+    const state = _computer.ExecuteNextInstruction();
+    postMessage({Type: 'step-single-instruction-complete', ...state});
 }
 
 /**
@@ -105,37 +47,29 @@ function stepSingleInstruction() {
  */
 function runAllClocked(clockSpeed) {
     _clockedRunIntervalId = setInterval( () => {
-        if (_computer.CPUState.Halt == false) {
-            const addr = _computer.CPUState.ProgramCounter;
-            const newState = executeNextInstruction();
-            postMessage({Type: 'run-all-clocked-complete', ...newState, LastInstructionAddress: addr });
+        const state = _computer.ExecuteNextInstruction();
+        if (state.CPUState.Halt == true) {
+            clearInterval(_clockedRunIntervalId);
         }
-        else {
-            clearInterval(_clockedRunIntervalId)
-        }
+        postMessage({Type: 'run-all-clocked-complete', ...state });
     }, clockSpeed);
 }
 
 /**
- * Runs through program without slowing down.
+ * Blasts through program no artificial slow-down.
  * 
  * @param {number} breakpointAddr Address of break-point (optional)
  */
 function runAllUnClocked(breakpointAddr =-1) {
     let traceOutputStr = '';
     let consoleOutputStr = '';
-    let lastInstructionAddr;
-    let newState;
-    while(_computer.CPUState.Halt == false && _computer.CPUState.ProgramCounter != breakpointAddr) {
-        lastInstructionAddr = _computer.CPUState.ProgramCounter;
-        newState = executeNextInstruction();
-        if (newState.ConsoleOut != undefined) {
-            consoleOutputStr += newState.ConsoleOut;
-        }
-        traceOutputStr += `0x${lastInstructionAddr.toString(16).padStart(4,'0')}\t${newState.LastInstructionDisassembly}\n`;
-    }
-    postMessage({Type: 'run-all-unclocked-complete', Trace: traceOutputStr, ...newState, LastInstructionAddress: lastInstructionAddr, ConsoleOut: consoleOutputStr });
-
+    let state;
+    do {
+        state = _computer.ExecuteNextInstruction();
+        consoleOutputStr += state.ConsoleOut ?? '';
+        traceOutputStr += `0x${state.LastInstructionAddress.toString(16).padStart(4,'0')}\t${state.LastInstructionDisassembly}\n`;
+    } while (state.CPUState.Halt == false && state.CPUState.ProgramCounter != breakpointAddr);
+    postMessage({Type: 'run-all-unclocked-complete', Trace: traceOutputStr, ...state, ConsoleOut: consoleOutputStr });
 }
 
 /**
@@ -159,6 +93,7 @@ function onMessage(e) {
     switch(msg.Type) {
         case 'reset':
             reset();
+            reload();
             break;
         case 'step-single-instruction':
             stepSingleInstruction();
@@ -185,3 +120,4 @@ function onMessage(e) {
 
 self.addEventListener('message', onMessage, false);
 reset();
+reload();

@@ -198,24 +198,24 @@ function refreshUI(msgData) {
 
 const buttonElems = {
     btnExecuteNext: document.getElementById('btnExecuteNext').addEventListener( 'click', () => {
-        _invadersWorker.postMessage({Type: 'step-single-instruction'});
+        _CPUDiagWorker.postMessage({Type: 'step-single-instruction'});
     }),
     btnRunAll: document.getElementById('btnRunAll').addEventListener( 'click', () => {
         const clockSpeed = inputElems.txtClockSpeed.value;
-        _invadersWorker.postMessage({Type: 'run-all-clocked', ClockSpeed: clockSpeed});
+        _CPUDiagWorker.postMessage({Type: 'run-all-clocked', ClockSpeed: clockSpeed});
     }),
     btnRunToBreakPoint: document.getElementById('btnRunToBreakPoint').addEventListener('click', () => {
         const breakPointAddr = inputElems.txtBreakpoint.value;
-        _invadersWorker.postMessage({Type: 'run-to-breakpoint', BreakpointAddress: breakPointAddr})
+        _CPUDiagWorker.postMessage({Type: 'run-to-breakpoint', BreakpointAddress: breakPointAddr})
     }),
     btnReset: document.getElementById('btnReset').addEventListener( 'click', () => {
-        _invadersWorker.postMessage({Type: 'reset'});
+        _CPUDiagWorker.postMessage({Type: 'reset'});
     }),
     btnRunAllUnclocked: document.getElementById('btnRunAllUnclocked').addEventListener( 'click', () => {
-        _invadersWorker.postMessage({Type: 'run-all-unclocked'});
+        _CPUDiagWorker.postMessage({Type: 'run-all-unclocked'});
     }),
     btnStop: document.getElementById('btnStop').addEventListener( 'click', () => {
-        _invadersWorker.postMessage({Type: 'stop'});
+        _CPUDiagWorker.postMessage({Type: 'stop'});
     })
 }
 
@@ -239,15 +239,15 @@ inputElems.txtClockSpeed.value = 30;
 // artifically slow down the clock speed without locking up the browser by using
 // the setInterval() call. It also decouples the UI code from the actual
 // emulator.
-const _invadersWorker = new Worker('cpudiag-worker.js', { type: "module" });
-_invadersWorker.onmessage = onMessage;
+const _CPUDiagWorker = new Worker('cpudiag-worker.js', { type: "module" });
+_CPUDiagWorker.onmessage = onMessage;
 
 /**
  * Event Listener for messages posted by the web worker.
  * 
  * @param {Event} e Data passed from the Web Worker
  */
-function onMessage(e) {
+ function onMessage(e) {
     const msgData = e.data;
     switch(msgData.Type) {
         case 'get-ram-dump-complete':
@@ -258,16 +258,17 @@ function onMessage(e) {
             outputElems.divConsolePanel.textContent = '';
             outputElems.divTracePanel.textContent = '';
             outputElems.divRAMPanel.textContent = '';
-            outputElems.divConsolePanel.textContent += msgData.ConsoleOut;
             resetAllFields();
-            _invadersWorker.postMessage({Type: 'get-ram-dump'});
+            _CPUDiagWorker.postMessage({Type: 'get-ram-dump'});
+            return;
+        case 'program-load-complete':
+            outputElems.divConsolePanel.textContent += msgData.ConsoleOut;
             return;
         case 'run-all-unclocked-complete':
+        case 'run-to-breakpoint-complete':
             outputElems.divTracePanel.textContent += msgData.Trace;
-            outputElems.divTracePanel.scrollTop = outputElems.divTracePanel.scrollHeight;
             break;
         case 'run-all-clocked-complete':
-        case 'run-to-breakpoint-complete':
         case 'step-single-instruction-complete':
             outputElems.divTracePanel.textContent += `0x${msgData.LastInstructionAddress.toString(16).padStart(4,'0')}\t${msgData.LastInstructionDisassembly}\n`;
             outputElems.divTracePanel.scrollTop = outputElems.divTracePanel.scrollHeight;
