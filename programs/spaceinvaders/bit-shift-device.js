@@ -7,6 +7,7 @@ import { Device } from './device.js';
 class BitShiftDevice extends Device {
 
     constructor() {
+        super();
         this._register = 0x0000;
         this._bitShift = 0;
     }
