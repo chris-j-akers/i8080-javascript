@@ -122,6 +122,7 @@ class i8080 {
         this._flags = 0x2;
         this._clock = 0x0;
         this._interruptsEnabled = true;
+        this._interruptWaiting = false;
         this._halt = false;
     }
 
@@ -131,6 +132,7 @@ class i8080 {
     constructor() {
         this.Reset();
         this._bus = null;
+        this._interrupt = null;
     }
 
     /**
@@ -521,6 +523,42 @@ class i8080 {
         const lowByte = this._getNextByte();
         const highByte = this._getNextByte();
         return (highByte << 8) | lowByte;
+    }
+
+    // INTERRUPT PROCESSING
+    // --------------------
+
+    /**
+     * Generates an interrput ready for processing by the main loop.
+     *
+     * Most of the time, interrupts will only ever call an `RST` OpCode, but,
+     * according to documentation, the 8080 will actually accept any OpCode
+     * raised as an interrupt, so this function takes the mnemonic required as a
+     * parameter and calls the neccessary method directly.
+     * 
+     * @param {text} mnemonic Assembler Mnemonic of OpCode (e.g. 'RST')
+     * @param {array} params Array of parameters to be passed to Direct Call
+     */
+    GenerateInterrupt(mnemonic, params) {
+        this._interrupt = { mnemonic, params };
+        this._interruptWaiting = true;
+        this._interruptsEnabled = false;
+    }
+
+    /**
+     * Process the waiting interrupt. The interrupt is stored in the i8080
+     * object in the format of:
+     * 
+     * {
+     *      mnemonic,
+     *      params[],
+     * }
+     * 
+     * */
+    _processInterrupt() {
+        this[`${this._interrupt.mnemonic}`](...this._interrupt.params);
+        this._interruptWaiting = false;
+        this._interruptsEnabled = true;
     }
 
     // OPCODES
@@ -1713,6 +1751,10 @@ class i8080 {
      * simple to read.
      */
     ExecuteNextInstruction() {
+
+        if (this._interruptWaiting) {
+            this._processInterrupt();
+        }
 
         // Diagnostic info to return
         let disassemble;
