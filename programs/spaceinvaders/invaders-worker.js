@@ -80,6 +80,7 @@ function getRAMDump() {
     postMessage({Type: 'get-ram-dump-complete', MemoryMap: str });
 }
 
+
 /**
  * Listener for the postMessage() event posted from the main page.
  * 

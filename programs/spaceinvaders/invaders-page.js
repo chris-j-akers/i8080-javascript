@@ -185,9 +185,7 @@ function resetAllFields() {
 }
 
 function refreshUI(msgData) {
-    if (typeof msgData.ConsoleOut != 'undefined') {
-        outputElems.divConsolePanel.textContent += `${msgData.ConsoleOut}\n`;
-    }
+
     updateRegisterFields(msgData.CPUState.Registers);
     updateFlagsFields(msgData.CPUState.Flags);
     updateFields(msgData.LastInstructionTicks, msgData.CPUState);
@@ -220,7 +218,7 @@ const buttonElems = {
     }),
     btnStop: document.getElementById('btnStop').addEventListener( 'click', () => {
         _invadersWorker.postMessage({Type: 'stop'});
-    })
+    }),
 }
 
 const inputElems = {
@@ -230,11 +228,9 @@ const inputElems = {
 
 const outputElems = {
     divTracePanel: document.getElementById('tracePanel'),
-    divConsolePanel: document.getElementById('consolePanel'),
     divRAMPanel: document.getElementById('ramPanel'),
 }
 
-outputElems.divConsolePanel.textContent = '';
 outputElems.divTracePanel.textContent = '';
 outputElems.divRAMPanel.textContent = '';
 inputElems.txtClockSpeed.value = 30;
@@ -259,14 +255,12 @@ function onMessage(e) {
             outputElems.divRAMPanel.textContent += msgData.MemoryMap;
             return;
         case 'reset-complete':
-            outputElems.divConsolePanel.textContent = '';
             outputElems.divTracePanel.textContent = '';
             outputElems.divRAMPanel.textContent = '';
             resetAllFields();
             _invadersWorker.postMessage({Type: 'get-ram-dump'});
             return;
         case 'program-load-complete':
-            outputElems.divConsolePanel.textContent += msgData.ConsoleOut;
             return;
         case 'run-all-unclocked-complete':
         case 'run-to-breakpoint-complete':

@@ -164,6 +164,7 @@
       <div class="controlPanel">
         <button id="btnReset">Reset</button>
         <button id="btnStop">Stop</button>
+        <button id="btnDraw">Draw</button>
         <button id="btnRunAll">Run Clocked at Speed:</button>
         <input id="txtClockSpeed" placeholder="Clockspeed (MS)"/>
         <button id="btnRunAllUnclocked">Run Unclocked</button>
@@ -185,7 +186,10 @@
           <div id="consoleTitle">
             <h2>Console</h2>
           </div>
-          <div class="outputPanel consolePanel" id ="consolePanel">
+          <div id = "screenDiv">
+            <canvas id = "screenCanvas", width="256", height="224", style="border:1px solid #000000;margin-right: 10px">
+
+            </canvas>
           </div>
         </div>
         <div id="ram">
