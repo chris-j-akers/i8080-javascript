@@ -116,6 +116,7 @@ function onMessage(e) {
         case 'vblank':
             console.log('Vblank Called');
             _computer.GenerateVBlank();
+            postMessage({Type: 'vblank-complete'})
             break;
         case 'request-vram':
             const VRAM = _computer.GetVideoBuffer();

@@ -560,7 +560,6 @@ class i8080 {
     _processInterrupt() {
         this[`${this._interrupt.mnemonic}`](...this._interrupt.params);
         this._interruptWaiting = false;
-        this._interruptsEnabled = true;
     }
 
     // OPCODES

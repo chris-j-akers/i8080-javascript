@@ -1,4 +1,5 @@
 let _videoRAMInterval;
+let _runWithDelayInterval;
 
 const registerTableElem = {
     // Register A
@@ -182,7 +183,7 @@ const buttonElems = {
     }),
     btnRunWithDelay: document.getElementById('btnRunWithDelay').addEventListener( 'click', () => {
         const clockSpeed = inputElems.txtClockSpeed.value;
-        _videoRAMInterval = _invadersWorker.postMessage({Type: 'run-all-clocked', ClockSpeed: clockSpeed});
+        _runWithDelayInterval = _invadersWorker.postMessage({Type: 'run-all-clocked', ClockSpeed: clockSpeed});
 
     }),
     btnRunToBreakPoint: document.getElementById('btnRunToBreakPoint').addEventListener('click', () => {
@@ -201,6 +202,7 @@ const buttonElems = {
     }),
     btnStop: document.getElementById('btnStop').addEventListener( 'click', () => {
         _invadersWorker.postMessage({Type: 'stop'});
+        clearInterval(_runWithDelayInterval);
         clearInterval(_videoRAMInterval);
     }),
     btnVBlank: document.getElementById('btnVBlank').addEventListener('click', () => {
@@ -233,6 +235,7 @@ const inputElems = {
     chkDisableTrace: document.getElementById('chkDisableTrace'),
     txtVblankMS: document.getElementById('txtVblankMS'),
     chkDisableFields: document.getElementById('chkDisableFields'),
+    chkAutoDraw: document.getElementById('chkAutoDraw'),
 }
 
 const outputElems = {
@@ -249,9 +252,9 @@ inputElems.txtClockSpeed.value = 30;
 function drawScreen(videoBuffer) {
     const ctx = outputElems.canvasScreen.getContext("2d");
     let pixelCount = 0;
-    // ctx.fillStyle = 'black';
-    // ctx.fillRect(0, 0, outputElems.canvasScreen.width, outputElems.canvasScreen.height);
-    ctx.fillStyle = 'red';
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, outputElems.canvasScreen.width, outputElems.canvasScreen.height);
+    ctx.fillStyle = 'white';
     let pixel;
     let rectX;
     let rectY;
@@ -310,7 +313,13 @@ function onMessage(e) {
                 outputElems.divTracePanel.scrollTop = outputElems.divTracePanel.scrollHeight;
             }
             break;
+        case 'vblank-complete':
+            if (inputElems.chkAutoDraw.checked) {
+                _invadersWorker.postMessage({Type: 'request-vram'});
+            }
+            return;
         }
+
         if (!chkDisableFields.checked) {
             refreshUI(msgData);
         }
