@@ -249,6 +249,12 @@ outputElems.divRAMPanel.textContent = '';
 inputElems.txtClockSpeed.value = 30;
 
 
+function clearScreen() {
+    const ctx = outputElems.canvasScreen.getContext("2d");
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, outputElems.canvasScreen.width, outputElems.canvasScreen.height);
+}
+
 function drawScreen(videoBuffer) {
     const ctx = outputElems.canvasScreen.getContext("2d");
     let pixelCount = 0;
@@ -278,6 +284,7 @@ function drawScreen(videoBuffer) {
 // emulator.
 let _invadersWorker = new Worker('invaders-worker.js', { type: "module" });
 _invadersWorker.onmessage = onMessage;
+clearScreen();
 
 /**
  * Event Listener for messages posted by the web worker.
@@ -323,6 +330,5 @@ function onMessage(e) {
         if (!chkDisableFields.checked) {
             refreshUI(msgData);
         }
-
 }
 
