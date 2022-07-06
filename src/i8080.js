@@ -540,9 +540,11 @@ class i8080 {
      * @param {array} params Array of parameters to be passed to Direct Call
      */
     GenerateInterrupt(mnemonic, params) {
-        this._interrupt = { mnemonic, params };
-        this._interruptWaiting = true;
-        this._interruptsEnabled = false;
+        if (this._interruptsEnabled == true ) {
+            this._interrupt = { mnemonic, params };
+            this._interruptWaiting = true;
+            this._interruptsEnabled = false;
+        }
     }
 
     /**
@@ -1704,7 +1706,8 @@ class i8080 {
      * @returns 
      */
     IN(deviceID) {
-        this._registers.A = this._bus.ReadDevice(deviceID);
+        this._registers.A = 0x0;
+        //this._registers.A = this._bus.ReadDevice(deviceID);
         this.clock += 10;
         return 10;
     }
@@ -1811,6 +1814,7 @@ class i8080 {
             case 0xFB:
                 disassemble = `EI`;
                 ticks = this._interruptsEnabled = true;
+                break;
             case 0xF3:
                 disassemble = `DI`
                 ticks = this._interruptsEnabled = false;

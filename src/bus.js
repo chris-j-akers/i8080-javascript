@@ -11,6 +11,10 @@
         this._devices = [];
     }
 
+    GetVideoBuffer(startAddr, endAddr) {
+        return this._mmu.GetVideoBuffer(startAddr, endAddr);
+    }
+
     ConnectDevice(port, device) {
         this._devices[port] = device;
     }
@@ -32,12 +36,24 @@
     }
 
     WriteDevice(port, val) {
-        this._devices[port].Write(port, val);
+        switch(port) {
+            case 0x02:
+            case 0x04:
+            this._devices[port].Write(port, val);
+            break;
+        }
+
     }
 
     ReadDevice(port) {
-        return this._devices[port].Read(port);
+        switch(port) {
+            case 0x03:
+                return this._devices[port].Read(port);
+                break;
+        }
+
     }
+
 }
 
 export { Bus };

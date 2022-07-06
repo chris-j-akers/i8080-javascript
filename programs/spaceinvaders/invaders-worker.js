@@ -65,8 +65,10 @@ function stepSingleInstruction() {
         state = _computer.ExecuteNextInstruction();
         consoleOutputStr += state.ConsoleOut ?? '';
         traceOutputStr += `0x${state.LastInstructionAddress.toString(16).padStart(4,'0')}\t${state.LastInstructionDisassembly}\n`;
+        console.log(state.CPUState.ProgramCounter);
     } while (state.CPUState.Halt == false && state.CPUState.ProgramCounter != breakpointAddr);
     postMessage({Type: 'run-all-unclocked-complete', Trace: traceOutputStr, ...state, ConsoleOut: consoleOutputStr });
+
 }
 
 /**
@@ -110,6 +112,14 @@ function onMessage(e) {
             break;
         case 'get-ram-dump':
             getRAMDump();
+            break;
+        case 'vblank':
+            console.log('Vblank Called');
+            _computer.GenerateVBlank();
+            break;
+        case 'request-vram':
+            const VRAM = _computer.GetVideoBuffer();
+            postMessage({Type: 'request-vram-complete', VRAM: VRAM });
             break;
         default:
             console.log('Invalid message sent to Worker.');

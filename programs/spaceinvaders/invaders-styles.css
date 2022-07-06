@@ -57,14 +57,38 @@ div.outputPanel {
   border: solid;
   overflow-y: auto;
   overflow-x: hidden;
-  height: 800px;
+  height: 700px;
   width: 350px;
 }
 
-.consolePanel {
-  background-color: #000000;
-  border-color: black;
-  
 
-  color: lime;
+p.optionsPanel {
+  margin: 0px;
+  font-family: courier;
+}
+
+p {
+  margin-bottom: 5px;
+  margin-top: 5px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+button {
+  font-size: 12px;
+}
+
+input {
+  border: solid 1px;
+}
+
+.controlPanel {
+  border: solid 1px;
+  padding: 5px;
+  font-size: 14px;
+  font-family: Arial;
+}
+
+.checkbox {
+  font-size: 12px;
 }

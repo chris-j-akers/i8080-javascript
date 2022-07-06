@@ -137,40 +137,41 @@
             </tbody>
           </table>
         </div>
-        <div class="panel ramPanel">
-          <h2>RAM</h2>
-          <table class="diagnosticTable">
-            <thead>
-              <tr>
-                <th>Counter</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Bytes Used</td>
-                <td id="tdBytesUsed">00000</td>
-              </tr>
-              <tr>
-                <td>Total</td> 
-                <td id="tdRAMTotal">00000</td>       
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </div>
     </section>
     <section id="controls">
       <div class="controlPanel">
-        <button id="btnReset">Reset</button>
-        <button id="btnStop">Stop</button>
-        <button id="btnDraw">Draw</button>
-        <button id="btnRunAll">Run Clocked at Speed:</button>
-        <input id="txtClockSpeed" placeholder="Clockspeed (MS)"/>
-        <button id="btnRunAllUnclocked">Run Unclocked</button>
-        <button id="btnExecuteNext">Step Single Instruction</button>
-        <button id="btnRunToBreakPoint">Run to Breakpoint:</button>
-        <input id="txtBreakpoint" placeholder="Address in 0xNN format..."/>
+        <div class="optionsPanel">
+          <p>Options</p>
+          <input id="chkDisableTrace" type="checkbox" class="checkbox">Disable Trace</input>
+          <input id="chkDisableFields" type="checkbox" class="checkbox">Disable Fields</input>
+          <button id="btnClearTrace">Clear Trace Output</button>
+          <button id="btnRefreshRAM">RefreshRAM</button>
+        </div>
+        <div class="runControlPanel">
+          <p>Run Options</p>
+          <button id="btnStop">Stop</button>
+          <button id="btnStep">Step Next Instruction</button>
+          <button id="btnRunWithDelay">Run All With Delay Of:</button>
+          <input id="txtClockSpeed" placeholder="ms" pattern="[0-9]{3}"" size="3"/>
+          milliseconds
+          <button id="btnRunNoDelay">Run All No Delay</button>
+          <button id="btnRunToBreakPoint">Run to Breakpoint at Address:</button>
+          <input id="txtBreakpoint" placeholder="0xnn" size="6"/>
+        </div>
+        <div class="graphicsControlpanel">
+          <p>Graphics Options</p>
+          <button id="btnDrawScreen">Draw Screen</button>
+          <button id="btnVBlank">Trigger VBLank</button>
+          <button id="btnAutoVBlank">Auto Trigger VBlank Every: </button>
+          <input id="txtVblankMS" placeholder="ms" pattern="[0-9]{3}"" size="3"/>
+          milliseconds
+          <button id="btnStopVBlanks">Stop VBLanks</button>
+        </div>
+        <div class="resetControlPanel">
+          <p>Reset</p>
+          <button id="btnReset">Reset</button>
+        </div>
       </div>
     </section>
     <section id = "execution">
@@ -184,7 +185,7 @@
         </div>
         <div id="console">
           <div id="consoleTitle">
-            <h2>Console</h2>
+            <h2>View Port</h2>
           </div>
           <div id = "screenDiv">
             <canvas id = "screenCanvas", width="256", height="224", style="border:1px solid #000000;margin-right: 10px">

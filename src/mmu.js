@@ -43,6 +43,10 @@ class MMU {
             return 0x0;
         }
     }
+
+    GetVideoBuffer(startAddr, endAddr) {
+        return this._ram.slice(startAddr, endAddr);
+    }
 }
 
 export { MMU };

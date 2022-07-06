@@ -1,3 +1,5 @@
+let _videoRAMInterval;
+
 const registerTableElem = {
     // Register A
     decA: document.getElementById('tdARegDecElem'),
@@ -162,45 +164,26 @@ function resetFields() {
     fieldsTableElem.decTicks.textContent = '00';
 }
 
-const ramTableElem = {
-    bytesUsed: document.getElementById('tdBytesUsed'),
-    ramTotal: document.getElementById('tdRAMTotal'),
-}
-
-function updateRAMFields(bytesUsed, ramTotal) {
-    ramTableElem.bytesUsed.textContent = bytesUsed;
-    ramTableElem.ramTotal.textContent = ramTotal;
-}
-
-function resetRAMFields() {
-    ramTableElem.bytesUsed.textContent = '00000';
-    ramTableElem.ramTotal.textContent = '00000';
-}
-
 function resetAllFields() {
     resetFields();
     resetFlagsFields();
     resetRegisterFields();
-    resetRAMFields();
 }
 
 function refreshUI(msgData) {
-
     updateRegisterFields(msgData.CPUState.Registers);
     updateFlagsFields(msgData.CPUState.Flags);
     updateFields(msgData.LastInstructionTicks, msgData.CPUState);
-    if (typeof msgData.RAMBytesUsed != 'undefined') {
-        updateRAMFields(msgData.RAMBytesUsed, msgData.RAMTotal);
-    }
 }
 
 const buttonElems = {
-    btnExecuteNext: document.getElementById('btnExecuteNext').addEventListener( 'click', () => {
+    btnStep: document.getElementById('btnStep').addEventListener( 'click', () => {
         _invadersWorker.postMessage({Type: 'step-single-instruction'});
     }),
-    btnRunAll: document.getElementById('btnRunAll').addEventListener( 'click', () => {
+    btnRunWithDelay: document.getElementById('btnRunWithDelay').addEventListener( 'click', () => {
         const clockSpeed = inputElems.txtClockSpeed.value;
-        _invadersWorker.postMessage({Type: 'run-all-clocked', ClockSpeed: clockSpeed});
+        _videoRAMInterval = _invadersWorker.postMessage({Type: 'run-all-clocked', ClockSpeed: clockSpeed});
+
     }),
     btnRunToBreakPoint: document.getElementById('btnRunToBreakPoint').addEventListener('click', () => {
         const breakPointAddr = inputElems.txtBreakpoint.value;
@@ -213,27 +196,78 @@ const buttonElems = {
         _invadersWorker.postMessage({Type: 'reset'});
 
     }),
-    btnRunAllUnclocked: document.getElementById('btnRunAllUnclocked').addEventListener( 'click', () => {
+    btnRunNoDelay: document.getElementById('btnRunNoDelay').addEventListener( 'click', () => {
         _invadersWorker.postMessage({Type: 'run-all-unclocked'});
     }),
     btnStop: document.getElementById('btnStop').addEventListener( 'click', () => {
         _invadersWorker.postMessage({Type: 'stop'});
+        clearInterval(_videoRAMInterval);
     }),
+    btnVBlank: document.getElementById('btnVBlank').addEventListener('click', () => {
+        _invadersWorker.postMessage({Type: 'vblank'});
+    }),
+    btnClearTrace: document.getElementById('btnClearTrace').addEventListener( 'click', () => {
+        outputElems.divTracePanel.textContent = '';
+    }),
+    btnRefreshRAM: document.getElementById('btnRefreshRAM').addEventListener('click', () => {
+        _invadersWorker.postMessage({Type: 'get-ram-dump'});
+    }),
+    btnAutoVBlank: document.getElementById('btnAutoVBlank').addEventListener('click', () => {
+        const vBlankDelay = txtVblankMS.value;
+        _videoRAMInterval = setInterval( () => {
+            _invadersWorker.postMessage({Type: 'vblank'});
+        }, vBlankDelay);
+    }),
+    btnStopVBlanks: document.getElementById('btnStopVBlanks').addEventListener('click', () => {
+        clearInterval(_videoRAMInterval);
+    }),
+    btnDrawScreen: document.getElementById('btnDrawScreen').addEventListener('click', () => {
+        _invadersWorker.postMessage({Type: 'request-vram'});
+    }),
+
 }
 
 const inputElems = {
     txtBreakpoint: document.getElementById('txtBreakpoint'),
     txtClockSpeed: document.getElementById('txtClockSpeed'),
+    chkDisableTrace: document.getElementById('chkDisableTrace'),
+    txtVblankMS: document.getElementById('txtVblankMS'),
+    chkDisableFields: document.getElementById('chkDisableFields'),
 }
 
 const outputElems = {
     divTracePanel: document.getElementById('tracePanel'),
     divRAMPanel: document.getElementById('ramPanel'),
+    canvasScreen: document.getElementById('screenCanvas'),
 }
 
 outputElems.divTracePanel.textContent = '';
 outputElems.divRAMPanel.textContent = '';
 inputElems.txtClockSpeed.value = 30;
+
+
+function drawScreen(videoBuffer) {
+    const ctx = outputElems.canvasScreen.getContext("2d");
+    let pixelCount = 0;
+    // ctx.fillStyle = 'black';
+    // ctx.fillRect(0, 0, outputElems.canvasScreen.width, outputElems.canvasScreen.height);
+    ctx.fillStyle = 'red';
+    let pixel;
+    let rectX;
+    let rectY;
+    for (let y=0; y<224; y++) {
+        for (let x=0; x<32; x++) {
+            pixel = videoBuffer[(y * 32 + x)];
+            for (let bit=0; bit<8; bit++) {
+                if ((pixel >> bit) & 1) {
+                    rectX = ((x * 8) + bit);
+                    rectY = y;
+                    ctx.fillRect(rectX,rectY,1,1);
+                }
+            }
+        }
+    }
+}
 
 // We use a web-worker to control the emulator because it allows us to
 // artifically slow down the clock speed without locking up the browser by using
@@ -250,6 +284,9 @@ _invadersWorker.onmessage = onMessage;
 function onMessage(e) {
     const msgData = e.data;
     switch(msgData.Type) {
+        case 'request-vram-complete':
+            drawScreen(msgData.VRAM);
+            return;
         case 'get-ram-dump-complete':
             outputElems.divRAMPanel.textContent = '';
             outputElems.divRAMPanel.textContent += msgData.MemoryMap;
@@ -268,10 +305,15 @@ function onMessage(e) {
             break;
         case 'run-all-clocked-complete':
         case 'step-single-instruction-complete':
-            outputElems.divTracePanel.textContent += `0x${msgData.LastInstructionAddress.toString(16).padStart(4,'0')}\t${msgData.LastInstructionDisassembly}\n`;
-            outputElems.divTracePanel.scrollTop = outputElems.divTracePanel.scrollHeight;
+            if (!inputElems.chkDisableTrace.checked) {
+                outputElems.divTracePanel.textContent += `0x${msgData.LastInstructionAddress.toString(16).padStart(4,'0')}\t${msgData.LastInstructionDisassembly}\n`;
+                outputElems.divTracePanel.scrollTop = outputElems.divTracePanel.scrollHeight;
+            }
             break;
         }
-        refreshUI(msgData);
+        if (!chkDisableFields.checked) {
+            refreshUI(msgData);
+        }
+
 }
 

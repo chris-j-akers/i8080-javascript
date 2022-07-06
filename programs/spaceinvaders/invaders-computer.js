@@ -15,6 +15,8 @@ class InvadersComputer extends Computer {
         this.Bus.ConnectDevice(0x04, this._bitShiftDevice);
         this.Bus.ConnectDevice(0x02, this._bitShiftDevice);
         this.Bus.ConnectDevice(0x03, this._bitShiftDevice);
+        this._videoRamStart = 0x2400;
+        this._videoRamEnd = 0x3FFF;
     }
 
     /**
@@ -39,6 +41,14 @@ class InvadersComputer extends Computer {
 
     ExecuteNextInstruction() {
         return super.ExecuteNextInstruction();
+    }
+
+    GetVideoBuffer() {
+        return this.Bus.GetVideoBuffer(this._videoRamStart, this._videoRamEnd);
+    }
+
+    GenerateVBlank() {
+        this._cpu.GenerateInterrupt('RST', [0x10]);
     }
 }
 export { InvadersComputer }
