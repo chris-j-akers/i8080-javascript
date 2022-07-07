@@ -42,14 +42,12 @@
             this._devices[port].Write(port, val);
             break;
         }
-
     }
 
     ReadDevice(port) {
         switch(port) {
             case 0x03:
                 return this._devices[port].Read(port);
-                break;
         }
 
     }

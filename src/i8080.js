@@ -1705,8 +1705,7 @@ class i8080 {
      * @returns 
      */
     IN(deviceID) {
-        this._registers.A = 0x0;
-        //this._registers.A = this._bus.ReadDevice(deviceID);
+        this._registers.A = this._bus.ReadDevice(deviceID);
         this.clock += 10;
         return 10;
     }
@@ -2734,6 +2733,9 @@ class i8080 {
             case 0xF6:
                 disassemble = `ORI\t0x${this._peekNextByte().toString(16)}`;
                 ticks = this.ORI(this._getNextByte());
+                break;
+            default:
+                throw new Error(`Undefined OpCode ${opcode}`);
                 break;
         }
         return { LastInstructionDisassembly: disassemble, 

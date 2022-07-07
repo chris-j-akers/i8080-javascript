@@ -19,7 +19,7 @@ class BitShiftDevice extends Device {
     Write(port ,val) {
         switch(port) {
             case 0x04:
-                this._register = (val << 8) | (this._register >> 8 & 0xFF);
+                this._register = ((val << 8) | (this._register >> 8 & 0xFF)) & 0xFFFF;
                 break;
             case 0x02:
                 this._bitShift = val;

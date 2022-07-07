@@ -50,5 +50,9 @@ class InvadersComputer extends Computer {
     GenerateVBlank() {
         this._cpu.GenerateInterrupt('RST', [0x10]);
     }
+
+    GenerateHalfVBlank() {
+        this._cpu.GenerateInterrupt('RST', [0x08]);
+    }
 }
 export { InvadersComputer }

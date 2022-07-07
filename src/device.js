@@ -4,8 +4,7 @@ class Device {
             throw new Error('Attempt to instantiate class Device')
         }
     }
-    Write = (port, data) => {};
-    Read = (port) => {};
+
 }
 
 export { Device }

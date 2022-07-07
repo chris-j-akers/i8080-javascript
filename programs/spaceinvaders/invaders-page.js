@@ -179,16 +179,16 @@ function refreshUI(msgData) {
 
 const buttonElems = {
     btnStep: document.getElementById('btnStep').addEventListener( 'click', () => {
-        _invadersWorker.postMessage({Type: 'step-single-instruction'});
+        _invadersWorker.postMessage({Type: 'step-single-instruction', Trace: chkTraceMessagesEnabled.checked});
     }),
     btnRunWithDelay: document.getElementById('btnRunWithDelay').addEventListener( 'click', () => {
         const clockSpeed = inputElems.txtClockSpeed.value;
-        _runWithDelayInterval = _invadersWorker.postMessage({Type: 'run-all-clocked', ClockSpeed: clockSpeed});
+        _runWithDelayInterval = _invadersWorker.postMessage({Type: 'run-all-clocked', ClockSpeed: clockSpeed, Trace: chkTraceMessagesEnabled.checked});
 
     }),
     btnRunToBreakPoint: document.getElementById('btnRunToBreakPoint').addEventListener('click', () => {
         const breakPointAddr = inputElems.txtBreakpoint.value;
-        _invadersWorker.postMessage({Type: 'run-to-breakpoint', BreakpointAddress: breakPointAddr})
+        _invadersWorker.postMessage({Type: 'run-to-breakpoint', VBlank: inputElems.txtNoDelayVblankMS.value, BreakpointAddress: breakPointAddr, Trace: chkTraceMessagesEnabled.checked})
     }),
     btnReset: document.getElementById('btnReset').addEventListener( 'click', () => {
         _invadersWorker.terminate();
@@ -198,7 +198,7 @@ const buttonElems = {
 
     }),
     btnRunNoDelay: document.getElementById('btnRunNoDelay').addEventListener( 'click', () => {
-        _invadersWorker.postMessage({Type: 'run-all-unclocked'});
+        _invadersWorker.postMessage({Type: 'run-all-unclocked', VBlank: inputElems.txtNoDelayVblankMS.value, Trace: chkTraceMessagesEnabled.checked});
     }),
     btnStop: document.getElementById('btnStop').addEventListener( 'click', () => {
         _invadersWorker.postMessage({Type: 'stop'});
@@ -226,7 +226,7 @@ const buttonElems = {
     btnDrawScreen: document.getElementById('btnDrawScreen').addEventListener('click', () => {
         _invadersWorker.postMessage({Type: 'request-vram'});
     }),
-
+    
 }
 
 const inputElems = {
@@ -236,6 +236,8 @@ const inputElems = {
     txtVblankMS: document.getElementById('txtVblankMS'),
     chkDisableFields: document.getElementById('chkDisableFields'),
     chkAutoDraw: document.getElementById('chkAutoDraw'),
+    txtNoDelayVblankMS: document.getElementById('txtNoDelayVblankMS'),
+    chkTraceMessagesEnabled: document.getElementById('chkTraceMessagesEnabled')
 }
 
 const outputElems = {
@@ -246,7 +248,9 @@ const outputElems = {
 
 outputElems.divTracePanel.textContent = '';
 outputElems.divRAMPanel.textContent = '';
+inputElems.txtVblankMS.value = 1000;
 inputElems.txtClockSpeed.value = 30;
+inputElems.txtNoDelayVblankMS.value = 16;
 
 
 function clearScreen() {
@@ -311,8 +315,6 @@ function onMessage(e) {
             return;
         case 'run-all-unclocked-complete':
         case 'run-to-breakpoint-complete':
-            outputElems.divTracePanel.textContent += msgData.Trace;
-            break;
         case 'run-all-clocked-complete':
         case 'step-single-instruction-complete':
             if (!inputElems.chkDisableTrace.checked) {

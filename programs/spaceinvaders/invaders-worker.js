@@ -30,9 +30,11 @@ function reload() {
 /**
  * Run the next instruction and return
  */
-function stepSingleInstruction() {
+function stepSingleInstruction(trace) {
     const state = _computer.ExecuteNextInstruction();
-    postMessage({Type: 'step-single-instruction-complete', ...state});
+    if (trace) {
+        postMessage({Type: 'step-single-instruction-complete', ...state});
+    }
 }
 
 /**
@@ -48,7 +50,9 @@ function stepSingleInstruction() {
         if (state.CPUState.Halt == true) {
             clearInterval(_clockedRunIntervalId);
         }
-        postMessage({Type: 'run-all-clocked-complete', ...state });
+        if (trace) {
+            postMessage({Type: 'run-all-clocked-complete', ...state });
+        }
     }, clockSpeed);
 }
 
@@ -57,18 +61,32 @@ function stepSingleInstruction() {
  * 
  * @param {number} breakpointAddr Address of break-point (optional)
  */
- function runAllUnClocked(breakpointAddr =-1) {
-    let traceOutputStr = '';
-    let consoleOutputStr = '';
+ function runAllUnClocked(vblank, trace, breakpointAddr =-1) {
+    // We need to run a half-blank followed by a full-blank because there is code
+    // in both ISRs that updates the screen. We toggle between the two.
+    let halfBlank = false;
+    const today = new Date();
+    let time = today.getTime();
     let state;
     do {
+        if (new Date().getTime() - time > vblank) {
+            if (halfBlank) {
+            _computer.GenerateHalfVBlank();
+            halfBlank = false;
+            }
+            else {
+            _computer.GenerateVBlank();
+            halfBlank = true;
+            }
+            const VRAM = _computer.GetVideoBuffer();
+            postMessage({Type: 'request-vram-complete', VRAM: VRAM });
+            time = new Date().getTime();
+        }
         state = _computer.ExecuteNextInstruction();
-        consoleOutputStr += state.ConsoleOut ?? '';
-        traceOutputStr += `0x${state.LastInstructionAddress.toString(16).padStart(4,'0')}\t${state.LastInstructionDisassembly}\n`;
-        console.log(state.CPUState.ProgramCounter);
+        if (trace) {
+            postMessage({Type: 'step-single-instruction-complete', ...state});
+        }
     } while (state.CPUState.Halt == false && state.CPUState.ProgramCounter != breakpointAddr);
-    postMessage({Type: 'run-all-unclocked-complete', Trace: traceOutputStr, ...state, ConsoleOut: consoleOutputStr });
-
 }
 
 /**
@@ -96,16 +114,16 @@ function onMessage(e) {
             reload();
             break;
         case 'step-single-instruction':
-            stepSingleInstruction();
+            stepSingleInstruction(msg.Trace);
             break;
         case 'run-all-clocked':
-            runAllClocked(msg.ClockSpeed);
+            runAllClocked(msg.ClockSpeed, msg.Trace);
             break;
         case 'run-all-unclocked':
-            runAllUnClocked();
+            runAllUnClocked(msg.VBlank, msg.Trace);
             break;
         case 'run-to-breakpoint':
-            runAllUnClocked(msg.BreakpointAddress);
+            runAllUnClocked(msg.VBlank, msg.BreakpointAddress, msg.Trace);
             break;
         case 'stop':
             clearInterval(_clockedRunIntervalId);
@@ -114,7 +132,6 @@ function onMessage(e) {
             getRAMDump();
             break;
         case 'vblank':
-            console.log('Vblank Called');
             _computer.GenerateVBlank();
             postMessage({Type: 'vblank-complete'})
             break;

@@ -143,20 +143,24 @@
       <div class="controlPanel">
         <div class="optionsPanel">
           <p>Options</p>
-          <input id="chkDisableTrace" type="checkbox" class="checkbox">Disable Trace</input>
-          <input id="chkDisableFields" type="checkbox" class="checkbox">Disable Fields</input>
+          <input id="chkDisableTrace" type="checkbox" class="checkbox">Disable Trace Output Window</input>
+          <input id="chkDisableFields" type="checkbox" class="checkbox">Disable Field Updates</input>
           <button id="btnClearTrace">Clear Trace Output</button>
           <button id="btnRefreshRAM">RefreshRAM</button>
         </div>
         <div class="runControlPanel">
-          <p>Run Options</p>
+          <p>Run Step/SlowMo Options</p>
+          <input id="chkTraceMessagesEnabled" type="checkbox" class="checkbox" checked="true">Enable Trace</input>
+
           <button id="btnStop">Stop</button>
           <button id="btnStep">Step Next Instruction</button>
           <button id="btnRunWithDelay">Run All With Delay Of:</button>
           <input id="txtClockSpeed" placeholder="ms" pattern="[0-9]{3}"" size="3"/>
+          milliseconds per instruction
+          <button id="btnRunNoDelay">Run All With VBlank Every:</button>
+          <input id="txtNoDelayVblankMS" placeholder="ms" pattern="[0-9]{3}"" size="3"/>
           milliseconds
-          <button id="btnRunNoDelay">Run All No Delay</button>
-          <button id="btnRunToBreakPoint">Run to Breakpoint at Address:</button>
+          <button id="btnRunToBreakPoint">Run to Breakpoint:</button>
           <input id="txtBreakpoint" placeholder="0xnn" size="6"/>
         </div>
         <div class="graphicsControlpanel">
