@@ -254,10 +254,10 @@ function clearScreen() {
 
 function drawScreen(videoBuffer) {
     const ctx = outputElems.canvasScreen.getContext("2d");
-    let pixelCount = 0;
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, outputElems.canvasScreen.width, outputElems.canvasScreen.height);
     ctx.fillStyle = 'white';
+    
     let pixel;
     let rectX;
     let rectY;
@@ -275,14 +275,17 @@ function drawScreen(videoBuffer) {
     }
 }
 
-// We use a web-worker to control the emulator because it allows us to
-// artifically slow down the clock speed without locking up the browser by using
-// the setInterval() call. It also decouples the UI code from the actual
-// emulator.
+// We use a web-worker to control the emulator to avoid locking the browser up
+// in instruction loops. It also decouples the UI code from the actual emulator.
 let _invadersWorker = new Worker('invaders-worker.js', { type: "module" });
 _invadersWorker.onmessage = onMessage;
 clearScreen();
 
+// We rotate the HTML canvas, here, because Space Invaders output is rotated 90
+// degrees (the CRT monitor in the arcade machine would be physically rotated!)
+const ctx = outputElems.canvasScreen.getContext("2d");
+ctx.translate(0, 256);
+ctx.rotate(270*Math.PI/180);
 
 outputElems.divTracePanel.textContent = '';
 outputElems.divRAMPanel.textContent = '';
