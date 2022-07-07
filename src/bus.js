@@ -48,6 +48,8 @@
         switch(port) {
             case 0x03:
                 return this._devices[port].Read(port);
+            default:
+                return 0x0;
         }
 
     }

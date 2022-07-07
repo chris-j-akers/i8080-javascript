@@ -1,17 +1,15 @@
 'use strict'
-
 import { InvadersComputer } from './invaders-computer.js';
 
-// Global Variables
+// The virtual machine itself
 const _computer = new InvadersComputer();
 
-// When the 'Run Clocked' buttons is clicked, the emulation uses calls to
-// setInterval() so we can slow down and more closely emulate the speed of a
-// computer running 8080. We need to keep the ID of the Interval, though, so we
-// can delete it when the program ends. If not, then it just keeps trying to run
-// code that doesn't exist. The id needs to be global, to keep it in scope for
-// subsequent calls.
+// runWithDelays() used calls to setInterval(). We keep the ID of the Interval,
+// here, so we can delete it when a request to stop or pause the program
+// arrives.
 let _clockedRunIntervalId;
+
+// Set when the user clicks 'Stop' in the browser.
 let _stopClicked = false;
 
 /**
@@ -23,81 +21,97 @@ function reset() {
     postMessage({Type: 'reset-complete'});
 }
 
+/**
+ * Load the program into memory and set the program counter to the correct
+ * place.
+ */
 function reload() {
     const bytesLoaded =  _computer.LoadProgram();
     postMessage({Type: 'program-load-complete', ConsoleOut: `LOADED ${bytesLoaded} BYTES`});
 }
 
 /**
- * Run the next instruction and return
+ * Run just the next instruction and return
  */
-function stepSingleInstruction(trace) {
+function stepSingleInstruction(traceMessagesEnabled) {
     const state = _computer.ExecuteNextInstruction();
-    if (trace) {
+    if (traceMessagesEnabled) {
         postMessage({Type: 'step-single-instruction-complete', ...state});
     }
 }
 
 /**
  * Run all program instructions, but with an interval between each one. This
- * allows us to slow down the emulator to a more realistic speed for 8080-based
- * computers.
+ * allows us to slow down the emulator for debugging purposes.
  *
  * @param {number} clockSpeed Number of ms between each program instruction
  */
- function runAllClocked(clockSpeed) {
+ function runWithDelays(clockSpeed, traceMessagesEnabled) {
     _clockedRunIntervalId = setInterval( () => {
         const state = _computer.ExecuteNextInstruction();
         if (state.CPUState.Halt == true) {
             clearInterval(_clockedRunIntervalId);
         }
-        if (trace) {
+        if (traceMessagesEnabled) {
             postMessage({Type: 'run-all-clocked-complete', ...state });
         }
     }, clockSpeed);
 }
 
 /**
- * Blasts through program no artificial slow-down.
- * 
+ * Runs through program no artificial slow-down ... Well, a teeny bit.
+ *
+ * We toggle between calling the VBlank interrupt (0x10) and the Half-VBlank
+ * interrupt (0x02) because both ISRs update various in-game components. We're
+ * not that fussed about timing, here, because we're not using a CRT. We Just
+ * call one after the other to make sure all the update code runs in the right
+ * order.
+ *
+ * VBlank interrupt timing is based on the option passed from the main page.
+ *
+ * We also execute instructions in batches of 30,000. This is to prevent the
+ * worker's thread from locking up and being unable to receive any STOP messages
+ * or making the browser think it's hanging. Just a 1ms wait using setTimeout()
+ * is all that's needed.
+ *
+ * @param {number} vblankIntervalMS Interval in milliseconds between each call
+ * to vertical blank and verticak half-blank interrupts.
+ * @param {boolean} traceMessagesEnabled Whether to send trace messages back to
+ * the browser.
  * @param {number} breakpointAddr Address of break-point (optional)
  */
- function runAllUnClocked(vblank, trace, breakpointAddr =-1) {
-    // We need to run a half-blank followed by a full-blank because there is code
-    // in both ISRs that updates the screen. We toggle between the two.
-    let halfBlank = false;
-    const today = new Date();
-    let time = today.getTime();
-    let state;
+ function run(vblankIntervalMS, traceMessagesEnabled, breakpointAddr =-1) {
+    let halfBlankToggle = false;
+    let cpuState;
     let instructionCount = 0;
+    let lastVBlankRunTime = new Date().getTime();
+
     do {
-        if (new Date().getTime() - time > vblank) {
-            if (halfBlank) {
-            _computer.GenerateHalfVBlank();
-            halfBlank = false;
-            }
-            else {
-            _computer.GenerateVBlank();
-            halfBlank = true;
-            }
+        if (new Date().getTime() - lastVBlankRunTime > vblankIntervalMS) {
+
+            halfBlankToggle ? _computer.GenerateHalfVBlank() : _computer.GenerateVBlank();
+            halfBlankToggle = !halfBlankToggle;
+
             const VRAM = _computer.GetVideoBuffer();
-            postMessage({Type: 'request-vram-complete', VRAM: VRAM });
-            time = new Date().getTime();
+            postMessage({Type: 'draw-screen-request', VRAM: VRAM });
+
+            lastVBlankRunTime = new Date().getTime();
         }
-        state = _computer.ExecuteNextInstruction();
+
+        cpuState = _computer.ExecuteNextInstruction();
         instructionCount++;
-        if (trace) {
-            postMessage({Type: 'step-single-instruction-complete', ...state});
+        
+        if (traceMessagesEnabled) {
+            postMessage({Type: 'step-single-instruction-complete', ...cpuState});
         }
-    } while (instructionCount < 30000 && state.CPUState.Halt == false && state.CPUState.ProgramCounter != breakpointAddr);
+        
+    } while (instructionCount < 30000 && cpuState.CPUState.Halt == false && cpuState.CPUState.ProgramCounter != breakpointAddr);
+    
     if (!_stopClicked) {
-        // Pause for a tiny, tiny period, here to give the worker a chance to
-        // process anything else in its event queue.
         setTimeout(() => {
-            runAllUnClocked(vblank, trace, breakpointAddr);
+            run(vblankIntervalMS, traceMessagesEnabled, breakpointAddr);
         },1);
     }
-    // Reset.
     _stopClicked = false;
 }
 
@@ -129,13 +143,13 @@ function onMessage(e) {
             stepSingleInstruction(msg.Trace);
             break;
         case 'run-all-clocked':
-            runAllClocked(msg.ClockSpeed, msg.Trace);
+            runWithDelays(msg.ClockSpeed, msg.Trace);
             break;
         case 'run-all-unclocked':
-            runAllUnClocked(msg.VBlank, msg.Trace);
+            run(msg.VBlank, msg.Trace);
             break;
         case 'run-to-breakpoint':
-            runAllUnClocked(msg.VBlank, msg.BreakpointAddress, msg.Trace);
+            run(msg.VBlank, msg.BreakpointAddress, msg.Trace);
             break;
         case 'stop':
             clearInterval(_clockedRunIntervalId);

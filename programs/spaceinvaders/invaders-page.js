@@ -246,13 +246,6 @@ const outputElems = {
     canvasScreen: document.getElementById('screenCanvas'),
 }
 
-outputElems.divTracePanel.textContent = '';
-outputElems.divRAMPanel.textContent = '';
-inputElems.txtVblankMS.value = 1000;
-inputElems.txtClockSpeed.value = 30;
-inputElems.txtNoDelayVblankMS.value = 16;
-
-
 function clearScreen() {
     const ctx = outputElems.canvasScreen.getContext("2d");
     ctx.fillStyle = 'black';
@@ -290,6 +283,13 @@ let _invadersWorker = new Worker('invaders-worker.js', { type: "module" });
 _invadersWorker.onmessage = onMessage;
 clearScreen();
 
+
+outputElems.divTracePanel.textContent = '';
+outputElems.divRAMPanel.textContent = '';
+inputElems.txtVblankMS.value = 1000;
+inputElems.txtClockSpeed.value = 30;
+inputElems.txtNoDelayVblankMS.value = 8;
+
 /**
  * Event Listener for messages posted by the web worker.
  * 
@@ -299,6 +299,7 @@ function onMessage(e) {
     const msgData = e.data;
     switch(msgData.Type) {
         case 'request-vram-complete':
+        case 'draw-screen-request':
             drawScreen(msgData.VRAM);
             return;
         case 'get-ram-dump-complete':
