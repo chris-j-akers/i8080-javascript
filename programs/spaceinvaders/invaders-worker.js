@@ -12,6 +12,7 @@ const _computer = new InvadersComputer();
 // code that doesn't exist. The id needs to be global, to keep it in scope for
 // subsequent calls.
 let _clockedRunIntervalId;
+let _stopClicked = false;
 
 /**
  * Switch the computer off and on again, and automatically load the program.
@@ -68,6 +69,7 @@ function stepSingleInstruction(trace) {
     const today = new Date();
     let time = today.getTime();
     let state;
+    let instructionCount = 0;
     do {
         if (new Date().getTime() - time > vblank) {
             if (halfBlank) {
@@ -83,10 +85,20 @@ function stepSingleInstruction(trace) {
             time = new Date().getTime();
         }
         state = _computer.ExecuteNextInstruction();
+        instructionCount++;
         if (trace) {
             postMessage({Type: 'step-single-instruction-complete', ...state});
         }
-    } while (state.CPUState.Halt == false && state.CPUState.ProgramCounter != breakpointAddr);
+    } while (instructionCount < 30000 && state.CPUState.Halt == false && state.CPUState.ProgramCounter != breakpointAddr);
+    if (!_stopClicked) {
+        // Pause for a tiny, tiny period, here to give the worker a chance to
+        // process anything else in its event queue.
+        setTimeout(() => {
+            runAllUnClocked(vblank, trace, breakpointAddr);
+        },1);
+    }
+    // Reset.
+    _stopClicked = false;
 }
 
 /**
@@ -127,6 +139,7 @@ function onMessage(e) {
             break;
         case 'stop':
             clearInterval(_clockedRunIntervalId);
+            _stopClicked = true;
             break;
         case 'get-ram-dump':
             getRAMDump();

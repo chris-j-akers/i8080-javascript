@@ -149,7 +149,7 @@
           <button id="btnRefreshRAM">RefreshRAM</button>
         </div>
         <div class="runControlPanel">
-          <p>Run Step/SlowMo Options</p>
+          <p>Run Options</p>
           <input id="chkTraceMessagesEnabled" type="checkbox" class="checkbox" checked="true">Enable Trace</input>
 
           <button id="btnStop">Stop</button>
@@ -164,7 +164,7 @@
           <input id="txtBreakpoint" placeholder="0xnn" size="6"/>
         </div>
         <div class="graphicsControlpanel">
-          <p>Graphics Options</p>
+          <p>Graphics Options (for stepped or delayed run only)</p>
           <button id="btnDrawScreen">Draw Screen</button>
           <input id="chkAutoDraw" type="checkbox" class="checkbox" checked="true">Draw on VBlank</input>
           <button id="btnVBlank">Trigger VBLank</button>
@@ -194,7 +194,6 @@
           </div>
           <div id = "screenDiv">
             <canvas id = "screenCanvas", width="256", height="224", style="border:1px solid #000000;margin-right: 10px">
-
             </canvas>
           </div>
         </div>
