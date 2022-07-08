@@ -2736,7 +2736,6 @@ class i8080 {
                 break;
             default:
                 throw new Error(`Undefined OpCode ${opcode}`);
-                break;
         }
         return { LastInstructionDisassembly: disassemble, 
                  LastInstructionTicks: ticks, 

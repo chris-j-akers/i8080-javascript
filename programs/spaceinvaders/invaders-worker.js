@@ -9,6 +9,8 @@ const _computer = new InvadersComputer();
 // arrives.
 let _clockedRunIntervalId;
 
+let _runTimeoutId;
+
 // Set when the user clicks 'Stop' in the browser.
 let _stopClicked = false;
 
@@ -34,6 +36,7 @@ function reload() {
  * Run just the next instruction and return
  */
 function stepSingleInstruction(traceMessagesEnabled) {
+    _stopClicked = false;
     const state = _computer.ExecuteNextInstruction();
     if (traceMessagesEnabled) {
         postMessage({Type: 'step-single-instruction-complete', ...state});
@@ -47,6 +50,7 @@ function stepSingleInstruction(traceMessagesEnabled) {
  * @param {number} clockSpeed Number of ms between each program instruction
  */
  function runWithDelays(clockSpeed, traceMessagesEnabled) {
+    _stopClicked = false;
     _clockedRunIntervalId = setInterval( () => {
         const state = _computer.ExecuteNextInstruction();
         if (state.CPUState.Halt == true) {
@@ -81,6 +85,7 @@ function stepSingleInstruction(traceMessagesEnabled) {
  * @param {number} breakpointAddr Address of break-point (optional)
  */
  function run(vblankIntervalMS, traceMessagesEnabled, breakpointAddr =-1) {
+    _stopClicked = false;
     let halfBlankToggle = false;
     let cpuState;
     let instructionCount = 0;
@@ -105,14 +110,17 @@ function stepSingleInstruction(traceMessagesEnabled) {
             postMessage({Type: 'step-single-instruction-complete', ...cpuState});
         }
         
-    } while (instructionCount < 30000 && cpuState.CPUState.Halt == false && cpuState.CPUState.ProgramCounter != breakpointAddr);
+        if (cpuState.CPUState.Halt || cpuState.CPUState.ProgramCounter == breakpointAddr || _stopClicked) {
+            return;
+        }
+
+    } while (instructionCount < 30000);
     
-    if (!_stopClicked) {
-        setTimeout(() => {
-            run(vblankIntervalMS, traceMessagesEnabled, breakpointAddr);
-        },1);
-    }
-    _stopClicked = false;
+    // We re-run after a short intermission so the thread can take a breath,
+    // have a cigerette - whatever.
+    _runTimeoutId = setTimeout(() => {
+        run(vblankIntervalMS, traceMessagesEnabled, breakpointAddr);
+    },1);
 }
 
 /**
@@ -149,10 +157,11 @@ function onMessage(e) {
             run(msg.VBlank, msg.Trace);
             break;
         case 'run-to-breakpoint':
-            run(msg.VBlank, msg.BreakpointAddress, msg.Trace);
+            run(msg.VBlank, msg.Trace, msg.BreakpointAddress);
             break;
         case 'stop':
             clearInterval(_clockedRunIntervalId);
+            clearTimeout(_runTimeoutId);
             _stopClicked = true;
             break;
         case 'get-ram-dump':
