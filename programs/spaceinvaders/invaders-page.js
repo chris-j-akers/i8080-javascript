@@ -188,6 +188,7 @@ const buttonElems = {
     }),
     btnRunToBreakPoint: document.getElementById('btnRunToBreakPoint').addEventListener('click', () => {
         const breakPointAddr = inputElems.txtBreakpoint.value;
+        inputElems.chkTraceMessagesEnabled.checked = false;
         _invadersWorker.postMessage({Type: 'run-to-breakpoint', VBlank: inputElems.txtNoDelayVblankMS.value, BreakpointAddress: breakPointAddr, Trace: chkTraceMessagesEnabled.checked})
     }),
     btnReset: document.getElementById('btnReset').addEventListener( 'click', () => {
@@ -198,6 +199,7 @@ const buttonElems = {
 
     }),
     btnRunNoDelay: document.getElementById('btnRunNoDelay').addEventListener( 'click', () => {
+        inputElems.chkTraceMessagesEnabled.checked = false;
         _invadersWorker.postMessage({Type: 'run-all-unclocked', VBlank: inputElems.txtNoDelayVblankMS.value, Trace: chkTraceMessagesEnabled.checked});
     }),
     btnStop: document.getElementById('btnStop').addEventListener( 'click', () => {
