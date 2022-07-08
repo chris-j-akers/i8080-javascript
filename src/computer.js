@@ -55,8 +55,8 @@ class Computer {
      * RET() call when they're complete.
      * 
      */
-    DirectExecOpCode(f) {
-        return this._cpu[f]();
+    DirectExecOpCode(f, params = []) {
+        return this._cpu[f](...params);
     }
     /**
      * Instruct the CPU to execute the next instruction at the current program
