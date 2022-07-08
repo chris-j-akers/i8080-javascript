@@ -15,3 +15,5 @@ Clicking 'Stop' pauses the program.
 
 You can trace through each instruction by making sure 'Enable Trace' is clicked and clicking 'Step Next Instruction', but you won't see much because it's such a large program and you need to manually run the Vertical Blank interrupts using the buttons.
 
+## Source
+Core of the project is i8080.js which emulates the 8080 chip itself.
