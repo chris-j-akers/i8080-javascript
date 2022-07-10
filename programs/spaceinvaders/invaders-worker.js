@@ -150,6 +150,18 @@ function onMessage(e) {
         case 'player-one-fire-up':
             _computer.InputDevicePortOne.PlayerOneFireButtonUp();
             break;
+        case 'player-one-left-down':
+            _computer.InputDevicePortOne.PlayerOneJoystickLeftDown();
+            break;
+        case 'player-one-left-up':
+            _computer.InputDevicePortOne.PlayerOneJoystickLeftUp();
+            break;
+        case 'player-one-right-down':
+            _computer.InputDevicePortOne.PlayerOneJoystickRightDown();
+            break;
+        case 'player-one-right-up':
+            _computer.InputDevicePortOne.PlayerOneJoystickRightUp();
+            break;
         case 'player-one-start-down':
             _computer.InputDevicePortOne.PlayerOneStartButtonDown();
             break;

@@ -302,9 +302,17 @@ window.addEventListener('keydown', (e) => {
         case 'Control':
             _invadersWorker.postMessage({Type: 'player-one-fire-down'});
             break;
+        case 'ArrowLeft':
+            _invadersWorker.postMessage({Type: 'player-one-left-down'});
+            break;
+        case 'ArrowRight':
+            _invadersWorker.postMessage({Type: 'player-one-right-down'});
+            break;
         case '1':
             _invadersWorker.postMessage({Type: 'player-one-start-down'});
-            break;         
+            break;
+        case '2':
+            _invadersWorker.postMessage({Type: 'player-two-start-down'});
     }
 });
 
@@ -313,9 +321,18 @@ window.addEventListener('keyup', (e) => {
         case 'Control':
             _invadersWorker.postMessage({Type: 'player-one-fire-up'});
             break;
+        case 'ArrowLeft':
+           _invadersWorker.postMessage({Type: 'player-one-left-up'});
+            break;
+        case 'ArrowRight':
+            _invadersWorker.postMessage({Type: 'player-one-right-up'});
+            break;
         case '1':
             _invadersWorker.postMessage({Type: 'player-one-start-up'});
-            break;        
+            break; 
+        case '2':
+            _invadersWorker.postMessage({Type: 'player-two-start-up'});
+            break;
     }
 });
 

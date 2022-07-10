@@ -11,8 +11,12 @@ class InputDevicePortOne extends Device {
         this._register &= ~1;
     }
 
-    PlayerTwoStartButton() {
+    PlayerTwoStartButtonDown() {
         this._register |= 0x2;
+    }
+
+    PlayerTwoStartButtonUp() {
+        this._register &= ~0x2;
     }
 
     PlayerOneStartButtonDown() {
@@ -28,16 +32,23 @@ class InputDevicePortOne extends Device {
     }
 
     PlayerOneFireButtonUp() {
-        this._register |= 0x1;
         this._register &= ~0x10;
     }
 
-    PlayerOneJoystickLeft() {
+    PlayerOneJoystickLeftDown() {
         this._register |= 0x20;
     }
 
-    PlayerOneJoystickRight() {
+    PlayerOneJoystickLeftUp() {
+        this._register &= ~0x20;
+    }
+
+    PlayerOneJoystickRightDown() {
         this._register |= 0x40;
+    }
+
+    PlayerOneJoystickRightUp() {
+        this._register &= ~0x40;
     }
 
     Read() {
