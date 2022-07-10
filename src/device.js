@@ -5,6 +5,9 @@ class Device {
         }
     }
 
+    Read() {}
+    Write() {}
+
 }
 
 export { Device }
