@@ -9,47 +9,6 @@ class i8080 {
     // -----------------------------------
      
     /**
-     * Returns a string representation of an an 8-bit (byte) number in binary.
-     * NOTE: Assumes that `val` passed is an 8-bit number.
-     *
-     * @param {number} val Value to be formatted
-     * @returns 
-     */
-    _dbgByteToBinaryStr(val) {
-        let str = '';
-        for (let i = 0; i<8; i++) {
-            if (val & (1 << i)) {
-                str += '1';
-            } 
-            else {
-                str += '0';
-            }
-        }
-        return str.split('').reverse().join('');
-        }
-
-
-    /**
-     * Returns a string representation of a 16-bit (word) number in binary.
-     * NOTE: Assumes that `val` passed is a 16-bit number.
-     *
-     * @param {number} val Value to be formatted
-     * @returns 
-     */
-    _dbgWordToBinaryStr(val) {
-        let str = '';
-        for (let i = 0; i<16; i++) {
-            if (val & (1 << i)) {
-                str += '1';
-            } 
-            else {
-                str += '0';
-            }
-        }
-        return str.split('').reverse().join('');
-    }
-
-    /**
      * @returns a formatted string listing each flag and its current value
      */
     _dbgGetFlags() {
@@ -69,7 +28,7 @@ class i8080 {
         let rval = '';
         for (let register in this._registers) {
             rval = this._registers[register];
-            str += `${register}: ${rval}, 0x${rval.toString(16)}, ${this._dbgByteToBinaryStr(rval)} | `
+            str += `${register}: ${rval}, 0x${rval.toString(16).padStart(4,'0')}, ${this.rval.toString(2).padStart(16,'0')} | `
         }
         return str.slice(0,-3) + ']';
     }
@@ -79,7 +38,7 @@ class i8080 {
      * stack pointer
      */
     _dbgGetStackPointer() {
-        return `SP [${this._stackPointer}, ${this._stackPointer.toString(16)}, ${this._dbgWordToBinaryStr(this._stackPointer)}]`;
+        return `SP [${this._stackPointer}, ${this._stackPointer.toString(16).padStart(4,'0')}, ${this._stackPointer.toString(2).padStart(16,'0')}]`;
     }
 
     /**
@@ -87,7 +46,7 @@ class i8080 {
      * program counter
      */
     _dbgGetProgramCounter() {
-        return `PC [${this._programCounter}, ${this._programCounter.toString(16)}, ${this._dbgWordToBinaryStr(this._programCounter)}]`;
+        return `PC [${this._programCounter}, ${this._programCounter.toString(16).padStart(4,'0')}, ${this._programCounter.toString(2).padStart(16,'0')}]`;
     }
 
     /**
@@ -95,7 +54,7 @@ class i8080 {
      * CPU clock
      */
     _dbgGetClock() {
-        return `CL [${this._clock}, ${this._clock.toString(16)}, ${this._dbgWordToBinaryStr(this._clock)}]`;
+        return `CL [${this._clock}, ${this._clock.toString(16)}, ${this._clock.toString(2).padStart(16,'0')}]`;
     }
 
     /**
