@@ -39,6 +39,8 @@ Currently you can only manually trigger a full VBlank in this mode, not a half-b
 
 Enable Trace is switched off when running at full speed (either 'Run all with VBLank' or 'Run to breakpoint' because the trace output is so large it will lock up the browser). If you want to see where you are in memory, you can pause the program with 'Stop', then click 'Enable Trace' checkbox, then start 'Step Next Instruction'. Fields and trace should be updated.
 
+There's no colour because the original arcade was only black and white - the colour came from couloured cellophane stuck over parts of the monitor. This can be emulated pretty easliy by changing the RGB value of the Rect() as it's placed on the HTML Canvas depending on its Y value. 
+
 ## User interfaces
 
 User interfaces will be overhauled - probably in react - they're proper brittle because I wanted it up and running asap to check the core engine works.
