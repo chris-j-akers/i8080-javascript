@@ -1,11 +1,17 @@
 # i8080-javascript Notes for Now
 
+
+Yo! Some quick notes.
+
 An Intel 8080 emulator in JavaScript
 
 Main source file is /src/i8080.js
 
 /src/bus.js is object for connecting devices/memory to CPU.
+
 /src/computer.js is object for the emulator (contains CPU, Bus, MMU). Where appropriate, emulators can derive from this object and add additional devices where fit (e.g. Space Ivaders adds input devices and the bit-shift device hardware emulation)
+
+device.js is the base class for any devices (they all need to implement a Read() and a Write())
 
 For the programs:
 
@@ -29,6 +35,18 @@ Clicking 'Stop' pauses the program.
 
 You can trace through each instruction by making sure 'Enable Trace' is clicked and clicking 'Step Next Instruction', but you won't see much because it's such a large program and you need to manually run the Vertical Blank interrupts using the buttons.
 
+Currently you can only manually trigger a full VBlank in this mode, not a half-blank as I didn't need that for debugging. Might
+
 Enable Trace is switched off when running at full speed (either 'Run all with VBLank' or 'Run to breakpoint' because the trace output is so large it will lock up the browser). If you want to see where you are in memory, you can pause the program with 'Stop', then click 'Enable Trace' checkbox, then start 'Step Next Instruction'. Fields and trace should be updated.
+
+## User interfaces
+
+User interfaces will be overhauled - probably in react - they're proper brittle because I wanted it up and running asap to check the core engine works.
+
+## Unit Tests
+
+The Unit Test Generator allowed me to produce 428 unique tests to check out all the CPU operations using some boiler plate code. It simply takes a YAML config with a load of {} placeholders and spits out each test function with the fields updated.
+
+To run the tests you need Mochs installed. If you have NPM, just run 'npm install' from within the Source directory and it will install it. Then unit tests can be run by: `npm test`.  They should all succeed.
 
 
