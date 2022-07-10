@@ -4,11 +4,12 @@ import { InvadersComputer } from './invaders-computer.js';
 // The virtual machine itself
 const _computer = new InvadersComputer();
 
-// runWithDelays() used calls to setInterval(). We keep the ID of the Interval,
-// here, so we can delete it when a request to stop or pause the program
+// runWithDelays() calls setInterval() to force the delay. We keep the ID of the
+// interval, here, so we can delete it when a request to pause the program
 // arrives.
-let _clockedRunIntervalId;
+let _delayedRunIntervalId;
 
+// Ditto for run(), but with setTimeout()
 let _runTimeoutId;
 
 // Set when the user clicks 'Stop' in the browser.
@@ -49,10 +50,10 @@ function stepSingleInstruction(traceMessagesEnabled) {
  * @param {number} clockSpeed Number of ms between each program instruction
  */
  function runWithDelays(clockSpeed, traceMessagesEnabled) {
-    _clockedRunIntervalId = setInterval( () => {
+    _delayedRunIntervalId = setInterval( () => {
         const state = _computer.ExecuteNextInstruction();
         if (state.CPUState.Halt == true) {
-            clearInterval(_clockedRunIntervalId);
+            clearInterval(_delayedRunIntervalId);
         }
         if (traceMessagesEnabled) {
             postMessage({Type: 'run-all-clocked-complete', ...state });
@@ -133,13 +134,28 @@ function getRAMDump() {
 
 
 /**
- * Listener for the postMessage() event posted from the main page.
+ * The main page posts worker requests as events.
  * 
  * @param {Event} e The event passed in by the postMessage() from the browser.
  */
 function onMessage(e) {
     const msg = e.data;
     switch(msg.Type) {
+        case 'deposit-coin':
+            _computer.InputDevicePortOne.DepositCoin();
+            break;
+        case 'player-one-fire-down':
+            _computer.InputDevicePortOne.PlayerOneFireButtonDown();
+            break;
+        case 'player-one-fire-up':
+            _computer.InputDevicePortOne.PlayerOneFireButtonUp();
+            break;
+        case 'player-one-start-down':
+            _computer.InputDevicePortOne.PlayerOneStartButtonDown();
+            break;
+        case 'player-one-start-up':
+            _computer.InputDevicePortOne.PlayerOneStartButtonUp();
+            break;
         case 'reset':
             reset();
             reload();
@@ -161,7 +177,7 @@ function onMessage(e) {
             run(msg.VBlank, msg.Trace, msg.BreakpointAddress);
             break;
         case 'stop':
-            clearInterval(_clockedRunIntervalId);
+            clearInterval(_delayedRunIntervalId);
             clearTimeout(_runTimeoutId);
             _stopClicked = true;
             break;

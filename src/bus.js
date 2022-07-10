@@ -8,15 +8,20 @@
     constructor() {
         this._mmu = null;
         this._cpu = null;
-        this._devices = [];
+        this._writeDevices = [];
+        this._readDevices = [];
     }
 
     GetVideoBuffer(startAddr, endAddr) {
         return this._mmu.GetVideoBuffer(startAddr, endAddr);
     }
 
-    ConnectDevice(port, device) {
-        this._devices[port] = device;
+    ConnectDeviceToReadPort(port, device) {
+        this._readDevices[port] = device;
+    }
+
+    ConnectDeviceToWritePort(port, device) {
+        this._writeDevices[port] = device;
     }
 
     ConnectMMU(mmu) {
@@ -39,15 +44,17 @@
         switch(port) {
             case 0x02:
             case 0x04:
-            this._devices[port].Write(port, val);
+            this._writeDevices[port].Write(port, val);
             break;
         }
     }
 
     ReadDevice(port) {
         switch(port) {
+            case 0x01:
+                return this._readDevices[port].Read(port);
             case 0x03:
-                return this._devices[port].Read(port);
+                return this._readDevices[port].Read(port);
             default:
                 return 0x0;
         }

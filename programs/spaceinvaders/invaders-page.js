@@ -259,7 +259,6 @@ function drawScreen(videoBuffer) {
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, outputElems.canvasScreen.width, outputElems.canvasScreen.height);
     ctx.fillStyle = 'white';
-    
     let pixel;
     let rectX;
     let rectY;
@@ -294,6 +293,31 @@ outputElems.divRAMPanel.textContent = '';
 inputElems.txtVblankMS.value = 1000;
 inputElems.txtClockSpeed.value = 30;
 inputElems.txtNoDelayVblankMS.value = 8;
+
+window.addEventListener('keydown', (e) => {
+    switch(e.key) {
+        case 'Shift':
+            _invadersWorker.postMessage({Type: 'deposit-coin' });
+            break;
+        case 'Control':
+            _invadersWorker.postMessage({Type: 'player-one-fire-down'});
+            break;
+        case '1':
+            _invadersWorker.postMessage({Type: 'player-one-start-down'});
+            break;         
+    }
+});
+
+window.addEventListener('keyup', (e) => {
+    switch(e.key) {
+        case 'Control':
+            _invadersWorker.postMessage({Type: 'player-one-fire-up'});
+            break;
+        case '1':
+            _invadersWorker.postMessage({Type: 'player-one-start-up'});
+            break;        
+    }
+});
 
 /**
  * Event Listener for messages posted by the web worker.

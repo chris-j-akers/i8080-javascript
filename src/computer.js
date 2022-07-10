@@ -51,7 +51,7 @@ class Computer {
     /**
      * Call an internal CPU OpCode directly.
      *
-     * Useful for some emulation tasks - for instance OC syscalls will need a
+     * Useful for some emulation tasks - for instance OS syscalls will need a
      * RET() call when they're complete.
      * 
      */
