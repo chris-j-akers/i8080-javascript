@@ -52,7 +52,6 @@ class InputDevicePortOne extends Device {
     }
 
     Read() {
-        console.log(`Returning ${this._register.toString(2).padStart(8, '0')}`);
         return this._register;
     }
 }
