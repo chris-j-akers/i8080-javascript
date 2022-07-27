@@ -55,12 +55,8 @@ class InvadersComputer extends Computer {
         return bytesLoaded;
     }
 
-    ExecuteNextInstruction() {
-        return super.ExecuteNextInstruction();
-    }
-
     GetVideoBuffer() {
-        return this.Bus.GetVideoBuffer(this._videoRamStart, this._videoRamEnd);
+        return this.Bus.GetRAMSlice(this._videoRamStart, this._videoRamEnd);
     }
 
     GenerateVBlank() {
