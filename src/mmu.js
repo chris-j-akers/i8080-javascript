@@ -44,7 +44,7 @@ class MMU {
         }
     }
 
-    GetVideoBuffer(startAddr, endAddr) {
+    GetRAMSlice(startAddr, endAddr) {
         return this._ram.slice(startAddr, endAddr);
     }
 }

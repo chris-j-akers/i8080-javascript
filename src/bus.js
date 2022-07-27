@@ -12,8 +12,8 @@
         this._readDevices = [];
     }
 
-    GetVideoBuffer(startAddr, endAddr) {
-        return this._mmu.GetVideoBuffer(startAddr, endAddr);
+    GetRAMSlice(startAddr, endAddr) {
+        return this._mmu.GetRAMSlice(startAddr, endAddr);
     }
 
     ConnectDeviceToReadPort(port, device) {
