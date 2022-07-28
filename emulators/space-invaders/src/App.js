@@ -11,6 +11,8 @@ function App() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [invadersWebWorker]);
 
+  /* This is a bit of a hack, but allows us to update a child's state without
+  updating our own and, therefore, re-drawining everything */
   let updateChildVRAMState = null;
   const connectStateToParent = (f) => {
     updateChildVRAMState = f;
@@ -21,7 +23,7 @@ function App() {
       case 'DRAW-SCREEN':
         updateChildVRAMState(msg.data.VRAM);
         break;
-      case 'Pong!':
+      case 'PONG!':
         console.log('Ping working!');
         break;
       default:

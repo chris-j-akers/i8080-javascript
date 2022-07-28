@@ -2,7 +2,6 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import logo from './img/logo.png'
 
-
 function Screen({ connectStateToParent, screenWidth, screenHeight, logoWidth, logoHeight, color, backgroundColor }) {
   const [VRAM, updateVRAM] = useState(new Array(0x1BFF).fill(0));
   const canvasRef = React.useRef(null);
@@ -23,10 +22,11 @@ function Screen({ connectStateToParent, screenWidth, screenHeight, logoWidth, lo
   useEffect( () => {
     const ctx = canvasRef.current.getContext("2d"); 
 
-    /* Before we draw, we save then rotate the context of the Canvas. Space
+    /* Before we draw, we save, then rotate the context of the Canvas. Space
     Invaders draws its screen at a 90 degree angle (the monitor was physically
-    rotated in the cabinet) so we do the same, but restore the context after the
-    screen draw. */ 
+    rotated in the cabinet) so if we draw the video buffer using a rotated
+    context then restore that context the game will appear the right way up.
+    after the screen draw. */ 
     ctx.save();
     ctx.translate(0, 256);
     ctx.rotate(270*Math.PI/180);
@@ -77,6 +77,4 @@ Screen.defaultProps = {
   backgroundColor: 'black',
   color: 'white'
 }
-
-
 export default Screen;

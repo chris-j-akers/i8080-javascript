@@ -22,10 +22,8 @@ const State = {
  * call one after the other to make sure all the update code runs in the right
  * order.
  *
- * VBlank interrupt timing is based on the option passed from the main page.
- *
  * We also execute instructions in batches of 30,000. This is to prevent the
- * worker's thread from locking up and being unable to receive any STOP messages
+ * worker thread from locking up and being unable to receive any STOP messages
  * or making the browser think it's hanging. Just a 1ms wait using setTimeout()
  * is all that's needed.
  *
@@ -38,15 +36,18 @@ const State = {
  function run(drawScreenInterval, vblankInterval, traceMessagesEnabled) {
     let cpuState;
     let instructionCount = 0;
+    let currentTime;
 
     do {
-        if (new Date().getTime() - State.lastScreenDrawRequestTime > drawScreenInterval) {
+        currentTime = new Date().getTime();
+
+        if (currentTime - State.lastScreenDrawRequestTime > drawScreenInterval) {
             const VRAM = _computer.GetVideoBuffer();
             postMessage({Type: 'DRAW-SCREEN', VRAM: VRAM });
             State.lastScreenDrawRequestTime = new Date().getTime();
         }
 
-        if (new Date().getTime() - State.lastVBlankInterruptTime > vblankInterval) {
+        if (currentTime - State.lastVBlankInterruptTime > vblankInterval) {
             State.halfBlankToggle ? _computer.GenerateHalfVBlank() : _computer.GenerateVBlank();
             State.halfBlankToggle = !State.halfBlankToggle;
             State.lastVBlankInterruptTime = new Date().getTime();
@@ -58,6 +59,7 @@ const State = {
         if (cpuState.CPUState.Halt || State.stopClicked) {
             return;
         }
+        
     } while (instructionCount < 30000);
     
     State.runTimeoutID = setTimeout(() => {
