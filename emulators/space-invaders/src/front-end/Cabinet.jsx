@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import logo from './img/logo.png'
 
-function Screen({ connectStateToParent, screenWidth, screenHeight, logoWidth, logoHeight, color, backgroundColor }) {
+function Cabinet({ connectStateToParent, screenWidth, screenHeight, logoWidth, logoHeight, color, backgroundColor }) {
   const [VRAM, updateVRAM] = useState(new Array(0x1BFF).fill(0));
   const canvasRef = React.useRef(null);
 
@@ -57,18 +57,18 @@ function Screen({ connectStateToParent, screenWidth, screenHeight, logoWidth, lo
   }, [VRAM]);
 
   return (
-    <div className='screen-container'>
+    <div className='cabinet-container'>
       <div>
         <img className='logo' src={logo} width={logoWidth} height={logoHeight}/>
       </div>
-      <div className='screen'>
-        <canvas ref={canvasRef} width={screenWidth} height={screenHeight}/>
+      <div className='cabinet'>
+        <canvas className='cabinet-canvas' ref={canvasRef} width={screenWidth} height={screenHeight}/>
       </div>
     </div>
   )
 }
 
-Screen.defaultProps = {
+Cabinet.defaultProps = {
   screenHeight: 256,
   screenWidth: 224,
   logoHeight: 60,
@@ -77,4 +77,4 @@ Screen.defaultProps = {
   color: 'white'
 }
 
-export default Screen;
+export default Cabinet;

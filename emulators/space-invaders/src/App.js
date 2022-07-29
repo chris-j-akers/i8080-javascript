@@ -1,6 +1,6 @@
 import './App.css';
 import { useEffect, useState } from 'react';
-import Screen from './front-end/Screen'
+import Cabinet from './front-end/Cabinet'
 
 function App() {
   const [invadersWebWorker] = useState(new Worker(new URL('./web-workers/invaders-web-worker.js', import.meta.url)));
@@ -33,7 +33,7 @@ function App() {
   
   return (
     <div className="App">
-      <Screen connectStateToParent={connectStateToParent}/>
+      <Cabinet connectStateToParent={connectStateToParent}/>
       <div>
         <button type ='button' onClick={() => invadersWebWorker.postMessage({Type: 'RUN'})}>GO</button>
         <button type ='button' onClick={() => invadersWebWorker.postMessage({Type: 'STOP'})}>STOP</button>

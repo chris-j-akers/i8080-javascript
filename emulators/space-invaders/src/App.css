@@ -2,7 +2,7 @@
   /* text-align: center; */
 }
 
-.screen-container {
+.cabinet-container {
   text-align: center;
   border-radius: 6px;
   background-color: #23337a;
@@ -10,9 +10,9 @@
   flex-direction: column;
 }
 
-.screen {
-  border-style: solid;
+.cabinet {
   border-radius: 6px;
+  border-style: solid;
   border-color: #23337a;
   border-width: 5px 24px 24px;
   background-color: black;
@@ -22,4 +22,8 @@
   border-radius: 6px;
   display: block;
   margin: 0;
+}
+
+.cabinet-canvas {
+  border-radius: 20p;
 }
