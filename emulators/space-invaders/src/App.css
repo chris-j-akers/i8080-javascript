@@ -1,16 +1,25 @@
 .App {
-  text-align: center;
+  /* text-align: center; */
 }
 
-/* The laptop with borders */
-.screen {
-  border-radius: 6px;
-  border-style: solid;
-  border-color: gray;
-  border-width: 14px 14px 14px;
-  background-color: black;
-}
 .screen-container {
+  text-align: center;
+  border-radius: 6px;
+  background-color: #23337a;
+  display: inline-block;
   flex-direction: column;
 }
 
+.screen {
+  border-style: solid;
+  border-radius: 6px;
+  border-color: #23337a;
+  border-width: 5px 24px 24px;
+  background-color: black;
+}
+
+.logo {
+  border-radius: 6px;
+  display: block;
+  margin: 0;
+}

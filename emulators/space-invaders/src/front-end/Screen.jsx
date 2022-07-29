@@ -25,8 +25,7 @@ function Screen({ connectStateToParent, screenWidth, screenHeight, logoWidth, lo
     /* Before we draw, we save, then rotate the context of the Canvas. Space
     Invaders draws its screen at a 90 degree angle (the monitor was physically
     rotated in the cabinet) so if we draw the video buffer using a rotated
-    context then restore that context the game will appear the right way up.
-    after the screen draw. */ 
+    context then restore that context the game will appear the right way up. */
     ctx.save();
     ctx.translate(0, 256);
     ctx.rotate(270*Math.PI/180);
@@ -51,7 +50,7 @@ function Screen({ connectStateToParent, screenWidth, screenHeight, logoWidth, lo
         }
     }
 
-    /* Restore canvas context to its unrotated form */
+    /* 'Un-rotate' canvas */
     ctx.restore();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -60,10 +59,10 @@ function Screen({ connectStateToParent, screenWidth, screenHeight, logoWidth, lo
   return (
     <div className='screen-container'>
       <div>
-        <img src={logo} width={logoWidth} height={logoHeight}/>
+        <img className='logo' src={logo} width={logoWidth} height={logoHeight}/>
       </div>
-      <div>
-        <canvas className='screen' ref={canvasRef} width={screenWidth} height={screenHeight}/>
+      <div className='screen'>
+        <canvas ref={canvasRef} width={screenWidth} height={screenHeight}/>
       </div>
     </div>
   )
@@ -72,9 +71,10 @@ function Screen({ connectStateToParent, screenWidth, screenHeight, logoWidth, lo
 Screen.defaultProps = {
   screenHeight: 256,
   screenWidth: 224,
-  logoHeight: 190,
-  logoWidth: 224,
+  logoHeight: 60,
+  logoWidth: 304,
   backgroundColor: 'black',
   color: 'white'
 }
+
 export default Screen;
