@@ -11,7 +11,9 @@ const State = {
     stopClicked: false,
     lastScreenDrawRequestTime: new Date().getTime(),
     lastVBlankInterruptTime: new Date().getTime(),
+    trace: [],
 }
+
 
 /**
  * Runs through program no artificial slow-down ... Well, a teeny bit.
@@ -33,7 +35,7 @@ const State = {
  * the browser.
  * @param {number} breakpointAddr Address of break-point (optional)
  */
- function run(drawScreenInterval, vblankInterval, traceMessagesEnabled) {
+ function run(drawScreenInterval, vblankInterval) {
     let cpuState;
     let instructionCount = 0;
     let currentTime;
@@ -54,16 +56,26 @@ const State = {
         }
 
         cpuState = _computer.ExecuteNextInstruction();
+        
+        /* Send trace back every 1000 messages */
+        State.trace.push(`0x${cpuState.LastInstructionAddress.toString(16).padStart(4,'0')}\t${cpuState.LastInstructionDisassembly}\n`);
+        if (State.trace.length > 1000) {
+            postMessage({Type: 'TRACE', Trace: State.trace});
+            State.trace = [];
+        }
+         /* Send state back */
         instructionCount++;
 
         if (cpuState.CPUState.Halt || State.stopClicked) {
+            clearTimeout(State.runTimeoutID);
+            postMessage({Type: 'CPU-STATE-UPDATE', CPUState: cpuState});
             return;
         }
         
     } while (instructionCount < 30000);
     
     State.runTimeoutID = setTimeout(() => {
-        run(drawScreenInterval, vblankInterval, traceMessagesEnabled);
+        run(drawScreenInterval, vblankInterval);
     },1);
 }
 
@@ -81,7 +93,16 @@ function onMessage(e) {
             break;
         case 'STOP':
             State.stopClicked = true;
-            clearTimeout(State.runTimeoutID);
+            break;
+        case 'RESET':
+            State.stopClicked = true;
+            _computer.Reset();
+            _computer.LoadProgram();
+            State.stopClicked = false;
+            State.trace = [];
+            break;
+        case 'GET-TRACE-DUMP':
+            postMessage({Type: 'TRACE-DUMP', Trace: State.trace});
             break;
         case 'PING!':
             postMessage({Type: 'PONG!'});

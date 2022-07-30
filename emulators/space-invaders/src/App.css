@@ -1,29 +1,78 @@
+@import "~normalize.css";
+@import "~@blueprintjs/core/lib/css/blueprint.css";
+@import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
+
 .App {
-  /* text-align: center; */
+  display: flex;
+  flex-direction: row;
 }
 
 .cabinet-container {
-  text-align: center;
-  border-radius: 6px;
-  background-color: #23337a;
-  display: inline-block;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;  width: 224px;
+  margin: 5px;
+  display: flex;
   flex-direction: column;
 }
 
-.cabinet {
-  border-radius: 6px;
+.cabinet-logo {
+  border-width: 5px 5px 0px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
   border-style: solid;
   border-color: #23337a;
-  border-width: 5px 24px 24px;
+  margin: 0;
+  padding: 0;
+  background-color: #23337a;
+}
+
+.cabinet-screen {
+  display: flex;
+  flex-direction: column;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  border-style: solid;
+  border-color: #23337a;
+  border-width: 0px 7px 7px;
   background-color: black;
 }
 
-.logo {
-  border-radius: 6px;
-  display: block;
-  margin: 0;
+.control-panel-container {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;  margin: 5px;
+  margin-top: auto;
 }
 
-.cabinet-canvas {
-  border-radius: 20p;
+.register-table-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.register-table {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;  margin: 5px;
+  font-family: courier;
+  border-collapse: collapse;
+}
+
+.register-table th, td {
+  border: 1px solid #999;
+  padding: 2px;
+}
+
+.register-table td {
+  background-color: black;
+  color: white;
+  text-align: left;
+
+}
+
+.register-table th {
+  text-align: center;
+}
+
+.register-table thead {
+  background-color: #24337a;
+  color: #efe80d;
+}
+
+.greyed-out {
+  opacity: 0.3;
 }
