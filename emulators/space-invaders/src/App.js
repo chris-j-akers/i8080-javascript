@@ -36,7 +36,7 @@ function App() {
       case 'DRAW-SCREEN':
         updateVRAMState(msg.data.VRAM);
         break;
-        case 'CPU-STATE-UPDATE':
+      case 'CPU-STATE-UPDATE':
         updateCpuState(msg.data.CPUState);
         break;
       case 'TRACE':
