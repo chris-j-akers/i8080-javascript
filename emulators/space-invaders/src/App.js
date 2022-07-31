@@ -62,16 +62,10 @@ function App({ invadersWebWorker }) {
   }
  
   return (
-    <>
-      <div>
-      </div>
       <div className="App">
         <DiagnosticsWindow invadersWebWorker={invadersWebWorker} programState={programState} programStatus={programStatus} trace={trace}/>
         <Cabinet connectScreenToVRAMState={connectScreenToVRAMState} invadersWebWorker={invadersWebWorker} programState={programState} programStatus={programStatus} updateProgramStatus={updateProgramStatus} updateTrace={updateTrace}/>
       </div>
-      <div>
-      </div>
-    </>
   );
 }
 

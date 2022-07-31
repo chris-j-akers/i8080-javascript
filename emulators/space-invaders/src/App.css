@@ -47,14 +47,13 @@
 }
 
 .greyed-out {
-  opacity: 0.3;
+  opacity: 0.5;
 }
 
 .cabinet-window {
   padding-top: 20px;
   padding-bottom: 20px;
   height: 380px;
-  width: 100%;
 }
 
 .cabinet-container {
@@ -68,7 +67,6 @@
 }
 
 .diag-window {
-  width: 100%;
   padding-top: 20px;
   padding-bottom: 20px;
   height: 500px;
@@ -89,6 +87,17 @@
   flex-direction: column;
   margin-left:5px;
   margin-right: 5px;
+}
+
+.trace-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.trace-disable-checkbox {
+  margin-bottom: 4%;
+  margin-top: auto;
+  margin-left: 5px;
 }
 
 .diag-table {

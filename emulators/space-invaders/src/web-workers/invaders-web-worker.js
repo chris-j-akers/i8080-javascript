@@ -82,6 +82,10 @@ const WebWorkerState = {
  */
  function stepNextInstruction() {
     const programState = _computer.ExecuteNextInstruction();
+    
+    const VRAM = _computer.GetVideoBuffer();
+    postMessage({Type: 'DRAW-SCREEN', VRAM: VRAM });
+    
     const traceMessage =  `0x${programState.LastInstructionAddress.toString(16).padStart(4,'0')}\t${programState.LastInstructionDisassembly}\n`;
 
     if (WebWorkerState.trace.length > 1000) {
@@ -103,7 +107,9 @@ function onMessage(e) {
     switch(msg.Type) {
         case 'RUN':
             WebWorkerState.stopClicked = false;
-            run(14,7, false);
+            /* Stop VBlanks running as soon as it starts */
+            WebWorkerState.lastScreenDrawRequestTime = new Date().getTime();
+            run(16,8, false);
             break;
         case 'STOP':
             WebWorkerState.stopClicked = true;
@@ -118,6 +124,12 @@ function onMessage(e) {
             break;
         case 'STEP-NEXT':
             stepNextInstruction();
+            break;
+        case 'VBLANK':
+            _computer.GenerateVBlank();
+            break;
+        case 'HALF-VBLANK':
+            _computer.GenerateHalfVBlank();
             break;
         case 'PING!':
             postMessage({Type: 'PONG!'});
