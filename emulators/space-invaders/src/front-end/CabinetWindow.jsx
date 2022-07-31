@@ -13,7 +13,6 @@ import DiagnosticControlPanel from './cabinet-components/DiagnosticControlPanel'
 
 function Cabinet({ connectScreenToVRAMState, invadersWebWorker, programState, programStatus, updateProgramStatus, updateTrace  }) {
   return (
-    <div className='cabinet-window shadow'>
       <div className='cabinet-container'>
         <div className='cabinet-screen-container'>
             <Logo />
@@ -25,7 +24,6 @@ function Cabinet({ connectScreenToVRAMState, invadersWebWorker, programState, pr
         </div>
         <div>
         </div>
-      </div>
     </div>
 )}
 

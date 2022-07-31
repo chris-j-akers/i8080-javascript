@@ -35,9 +35,7 @@ function TraceWindow({ trace, programStatus }) {
                     </td>
                 </tr>
                 </tbody>
-                <tfoot>
-                    (Last 1000 Instructions)
-                </tfoot>
+                <tfoot>{'(Last 1000 Instructions)'}</tfoot>
             </table>
             <Checkbox onChange={() => toggleTraceDisabled(!traceDisabled)} className='trace-disable-checkbox' defaultChecked={false} label='Disable Trace' large={true}/>
     </div>

@@ -2,6 +2,7 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import Cabinet from './front-end/CabinetWindow'
 import DiagnosticsWindow from './front-end/DiagnosticsWindow';
+import Header from './front-end/Header';
 
 // V8 javascript OOM: (MemoryChunk allocation failed during deserialization.).
 
@@ -62,10 +63,15 @@ function App({ invadersWebWorker }) {
   }
  
   return (
-      <div className="App">
+    <>
+    <div />
+      <div className="App app-container shadow">
+        <Header />
         <DiagnosticsWindow invadersWebWorker={invadersWebWorker} programState={programState} programStatus={programStatus} trace={trace}/>
         <Cabinet connectScreenToVRAMState={connectScreenToVRAMState} invadersWebWorker={invadersWebWorker} programState={programState} programStatus={programStatus} updateProgramStatus={updateProgramStatus} updateTrace={updateTrace}/>
       </div>
+    <div />
+    </>
   );
 }
 

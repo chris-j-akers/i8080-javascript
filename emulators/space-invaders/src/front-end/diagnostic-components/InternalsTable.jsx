@@ -26,6 +26,10 @@ function InternalsTable({ programState, programStatus }) {
                     <td>{`0x${programState.CPUState.StackPointer.toString(16).padStart(8,'0')}`}</td>
                     <td>{`${programState.CPUState.StackPointer.toString(2).padStart(16,'0')}`}</td>
                 </tr>
+                <tr>
+                    <td>INTERRUPTS ENABLED</td>
+                    <td colSpan='3'>{programState.CPUState.InterruptsEnabled.toString().toUpperCase()}</td>
+                </tr>
             </tbody>
         </table>
         </div>
@@ -37,6 +41,7 @@ InternalsTable.defaultProps = {
         CPUState: {
             ProgramCounter: 0,
             StackPointer: 0,
+            InterruptsEnabled: true,
         }
     }
   }

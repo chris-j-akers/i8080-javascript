@@ -2,10 +2,14 @@
 @import "~@blueprintjs/core/lib/css/blueprint.css";
 @import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
 
-.App {
+#root {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.header {
+  text-align: center;
 }
 
 .cabinet-container {
@@ -48,6 +52,12 @@
 
 .greyed-out {
   opacity: 0.5;
+}
+
+.app-container {
+  margin: auto;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .cabinet-window {
