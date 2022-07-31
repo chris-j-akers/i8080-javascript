@@ -5,7 +5,7 @@ const _computer = new InvadersComputer();
 _computer.LoadProgram();
 
 // Web Worker State
-const State = {
+const WebWorkerState = {
     halfBlankToggle: true,
     runTimeoutID: null,
     stopClicked: false,
@@ -13,7 +13,6 @@ const State = {
     lastVBlankInterruptTime: new Date().getTime(),
     trace: [],
 }
-
 
 /**
  * Runs through program no artificial slow-down ... Well, a teeny bit.
@@ -36,47 +35,62 @@ const State = {
  * @param {number} breakpointAddr Address of break-point (optional)
  */
  function run(drawScreenInterval, vblankInterval) {
-    let cpuState;
+    let programState;
     let instructionCount = 0;
     let currentTime;
 
     do {
         currentTime = new Date().getTime();
 
-        if (currentTime - State.lastScreenDrawRequestTime > drawScreenInterval) {
+        if (currentTime - WebWorkerState.lastScreenDrawRequestTime > drawScreenInterval) {
             const VRAM = _computer.GetVideoBuffer();
             postMessage({Type: 'DRAW-SCREEN', VRAM: VRAM });
-            State.lastScreenDrawRequestTime = new Date().getTime();
+            WebWorkerState.lastScreenDrawRequestTime = new Date().getTime();
         }
 
-        if (currentTime - State.lastVBlankInterruptTime > vblankInterval) {
-            State.halfBlankToggle ? _computer.GenerateHalfVBlank() : _computer.GenerateVBlank();
-            State.halfBlankToggle = !State.halfBlankToggle;
-            State.lastVBlankInterruptTime = new Date().getTime();
+        if (currentTime - WebWorkerState.lastVBlankInterruptTime > vblankInterval) {
+            WebWorkerState.halfBlankToggle ? _computer.GenerateHalfVBlank() : _computer.GenerateVBlank();
+            WebWorkerState.halfBlankToggle = !WebWorkerState.halfBlankToggle;
+            WebWorkerState.lastVBlankInterruptTime = new Date().getTime();
         }
 
-        cpuState = _computer.ExecuteNextInstruction();
+        programState = _computer.ExecuteNextInstruction();
         
-        /* Send trace back every 1000 messages */
-        State.trace.push(`0x${cpuState.LastInstructionAddress.toString(16).padStart(4,'0')}\t${cpuState.LastInstructionDisassembly}\n`);
-        if (State.trace.length > 1000) {
-            postMessage({Type: 'TRACE', Trace: State.trace});
-            State.trace = [];
+        /* Send trace back in batched of 1000 */
+        WebWorkerState.trace.push(`0x${programState.LastInstructionAddress.toString(16).padStart(4,'0')}\t${programState.LastInstructionDisassembly}\n`);
+        if (WebWorkerState.trace.length > 1000) {
+            postMessage({Type: 'TRACE', Trace: WebWorkerState.trace});
+            WebWorkerState.trace = [];
         }
-         /* Send state back */
         instructionCount++;
 
-        if (cpuState.CPUState.Halt || State.stopClicked) {
-            clearTimeout(State.runTimeoutID);
-            postMessage({Type: 'CPU-STATE-UPDATE', CPUState: cpuState});
+        if (programState.CPUState.Halt || WebWorkerState.stopClicked) {
+            clearTimeout(WebWorkerState.runTimeoutID);
+            postMessage({Type: 'PROGRAM-STATE-UPDATE', ProgramState: programState});
             return;
         }
         
     } while (instructionCount < 30000);
     
-    State.runTimeoutID = setTimeout(() => {
+    WebWorkerState.runTimeoutID = setTimeout(() => {
         run(drawScreenInterval, vblankInterval);
     },1);
+}
+
+/**
+ * Run just the next instruction and return
+ */
+ function stepNextInstruction() {
+    const programState = _computer.ExecuteNextInstruction();
+    const traceMessage =  `0x${programState.LastInstructionAddress.toString(16).padStart(4,'0')}\t${programState.LastInstructionDisassembly}\n`;
+
+    if (WebWorkerState.trace.length > 1000) {
+        WebWorkerState.trace.shift();
+    }
+    
+    WebWorkerState.trace.push(traceMessage);
+    postMessage({Type: 'PROGRAM-STATE-UPDATE', ProgramState: programState});
+    postMessage({Type: 'TRACE', Trace: WebWorkerState.trace});
 }
 
 /**
@@ -88,21 +102,22 @@ function onMessage(e) {
     const msg = e.data;
     switch(msg.Type) {
         case 'RUN':
-            State.stopClicked = false;
+            WebWorkerState.stopClicked = false;
             run(14,7, false);
             break;
         case 'STOP':
-            State.stopClicked = true;
+            WebWorkerState.stopClicked = true;
+            postMessage({Type: 'TRACE', Trace: WebWorkerState.trace});
             break;
         case 'RESET':
-            State.stopClicked = true;
+            WebWorkerState.stopClicked = true;
             _computer.Reset();
             _computer.LoadProgram();
-            State.stopClicked = false;
-            State.trace = [];
+            WebWorkerState.stopClicked = false;
+            WebWorkerState.trace = [];
             break;
-        case 'GET-TRACE-DUMP':
-            postMessage({Type: 'TRACE-DUMP', Trace: State.trace});
+        case 'STEP-NEXT':
+            stepNextInstruction();
             break;
         case 'PING!':
             postMessage({Type: 'PONG!'});

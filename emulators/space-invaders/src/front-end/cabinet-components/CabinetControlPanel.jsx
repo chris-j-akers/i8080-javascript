@@ -5,14 +5,14 @@ import { GiAlienBug } from 'react-icons/gi'
 import { GrPowerReset } from 'react-icons/gr'
 import { FocusStyleManager } from "@blueprintjs/core";
 
-function ControlPanel({ invadersWebWorker, programStatus, updateProgramStatus}) {
+function CabinetControlPanel({ invadersWebWorker, programStatus, updateProgramStatus, updateTraceStatus}) {
     
   useEffect( () => {
     FocusStyleManager.onlyShowFocusOnTabs();
   },[]);
 
   return (
-    <div className='control-panel-container'>
+    <div className='control-panel-container shadow'>
       <div className='control-panel-game-controls'>
           <ButtonGroup vertical={true} alignText='left' fill={true}>
               
@@ -43,4 +43,4 @@ function ControlPanel({ invadersWebWorker, programStatus, updateProgramStatus}) 
   )
 }
 
-export default ControlPanel
+export default CabinetControlPanel

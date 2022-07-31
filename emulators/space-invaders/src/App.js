@@ -1,14 +1,14 @@
 import './App.css';
 import { useEffect, useState } from 'react';
-import Cabinet from './front-end/Cabinet'
-import ControlPanel from './front-end/ControlPanel';
-import RegisterTable from './front-end/RegisterTable';
-import InternalsTable from './front-end/InternalsTable'
-import FlagsTable from './front-end/FlagsTable'
+import Cabinet from './front-end/CabinetWindow'
+import DiagnosticsWindow from './front-end/DiagnosticsWindow';
 
-function App() {
-  const [invadersWebWorker] = useState(new Worker(new URL('./web-workers/invaders-web-worker.js', import.meta.url)));
+// V8 javascript OOM: (MemoryChunk allocation failed during deserialization.).
+
+function App({ invadersWebWorker }) {
+  // const [invadersWebWorker] = useState(new Worker(new URL('./web-workers/invaders-web-worker.js', import.meta.url)));
   const [programState, updateProgramState] = useState();
+  const [trace, updateTrace] = useState([]);
 
   /*
     POSSIBLE PROGRAM STATES:
@@ -22,6 +22,7 @@ function App() {
     switch(programStatus) {
       case 'RESET':
         updateProgramState();
+        updateTrace('');
         break;
       default:
         break;
@@ -38,10 +39,11 @@ function App() {
       case 'DRAW-SCREEN':
         updateVRAMState(msg.data.VRAM);
         break;
-      case 'CPU-STATE-UPDATE':
-        updateProgramState(msg.data.CPUState);
+      case 'PROGRAM-STATE-UPDATE':
+        updateProgramState(msg.data.ProgramState);
         break;
       case 'TRACE':
+        updateTrace(msg.data.Trace);
         break;
       case 'PONG!':
         console.log('Ping working!');
@@ -60,13 +62,16 @@ function App() {
   }
  
   return (
-    <div className="App">
-      <Cabinet connectScreenToVRAMState={connectScreenToVRAMState} programStatus={programStatus}/>
-      <ControlPanel invadersWebWorker={invadersWebWorker} programStatus={programStatus} updateProgramStatus={updateProgramStatus}/>
-      <RegisterTable programState={programState} programStatus={programStatus} />
-      <InternalsTable programState={programState} programStatus={programStatus}/>
-      <FlagsTable programStatus={programStatus} programState={programState} />
-    </div>
+    <>
+      <div>
+      </div>
+      <div className="App">
+        <DiagnosticsWindow invadersWebWorker={invadersWebWorker} programState={programState} programStatus={programStatus} trace={trace}/>
+        <Cabinet connectScreenToVRAMState={connectScreenToVRAMState} invadersWebWorker={invadersWebWorker} programState={programState} programStatus={programStatus} updateProgramStatus={updateProgramStatus} updateTrace={updateTrace}/>
+      </div>
+      <div>
+      </div>
+    </>
   );
 }
 

@@ -4,11 +4,17 @@
 
 .App {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .cabinet-container {
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;  width: 224px;
+  display: flex;
+  flex-direction: row;
+}
+
+.cabinet-screen-container {
+  border-radius: 6px;
   margin: 5px;
   display: flex;
   flex-direction: column;
@@ -36,18 +42,56 @@
   background-color: black;
 }
 
-.control-panel-container {
+.shadow {
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;  margin: 5px;
-  margin-top: auto;
+}
+
+.greyed-out {
+  opacity: 0.3;
+}
+
+.cabinet-window {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  height: 380px;
+  width: 100%;
+}
+
+.cabinet-container {
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.cabinet-control-panel-container {
+  margin-bottom: auto;
+}
+
+.diag-window {
+  width: 100%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  height: 500px;
+}
+
+.diag-container {
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.diag-control-panel-container {
+  margin-bottom: auto;
 }
 
 .diag-table-container {
   display: flex;
   flex-direction: column;
+  margin-left:5px;
+  margin-right: 5px;
 }
 
 .diag-table {
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;  margin: 5px;
   font-family: courier;
   font-size: 9;
   border-collapse: collapse;
@@ -64,7 +108,7 @@
   padding-right: 2px;
 }
 
-.diag-table th {
+.diag-table th, tfoot {
   text-align: center;
 }
 
@@ -74,6 +118,13 @@
   text-align: left;
 }
 
-.greyed-out {
-  opacity: 0.3;
+.trace-table {
+  white-space: pre;
+  width: 275px;
+}
+
+.scrollable {
+  height: 400px;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
