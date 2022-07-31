@@ -1,9 +1,7 @@
 
-import { useEffect, useRef, useState } from 'react'
-import { Checkbox } from "@blueprintjs/core";
+import { useEffect, useRef } from 'react'
 
-function TraceWindow({ trace, programStatus }) {
-    const [traceDisabled, toggleTraceDisabled] = useState(false);
+function TraceWindow({ trace, traceDisabled }) {
     const traceWindowRef = useRef(null);
 
     const scrollToBottom = () => {
@@ -37,7 +35,6 @@ function TraceWindow({ trace, programStatus }) {
                 </tbody>
                 <tfoot>{'(Last 1000 Instructions)'}</tfoot>
             </table>
-            <Checkbox onChange={() => toggleTraceDisabled(!traceDisabled)} className='trace-disable-checkbox' defaultChecked={false} label='Disable Trace' large={true}/>
     </div>
     )
 }

@@ -11,7 +11,7 @@ import DiagnosticControlPanel from './cabinet-components/DiagnosticControlPanel'
   many times per second based on data sent from our Worker process which
   is controlled by the top-level App component.*/
 
-function Cabinet({ connectScreenToVRAMState, invadersWebWorker, programState, programStatus, updateProgramStatus, updateTrace  }) {
+function CabinetWindow({ connectScreenToVRAMState, invadersWebWorker, programState, programStatus, updateProgramStatus, toggleTraceDisabled, traceDisabled, updateTrace  }) {
   return (
       <div className='cabinet-container'>
         <div className='cabinet-screen-container'>
@@ -20,7 +20,7 @@ function Cabinet({ connectScreenToVRAMState, invadersWebWorker, programState, pr
         </div>
         <div className='cabinet-control-panel-container'>
             <CabinetControlPanel invadersWebWorker={invadersWebWorker} programStatus={programStatus} updateProgramStatus={updateProgramStatus} updateTrace={updateTrace}/>
-            <DiagnosticControlPanel invadersWebWorker={invadersWebWorker} programStatus={programStatus} programState={programState}/>
+            <DiagnosticControlPanel invadersWebWorker={invadersWebWorker} programStatus={programStatus} programState={programState} toggleTraceDisabled={toggleTraceDisabled} traceDisabled={traceDisabled}/>
         </div>
         <div>
         </div>
@@ -28,4 +28,4 @@ function Cabinet({ connectScreenToVRAMState, invadersWebWorker, programState, pr
 )}
 
 
-export default Cabinet;
+export default CabinetWindow;

@@ -1,6 +1,6 @@
 import './App.css';
 import { useEffect, useState } from 'react';
-import Cabinet from './front-end/CabinetWindow'
+import CabinetWindow from './front-end/CabinetWindow'
 import DiagnosticsWindow from './front-end/DiagnosticsWindow';
 import Header from './front-end/Header';
 
@@ -10,6 +10,7 @@ function App({ invadersWebWorker }) {
   // const [invadersWebWorker] = useState(new Worker(new URL('./web-workers/invaders-web-worker.js', import.meta.url)));
   const [programState, updateProgramState] = useState();
   const [trace, updateTrace] = useState([]);
+  const [traceDisabled, toggleTraceDisabled] = useState(false);
 
   /*
     POSSIBLE PROGRAM STATES:
@@ -66,9 +67,8 @@ function App({ invadersWebWorker }) {
     <>
     <div />
       <div className="App app-container shadow">
-        <Header />
-        <DiagnosticsWindow invadersWebWorker={invadersWebWorker} programState={programState} programStatus={programStatus} trace={trace}/>
-        <Cabinet connectScreenToVRAMState={connectScreenToVRAMState} invadersWebWorker={invadersWebWorker} programState={programState} programStatus={programStatus} updateProgramStatus={updateProgramStatus} updateTrace={updateTrace}/>
+        <DiagnosticsWindow invadersWebWorker={invadersWebWorker} programState={programState} programStatus={programStatus} traceDisabled={traceDisabled} trace={trace}/>
+        <CabinetWindow connectScreenToVRAMState={connectScreenToVRAMState} invadersWebWorker={invadersWebWorker} programState={programState} programStatus={programStatus} updateProgramStatus={updateProgramStatus} toggleTraceDisabled={toggleTraceDisabled} traceDisabled={traceDisabled} updateTrace={updateTrace}/>
       </div>
     <div />
     </>

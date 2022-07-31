@@ -10,8 +10,8 @@ function Logo({logoWidth, logoHeight}) {
 }
 
 Logo.defaultProps = {
-    logoHeight: 50,
-    logoWidth: 215,
+    logoHeight: 70,
+    logoWidth: 300,
   }
 
 export default Logo
