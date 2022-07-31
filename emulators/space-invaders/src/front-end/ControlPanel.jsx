@@ -5,7 +5,7 @@ import { GiAlienBug } from 'react-icons/gi'
 import { GrPowerReset } from 'react-icons/gr'
 import { FocusStyleManager } from "@blueprintjs/core";
 
-function ControlPanel({ invadersWebWorker, programState, updateProgramState}) {
+function ControlPanel({ invadersWebWorker, programStatus, updateProgramStatus}) {
     
   useEffect( () => {
     FocusStyleManager.onlyShowFocusOnTabs();
@@ -18,21 +18,21 @@ function ControlPanel({ invadersWebWorker, programState, updateProgramState}) {
               
               <Button type ='button' icon={<GiAlienBug/>} onClick={() => {
                 invadersWebWorker.postMessage({Type: 'RUN'});
-                updateProgramState('RUNNING');
+                updateProgramStatus('RUNNING');
                 }}>
               Play Space Invaders
               </Button>
 
               <Button type ='button' icon={<AiFillPauseCircle />} onClick={() => {
                 invadersWebWorker.postMessage({Type: 'STOP'});
-                updateProgramState('PAUSED');
+                updateProgramStatus('PAUSED');
               }}>
               Pause Game
               </Button>
               
-              <Button type ='button' disabled={programState=='RUNNING'} icon={<GrPowerReset />} onClick={() => {
+              <Button type ='button' disabled={programStatus==='RUNNING'} icon={<GrPowerReset />} onClick={() => {
                 invadersWebWorker.postMessage({Type: 'RESET'});
-                updateProgramState('RESET');
+                updateProgramStatus('RESET');
                 }}>
               Reset Computer
               </Button>

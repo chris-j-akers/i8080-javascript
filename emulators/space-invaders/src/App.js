@@ -3,10 +3,12 @@ import { useEffect, useState } from 'react';
 import Cabinet from './front-end/Cabinet'
 import ControlPanel from './front-end/ControlPanel';
 import RegisterTable from './front-end/RegisterTable';
+import InternalsTable from './front-end/InternalsTable'
+import FlagsTable from './front-end/FlagsTable'
 
 function App() {
   const [invadersWebWorker] = useState(new Worker(new URL('./web-workers/invaders-web-worker.js', import.meta.url)));
-  const [cpuState, updateCpuState] = useState({});
+  const [programState, updateProgramState] = useState();
 
   /*
     POSSIBLE PROGRAM STATES:
@@ -14,17 +16,17 @@ function App() {
       PAUSED
       RESET
   */
-  const [programState, updateProgramState] = useState('STOPPED');
+  const [programStatus, updateProgramStatus] = useState('STOPPED');
 
   useEffect( () => {
-    switch(programState) {
+    switch(programStatus) {
       case 'RESET':
-        updateCpuState({});
+        updateProgramState();
         break;
       default:
         break;
     }
-  },[programState]);
+  },[programStatus]);
 
   useEffect( () => {
     invadersWebWorker.onmessage = onMessage;
@@ -37,7 +39,7 @@ function App() {
         updateVRAMState(msg.data.VRAM);
         break;
       case 'CPU-STATE-UPDATE':
-        updateCpuState(msg.data.CPUState);
+        updateProgramState(msg.data.CPUState);
         break;
       case 'TRACE':
         break;
@@ -59,9 +61,11 @@ function App() {
  
   return (
     <div className="App">
-      <Cabinet connectScreenToVRAMState={connectScreenToVRAMState} programState={programState}/>
-      <ControlPanel invadersWebWorker={invadersWebWorker} programState={programState} updateProgramState={updateProgramState}/>
-      <RegisterTable registers={cpuState.CPUState?.Registers} programState={programState} />
+      <Cabinet connectScreenToVRAMState={connectScreenToVRAMState} programStatus={programStatus}/>
+      <ControlPanel invadersWebWorker={invadersWebWorker} programStatus={programStatus} updateProgramStatus={updateProgramStatus}/>
+      <RegisterTable programState={programState} programStatus={programStatus} />
+      <InternalsTable programState={programState} programStatus={programStatus}/>
+      <FlagsTable programStatus={programStatus} programState={programState} />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 
-function Screen({connectScreenToVRAMState, width, height, backgroundColor, color, programState }) {
+function Screen({connectScreenToVRAMState, width, height, backgroundColor, color, programStatus }) {
 
     const canvasRef = React.useRef(null);
     const [VRAM, updateVRAM] = useState(new Array(0x1BFF).fill(0));
@@ -18,18 +18,17 @@ function Screen({connectScreenToVRAMState, width, height, backgroundColor, color
     },[]);
 
     useEffect( () => {
-        switch(programState) {
+        switch(programStatus) {
             case 'RESET':
                 updateVRAM(new Array(0x1BFF).fill(0));
                 break;
             default:
                 break;
         }
-    }, [programState]);
+    }, [programStatus]);
 
     /* Re-draw the screen when VRAM buffer in state changes*/
     useEffect( () => {
-
         const ctx = canvasRef.current.getContext("2d"); 
 
         /* Before we draw, we save, then rotate the context of the Canvas. Space
@@ -59,12 +58,11 @@ function Screen({connectScreenToVRAMState, width, height, backgroundColor, color
                 }
             }
         }
-
         /* 'Un-rotate' canvas */
         ctx.restore();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [VRAM, programState]);    
+    }, [VRAM]);    
 
     return (
         <div className='cabinet-screen'>

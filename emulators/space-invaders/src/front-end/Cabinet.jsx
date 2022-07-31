@@ -9,12 +9,12 @@ import Screen from './cabinet-components/Screen';
   many times per second based on data sent from our Worker process which
   is controlled by the top-level App component.*/
 
-function Cabinet({ connectScreenToVRAMState,programState  }) {
+function Cabinet({ connectScreenToVRAMState, programStatus  }) {
   
   return (
       <div className='cabinet-container'>
           <Logo />
-          <Screen connectScreenToVRAMState={connectScreenToVRAMState} programState={programState}/>
+          <Screen connectScreenToVRAMState={connectScreenToVRAMState} programStatus={programStatus}/>
       </div>
   )}
 
