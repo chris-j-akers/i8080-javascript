@@ -3,7 +3,7 @@ function FlagsTable({ programState, programStatus }) {
         <div className='diag-table-container'>
         <table className ={`diag-table ${programStatus === 'RUNNING' && 'greyed-out'}`}>
             <caption>
-                Flag State
+                CPU Flag State
             </caption>
             <thead>
                 <tr>

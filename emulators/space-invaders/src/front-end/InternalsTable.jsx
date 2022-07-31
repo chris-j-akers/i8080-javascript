@@ -3,7 +3,7 @@ function InternalsTable({ programState, programStatus }) {
         <div className='diag-table-container'>
         <table className ={`diag-table ${programStatus === 'RUNNING' && 'greyed-out'}`}>
             <caption>
-                Internal Field State
+                CPU Misc. Field State
             </caption>
             <thead>
                 <tr>

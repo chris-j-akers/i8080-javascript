@@ -3,7 +3,7 @@ function RegisterTable({ programState, programStatus }) {
         <div className='diag-table-container'>
         <table className ={`diag-table ${programStatus === 'RUNNING' && 'greyed-out'}`}>
             <caption>
-                Register State
+                CPU Register State
             </caption>
             <thead>
                 <tr>
