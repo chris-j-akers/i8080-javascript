@@ -67,8 +67,19 @@ function App({ invadersWebWorker }) {
     <>
     <div />
       <div className="App app-container shadow">
-        <DiagnosticsWindow invadersWebWorker={invadersWebWorker} programState={programState} programStatus={programStatus} traceDisabled={traceDisabled} trace={trace}/>
-        <CabinetWindow connectScreenToVRAMState={connectScreenToVRAMState} invadersWebWorker={invadersWebWorker} programState={programState} programStatus={programStatus} updateProgramStatus={updateProgramStatus} toggleTraceDisabled={toggleTraceDisabled} traceDisabled={traceDisabled} updateTrace={updateTrace}/>
+        <DiagnosticsWindow invadersWebWorker={invadersWebWorker} 
+                            programState={programState} 
+                            programStatus={programStatus} 
+                            traceDisabled={traceDisabled} 
+                            trace={trace} />
+        <CabinetWindow connectScreenToVRAMState={connectScreenToVRAMState} 
+                        invadersWebWorker={invadersWebWorker} 
+                        programState={programState} 
+                        programStatus={programStatus} 
+                        updateProgramStatus={updateProgramStatus} 
+                        toggleTraceDisabled={toggleTraceDisabled} 
+                        traceDisabled={traceDisabled} 
+                        updateTrace={updateTrace}/>
       </div>
     <div />
     </>

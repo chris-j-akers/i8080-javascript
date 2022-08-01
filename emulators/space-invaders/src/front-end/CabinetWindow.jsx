@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'react'
 import Logo from './cabinet-components/Logo';
 import Screen from './cabinet-components/Screen';
 import CabinetControlPanel from './cabinet-components/CabinetControlPanel';
@@ -12,6 +12,8 @@ import DiagnosticControlPanel from './cabinet-components/DiagnosticControlPanel'
   is controlled by the top-level App component.*/
 
 function CabinetWindow({ connectScreenToVRAMState, invadersWebWorker, programState, programStatus, updateProgramStatus, toggleTraceDisabled, traceDisabled, updateTrace  }) {
+  const [running, updateRunning] = useState(false);
+
   return (
       <div className='cabinet-container'>
         <div className='cabinet-screen-container'>
@@ -19,8 +21,18 @@ function CabinetWindow({ connectScreenToVRAMState, invadersWebWorker, programSta
             <Screen connectScreenToVRAMState={connectScreenToVRAMState} programStatus={programStatus}/>
         </div>
         <div className='cabinet-control-panel-container'>
-            <CabinetControlPanel invadersWebWorker={invadersWebWorker} programStatus={programStatus} updateProgramStatus={updateProgramStatus} updateTrace={updateTrace}/>
-            <DiagnosticControlPanel invadersWebWorker={invadersWebWorker} programStatus={programStatus} programState={programState} toggleTraceDisabled={toggleTraceDisabled} traceDisabled={traceDisabled}/>
+            <CabinetControlPanel invadersWebWorker={invadersWebWorker} 
+                                  programStatus={programStatus} 
+                                  updateProgramStatus={updateProgramStatus} 
+                                  updateTrace={updateTrace}
+                                  running={running}
+                                  updateRunning={updateRunning}/>
+
+            <DiagnosticControlPanel invadersWebWorker={invadersWebWorker} 
+                                    programStatus={programStatus} 
+                                    programState={programState} 
+                                    toggleTraceDisabled={toggleTraceDisabled} 
+                                    traceDisabled={traceDisabled}/>
         </div>
         <div>
         </div>

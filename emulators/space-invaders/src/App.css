@@ -99,6 +99,11 @@
   margin-bottom: auto;
 }
 
+.diag-running-callout {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
 .diag-table-container {
   display: flex;
   flex-direction: column;
@@ -110,7 +115,6 @@
   display: flex;
   flex-direction: row;
 }
-
 
 .trace-checkbox-container {
   display: flex;

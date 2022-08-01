@@ -1,14 +1,11 @@
-import { useEffect } from "react";
-import { Button, ButtonGroup } from "@blueprintjs/core";
-import { FocusStyleManager } from "@blueprintjs/core";
+import { useEffect, useState } from "react";
+import { Button, ButtonGroup, Checkbox, FocusStyleManager } from "@blueprintjs/core";
 import { AiFillStepForward } from 'react-icons/ai'
 import { BsSquareHalf } from 'react-icons/bs'
 import { FaSquareFull } from 'react-icons/fa'
-import { Checkbox } from "@blueprintjs/core";
 
 
-function DiagnosticControlPanel({ invadersWebWorker, toggleTraceDisabled, traceDisabled}) {
-
+function DiagnosticControlPanel({ running, invadersWebWorker, toggleTraceDisabled, traceDisabled, cpuHaltStatus}) {
     useEffect( () => {
         FocusStyleManager.onlyShowFocusOnTabs();
       },[]);
@@ -45,5 +42,6 @@ function DiagnosticControlPanel({ invadersWebWorker, toggleTraceDisabled, traceD
     </>
   )
 }
+
 
 export default DiagnosticControlPanel
