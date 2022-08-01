@@ -2,51 +2,88 @@
 @import "~@blueprintjs/core/lib/css/blueprint.css";
 @import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
 
-#root {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.header {
-  text-align: center;
-}
-
-.cabinet-container {
-  display: flex;
-  flex-direction: row;
-}
-
-.cabinet-screen-container {
-  height: 356px;
-  width: 324px;
-  border-radius: 6px;
-  margin: 5px;
-  display: flex;
-  flex-direction: column;
-}
-
-.cabinet-logo {
-  text-align: center;
-  border-width: 5px 5px 0px;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-  border-style: solid;
-  border-color: #23337a;
+* {
   margin: 0;
   padding: 0;
-  background-color: #23337a;
+  box-sizing: border-box;
 }
 
-.cabinet-screen {
+#header-container,
+#footer-container {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+#header-container,
+#footer-container,
+#body-container {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+#root-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#app-container {
   display: flex;
   flex-direction: column;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;  margin: 5px;
+}
+
+#header-container {
+  background-color: coral;
+}
+
+#body-container {
+  display: flex;
+  flex-direction: row;
+}
+
+#game-cabinet-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: auto;
+}
+
+#game-cabinet-screen-canvas {
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
-  border-style: solid;
-  border-color: #23337a;
-  border-width: 0px 7px 7px;
-  background-color: black;
+}
+
+#footer-container {
+  background-color: coral;
+}
+
+#state-table-container {
+  flex-direction: column;
+  align-items: center;
+}
+
+#game-cabinet-logo {
+  margin-top:18px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  width: 300px;
+}
+
+#control-panel-container {
+  text-align: center;
+  margin-top:18px;
+}
+
+#control-panel-status-callout {
+  margin-bottom: 5px;
+}
+
+#control-panel-disable-trace-checkbox {
+  padding-top: 11px;
+  padding-bottom: 3px;
+  margin-bottom: 5px;
 }
 
 .shadow {
@@ -57,51 +94,10 @@
   opacity: 0.5;
 }
 
-.app-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin: auto;
-  padding-top: 20px;
-  padding-bottom: 20px;
-}
-
-.cabinet-window {
-  padding-top: 20px;
-  padding-bottom: 20px;
-  height: 380px;
-}
-
-.cabinet-container {
-  margin: 14px;
-  justify-content: center;
-  display: flex;
-  flex-direction: row;
-}
-
-.cabinet-control-panel-container {
-  margin-bottom: auto;
-}
-
-.diag-window {
-  padding-top: 20px;
-  padding-bottom: 20px;
-  height: 500px;
-}
-
-.diag-container {
-  justify-content: center;
-  display: flex;
-  flex-direction: row;
-}
-
-.diag-control-panel-container {
-  margin-bottom: auto;
-}
-
-.diag-running-callout {
-  text-align: center;
-  margin-bottom: 50px;
+.scrollable {
+  height: 400px;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .diag-table-container {
@@ -109,19 +105,6 @@
   flex-direction: column;
   margin-left:5px;
   margin-right: 5px;
-}
-
-.trace-container {
-  display: flex;
-  flex-direction: row;
-}
-
-.trace-checkbox-container {
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-  padding-left: 9px;
-  padding-top: 11px;
 }
 
 .diag-table {
@@ -156,8 +139,4 @@
   width: 275px;
 }
 
-.scrollable {
-  height: 400px;
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
+

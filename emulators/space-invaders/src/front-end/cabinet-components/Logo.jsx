@@ -1,17 +1,10 @@
 import React from 'react'
 import logo from '../img/logo.png'
 
-function Logo({logoWidth, logoHeight}) {
+function Logo() {
   return (
-    <div className='cabinet-logo'>
-        <img src={logo} width={logoWidth} height={logoHeight}/>
-    </div>
+      <img id='game-cabinet-logo' src={logo}/>
   )
 }
-
-Logo.defaultProps = {
-    logoHeight: 70,
-    logoWidth: 300,
-  }
 
 export default Logo

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 
-function Screen({connectScreenToVRAMState, width, height, backgroundColor, color, programStatus }) {
+function Screen({connectScreenToVRAMState, backgroundColor, color, programStatus }) {
 
     const canvasRef = React.useRef(null);
     const [VRAM, updateVRAM] = useState(new Array(0x1BFF).fill(0));
@@ -41,12 +41,12 @@ function Screen({connectScreenToVRAMState, width, height, backgroundColor, color
 
         /* Draw VRAM out to the canvas */
         ctx.fillStyle = backgroundColor;
-        ctx.fillRect(0, 0, height, width);
+        ctx.fillRect(0, 0, 256, 300);
         ctx.fillStyle = color;
         let pixel;
         let rectX;
         let rectY;
-        for (let y=0; y<height; y++) {
+        for (let y=0; y<256; y++) {
             for (let x=0; x<32; x++) {
                 pixel = VRAM[(y * 32 + x)];
                 for (let bit=0; bit<8; bit++) {
@@ -65,15 +65,11 @@ function Screen({connectScreenToVRAMState, width, height, backgroundColor, color
     }, [VRAM]);    
 
     return (
-        <div className='cabinet-screen'>
-            <canvas ref={canvasRef} width={width} height={height}/>
-        </div>
+        <canvas id='game-cabinet-screen-canvas' width='224' height='256'ref={canvasRef}/>
     )
 }
 
 Screen.defaultProps = {
-    height: 256,
-    width: 224,
     backgroundColor: 'black',
     color: 'white'
 }
