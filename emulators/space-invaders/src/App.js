@@ -1,13 +1,16 @@
 import './App.css';
 import { useEffect, useState } from 'react';
-import RegisterTable from './front-end/diagnostic-components/RegisterTable';
-import FlagsTable from './front-end/diagnostic-components/FlagsTable';
-import InternalsTable from './front-end/diagnostic-components/InternalsTable';
+import RegisterTable from './front-end/RegisterTable';
+import FlagsTable from './front-end/FlagsTable';
+import InternalsTable from './front-end/InternalsTable';
 import TraceWindow from './front-end/TraceWindow';
-import Screen from './front-end/cabinet-components/Screen';
-import Logo from './front-end/cabinet-components/Logo';
+import Screen from './front-end/game-cabinet-components/Screen';
+import Logo from './front-end/game-cabinet-components/Logo';
 import ControlPanel from './front-end/ControlPanel'
 import Header from './front-end/Header';
+import { Card } from '@blueprintjs/core';
+import InstructionsTable from './front-end/InstructionsTable'
+
 
 // V8 javascript OOM: (MemoryChunk allocation failed during deserialization.).
 
@@ -101,26 +104,6 @@ function App({ invadersWebWorker }) {
         </div>
       </div>
     </div>
-
-    // <>
-    // <div />
-    //   <div className="App app-container shadow">
-    //     <DiagnosticsWindow invadersWebWorker={invadersWebWorker} 
-    //                         programState={programState} 
-    //                         programStatus={programStatus} 
-    //                         traceDisabled={traceDisabled} 
-    //                         trace={trace} />
-    //     <CabinetWindow connectScreenToVRAMState={connectScreenToVRAMState} 
-    //                     invadersWebWorker={invadersWebWorker} 
-    //                     programState={programState} 
-    //                     programStatus={programStatus} 
-    //                     updateProgramStatus={updateProgramStatus} 
-    //                     toggleTraceDisabled={toggleTraceDisabled} 
-    //                     traceDisabled={traceDisabled} 
-    //                     updateTrace={updateTrace}/>
-    //   </div>
-    // <div />
-    // </>
   );
 }
 

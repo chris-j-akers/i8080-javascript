@@ -9,16 +9,16 @@
 }
 
 #header-container,
-#footer-container {
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-#header-container,
 #footer-container,
 #body-container {
   margin-left: 20px;
   margin-right: 20px;
+}
+
+#header-container,
+#footer-container {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 #root-container {
@@ -69,6 +69,7 @@
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
   width: 300px;
+  height: 80px;
 }
 
 #control-panel-container {
@@ -84,6 +85,10 @@
   padding-top: 11px;
   padding-bottom: 3px;
   margin-bottom: 5px;
+}
+
+#control-panel-instruction-card {
+  text-align: center;
 }
 
 .shadow {
