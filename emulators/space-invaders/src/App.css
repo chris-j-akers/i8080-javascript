@@ -43,6 +43,13 @@
   flex-direction: row;
 }
 
+#trace-container {
+    white-space: pre;
+    width: 275px;
+    margin-right: 15px;
+}
+
+
 #game-cabinet-container {
   display: flex;
   flex-direction: column;
@@ -139,9 +146,5 @@
   text-align: left;
 }
 
-.trace-table {
-  white-space: pre;
-  width: 275px;
-}
 
 
