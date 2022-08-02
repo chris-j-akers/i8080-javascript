@@ -99,8 +99,10 @@
 }
 
 #trace-table td {
-  height: 456px;
+  height: 400px;
   width: 275px;
+  margin: 0;
+  padding: 0;
 }
 
 .shadow {
@@ -126,8 +128,8 @@
 
 .diag-table {
   font-family: courier;
-  font-size: 9;
   border-collapse: collapse;
+
 }
 
 .diag-table thead {

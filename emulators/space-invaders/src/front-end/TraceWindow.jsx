@@ -13,7 +13,7 @@ function TraceWindow({ trace, traceDisabled }) {
       }, [trace]);
 
     return (
-        <div id='trace-container' className={`${traceDisabled && 'greyed-out'}`}>
+        <div className={`${traceDisabled && 'greyed-out'}`}>
             <table id='trace-table' className ={`diag-table`}>
                 <caption>
                     Disassembly
@@ -25,15 +25,14 @@ function TraceWindow({ trace, traceDisabled }) {
                 </thead>
                 <tbody>
                 <tr>
-                    <div className='scrollable' >
-                        <td>
+                    <td>
+                        <div className='scrollable'>
                             {!traceDisabled && trace}
                         <div ref={traceWindowRef} />
+                        </div>
                     </td>
-                    </div>
                 </tr>
                 </tbody>
-                <tfoot>{'(Last 1000 Instructions)'}</tfoot>
             </table>
         </div>
     )
