@@ -9,11 +9,12 @@ class InputDevicePortOne extends Device {
 
     DepositCoin() {
         this._register &= ~1;
+
+        /* Clear the coin bit after 10ms so we can put more in */
         setTimeout(() => {
             this._register |= 1;
         }, 10);
     }
-
 
     PlayerTwoStartButtonDown() {
         this._register |= 0x2;

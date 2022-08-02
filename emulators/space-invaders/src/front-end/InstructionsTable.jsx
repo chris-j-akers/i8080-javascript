@@ -2,8 +2,8 @@ import { HTMLTable } from '@blueprintjs/core';
 
 function InstructionsTable() {
     return (
-
-        <HTMLTable condensed={true}>
+        <table id='instructions-table'>
+          <caption><h3>Instructions</h3></caption>
         <thead>
           <tr>
             <th>
@@ -33,14 +33,30 @@ function InstructionsTable() {
           </tr>
           <tr>
             <td>
-              2
+              CTRL
             </td>
             <td>
-              Player 2 Start
+              Player 1 Fire
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Left Cursor
+            </td>
+            <td>
+              Player 1 Left
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Right Cursor
+            </td>
+            <td>
+              Player 1 Right
             </td>
           </tr>
         </tbody>
-      </HTMLTable>
+      </table>
     )
 }
 

@@ -87,6 +87,7 @@ function App({ invadersWebWorker }) {
           <div id='trace-container'>
             <TraceWindow trace={trace} traceDisabled={traceDisabled} />
           </div>
+
           <div id='game-cabinet-container'>
             <Logo />
             <Screen connectScreenToVRAMState={connectScreenToVRAMState} programStatus={programStatus}/>
@@ -97,6 +98,9 @@ function App({ invadersWebWorker }) {
                           toggleTraceDisabled={toggleTraceDisabled}
                           programStatus={programStatus}
                           updateProgramStatus={updateProgramStatus} />
+            <div id='instructions-container' className='shadow'>
+              <InstructionsTable />
+          </div>
           </div>
         </div>
         <div id='footer-container'>

@@ -1,5 +1,5 @@
 html {
-  font-size: 12px;
+  font-size: 10px;
 }
 
 body {
@@ -10,8 +10,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',

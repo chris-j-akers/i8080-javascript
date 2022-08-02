@@ -52,10 +52,6 @@
   margin-right: 1rem;
 }
 
-#game-cabinet-screen-canvas {
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
-}
 
 #footer-container {
   background-color: coral;
@@ -68,8 +64,6 @@
 
 #game-cabinet-logo {
   margin-top:1.25rem;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
   width: 30.0rem;
   height: 8.0rem;
 }
@@ -107,6 +101,30 @@
   height: 40.0rem;
   margin: 0;
   padding: 0;
+}
+
+#instructions-container {
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+#instructions-table {
+  border-collapse: collapse;
+  margin-bottom: 0.5rem;
+}
+
+#instructions-table caption {
+  padding-bottom: 0.5rem;;
+}
+
+#instructions-table th {
+  text-align: center;
+}
+
+#instructions-table td {
+  text-align: left;
 }
 
 .button-style {
