@@ -44,11 +44,11 @@
 }
 
 #trace-container {
+    font-family: courier;
     white-space: pre;
     width: 275px;
-    margin-right: 15px;
+    margin-right: 15px;;
 }
-
 
 #game-cabinet-container {
   display: flex;
@@ -96,6 +96,11 @@
 
 #control-panel-instruction-card {
   text-align: center;
+}
+
+#trace-table td {
+  height: 456px;
+  width: 275px;
 }
 
 .shadow {
