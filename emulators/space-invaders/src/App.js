@@ -8,24 +8,14 @@ import Screen from './front-end/game-cabinet-components/Screen';
 import Logo from './front-end/game-cabinet-components/Logo';
 import ControlPanel from './front-end/ControlPanel'
 import Header from './front-end/Header';
-import { Card } from '@blueprintjs/core';
 import InstructionsTable from './front-end/InstructionsTable'
 
-
-// V8 javascript OOM: (MemoryChunk allocation failed during deserialization.).
-
 function App({ invadersWebWorker }) {
-  // const [invadersWebWorker] = useState(new Worker(new URL('./web-workers/invaders-web-worker.js', import.meta.url)));
   const [programState, updateProgramState] = useState();
   const [trace, updateTrace] = useState([]);
   const [traceDisabled, toggleTraceDisabled] = useState(false);
 
-  /*
-    POSSIBLE PROGRAM STATES:
-      RUNNING
-      PAUSED
-      RESET
-  */
+  /* POSSIBLE PROGRAM STATES: RUNNING, PAUSED, RESET */
   const [programStatus, updateProgramStatus] = useState('STOPPED');
 
   useEffect( () => {
@@ -41,6 +31,7 @@ function App({ invadersWebWorker }) {
 
   useEffect( () => {
     invadersWebWorker.onmessage = onMessage;
+    
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [invadersWebWorker]);
 
@@ -66,7 +57,7 @@ function App({ invadersWebWorker }) {
 
   /* This is a bit of a hack, but allows us to update a child's state without
   updating our own and, therefore, re-drawining everything - required when the
-  child is the Screen and will require redrawing multiple times a second!*/
+  child is the Screen and will require redrawing multiple times a second! */
   let updateVRAMState = null;
   const connectScreenToVRAMState=(f) => {
     updateVRAMState = f;
@@ -87,7 +78,6 @@ function App({ invadersWebWorker }) {
           <div id='trace-container'>
             <TraceWindow trace={trace} traceDisabled={traceDisabled} />
           </div>
-
           <div id='game-cabinet-container'>
             <Logo />
             <Screen connectScreenToVRAMState={connectScreenToVRAMState} programStatus={programStatus}/>
