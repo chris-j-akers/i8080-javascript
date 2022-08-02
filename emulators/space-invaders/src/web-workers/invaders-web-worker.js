@@ -131,6 +131,33 @@ function onMessage(e) {
         case 'HALF-VBLANK':
             _computer.GenerateHalfVBlank();
             break;
+        case 'COIN':
+            _computer.InputDevicePortOne.DepositCoin();
+            break;
+        case 'P1-FIRE-DOWN':
+            _computer.InputDevicePortOne.PlayerOneFireButtonDown();
+            break;
+        case 'P1-LEFT-DOWN':
+            _computer.InputDevicePortOne.PlayerOneJoystickLeftDown();
+            break;
+        case 'P1-RIGHT-DOWN':
+            _computer.InputDevicePortOne.PlayerOneJoystickRightDown();
+            break;
+        case 'P1-START-DOWN':
+            _computer.InputDevicePortOne.PlayerOneStartButtonDown();
+            break;
+        case 'P1-FIRE-UP':
+            _computer.InputDevicePortOne.PlayerOneFireButtonUp();
+            break;
+        case 'P1-LEFT-UP':
+            _computer.InputDevicePortOne.PlayerOneJoystickLeftUp();
+            break;
+        case 'P1-RIGHT-UP':
+            _computer.InputDevicePortOne.PlayerOneJoystickRightUp();
+            break;
+        case 'P1-START-UP':
+            _computer.InputDevicePortOne.PlayerOneStartButtonUp();
+            break;
         case 'PING!':
             postMessage({Type: 'PONG!'});
             break;

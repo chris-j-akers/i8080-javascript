@@ -8,7 +8,15 @@ class InputDevicePortOne extends Device {
     }
 
     DepositCoin() {
+        console.log('Dropping coing');
         this._register &= ~1;
+        setTimeout(this._clearCoin, 2);
+    }
+
+    _clearCoin() {
+        console.log('Clearing coin');
+        this._register |= 0x01;
+        console.log(this._regiser);
     }
 
     PlayerTwoStartButtonDown() {
