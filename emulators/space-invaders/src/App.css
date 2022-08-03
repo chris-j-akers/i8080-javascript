@@ -34,8 +34,11 @@
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;  margin: 5px;
 }
 
-#header-container {
-  background-color: coral;
+#header-title {
+  border-top: 0.1em solid;
+  border-bottom: 0.1em solid;
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 #body-container {

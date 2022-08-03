@@ -5,6 +5,7 @@ import ControlPanel from './components/ControlPanel'
 import Header from './components/Header';
 import CPUStateTables from './components/CPUStateTables';
 import GameCabinet from './components/GameCabinet';
+import Footer from './components/Footer';
 
 function App({ invadersWebWorker }) {
   const [programState, updateProgramState] = useState();
@@ -61,7 +62,7 @@ function App({ invadersWebWorker }) {
 
   return (
     <div id='root-container' >
-      <div id='app-container' style={{fontSize: '10px'}}>
+      <div id='app-container' style={{fontSize: '12px'}}>
           <Header />
           <div id='body-container'>
             <CPUStateTables programState={programState} programStatus={programStatus}/>
@@ -73,9 +74,7 @@ function App({ invadersWebWorker }) {
                           programStatus={programStatus}
                           updateProgramStatus={updateProgramStatus} />
           </div>
-        <div id='footer-container'>
-          FOOTER!
-        </div>
+          <Footer />
       </div>
     </div>
   );
