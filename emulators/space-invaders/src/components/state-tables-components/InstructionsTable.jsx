@@ -3,7 +3,6 @@ import { HTMLTable } from '@blueprintjs/core';
 function InstructionsTable() {
     return (
         <table id='instructions-table'>
-          <caption><h3>Instructions</h3></caption>
         <thead>
           <tr>
             <th>

@@ -54,7 +54,7 @@ function App({ invadersWebWorker }) {
 
   /* This is a bit of a hack, but allows us to update a child's state without
   updating our own and, therefore, re-drawining everything - required when the
-  child is the Screen and will require redrawing multiple times a second! */
+  child is the Screen and needs redrawing multiple times a second! */
   let updateVRAMState = null;
   const connectScreenToVRAMState=(f) => {
     updateVRAMState = f;
@@ -62,7 +62,7 @@ function App({ invadersWebWorker }) {
 
   return (
     <div id='root-container' >
-      <div id='app-container' style={{fontSize: '12px'}}>
+      <div id='app-container'>
           <Header />
           <div id='body-container'>
             <CPUStateTables programState={programState} programStatus={programStatus}/>
@@ -79,5 +79,10 @@ function App({ invadersWebWorker }) {
     </div>
   );
 }
+
+// www.cakers.io is improperly configured Your site's DNS settings are using a
+// custom subdomain, www.cakers.io, that is set up as an A record. We recommend
+// you change this to a CNAME record pointing to chris-j-akers.github.io. For
+// more information, see documentation (InvalidARecordError).
 
 export default App;
