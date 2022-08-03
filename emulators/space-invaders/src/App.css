@@ -11,14 +11,14 @@
 #header-container,
 #footer-container,
 #body-container {
-  margin-left: 2rem;
-  margin-right: 2rem;;
+  margin-left: 2em;
+  margin-right: 2em;;
 }
 
 #header-container,
 #footer-container {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin-top: 2em;
+  margin-bottom: 2em;
 }
 
 #root-container {
@@ -48,8 +48,8 @@
   flex-direction: column;
   justify-content: center;
   margin-bottom: auto;
-  margin-left: 1rem;
-  margin-right: 1rem;
+  margin-left: 1em;
+  margin-right: 1em;
 }
 
 
@@ -57,32 +57,32 @@
   background-color: coral;
 }
 
-#state-table-container {
+#cpu-state-table-container {
   flex-direction: column;
   align-items: center;
 }
 
 #game-cabinet-logo {
-  margin-top:1.25rem;
-  width: 30.0rem;
-  height: 8.0rem;
+  margin-top:1.25em;
+  width: 30.0em;
+  height: 8.0em;
 }
 
 #control-panel-container {
   text-align: center;
-  margin-top:1.8rem;
-  margin-left: 1rem;
-  margin-right: 1rem;
+  margin-top:1.8em;
+  margin-left: 1em;
+  margin-right: 1em;
 }
 
 #control-panel-status-callout {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.5em;
 }
 
 #control-panel-disable-trace-checkbox {
-  padding-top: 1.1rem;
-  padding-bottom: 0.3rem;
-  margin-bottom: 0.5rem;
+  padding-top: 1.1em;
+  padding-bottom: 0.3em;
+  margin-bottom: 0.5em;
 }
 
 #control-panel-instruction-card {
@@ -92,31 +92,31 @@
 #trace-container {
   font-family: courier;
   white-space: pre;
-  width: 22rem;
-  margin-right: 1rem;
-  margin-left: 1rem;
+  width: 21.5em;
+  margin-right: 1em;
+  margin-left: 1em;
 }
 
 #trace-table td {
-  height: 40.0rem;
+  height: 40.0em;
   margin: 0;
   padding: 0;
 }
 
 #instructions-container {
-  font-size: 1rem;
+  font-size: 1em;
   display: flex;
   justify-content: center;
-  margin-top: 2rem;
+  margin-top: 2em;
 }
 
 #instructions-table {
   border-collapse: collapse;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.5em;
 }
 
 #instructions-table caption {
-  padding-bottom: 0.5rem;;
+  padding-bottom: 0.5em;;
 }
 
 #instructions-table th {
@@ -128,7 +128,7 @@
 }
 
 .button-style {
-  font-size: 1rem;
+  font-size: 1em;
 }
 
 .shadow {
@@ -140,7 +140,7 @@
 }
 
 .scrollable {
-  height: 40.7rem;
+  height: 40.7em;
   overflow-y: scroll;
   overflow-x: hidden;
 }
@@ -148,14 +148,14 @@
 .diag-table-container {
   display: flex;
   flex-direction: column;
-  margin-left: 1rem;
-  margin-right: 1rem;
-  margin-bottom: 1rem;
+  margin-left: 1em;
+  margin-right: 1em;
+  margin-bottom: 1em;
 }
 
 .diag-table {
   font-family: courier;
-  font-size: 1rem;
+  font-size: 1em;
   border-collapse: collapse;
 
 }
@@ -166,9 +166,9 @@
 }
 
 .diag-table th, td {
-  border: 0.1rem solid #999;
-  padding-left: 0.2rem;
-  padding-right: 0.2rem;
+  border: 0.1em solid #999;
+  padding-left: 0.2em;
+  padding-right: 0.2em;
 }
 
 .diag-table th, tfoot {

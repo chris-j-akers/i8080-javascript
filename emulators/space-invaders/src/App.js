@@ -1,14 +1,10 @@
 import './App.css';
 import { useEffect, useState } from 'react';
-import RegisterTable from './front-end/RegisterTable';
-import FlagsTable from './front-end/FlagsTable';
-import InternalsTable from './front-end/InternalsTable';
-import TraceWindow from './front-end/TraceWindow';
-import Screen from './front-end/game-cabinet-components/Screen';
-import Logo from './front-end/game-cabinet-components/Logo';
-import ControlPanel from './front-end/ControlPanel'
-import Header from './front-end/Header';
-import InstructionsTable from './front-end/InstructionsTable'
+import TraceWindow from './components/TraceWindow';
+import ControlPanel from './components/ControlPanel'
+import Header from './components/Header';
+import CPUStateTables from './components/CPUStateTables';
+import GameCabinet from './components/GameCabinet';
 
 function App({ invadersWebWorker }) {
   const [programState, updateProgramState] = useState();
@@ -62,37 +58,21 @@ function App({ invadersWebWorker }) {
   const connectScreenToVRAMState=(f) => {
     updateVRAMState = f;
   }
- 
+
   return (
-    <div id='root-container'>
-      <div id='app-container'>
-        <div id='header-container'>
+    <div id='root-container' >
+      <div id='app-container' style={{fontSize: '10px'}}>
           <Header />
-        </div>
-        <div id='body-container'>
-          <div id='state-table-container'>
-            <InternalsTable programStatus={programStatus} programState={programState} />
-            <RegisterTable programStatus={programStatus} programState={programState} />
-            <FlagsTable programStatus={programStatus} programState={programState} />
-          </div>
-          <div id='trace-container'>
+          <div id='body-container'>
+            <CPUStateTables programState={programState} programStatus={programStatus}/>
             <TraceWindow trace={trace} traceDisabled={traceDisabled} />
-          </div>
-          <div id='game-cabinet-container'>
-            <Logo />
-            <Screen connectScreenToVRAMState={connectScreenToVRAMState} programStatus={programStatus}/>
-          </div>
-          <div id='control-panel-container'>
+            <GameCabinet connectScreenToVRAMState={connectScreenToVRAMState} programStatus={programStatus}/>
             <ControlPanel invadersWebWorker={invadersWebWorker} 
                           traceDisabled={traceDisabled}
                           toggleTraceDisabled={toggleTraceDisabled}
                           programStatus={programStatus}
                           updateProgramStatus={updateProgramStatus} />
-            <div id='instructions-container' className='shadow'>
-              <InstructionsTable />
           </div>
-          </div>
-        </div>
         <div id='footer-container'>
           FOOTER!
         </div>
