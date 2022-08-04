@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, ButtonGroup, Callout, Checkbox, FocusStyleManager  } from "@blueprintjs/core";
+import { Button, ButtonGroup, Checkbox, FocusStyleManager  } from "@blueprintjs/core";
 import { AiFillPauseCircle } from 'react-icons/ai'
 import { GiAlienBug } from 'react-icons/gi'
 import { GrPowerReset } from 'react-icons/gr'
@@ -7,6 +7,7 @@ import { AiFillStepForward } from 'react-icons/ai'
 import { BsSquareHalf } from 'react-icons/bs'
 import { FaSquareFull } from 'react-icons/fa'
 import InstructionsTable from "./state-tables-components/InstructionsTable";
+import StatusCard from "./StatusCard";
 
 function ControlPanel({ invadersWebWorker, traceDisabled, toggleTraceDisabled, programStatus, updateProgramStatus}) {
 
@@ -18,9 +19,7 @@ function ControlPanel({ invadersWebWorker, traceDisabled, toggleTraceDisabled, p
 
     return (
         <div id='control-panel-container'>
-            <div id='control-panel-status-callout' className='shadow'>
-                <Callout title={running ? 'RUNNING' : 'STOPPED'} intent={running ? 'Success' : 'Danger'}></Callout>
-            </div>
+            <StatusCard running={running}></StatusCard>
 
             <div id='control-panel-disable-trace-checkbox' className='shadow button-style'>
                 <Checkbox onChange={() => toggleTraceDisabled(!traceDisabled)} defaultChecked={false} label='Disable Trace' large={false}/>

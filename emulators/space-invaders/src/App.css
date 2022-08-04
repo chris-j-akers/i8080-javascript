@@ -108,8 +108,25 @@
   margin-right: 1em;
 }
 
-#control-panel-status-callout {
-  margin-bottom: 0.5em;
+#control-panel-status-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.5em;
+  margin-bottom: 1.5em;
+  height: 2em;
+  border-radius: 0.5em;
+  }
+
+.status-card-stopped {
+  background-color: #f7eded;
+  color: #AC2F33;
+}
+
+.status-card-running {
+  background-color: #ebf3eb;
+  color: #36453c
 }
 
 @media (max-width: 820px) {
