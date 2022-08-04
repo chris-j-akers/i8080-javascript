@@ -6,6 +6,7 @@ import Header from './components/Header';
 import CPUStateTables from './components/CPUStateTables';
 import GameCabinet from './components/GameCabinet';
 import Footer from './components/Footer';
+import PortableDeviceControls from './components/PortableDeviceControls';
 
 function App({ invadersWebWorker }) {
   const [programState, updateProgramState] = useState();
@@ -74,6 +75,7 @@ function App({ invadersWebWorker }) {
                           programStatus={programStatus}
                           updateProgramStatus={updateProgramStatus} />
           </div>
+          <PortableDeviceControls invadersWebWorker={invadersWebWorker}/>
           <Footer />
       </div>
     </div>

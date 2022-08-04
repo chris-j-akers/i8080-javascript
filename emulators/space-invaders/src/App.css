@@ -21,6 +21,44 @@
   margin-bottom: 2em;
 }
 
+#portable-device-controls {
+  display: none;
+}
+
+@media (max-width: 900px) {
+
+  #portable-device-controls {
+    margin-top: 2em;
+    display: flex;
+    flex-direction: row;
+    margin-left: 3em;
+    border-radius: 1em;
+  }
+
+  #fire-start-controls {
+    justify-content: left;
+    margin-left: auto;
+    border-radius: 1em;
+  }
+
+  #direction-controls {
+    display: flex;
+    flex-direction: row;
+    }
+
+  .button-controls {
+    height: 4em;
+    width: 4em;
+  }
+
+  @media (max-width: 568px) {
+    .button-controls {
+        height: 1em;
+        width: 1em;
+    }
+  }
+}
+
 #root-container {
   width: 100%;
   display: flex;
@@ -42,7 +80,7 @@
 
 @media (max-width: 568px) {
   #app-container {
-    font-size: 6px;
+    font-size: 5px;
   }
 }
 
