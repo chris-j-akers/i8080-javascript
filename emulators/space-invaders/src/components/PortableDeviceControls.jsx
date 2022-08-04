@@ -2,7 +2,6 @@ import { Button } from "@blueprintjs/core";
 import { AiFillCaretLeft, AiFillCaretRight } from 'react-icons/ai';
 import { BsCoin } from 'react-icons/bs';
 import { GiBolterGun } from 'react-icons/gi';
-import { IconContext } from 'react-icons';
 import { FaRunning } from 'react-icons/fa';
 
 function PortableDeviceControls( {invadersWebWorker} ) {
