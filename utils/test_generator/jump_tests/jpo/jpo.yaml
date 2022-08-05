@@ -1,0 +1,68 @@
+# Tests moving data from Memory locations to Register using MOV OpCode
+---
+test_suite:
+  enable: True
+  generator_function: jpo_tests.generate_jpo
+  description: 'JPO'
+  output_file_name: '/jump/jpo.test.js'
+  header: |
+    import { Computer } from '../../core/computer.js'
+    import { i8080 } from '../../core/i8080.js'
+    import { strict as assert } from 'assert'
+
+  footer: |
+    });
+  boilerplate: |
+    const c = new Computer();
+    const FlagType = c._cpu._flagManager.FlagType;
+
+    let program = [
+      0x3E,                   // MVI into accumulator
+      {accumulator},          // ...this byte
+      0x26,                   // MVI into Register H...
+      0xFF,                   // ...This high-byte
+      0x2E,                   // MVI into Register L...
+      0xFE,                   // ...This high-byte
+      0x36,                   // MVI into memory location (stored in registers H/L)
+      0x76,                   // ...OpCode 0x76 (So the program HALTS when the program counter changes on JNZ)
+      0xC6,                   // Add...
+      {add},                  // ...This immediate value to accumulator
+      0xE2,                   // JPO
+      0xFE,                   // ..This low-byte
+      0xFF,                   // ...and this high-byte
+      0x76,                   // HALT
+    ]
+
+      c.LoadProgram(program);
+      c.ExecuteProgram();
+
+      assert.equal(c.CPUState.Registers['A'], {expected_result})
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity), {parity});
+      assert.equal(c.CPUState.ProgramCounter, {expected_program_counter});
+      assert.equal(c.CPUState.Clock, {expected_clock});
+
+    }});
+    
+  tests:
+
+    - test:
+      name: Parity is set (Even Parity), program counter is not modified
+      accumulator: 10
+      add: 10
+      expected_result: 20
+      expected_program_counter: 14
+      expected_clock: 48
+      parity: true
+
+
+    - test: 
+      name: Parity is not set (Odd Parity), program counter is modified
+      accumulator: 10
+      add: 9
+      expected_result: 19
+      expected_program_counter: 0xFFFF
+      expected_clock: 55
+      parity: false
+
+
+    

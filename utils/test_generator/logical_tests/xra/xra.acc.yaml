@@ -1,0 +1,79 @@
+---
+test_suite:
+  enable: True
+  generator_function: xra_tests.generate_xra_acc
+  description: 'XRA Accumulator'
+  output_file_name: '/logical/xra.acc.test.js'
+  header: |
+    import { Computer } from '../../core/computer.js'
+    import { i8080 } from '../../core/i8080.js'
+    import { strict as assert } from 'assert'
+
+  footer: |
+    });
+  boilerplate: |
+    const c = new Computer();
+    const FlagType = c._cpu._flagManager.FlagType;
+
+
+    let program = [
+        0x3E,                 // MVI into the accumulator...
+        {accumulator},        // ... this immediate value
+        0xAF,                 // XRA value in register with Accumulator
+        0x76                  // HALT
+      ]
+
+    for (let reg of Object.keys(c.CPUState.Registers).filter((register) => register != 'A')) {{
+
+      c.LoadProgram(program);
+      {set_carry}
+      c.ExecuteProgram();
+
+      assert.equal(c.CPUState.Registers.A, {expected_result});
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), {carry});
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),{parity});
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), {auxillary_carry});
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), {zero});
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), {sign});
+
+      assert.equal(c.CPUState.Clock, 18);
+
+      c.Reset();
+      }}
+    }});
+
+  tests:
+
+    - test:
+      name: Zero Accumulator
+      comment: |
+        // +-----------------------+-----------------------+-------+
+        // |      Accumulator      |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+
+        // | 004 | 0x04 | 00000100 | 000 | 0x00 | 00000000 | Z|P   |
+        // +-----------------------+-----------------------+-------+
+      set_carry: False
+      accumulator: 4
+      expected_result: 0
+      carry: False
+      parity: True
+      auxillary_carry: False
+      zero: True
+      sign: False
+
+    - test:
+      name: Zero Accumulator and Reset Carry
+      comment: |
+        // +-----------------------+-----------------------+-------+
+        // |      Accumulator      |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+
+        // | 004 | 0x04 | 00000100 | 000 | 0x00 | 00000000 | Z|P   |
+        // +-----------------------+-----------------------+-------+
+      set_carry: True
+      accumulator: 4
+      expected_result: 0
+      carry: False
+      parity: True
+      auxillary_carry: False
+      zero: True
+      sign: False      

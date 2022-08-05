@@ -1,0 +1,42 @@
+# Tests moving data from Memory locations to Register using MOV OpCode
+---
+test_suite:
+  enable: True
+  generator_function: sphl_tests.generate_sphl
+  description: 'SPHL'
+  output_file_name: '/stack/sphl.test.js'
+  header: |
+    import { Computer } from '../../core/computer.js'
+    import { i8080 } from '../../core/i8080.js'
+    import { strict as assert } from 'assert'
+  footer: |
+    });
+  boilerplate: |
+    const c = new Computer();
+    const FlagType = c._cpu._flagManager.FlagType;
+    
+    let program = [
+      0x26,                   // MVI into Register H...
+      {h_register},           // ...This high-byte
+      0x2E,                   // MVI into Register L...
+      {l_register},           // ...This low-byte
+      0xF9,                   // SPHL
+      0x76,                   // HALT
+    ]
+    
+      c.LoadProgram(program);
+      c.ExecuteProgram();
+
+      // Check we're set-up correctly
+
+      assert.equal(c.CPUState.StackPointer, {h_register} << 8 | {l_register});
+      assert.equal(c.CPUState.Clock, 26);
+
+    }});
+
+  tests:
+
+    - test: 
+      name: Standard SPHL (taken from 8080 programmers manual)
+      h_register: 0x50
+      l_register: 0x6C

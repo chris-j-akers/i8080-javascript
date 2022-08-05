@@ -1,0 +1,74 @@
+---
+test_suite:
+  enable: True
+  generator_function: sub_tests.generate_sub_acc
+  description: 'SUB Accumulator Flag'
+  output_file_name: '/arithmetic/sub.acc.test.js'
+  header: |
+    import { Computer } from '../../core/computer.js'
+    import { i8080 } from '../../core/i8080.js'
+    import { strict as assert } from 'assert'
+  footer: |
+    });
+  boilerplate: |
+    const c = new Computer();
+    const FlagType = c._cpu._flagManager.FlagType;
+
+
+    const program = [
+      0x3E,           // MVI into accumulator ...
+      {accumulator},  // ...this immediate value
+      0x97,           // SUB A
+      0x76            // HALT
+    ]
+
+    c.LoadProgram(program);
+    c.ExecuteProgram();
+
+    assert.equal(c.CPUState.Registers.A, {expected_result});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), {carry});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),{parity});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), {auxillary_carry});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), {zero});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), {sign});
+    
+    assert.equal(c.CPUState.Clock, 18);
+
+
+    c.Reset();
+    }});
+
+  tests:
+
+    - test:
+      name: Zero, AuxCarry, Parity Flags Set 
+      comment: |
+        // +-----------------------+-----------------------+-------+
+        // |      Accumulator      |      Expected         | Flags |
+        // +-----------------------+-----------------------+-------+
+        // | 001 | 0x01 | 00000001 | 000 | 0x00 | 00000000 | Z|P   |
+        // +-----------------------+-----------------------+-------+
+      accumulator: 1
+      expected_result: 0
+      carry: False
+      parity: True
+      auxillary_carry: True
+      zero: True
+      sign: False
+
+    - test:
+      name: Carry, Sign Flags Set
+      comment: |
+        // +-----------------------+-----------------------+-------+
+        // |      Accumulator      |      Expected         | Flags |
+        // +-----------------------+-----------------------+-------+
+        // | 255 | 0xFF | 11111111 | 000 | 0x00 | 00000000 | C|S   |
+        // +-----------------------+-----------------------+-------+
+      accumulator: 255
+      expected_result: 0
+      carry: False
+      parity: True
+      auxillary_carry: True
+      zero: True
+      sign: False
+      

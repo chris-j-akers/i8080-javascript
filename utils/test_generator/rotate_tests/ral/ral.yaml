@@ -1,0 +1,75 @@
+# Tests moving data from Memory locations to Register using MOV OpCode
+---
+test_suite:
+  enable: True
+  generator_function: ral_tests.generate_ral
+  description: 'RAL'
+  output_file_name: '/rotate/ral.test.js'
+  header: |
+    import { Computer } from '../../core/computer.js'
+    import { i8080 } from '../../core/i8080.js'
+    import { strict as assert } from 'assert'
+
+  footer: |
+    });
+  boilerplate: |
+    const c = new Computer();
+    const FlagType = c._cpu._flagManager.FlagType;
+
+
+    let program = [
+      0x3E,           // MVI into accumulator
+      {data},         // ...this byte
+      0x17,           // RAL
+      0x76,           // HALT
+    ]
+
+      {set_carry}
+
+      c.LoadProgram(program);
+      c.ExecuteProgram();
+
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), {carry});
+      assert.equal(c.CPUState.Registers['A'], {expected_result})
+
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity), false);
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), false);
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), false);
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), false);
+
+      assert.equal(c.CPUState.Clock, 18);
+
+      c.Reset();
+
+    }});
+    
+  tests:
+
+    - test:
+      name: Bit 7 set, Carry not set
+      set_carry: false
+      data: 181
+      carry: True
+      expected_result: 106
+
+    - test:
+      name: Bit 7 not set, Carry not set 
+      set_carry: false
+      data: 106
+      carry: False
+      expected_result: 212
+
+    - test:
+      name: Bit 7 set, carry set 
+      set_carry: true
+      data: 181
+      carry: True
+      expected_result: 107
+
+    - test:
+      name: Bit 7 not set, Carry set 
+      set_carry: true
+      data: 106
+      carry: False
+      expected_result: 213
+    

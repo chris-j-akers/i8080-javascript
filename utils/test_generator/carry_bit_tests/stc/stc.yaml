@@ -1,0 +1,44 @@
+# Tests moving data from Memory locations to Register using MOV OpCode
+---
+test_suite:
+  enable: True
+  generator_function: stc_tests.generate_stc
+  description: 'STC'
+  output_file_name: '/carry_bit/stc.test.js'
+  header: |
+    import { Computer } from '../../core/computer.js'
+    import { i8080 } from '../../core/i8080.js'
+    import { strict as assert } from 'assert'
+  footer: |
+    });
+  boilerplate: |
+    const c = new Computer();
+    const FlagType = c._cpu._flagManager.FlagType;
+
+
+    const program = [
+      0x37,          // Complement Carry
+      0x76           // HALT
+    ]
+
+      {set_carry};
+
+      c.LoadProgram(program);
+      c.ExecuteProgram();
+
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), true);
+      assert.equal(c.CPUState.Clock, 11);
+
+      c.Reset();
+    }});
+  tests:
+
+    - test:
+      name: STC when Carry unset
+      set_carry: False
+
+    - test:
+      name: STC when Carry set
+      set_carry: true
+    
+  

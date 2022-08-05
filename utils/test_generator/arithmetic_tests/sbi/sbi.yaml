@@ -1,0 +1,257 @@
+---
+test_suite:
+  enable: True
+  generator_function: sbi_tests.generate_sbi
+  description: 'SBI'
+  output_file_name: '/arithmetic/sbi.test.js'
+  header: |
+    import { Computer } from '../../core/computer.js'
+    import { i8080 } from '../../core/i8080.js'
+    import { strict as assert } from 'assert'
+  footer: |
+    });
+  boilerplate: |
+    const c = new Computer();
+    const FlagType = c._cpu._flagManager.FlagType;
+
+
+    const program = [
+      0x3E,                   // MVI into accumulator....
+      {accumulator},          // ...this immediate value
+      0xDE,                   // SBI from the accumulator...
+      {data},                 // ...this immediate value
+      0x76                    // HALT 
+    ]
+
+    c.LoadProgram(program);
+    {set_carry}
+    c.ExecuteProgram();
+
+    assert.equal(c.CPUState.Registers.A,{expected_result});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), {carry});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity), {parity});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), {auxillary_carry});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), {zero});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), {sign});
+    
+    assert.equal(c.CPUState.Clock, 21);
+    
+    }});
+
+  tests:
+
+    - test:
+      name: No Flags Set (Carry Bit Reset)
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 001 | 0x01 | 00000001 | 032 | 0x20 | 00100000 |     0 | 31 | 0x1F | 000011111 |       |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 1
+      accumulator: 32
+      set_carry: False
+      expected_result: 31
+      carry: False
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: False
+      
+    - test:
+      name: No Flags Set (Carry Bit Set)
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 001 | 0x01 | 00000001 | 033 | 0x21 | 00100001 |     0 | 31 | 0x1F | 000011111 |       |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 1
+      accumulator: 33
+      set_carry: True
+      expected_result: 31
+      carry: False
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: False
+      
+    - test:
+      name: Parity, Aux Carry and Zero Flags Set (Carry Bit Reset)
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 001 | 0x01 | 00000001 | 001 | 0x01 | 00000001 |     0 | 000 | 0x00 | 00000000 | P|A|Z |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 1
+      accumulator: 1
+      set_carry: False
+      expected_result: 0
+      carry: False
+      parity: True
+      auxillary_carry: True
+      zero: True
+      sign: False
+
+    - test:
+      name: Parity, Aux Carry and Zero Flags Set (Carry Bit Set)
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 002 | 0x02 | 00000010 | 001 | 0x01 | 00000001 |     1 | 000 | 0x00 | 00000000 | P|A|Z |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 2
+      accumulator: 3
+      set_carry: True
+      expected_result: 0
+      carry: False
+      parity: True
+      auxillary_carry: True
+      zero: True
+      sign: False
+
+    - test:
+      name: Parity Flag Set (Carry Bit Reset)
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 002 | 0x02 | 00000010 | 032 | 0x20 | 00100000 |     0 | 030 | 0x1E | 00011110 | P     |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 2
+      accumulator: 32
+      set_carry: False
+      expected_result: 30
+      carry: False
+      parity: True
+      auxillary_carry: False
+      zero: False
+      sign: False
+
+    - test:
+      name: Parity Flag Set (Carry Bit Set)
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 002 | 0x02 | 00000010 | 032 | 0x20 | 00100000 |     1 | 030 | 0x1E | 00011110 | P     |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 1
+      accumulator: 32
+      set_carry: True
+      expected_result: 30
+      carry: False
+      parity: True
+      auxillary_carry: False
+      zero: False
+      sign: False
+
+    - test:
+      name: Aux Carry Set (Carry Bit Reset)
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 003 | 0x03 | 00000011 | 127 | 0x7F | 01111111 |     0 | 124 | 0x7C | 01111100 | A     |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 3
+      accumulator: 127
+      set_carry: False
+      expected_result: 124
+      carry: False
+      parity: False
+      auxillary_carry: True
+      zero: False
+      sign: False
+
+    - test:
+      name: Aux Carry Set (Carry Bit Set)
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 004 | 0x04 | 00000100 | 127 | 0x7F | 01111111 |     1 | 122 | 0x7A | 01111010 | A     |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 4
+      accumulator: 127
+      set_carry: True
+      expected_result: 122
+      carry: False
+      parity: False
+      auxillary_carry: True
+      zero: False
+      sign: False
+
+    - test:
+      name: Aux Carry and Sign Flag Set (Carry Bit Reset)
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 001 | 0x01 | 00000001 | 255 | 0xFF | 11111111 |     0 | 254 | 0xFE | 11111110 | A|S   |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 1
+      accumulator: 255
+      set_carry: False
+      expected_result: 254
+      carry: False
+      parity: False
+      auxillary_carry: True
+      zero: False
+      sign: True
+
+    - test:
+      name: Aux Carry and Sign Flag Set (Carry Bit Set)
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 002 | 0x02 | 00000010 | 001 | 0x01 | 100000001 |     1 | 128 | 0x80 | 10000000 |  S|A  |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 3
+      accumulator: 253
+      set_carry: True
+      expected_result: 249
+      carry: False
+      parity: True
+      auxillary_carry: True
+      zero: False
+      sign: True
+
+    - test:
+      name: Carry and Sign Flag Set (Carry Bit Reset)
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 255 | 0xFF | 11111111 | 020 | 0x14 | 00000001 |     0 | 251 | 0xFB | 11111011 | C|S   |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 10
+      accumulator: 5
+      set_carry: False
+      expected_result: 251
+      carry: True
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: True
+
+    - test:
+      name: Carry and Sign Flag Set (Carry Bit Set)
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 255 | 0xFF | 11111111 | 020 | 0x14 | 00000001 |     1 | 251 | 0xFB | 11111011 | C|S   |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 9
+      accumulator: 5
+      set_carry: True
+      expected_result: 251
+      carry: True
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: True

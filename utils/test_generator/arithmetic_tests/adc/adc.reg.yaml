@@ -1,0 +1,261 @@
+---
+test_suite:
+  enable: True
+  generator_function: adc_tests.generate_adc_reg
+  description: 'ADC Register'
+  output_file_name: '/arithmetic/adc.reg.test.js'
+  header: |
+    import { Computer } from '../../core/computer.js'
+    import { i8080 } from '../../core/i8080.js'
+    import { strict as assert } from 'assert'
+
+    /**
+    * An opcode lookup table allows us to programmatically determine which OpCodes
+    * to use, depending on the register being tested. It saves us having to write a
+    * separate test per register. Instead we can loop through each one and run the
+    * same test.
+    */
+    const opcode_lookup = {
+        'B': {MVI: 0x06, ADC: 0x88},
+        'C': {MVI: 0x0E, ADC: 0x89},
+        'D': {MVI: 0x16, ADC: 0x8A},
+        'E': {MVI: 0x1E, ADC: 0x8B},
+        'H': {MVI: 0x26, ADC: 0x8C},
+        'L': {MVI: 0x2E, ADC: 0x8D}
+    };
+  footer: |
+    });
+  boilerplate: |
+    const c = new Computer();
+    const FlagType = c._cpu._flagManager.FlagType;
+
+
+    let program = [
+        0x3E, 
+        {accumulator},  // MOV A, #{accumulator}
+        null,           // Placeholder for relavent MOV opcode (see opcode lookup table)
+        {data},         // MOV [R], {data}
+        null,           // Placeholder for relavent ADD opcode (see opcode lookup table)
+        0x76            // HALT
+    ]
+
+    for (let reg of Object.keys(c.CPUState.Registers).filter((register) => register != 'A')) {{
+        program[2] = opcode_lookup[reg].MVI;
+        program[4] = opcode_lookup[reg].ADC;
+
+        c.LoadProgram(program);
+        {set_carry}
+        c.ExecuteProgram();
+
+        assert.equal(c.CPUState.Registers.A, {expected_result});
+        assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), {carry});
+        assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),{parity});
+        assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), {auxillary_carry});
+        assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), {zero});
+        assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), {sign});
+
+        assert.equal(c.CPUState.Clock, 25);
+
+        c.Reset();
+    }};
+    }});
+
+  tests:
+
+    - test:
+      name: No Flags Set (With Carry Unset)
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 001 | 0x01 | 00000001 | 000 | 0x00 | 00000000 |     0 | 001 | 0x01 | 00000001 |       |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 1
+      accumulator: 0
+      set_carry: False
+      expected_result: 1
+      carry: False
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: False
+      
+    - test:
+      name: No Flags Set (With Carry Set)
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 001 | 0x01 | 00000001 | 000 | 0x00 | 00000000 |     1 | 002 | 0x02 | 00000010 |       |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 1
+      accumulator: 0
+      set_carry: True
+      expected_result: 2
+      carry: False
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: False
+      
+    - test:
+      name: Set Parity and Zero Flags (With Carry Unset)
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 000 | 0x00 | 00000000 | 000 | 0x00 | 00000000 |     0 | 000 | 0x000 | 00000000 | P|Z  |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 0
+      accumulator: 0
+      set_carry: False
+      expected_result: 0
+      carry: False
+      parity: True
+      auxillary_carry: False
+      zero: True
+      sign: False
+
+    - test:
+      name: Set Parity Flag (With Carry Unset)
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 084 | 0x54 | 00110110 | 001 | 0x01 | 00000001 |     0 | 085 | 0x55 | 00110111 | P     |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 84
+      accumulator: 1
+      set_carry: False
+      expected_result: 85
+      carry: False
+      parity: True
+      auxillary_carry: False
+      zero: False
+      sign: False
+
+    - test:
+      name: Set Parity Flag (With Carry Set)
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 083 | 0x53 | 01010011 | 001 | 0x01 | 00000001 |     1 | 085 | 0x55 | 01010101 | P     |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 83
+      accumulator: 1
+      set_carry: True
+      expected_result: 85
+      carry: False
+      parity: True
+      auxillary_carry: False
+      zero: False
+      sign: False
+
+    - test:
+      name: Set Aux Carry Flag (With Carry Unset)
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 015 | 0x0F | 00001111 | 001 | 0x01 | 00000001 |     0 | 016 | 0x10 | 00010000 | A     |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 15
+      accumulator: 1
+      set_carry: False
+      expected_result: 16
+      carry: False
+      parity: False
+      auxillary_carry: True
+      zero: False
+      sign: False
+
+    - test:
+      name: Set Aux Carry Flag (With Carry Set)
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 014 | 0x0E | 01010011 | 001 | 0x01 | 00000001 |     1 | 016 | 0x10 | 00010000 | A     |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 14
+      accumulator: 1
+      set_carry: True
+      expected_result: 16
+      carry: False
+      parity: False
+      auxillary_carry: True
+      zero: False
+      sign: False
+
+    - test:
+      name: Set Aux Carry and Sign Flag (With Carry Unset)
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 127 | 0x7F | 01111111 | 001 | 0x01 | 00000001 |     0 | 128 | 0x80 | 10000000 | A|S   |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 127
+      accumulator: 1
+      set_carry: False
+      expected_result: 128
+      carry: False
+      parity: False
+      auxillary_carry: True
+      zero: False
+      sign: True
+
+    - test:
+      name: Set Sign Flag (With Carry Set)
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 126 | 0x7E | 01111110 | 001 | 0x01 | 00000001 |     1 | 128 | 0x80 | 10000000 |  S|A  |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 126
+      accumulator: 1
+      set_carry: True
+      expected_result: 128
+      carry: False
+      parity: False
+      auxillary_carry: True
+      zero: False
+      sign: True
+
+    - test:
+      name: Set Carry and Aux Carry Flag (With Carry Unset)
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 255 | 0xFF | 11111111 | 020 | 0x14 | 00000001 |     0 | 019 | 0x13 | 00010011 | C|A   |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 255
+      accumulator: 20
+      set_carry: False
+      expected_result: 19
+      carry: True
+      parity: False
+      auxillary_carry: True
+      zero: False
+      sign: False
+
+    - test:
+      name: Set Carry and Parity Flag (With Carry Set)
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 254 | 0xFE | 11111110 | 001 | 0x01 | 00000001 |     1 | 000 | 0x00 | 00000000 | C|P|A |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 254
+      accumulator: 1
+      set_carry: True
+      expected_result: 00
+      carry: True
+      parity: True
+      auxillary_carry: True
+      zero: True
+      sign: False

@@ -1,0 +1,137 @@
+---
+test_suite:
+  enable: True
+  generator_function: add_tests.generate_add_acc
+  description: 'ADD Accumulator'
+  output_file_name: '/arithmetic/add.acc.test.js'
+  header: |
+    import { Computer } from '../../core/computer.js'
+    import { i8080 } from '../../core/i8080.js'
+    import { strict as assert } from 'assert'
+  footer: |
+    });
+  boilerplate: |
+    const c = new Computer();
+    const FlagType = c._cpu._flagManager.FlagType;
+
+
+    const program = [
+      0x3E,           // MVI into accumulator ...
+      {accumulator},  // ...this immediate value
+      0x87,           // ADD A
+      0x76            // Halt
+    ]
+
+    c.LoadProgram(program);
+    c.ExecuteProgram();
+
+    assert.equal(c.CPUState.Registers.A, {expected_result});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), {carry});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),{parity});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), {auxillary_carry});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), {zero});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), {sign});
+    
+    assert.equal(c.CPUState.Clock, 18);
+    
+    c.Reset();
+    }});
+
+  tests:
+
+    - test:
+      name: No Flags Set
+      comment: |
+        // +-----------------------+-----------------------+-------+
+        // |      Accumulator      |      Expected         | Flags |
+        // +-----------------------+-----------------------+-------+
+        // | 002 | 0x02 | 00000010 | 004 | 0x04 | 00000100 |       |
+        // +-----------------------+-----------------------+-------+
+      accumulator: 2
+      expected_result: 4
+      carry: False
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: False
+ 
+    - test:
+      name: Set Parity and Zero Flags
+      comment: |
+        // +-----------------------+-----------------------+-------+
+        // |      Accumulator      |      Expected         | Flags |
+        // +-----------------------+-----------------------+-------+
+        // | 000 | 0x00 | 00000000 | 000 | 0x00 | 00000000 | P|Z   |
+        // +-----------------------+-----------------------+-------+
+      accumulator: 0
+      expected_result: 0
+      carry: False
+      parity: True
+      auxillary_carry: False
+      zero: True
+      sign: False
+
+    - test:
+      name: Set Parity and Zero Flag
+      comment: |
+        // +-----------------------+-----------------------+-------+
+        // |      Accumulator      |      Expected         | Flags |
+        // +-----------------------+-----------------------+-------+
+        // | 000 | 0x00 | 00000000 | 000 | 0x00 | 0000000  | P|Z   |
+        // +-----------------------+-----------------------+-------+
+      accumulator: 0
+      set_carry: False
+      expected_result: 0
+      carry: False
+      parity: True
+      auxillary_carry: False
+      zero: True
+      sign: False
+
+    - test:
+      name: Set Parity and Aux Carry Flag
+      comment: |
+        // +-----------------------+-----------------------+-------+
+        // |      Accumulator      |      Expected         | Flags |
+        // +-----------------------+-----------------------+-------+
+        // | 009 | 0x09 | 00001001 | 018 | 0x12 | 00010010 | P|A   |
+        // +-----------------------+-----------------------+-------+
+      accumulator: 9
+      expected_result: 18
+      carry: False
+      parity: True
+      auxillary_carry: True
+      zero: False
+      sign: False
+
+    - test:
+      name: Set Parity, Aux Carry and Sign Flags
+      comment: |
+        // +-----------------------+-----------------------+-------+
+        // |      Accumulator      |     Expected          | Flags |
+        // +-----------------------+-----------------------+-------+
+        // | 089 | 0x59 | 01011001 | 178 | 0xB2 | 10110010 | P|A|S |
+        // +-----------------------+-----------------------+-------+
+      accumulator: 89
+      expected_result: 178
+      carry: False
+      parity: True
+      auxillary_carry: True
+      zero: False
+      sign: True
+
+    - test:
+      name: Set Carry, Parity and Sign Flag
+      comment: |
+        // +-----------------------+-----------------------+-------+
+        // |      Accumulator      |      Expected         | Flags |
+        // +-----------------------+-----------------------+-------+
+        // | 241 | 0xF1 | 11110001 | 226 | 0xE2 | 11100010 | C|P|S |
+        // +-----------------------+-----------------------+-------+
+      accumulator: 241
+      expected_result: 226
+      carry: True
+      parity: True
+      auxillary_carry: False
+      zero: False
+      sign: True

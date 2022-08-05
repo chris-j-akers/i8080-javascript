@@ -1,0 +1,69 @@
+---
+test_suite:
+  enable: True
+  generator_function: add_tests.generate_add_acc
+  description: 'ADD Accumulator (Unset All Flags)'
+  output_file_name: '/arithmetic/add.acc.unset-flags.test.js'
+  header: |
+    import { Computer } from '../../core/computer.js'
+    import { i8080 } from '../../core/i8080.js'
+    import { strict as assert } from 'assert'
+  footer: |
+    });
+  boilerplate: |
+    const c = new Computer();
+    const FlagType = c._cpu._flagManager.FlagType;
+
+
+    const program = [
+      0x3E,           // MVI into accumulator ...
+      {accumulator},  // ...this immediate value
+      0x87,           // ADD A
+      0x76            // Halt
+    ]
+
+    c._cpu._flagManager.SetFlag(FlagType.Carry);
+    c._cpu._flagManager.SetFlag(FlagType.Parity);
+    c._cpu._flagManager.SetFlag(FlagType.AuxillaryCarry);
+    c._cpu._flagManager.SetFlag(FlagType.Zero);
+    c._cpu._flagManager.SetFlag(FlagType.Sign);
+
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), true);
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),true);
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), true);
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), true);
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), true);
+
+    c.LoadProgram(program);
+    c.ExecuteProgram();
+
+    assert.equal(c.CPUState.Registers.A, {expected_result});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), {carry});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),{parity});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), {auxillary_carry});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), {zero});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), {sign});
+    
+    assert.equal(c.CPUState.Clock, 18);
+
+
+    c.Reset();
+    }});
+
+  tests:
+
+    - test:
+      name: Unset All Flags
+      comment: |
+        // +-----------------------+-------+-----------------------+-------+
+        // |      Accumulator      | Carry |      Expected         | Flags |
+        // +-----------------------+-------+-----------------------+-------+
+        // | 001 | 0X01 | 00000001 |     0 | 002 | 0x02 | 00000010 |       |
+        // +-----------------------+-------+-----------------------+-------+
+      accumulator: 1
+      expected_result: 2
+      carry: False
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: False

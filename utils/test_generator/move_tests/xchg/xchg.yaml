@@ -1,0 +1,50 @@
+# Tests moving fata from register to register using the MOV OpCode
+---
+test_suite:
+  enable: True
+  generator_function: xchg_tests.generate_xchg
+  description: 'XCHG'
+  output_file_name: '/move/xchg.test.js'
+  header: |
+    import { Computer } from '../../core/computer.js'
+    import { strict as assert } from 'assert'
+  footer: |
+    });
+  boilerplate: |
+    const c = new Computer();
+    
+    let program = [
+      0x26,          // MVI into H..
+      {h_register},  // ... this data
+      0x2E,          // MVI into L
+      {l_register},  // ...This data
+      0x16,          // MVI into D
+      {d_register},  // ...this data
+      0x1E,          // MVI into E
+      {e_register},  // ...this data
+      0xEB,          // XCHNG
+      0x76           // HALT
+    ]
+
+    c.LoadProgram(program);
+    c.ExecuteProgram();
+
+    assert.equal(c.CPUState.Registers['D'], {h_register});
+    assert.equal(c.CPUState.Registers['E'], {l_register});
+    assert.equal(c.CPUState.Registers['H'], {d_register});
+    assert.equal(c.CPUState.Registers['L'], {e_register});
+
+    assert.equal(c.CPUState.Clock, 40);
+
+    }});
+
+
+  tests:
+
+    - test: 
+      name: Standard Exchange (taken from 8080 Programmers Manual Example)
+      h_register: 0x00
+      l_register: 0xFF
+      d_register: 0x33
+      e_register: 0x55
+

@@ -1,0 +1,61 @@
+---
+test_suite:
+  enable: True
+  generator_function: lxi_tests.generate_lxi
+  description: 'LXI Register'
+  output_file_name: '/load/lxi.reg.test.js'
+  header: |
+    import { Computer } from '../../core/computer.js'
+    import { strict as assert } from 'assert'
+  footer: |
+    });
+  boilerplate: |
+    const max_value_to_test = {max_value_to_test};
+    const c = new Computer();
+
+    let program = [
+      {opcode},      // LXI into {msb_register}/{lsb_register}...
+      null,          // ...low-byte of 16-bit data (inserted, below)
+      null,          // ...high-byte of 16-bit data (inserted, below)
+      0x76           // HALT
+    ]
+
+    for (let word = 0x0000; word <= max_value_to_test; word++) {{
+      program[1] = word & 0xFF;
+      program[2] = (word >> 8) & 0xFF;
+
+      c.LoadProgram(program);
+      c.ExecuteProgram();
+
+      assert.equal(c.CPUState.Registers.{msb_register}, (word >> 8) & 0xFF);
+      assert.equal(c.CPUState.Registers.{lsb_register}, word & 0xFF);
+      assert.equal(word, (c.CPUState.Registers.{msb_register} << 8) | c.CPUState.Registers.{lsb_register});
+      
+      assert.equal(c.CPUState.Clock, 17);
+      c.Reset();
+
+    }}
+    }});
+
+  tests:
+
+    - test:
+      name: LXI B,d16
+      comment: 
+      msb_register: B
+      lsb_register: C
+      opcode: 0x01
+      
+    - test:
+      name: LXI D,d16
+      comment: 
+      msb_register: D
+      lsb_register: E    
+      opcode: 0x11
+    
+    - test:
+      name: LXI H,d16
+      comment: 
+      msb_register: H
+      lsb_register: L
+      opcode: 0x21

@@ -1,0 +1,114 @@
+---
+test_suite:
+  enable: True
+  generator_function: ori_tests.generate_ori
+  description: 'ORI'
+  output_file_name: '/logical/ori.test.js'
+  header: |
+    import { Computer } from '../../core/computer.js'
+    import { i8080 } from '../../core/i8080.js'
+    import { strict as assert } from 'assert'
+  footer: |
+    });
+  boilerplate: |
+    const c = new Computer();
+    const FlagType = c._cpu._flagManager.FlagType;
+
+
+    const program = [
+      0x3E,          // MVI into Accumulator....
+      {accumulator}, // ...this value
+      0xF6,          // ORI with ...
+      {data},        // ...this value
+      0x76           // HALT
+    ]
+
+    c.LoadProgram(program);
+    {set_carry}
+    c.ExecuteProgram();
+
+    assert.equal(c.CPUState.Registers.A, {expected_result});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), {carry});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),{parity});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), {auxillary_carry});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), {zero});
+    assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), {sign});
+
+    assert.equal(c.CPUState.Clock, 18);
+
+    c.Reset();
+    }});
+
+  tests:
+
+    - test:
+      name: Reset Carry Flag
+      comment: |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // |       Register        |      Accumulator      |       Expected        | Flags |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // | 100 | 0x64 | 00000100 | 004 | 0x04 | 00000101 | 004 | 0x04 | 00000100 |       |
+        // +-----------------------+-----------------------+-----------------------+-------+
+      set_carry: True
+      data: 4
+      accumulator: 5
+      expected_result: 5
+      carry: False
+      parity: True
+      auxillary_carry: False
+      zero: False
+      sign: False
+
+    - test:
+      name: Set Zero Flag
+      comment: |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // |       Register        |      Accumulator      |       Expected        | Flags |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // | 000 | 0x00 | 00000000 | 000 | 0x00 | 00000000 | 000 | 0x00 | 00000000 | P|Z   |
+        // +-----------------------+-----------------------+-----------------------+-------+
+      set_carry: False
+      data: 0
+      accumulator: 0
+      expected_result: 0
+      carry: False
+      parity: True
+      auxillary_carry: False
+      zero: True
+      sign: False
+
+    - test:
+      name: Set Sign Flag
+      comment: |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // |       Register        |      Accumulator      |       Expected        | Flags |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // | 255 | 0xFF | 11111111 | 127 | 0x7F | 01111111 | 255 | 0xFF | 11111111 | S     |
+        // +-----------------------+-----------------------+-----------------------+-------+
+      set_carry: False
+      data: 255
+      accumulator: 127
+      expected_result: 255
+      carry: False
+      parity: True
+      auxillary_carry: False
+      zero: False
+      sign: True
+ 
+    - test:
+      name: Set Parity Flag
+      comment: |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // |       Register        |      Accumulator      |       Expected        | Flags |
+        // +-----------------------+-----------------------+-----------------------+-------+
+        // | 081 | 0x51 | 01010001 | 068 | 0x44 | 01000100 | 085 | 0x55 | 01010101 | P     |
+        // +-----------------------+-----------------------+-----------------------+-------+
+      set_carry: False
+      data: 81
+      accumulator: 68
+      expected_result: 85
+      carry: False
+      parity: True
+      auxillary_carry: False
+      zero: False
+      sign: False

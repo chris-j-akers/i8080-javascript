@@ -1,0 +1,44 @@
+# Tests moving data from Memory locations to Register using MOV OpCode
+---
+test_suite:
+  enable: True
+  generator_function: pchl_tests.generate_pchl
+  description: 'PCHL'
+  output_file_name: '/jump/pchl.test.js'
+  header: |
+    import { Computer } from '../../core/computer.js'
+    import { i8080 } from '../../core/i8080.js'
+    import { strict as assert } from 'assert'
+  footer: |
+    });
+  boilerplate: |
+    const c = new Computer();
+    const FlagType = c._cpu._flagManager.FlagType;
+    
+    let program = [
+      0x26,                   // MVI into Register H...
+      {h_register},           // ...This high-byte
+      0x2E,                   // MVI into Register L...
+      {l_register},           // ...This low-byte
+      0x36,                   // MVI into Mem Location
+      0x76,                   // HALT command (so when PCHL is called, the program stops)
+      0xE9,                   // PCHL
+    ]
+    
+      c.LoadProgram(program);
+      c.ExecuteProgram();
+
+      // Check we're set-up correctly
+
+      // + 1 on Program Counter because the HALT command would have been executed
+      assert.equal(c.CPUState.ProgramCounter, {h_register} << 8 | {l_register} + 1);
+      assert.equal(c.CPUState.Clock, 36);
+
+    }});
+
+  tests:
+
+    - test: 
+      name: Standard PCHL (taken from 8080 programmers manual)
+      h_register: 0x41
+      l_register: 0x3E

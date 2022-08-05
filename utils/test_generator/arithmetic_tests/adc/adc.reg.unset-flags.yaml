@@ -1,0 +1,110 @@
+---
+test_suite:
+  enable: True
+  generator_function: adc_tests.generate_adc_reg
+  description: 'ADC Register (Unset All Flags)'
+  output_file_name: '/arithmetic/adc.reg.unset-flags.test.js'
+  header: |
+    import { Computer } from '../../core/computer.js'
+    import { i8080 } from '../../core/i8080.js'
+    import { strict as assert } from 'assert'
+
+    /**
+    * An opcode lookup table allows us to programmatically determine which OpCodes
+    * to use, depending on the register being tested. It saves us having to write a
+    * separate test per register. Instead we can loop through each one and run the
+    * same test.
+    */
+    const opcode_lookup = {
+        'B': {MVI: 0x06, ADC: 0x88},
+        'C': {MVI: 0x0E, ADC: 0x89},
+        'D': {MVI: 0x16, ADC: 0x8A},
+        'E': {MVI: 0x1E, ADC: 0x8B},
+        'H': {MVI: 0x26, ADC: 0x8C},
+        'L': {MVI: 0x2E, ADC: 0x8D}
+    };
+  footer: |
+    });
+  boilerplate: |
+    const c = new Computer();
+    const FlagType = c._cpu._flagManager.FlagType;
+
+
+    let program = [
+        0x3E,           // MVI into accumulator...
+        {accumulator},  // ...data value {accumulator}
+        null,           // MVI into register (to be populated)...
+        {data},         // ...data value {data}
+        null,           // ADD register to accumulator (to be populated)
+        0x76            // HALT
+    ]
+
+    for (let reg of Object.keys(c.CPUState.Registers).filter((register) => register != 'A')) {{
+      program[2] = opcode_lookup[reg].MVI;
+      program[4] = opcode_lookup[reg].ADC;
+
+      c._cpu._flagManager.SetFlag(FlagType.Parity);
+      c._cpu._flagManager.SetFlag(FlagType.AuxillaryCarry);
+      c._cpu._flagManager.SetFlag(FlagType.Zero);
+      c._cpu._flagManager.SetFlag(FlagType.Sign);
+
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),true);
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), true);
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), true);
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), true);
+
+      c.LoadProgram(program);
+      {set_carry}
+      c.ExecuteProgram();
+
+      assert.equal(c.CPUState.Registers.A, {expected_result});
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), {carry});
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),{parity});
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), {auxillary_carry});
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), {zero});
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), {sign});
+
+      assert.equal(c.CPUState.Clock, 25);
+
+      c.Reset();
+    }};
+    }});
+
+  tests:
+
+    - test:
+      name: Unset All Flags (With Carry Unset)
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 001 | 0x01 | 00000001 | 001 | 0x01 | 00000001 |     0 | 002 | 0x02 | 00000010 |       |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 1
+      accumulator: 01
+      set_carry: False
+      expected_result: 2
+      carry: False
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: False
+
+    - test:
+      name: Unset All Flags (With Carry Set)
+      comment: |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // |       Register        |      Accumulator      | Carry |       Expected        | Flags |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+        // | 001 | 0x01 | 00000001 | 000 | 0x00 | 00000000 |    1  | 002 | 0x02 | 00000010 |       |
+        // +-----------------------+-----------------------+-------+-----------------------+-------+
+      data: 1
+      accumulator: 0
+      set_carry: True
+      expected_result: 2
+      carry: False
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: False
+      

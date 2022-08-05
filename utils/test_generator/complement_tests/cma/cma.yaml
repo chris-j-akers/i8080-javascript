@@ -1,0 +1,44 @@
+---
+test_suite:
+  enable: True
+  generator_function: cma_tests.generate_cma
+  description: 'CMA'
+  output_file_name: '/complement/cma.test.js'
+  header: |
+    import { Computer } from '../../core/computer.js'
+    import { i8080 } from '../../core/i8080.js'
+    import { strict as assert } from 'assert'
+
+  footer: |
+    });
+  boilerplate: |
+    const c = new Computer();
+    const FlagType = c._cpu._flagManager.FlagType;
+
+
+    let program = [
+        0x3E,                 // MVI into the accumulator...
+        {accumulator},        // ... this immediate value
+        0x2F,                 // CMA
+        0x76                  // HALT
+      ]
+
+    c.LoadProgram(program);
+    c.ExecuteProgram();
+
+    assert.equal(c.CPUState.Registers['A'], {expected_result});
+    assert.equal(c.CPUState.Clock, 18);
+
+    }});
+
+  tests:
+
+    - test:
+      name: 0xFF becomes 0x00
+      accumulator: 255
+      expected_result: 0
+      
+    - test:
+      name: 0x00 becomes 0xFF
+      accumulator: 0
+      expected_result: 255

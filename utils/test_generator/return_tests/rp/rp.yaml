@@ -1,0 +1,93 @@
+# Tests moving data from Memory locations to Register using MOV OpCode
+---
+test_suite:
+  enable: True
+  generator_function: rp_tests.generate_rp
+  description: 'RP'
+  output_file_name: '/return/rp.test.js'
+  header: |
+    import { Computer } from '../../core/computer.js'
+    import { i8080 } from '../../core/i8080.js'
+    import { strict as assert } from 'assert'
+
+  footer: |
+    });
+  boilerplate: |
+    const c = new Computer();
+    const FlagType = c._cpu._flagManager.FlagType;
+
+    let program = [
+
+      // Store configurable value into the Accumulator
+
+      0x3E,                   // MVI into accumulator
+      {accumulator},          // ...this byte
+
+      // Set stack pointer at address 0xFFFE
+
+      0x31,                   // Load stack pointer with...
+      0xFE,                   // ..This low-byte
+      0xFF,                   // ...and this high-byte
+
+      //  Move 0xAA into Register B and 0xAA into Register C,
+      //  then push onto the Stack. (0xAAAA is the return address we will RET to)
+
+      0x06,                   // MVI into register B...
+      0xAA,                   // ...This high addr byte
+      0x0E,                   // MVI into register C...
+      0xAA,                   // ...This low addr byte
+      0xC5,                   // PUSH B
+
+      //  Move OpCode 0x76 (HALT) into memory location 0xAAAA (so the test will HALT when it RETS)
+
+      0x26,                   // MVI into Register H...
+      0xAA,                   // ...This high-byte
+      0x2E,                   // MVI into Register L...
+      0xAA,                   // ...This high-byte
+      0x36,                   // MVI into memory location (stored in registers H/L)
+      0x76,                   // ...OpCode 0x76 (So the program HALTS when the program counter changes on JNZ)
+
+      // Now perform ADD
+
+      0xC6,                   // Add...
+      {add},                  // ...This immediate value to accumulator
+
+      // And check
+
+      0xF0,                   // RP
+      0x76,                   // HALT
+    ]
+
+      c.LoadProgram(program);
+      c.ExecuteProgram();
+
+      assert.equal(c.CPUState.Registers['A'], {expected_result})
+      assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), {sign});
+      assert.equal(c.CPUState.ProgramCounter, {expected_program_counter});
+      assert.equal(c.CPUState.Clock, {expected_clock});
+
+    }});
+    
+  tests:
+
+    - test:
+      name: Sign is set, program counter is not modified
+      accumulator: 100
+      add: 87
+      expected_result: 187
+      expected_program_counter: 20
+      expected_clock: 85
+      sign: true
+
+    - test: 
+      name: Sign bit is set, program counter is modified
+      accumulator: 10
+      add: 10
+      expected_result: 20
+      expected_program_counter: 43691
+      expected_clock: 91
+      sign: false
+
+
+
+    

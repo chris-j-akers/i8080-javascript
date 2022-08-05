@@ -1,0 +1,111 @@
+---
+test_suite:
+  enable: True
+  generator_function: cpi_tests.generate_cpi
+  description: 'CPI'
+  output_file_name: '/compare/cpi.test.js'
+  header: |
+    import { Computer } from '../../core/computer.js'
+    import { i8080 } from '../../core/i8080.js'
+    import { strict as assert } from 'assert'
+
+  footer: |
+    });
+  boilerplate: |
+    const c = new Computer();
+    const FlagType = c._cpu._flagManager.FlagType;
+
+    let program = [
+        0x3E,           // MVI into accumulator
+        {accumulator},  // ...this data
+        0xFE,           // CPI
+        {data},         // ...this data
+        0x76            // HALT
+    ]
+
+    for (let reg of Object.keys(c.CPUState.Registers).filter((register) => register != 'A')) {{
+
+        c.LoadProgram(program);
+        c.ExecuteProgram();
+
+        assert.equal(c.CPUState.Registers.A, {expected_result});
+        assert.equal(c._cpu._flagManager.IsSet(FlagType.Carry), {carry});
+        assert.equal(c._cpu._flagManager.IsSet(FlagType.Parity),{parity});
+        assert.equal(c._cpu._flagManager.IsSet(FlagType.AuxillaryCarry), {auxillary_carry});
+        assert.equal(c._cpu._flagManager.IsSet(FlagType.Zero), {zero});
+        assert.equal(c._cpu._flagManager.IsSet(FlagType.Sign), {sign});
+
+        assert.equal(c.CPUState.Clock, 21);
+
+        c.Reset();
+    }};
+    }});
+
+  tests:
+
+    - test:
+      name: No Flags Set
+      data: 1
+      accumulator: 32
+      expected_result: 32
+      carry: False
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: False
+      
+    - test:
+      name: Parity, Aux Carry and Zero Flag Set
+      data: 1
+      accumulator: 1
+      expected_result: 1
+      carry: False
+      parity: True
+      auxillary_carry: True
+      zero: True
+      sign: False
+
+    - test:
+      name: Parity Flag Set
+      data: 2
+      accumulator: 32
+      expected_result: 32
+      carry: False
+      parity: True
+      auxillary_carry: False
+      zero: False
+      sign: False
+
+    - test:
+      name: Aux Carry Flag Set
+      data: 3
+      accumulator: 127
+      expected_result: 127
+      carry: False
+      parity: False
+      auxillary_carry: True
+      zero: False
+      sign: False
+
+
+    - test:
+      name: Sign Flag Set
+      data: 1
+      accumulator: 255
+      expected_result: 255
+      carry: False
+      parity: False
+      auxillary_carry: True
+      zero: False
+      sign: True
+
+    - test:
+      name: Carry and Sign Flags Set
+      data: 10
+      accumulator: 5
+      expected_result: 5
+      carry: True
+      parity: False
+      auxillary_carry: False
+      zero: False
+      sign: True
