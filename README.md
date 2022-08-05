@@ -1,8 +1,15 @@
 # Description
 
-This repo contains an Intel 8080 CPU emulator written in JavaScript (`/src/i8080.js`) and various other components that can be used to build a virtual machine with the Intel 8080 as its processor. 
+This repo contains an Intel 8080 CPU emulator written in JavaScript, along with various other components that can be used to build a virtual machine with the Intel 8080 as its processor. 
 
-An emulator of the original 1978 version of 'Space Invaders' which demonstrates these components can be found in `/emulators/space-invaders`. It uses a simple React front-end to present the game emulator in the clients browser. To see this in action, visit: http://8080.cakers.io.
+The repo also includes a 'Space Invaders' emulator which uses the 8080 virtual machine components and React to run the original ROM for the game in a modern web browser (all client-side). To see this in action, visit: http://8080.cakers.io.
+
+
+## Set-up Unit Testing
+## Running the Emulator
+## Running the CPU Diag Program
+
+
 
 ## Repo Contents
 
