@@ -3,15 +3,21 @@
 - [Description](#description)
 - [Why JavaScript?](#why-javascript)
 - [Core Components](#core-components)
+  - [Class Diagram](#class-diagram)
 - [Testing](#testing)
 - [Implementing Space Invaders](#implementing-space-invaders)
   - [Components](#components)
+  - [Space Invaders Class Diagram](#space-invaders-class-diagram)
   - [Video](#video)
     - [Video Buffer](#video-buffer)
     - [Roated Screen](#roated-screen)
+    - [Efficiency](#efficiency)
   - [Additional Hardware](#additional-hardware)
     - [Bit-Shift Device](#bit-shift-device)
     - [Controller Devices](#controller-devices)
+  - [Front-End](#front-end)
+    - [Implementing the Web Worker](#implementing-the-web-worker)
+- [References and Sources](#references-and-sources)
 
 ---
 # Description
@@ -31,7 +37,7 @@ Briefly, this repo contains the following:
 ---
 # Why JavaScript?
 
-Originally, this project was started in `C`. After all, this was the language most people seemed to write their emulators in and would also serve to illustrate just how fucking hard-core I am when it comes to programming, but as I got going a few issues appeared on the horizon:
+Originally, this project was started in `C`. After all, research suggested this was the language most people wrote their emulators in and it would also serve to illustrate just how fucking hard-core I am when it comes to programming, but as I got going a few issues appeared on the horizon:
 
 - Emulating 8080 software, in particular games, means drawing graphics, playing sounds and controlling sprites. For C, some sort of display library like `SDL` would have to be used and, therefore, studied, whereas a modern web browser has all that capability built-in and can easily controlled using a well-known and ubiquitous scripting language.
 
@@ -46,7 +52,9 @@ Originally, this project was started in `C`. After all, this was the language mo
 
 Computer, MMU, Bus, i8080, Device
 
-DIAGRAM
+## Class Diagram
+
+![Core UML](/documentation/diagrams/uml-diagrams/core-uml.drawio.png)
 
 ---
 # Testing
@@ -73,9 +81,13 @@ All tests should pass.
 
 ## Components
 
+## Space Invaders Class Diagram
+
 ![Space Invaders UML](/documentation/diagrams/uml-diagrams/space-invaders-uml.drawio.png)
 
 ## Video
+
+
 
 ### Video Buffer
 
@@ -91,6 +103,10 @@ When the game was in action, the scanline of the monitor would interpret the
 
 Another interesting tit-bit discovered when reading about Space Invaders is the fact that the video buffer is drawn out sidways, at a 90 degree angle. To compensate for this, the monitor in the original cabinet was physically roated 90 degrees.
 
+### Efficiency
+
+Because the game runs in b&w we can save time by simply blacking out the canvas rectable and only drawing the white pixels.
+
 ## Additional Hardware
 
 The Space Invaders arcade machine included some additional, custom hardware that connected to the 8080 through device ports.
@@ -99,4 +115,22 @@ The Space Invaders arcade machine included some additional, custom hardware that
 
 ### Controller Devices
 
+## Front-End
+
+### Implementing the Web Worker
+
+
+
+# References and Sources
+
+* OneLonleyCoder
+* Emulator101.com
+* A guide to the game boy half-carry flag
+https://robdor.com/2016/08/10/gameboy-emulator-half-carry-flag/
+
+* Binary/decimal to hex converter: https://www.mathsisfun.com/binary-decimal-hexadecimal-converter.html
+
+* Intel opCode list: https://pastraiser.com/cpu/i8080/i8080_opcodes.html
+
+* https://www.computerarcheology.com/Arcade/SpaceInvaders/Hardware.html
 
