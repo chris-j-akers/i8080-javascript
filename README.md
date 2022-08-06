@@ -3,12 +3,15 @@
 - [Description](#description)
 - [Why JavaScript?](#why-javascript)
 - [Core Components](#core-components)
+- [Testing](#testing)
 - [Implementing Space Invaders](#implementing-space-invaders)
   - [Components](#components)
   - [Video](#video)
     - [Video Buffer](#video-buffer)
     - [Roated Screen](#roated-screen)
-- [Set-up Unit Testing](#set-up-unit-testing)
+  - [Additional Hardware](#additional-hardware)
+    - [Bit-Shift Device](#bit-shift-device)
+    - [Controller Devices](#controller-devices)
 
 ---
 # Description
@@ -19,22 +22,24 @@ Briefly, this repo contains the following:
 
 * A 'Space Invaders' emulator which uses the 8080 virtual machine components to run the original 1978 game ROM in a modern web browser using React (all client-side). To see this in action, visit: http://8080.cakers.io.
 
-* A 'CPU Diag' emulator that also runs on a the 8080 virtual machine components. 'CPU Diag' is a piece of software written in 1980 by Kelly Smith of Microcosm Associates and it tests that the 8080 chip OpCodes are working correctly. The version in this repo runs on a simple static website which requires a web-server to run (e.g. 'live-server' or `python -m SimpleHTTPServer`).
+* A 'CPU Diag' emulator that also runs on a the 8080 virtual machine components. 'CPU Diag' is a piece of software written in 1980 by Kelly Smith of Microcosm Associates to test that the 8080 chip is in full working order. The version in this repo runs in a simple static website, but it does require a running web-server to use (albeit a simple one such as 'live-server' or `python -m SimpleHttpServer`).
 
 * Unit tests for nearly all of the 8080 operations in 'Mocha' format and the unit test generator Python app.
+
+* An app to convert 8080 ROM binary files into JavaScript arrays of bytes.
 
 ---
 # Why JavaScript?
 
-Originally, this project was started in `C`. After all, this was the language most people seemed to write their emulators in and can also serve to illustrate just how fucking hard-core we all are when it comes to programming, but as I got going a few issues became visible on the horizon:
+Originally, this project was started in `C`. After all, this was the language most people seemed to write their emulators in and would also serve to illustrate just how fucking hard-core I am when it comes to programming, but as I got going a few issues appeared on the horizon:
 
-1) Time is a factor. I have a family and work on the emulator could only really be done when a couple of hours were snatched each evening or during nap-time.
+- Emulating 8080 software, in particular games, means drawing graphics, playing sounds and controlling sprites. For C, some sort of display library like `SDL` would have to be used and, therefore, studied, whereas a modern web browser has all that capability built-in and can easily controlled using a well-known and ubiquitous scripting language.
 
-2) Emulating 8080 software, in particular games, means a requirement to draw graphics, play sounds and control sprites. For C, some sort of display library like `SDL` would have to be leanred whereas a modern web browser has all this capability built-in and uses a ubiquitouspresentation lanugage.
+- This is a personal research project, but I still want people to be able to access it easily without having to download an executable and deal with all the hand-wringing secuity issues that entails, plus I didn't want to have to provide a set of exeuctables for different OS types. This way, I can just stick it on the web. For instance, here: [http://8080.cakers.io](http://8080.cakers.io).
 
-3) I wanted people to be able to access the emulator easily and not have to download some executable and all the hand-wringing secuity issues that would entail plus I didn't want to have to provide a set of exeuctables for different OS types
+- Chromium-based browsers have great dev tools built in. It was either that or spending some more quality time with `GDB` which - and I'm sorry - just isn't pretty enough.
 
-4) Chromium-based browsers have great dev tools built in. It was either that or spending some quality time with GDB.
+- Time is a factor. I have a family and work on the emulator could only really be done when a couple of hours were snatched each evening or during nap-time (the baby's, not mine). I didn't want to spend those precious few hours chasing down endless, fucking segmentation errors. A high-level language is better suited to this rapid-development requirement.
 
 ---
 # Core Components
@@ -42,6 +47,22 @@ Originally, this project was started in `C`. After all, this was the language mo
 Computer, MMU, Bus, i8080, Device
 
 DIAGRAM
+
+---
+# Testing
+
+Unit tests cover nearly all the 8080 operations. They are generated from config that can be found in the `/utils/test_generator' directory. The `test_generator.py` app is a python program that reads YAML config files to generate JavaScript unit tests.
+
+Unit tests are written to: `/src/unit_tests`. Mocha should be installed (`npm install`) before they can be executed:
+
+```
+i8080-javascript/src/unit_tests on  main [!] 
+➜ npm run test
+```
+
+All tests should pass.
+
+
 
 ---
 # Implementing Space Invaders
@@ -70,18 +91,12 @@ When the game was in action, the scanline of the monitor would interpret the
 
 Another interesting tit-bit discovered when reading about Space Invaders is the fact that the video buffer is drawn out sidways, at a 90 degree angle. To compensate for this, the monitor in the original cabinet was physically roated 90 degrees.
 
+## Additional Hardware
 
-# Set-up Unit Testing
+The Space Invaders arcade machine included some additional, custom hardware that connected to the 8080 through device ports.
 
-Unit tests cover nearly all the 8080 operations. They are generated from config that can be found in the `/utils/test_generator' directory. The `test_generator.py` app is a python program that reads YAML config files to generate JavaScript unit tests.
+### Bit-Shift Device
 
-Unit tests are written to: `/src/unit_tests`. Mocha should be installed (`npm install`) before they can be executed:
-
-```
-i8080-javascript/src/unit_tests on  main [!] 
-➜ npm run test
-```
-
-All tests should pass.
+### Controller Devices
 
 
