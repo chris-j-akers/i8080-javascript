@@ -3,8 +3,15 @@
 - [Description](#description)
 - [Why JavaScript?](#why-javascript)
 - [Core Components](#core-components)
-  - [Class Diagram](#class-diagram)
+  - [`i8080.js`](#i8080js)
+  - [`mmu.js`](#mmujs)
+  - [`bus.js`](#busjs)
+  - [`device.js`](#devicejs)
+  - [Core Component Class Diagram](#core-component-class-diagram)
 - [Testing](#testing)
+  - [The Unit Test Generator (`test_generator.py`)](#the-unit-test-generator-test_generatorpy)
+  - [Running Unit Tests](#running-unit-tests)
+  - [Test Iteration](#test-iteration)
 - [Implementing Space Invaders](#implementing-space-invaders)
   - [Components](#components)
   - [Space Invaders Class Diagram](#space-invaders-class-diagram)
@@ -50,13 +57,29 @@ Originally, this project was started in `C`. After all, research suggested this 
 ---
 # Core Components
 
+In `/src/core`, the following JavaScript classes can be used to make-up a virtual machine that runs an 8080 CPU. 
 
+## `i8080.js`
 
+The 8080 CPU component which emulates all 8080 operations and contains a few debug functions that output strings related to the current state of the CPU. It also contains a method for executing an 8080 program, including adjusting the program counter.
 
+## `mmu.js`
 
-Computer, MMU, Bus, i8080, Device
+A simple class used to store the RAM of the machine (in a `Number` `Array`) and provide an interface for reading and writing to that RAM.
 
-## Class Diagram
+## `bus.js`
+
+A class used to connect the CPU, MMU and any added devices together. CPU operations that use RAM, for instance, only interact with the bus which passes the request to the `MMU`.
+
+Devices are added to `Read` and `Write` arrays in positions that reflect the ports they are hooked up to. For instance, the 'Space Invaders' custom bit-shift device (see below) is added to the `Read` array at positions `2` and `4` and the `Write` array at position `3`. These are the three ports it uses to communicate with the CPU via the `IN` and `OUT` opcodes.
+
+## `device.js`
+
+An abstract class that provides an interface for any device that needs to be connected to the bus. This just ensures each device provides a `Read()` and a `Write()` method.
+
+## Core Component Class Diagram
+
+The class diagram, below, shows the core components and how they're related to each other.
 
 ![Core UML](/documentation/diagrams/uml-diagrams/core-uml.drawio.png)
 
@@ -65,15 +88,58 @@ Computer, MMU, Bus, i8080, Device
 
 Unit tests cover nearly all the 8080 operations. They are generated from config that can be found in the `/utils/test_generator' directory. The `test_generator.py` app is a python program that reads YAML config files to generate JavaScript unit tests.
 
-Unit tests are written to: `/src/unit_tests`. Mocha should be installed (`npm install`) before they can be executed:
+## The Unit Test Generator (`test_generator.py`)
 
-```
+A separate application for generating the tests was written because a number of OpCodes in the 8080 perform similar operations, but use different components. For instance, the command `MOV A,B` copies the value in register `B` to the accumulator and the command `MOV D,E` copies the value in register `E` to register `D`. These commands are similar but they are completley different opcodes (0x78 and 0x53). The question, then, is do I test the `MOV` command based on one opcode or all of them. I would rather test all of them, but that means writing 64 separate tests with virtually the same set-up and tear-down code. That's a lot of duplciated boiler plate which all has to change if I want to amend the test. Far easier, then, to write the tests in a set of YAML config files and have a separate application spit out the required JavaScript code based on that configuration.
+
+It is far from perfect, but still saved a lot of time when it came to writing unit tests for each opcode. The application along with its config can be found in `/util/test_generator`.
+
+## Running Unit Tests
+
+Unit tests are written to: `/src/unit_tests` and require Mocha to run (`npm install`). To execute all tests, should be as simple as:
+
+```bash
 i8080-javascript/src/unit_tests on  main [!] 
 ➜ npm run test
 ```
 
-All tests should pass.
+There are 428 tests in total and all should pass cleanly.
 
+## Test Iteration
+
+Unit tests are written to closley resemble the way 8080 programs would be executed. Instead of directly accessing internal members of the i8080 class to set-up and tear-down tests, we use small binary executable programs stored in arrays consisting of a sequence of 8080 opcodes and operands. Basically, Unit teests are all mini 8080 executables.
+
+For instance, one of the tests to check the `JNC` (Jump if Carry Not Set) command executes this sequence of bytes:
+
+```javascript
+		let program = [
+		  0x3E,                   // MVI into accumulator
+		  255,                    // ...this byte
+		  0x26,                   // MVI into Register H...
+		  0xFF,                   // ...This high-byte
+		  0x2E,                   // MVI into Register L...
+		  0xFE,                   // ...This low-byte
+		  0x36,                   // MVI into memory location (stored in registers H/L)
+		  0x76,                   // ...OpCode 0x76 (So the program HALTS when the program counter changes if a jump occurs)
+		  0xC6,                   // ADI...
+		  10,                     // ...This immediate value to accumulator
+		  0xD2,                   // JNC
+		  0xFE,                   // ..This low-byte
+		  0xFF,                   // ...and this high-byte
+		  0x76,                   // HALT
+		]
+```
+The above sequence is as follows:
+
+1. Loads the immediate value `255` (`0xFF`) into the accumulator, the largest number it can take.
+2. Load a 16bit memory address into the `H` and `L` registers
+3. Call the `MVI` command to load immediate value `0x76` (the HALT opcode) to the 16bit address now loaded into the `H` and `L` registers
+4. Add the immediate value `10` (`0xA`) to the accumulator which should set the CPU Carry bit.
+5. The actual test: Calls the `JNC` instruction. 
+
+The expected result of this test is that a jump should *not* occur becaue the carry bit was set during the `ADD` operation in step 4.
+
+This method of testing not only 
 
 
 ---
