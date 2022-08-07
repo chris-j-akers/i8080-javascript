@@ -1,8 +1,7 @@
 
 
 - [Description](#description)
-- [Why JavaScript?](#why-javascript)
-- [Core Components](#core-components)
+- [8080 Core Components](#8080-core-components)
   - [`i8080.js`](#i8080js)
   - [`mmu.js`](#mmujs)
   - [`bus.js`](#busjs)
@@ -13,6 +12,7 @@
     - [The Unit Test Generator (`test_generator.py`)](#the-unit-test-generator-test_generatorpy)
   - [Running Unit Tests](#running-unit-tests)
   - [Unit Test Methodology](#unit-test-methodology)
+  - [CPU Diag (1980)](#cpu-diag-1980)
 - [Implementing Space Invaders](#implementing-space-invaders)
   - [Components](#components)
   - [Space Invaders Class Diagram](#space-invaders-class-diagram)
@@ -25,6 +25,7 @@
     - [Controller Devices](#controller-devices)
   - [Front-End](#front-end)
     - [Implementing the Web Worker](#implementing-the-web-worker)
+- [APPENDIX: Why JavaScript?](#appendix-why-javascript)
 - [References and Sources](#references-and-sources)
 
 ---
@@ -43,20 +44,7 @@ Briefly, this repo contains the following:
 * An app to convert 8080 ROM binary files into JavaScript arrays of bytes.
 
 ---
-# Why JavaScript?
-
-Originally, this project was started in `C`. After all, research suggested this was the language most people wrote their emulators in and it would also serve to illustrate just how fucking hard-core I am when it comes to programming, but as I got going a few issues appeared on the horizon:
-
-- Emulating 8080 software, in particular games, means drawing graphics, playing sounds and controlling sprites. For C, some sort of display library like `SDL` would have to be used and, therefore, studied, whereas a modern web browser has all that capability built-in and can easily controlled using a well-known and ubiquitous scripting language.
-
-- This is a personal research project, but I still want people to be able to access a demo easily without having to download an executable and deal with all the hand-wringing secuity issues that entails, plus I didn't want to have to provide a set of exeuctables for different OS types. This way, I can just stick it on the web. For instance, here: [http://8080.cakers.io](http://8080.cakers.io).
-
-- Chromium-based browsers have great dev tools built in. It was either that or spending some more quality time with `GDB` which - and I'm sorry - just isn't pretty enough.
-
-- Time is a factor. I have a family and work on the emulator could only really be done when a couple of hours were snatched each evening or during nap-time (the baby's, not mine). I didn't want to spend those precious few hours chasing down endless, fucking segmentation errors. A high-level language is better suited to this rapid-development requirement.
-
----
-# Core Components
+# 8080 Core Components
 
 In `/src/core`, the following JavaScript classes can be used to make-up a virtual machine that runs an 8080 CPU. 
 
@@ -207,9 +195,17 @@ The above sequence executes the following on the 8080 CPU:
 4. Add the immediate value `10` (`0xA`) to the accumulator, which should set the CPU Carry bit.
 5. Call the `JNC` instruction. 
 
-The expected result of this test is that a jump should *not* occur becaue the carry bit was set during the `ADD` operation in step 4. The test will, therefore, check that the CPU's program counter contains the expected address.
+The expected result of this test is that a jump should *not* occur becaue the carry bit was set during the `ADD` operation in step 4. The test will, therefore, check that the CPU's program counter contains the expected address in order for it to pass.
 
 This method of testing ensures that the emulator is tested as close to real operation as possible.
+
+## CPU Diag (1980)
+
+CPU Diag is an 8080 assembler program written in 1980 by Kelly Smith of Microcosm Associates. It’s full source can be viewed, below.
+
+It is designed to test the functionality of the 8080 chip and, therefore, was the first piece of software to get running in an emulator.
+
+This is where the investment in unit testing paid off. When I first ran the CPU Diag program, the only issue I encountered was the DAA instruction. An instruction that I hadn’t fully implemented, yet, and hadn’t written any unit tests for. The reason is that a lot of others writing 8080 emulators actually skipped this instruction because it wasn’t used very much, at least in games. I was in two minds on whether to implement it myself or skip it. 
 
 ---
 # Implementing Space Invaders
@@ -266,6 +262,18 @@ The Space Invaders arcade machine included some additional, custom hardware that
 
 ### Implementing the Web Worker
 
+---
+# APPENDIX: Why JavaScript?
+
+Originally, this project was started in `C`. After all, research suggested this was the language most people wrote their emulators in and would also serve to illustrate just how fucking hard-core I am when it comes to programming, but as I got going a few issues appeared on the horizon:
+
+- Emulating 8080 software, in particular games, means drawing graphics, playing sounds and controlling sprites. For C, some sort of display library like `SDL` would have to be used and, therefore, studied, whereas a modern web browser has all that capability built-in and can easily controlled using a well-known and ubiquitous scripting language.
+
+- This is a personal research project, but I still want people to be able to access a demo easily without having to download an executable and deal with all the hand-wringing secuity issues that entails, plus I didn't want to have to provide a set of exeuctables for different OS types. This way, I can just stick it on the web. For instance, here: [http://8080.cakers.io](http://8080.cakers.io).
+
+- Chromium-based browsers have great dev tools built in. It was either that or spending some more quality time with `GDB` which - and I'm sorry - just isn't pretty enough.
+
+- Time is a factor. I have a family and work on the emulator could only really be done when a couple of hours were snatched each evening or during nap-time (the baby's, not mine). I didn't want to spend those precious few hours chasing down endless, fucking segmentation errors. A high-level language is better suited to this rapid-development requirement.
 
 
 # References and Sources
