@@ -9,7 +9,8 @@
   - [`device.js`](#devicejs)
   - [Core Component Class Diagram](#core-component-class-diagram)
 - [Testing](#testing)
-  - [The Unit Test Generator (`test_generator.py`)](#the-unit-test-generator-test_generatorpy)
+  - [Unit Tests](#unit-tests)
+    - [The Unit Test Generator (`test_generator.py`)](#the-unit-test-generator-test_generatorpy)
   - [Running Unit Tests](#running-unit-tests)
   - [Test Iteration](#test-iteration)
 - [Implementing Space Invaders](#implementing-space-invaders)
@@ -86,13 +87,83 @@ The class diagram, below, shows the core components and how they're related to e
 ---
 # Testing
 
+## Unit Tests 
+
 Unit tests cover nearly all the 8080 operations. They are generated from config that can be found in the `/utils/test_generator' directory. The `test_generator.py` app is a python program that reads YAML config files to generate JavaScript unit tests.
 
-## The Unit Test Generator (`test_generator.py`)
+### The Unit Test Generator (`test_generator.py`)
 
-A separate application for generating the tests was written because a number of OpCodes in the 8080 perform similar operations, but use different components. For instance, the command `MOV A,B` copies the value in register `B` to the accumulator and the command `MOV D,E` copies the value in register `E` to register `D`. These commands are similar but they are completley different opcodes (0x78 and 0x53). The question, then, is do I test the `MOV` command based on one opcode or all of them. I would rather test all of them, but that means writing 64 separate tests with virtually the same set-up and tear-down code. That's a lot of duplciated boiler plate which all has to change if I want to amend the test. Far easier, then, to write the tests in a set of YAML config files and have a separate application spit out the required JavaScript code based on that configuration.
+The unit test generator takes a series of `YAML` config files which consist of various sets of common boilerplate code, set-up values and expected values. It uses this config to generate Mocha test-suites in JavaScript.
 
-It is far from perfect, but still saved a lot of time when it came to writing unit tests for each opcode. The application along with its config can be found in `/util/test_generator`.
+For instance, the configuration for generating the test suite which consists of tests to check the `LXI` opcode is below:
+
+```yaml
+---
+test_suite:
+  enable: True
+  generator_function: lxi_tests.generate_lxi
+  description: 'LXI Register'
+  output_file_name: '/load/lxi.reg.test.js'
+  header: |
+    import { Computer } from '../../core/computer.js'
+    import { strict as assert } from 'assert'
+  footer: |
+    });
+  boilerplate: |
+    const max_value_to_test = {max_value_to_test};
+    const c = new Computer();
+
+    let program = [
+      {opcode},      // LXI into {msb_register}/{lsb_register}...
+      null,          // ...low-byte of 16-bit data (inserted, below)
+      null,          // ...high-byte of 16-bit data (inserted, below)
+      0x76           // HALT
+    ]
+
+    for (let word = 0x0000; word <= max_value_to_test; word++) {{
+      program[1] = word & 0xFF;
+      program[2] = (word >> 8) & 0xFF;
+
+      c.LoadProgram(program);
+      c.ExecuteProgram();
+
+      assert.equal(c.CPUState.Registers.{msb_register}, (word >> 8) & 0xFF);
+      assert.equal(c.CPUState.Registers.{lsb_register}, word & 0xFF);
+      assert.equal(word, (c.CPUState.Registers.{msb_register} << 8) | c.CPUState.Registers.{lsb_register});
+      
+      assert.equal(c.CPUState.Clock, 17);
+      c.Reset();
+
+    }}
+    }});
+```
+The table below describes each field.
+
+| Key                | Description                                                                                                            |
+|--------------------|------------------------------------------------------------------------------------------------------------------------|
+| `enable`             | Whether or not to actually generate this test                                                                          |
+| `generator_function` | The name of the function in the `test_generator.py` application that will be used to generate this test.               |
+| `description`        | Brief description of the test                                                                                          |
+| `output_file_name`   | The full path and name of the resulting test suite file (should end in `.js`)                                          |
+| `header`             | Any code that should be at the top of the test file (usually import statements or global variables required)           |
+| `footer`             | Any code that should be at the bottom of the test file                                                                 |
+| `boilerplate`        | The test code itself. This should include placeholders for any values that would change according to the test running. |
+
+To actually generate a test, the `tests` section of the configuration file should contain subsections similar to the following:
+
+```yaml
+    - test:
+      name: LXI B,d16
+      comment: 
+      msb_register: B
+      lsb_register: C
+      opcode: 0x01
+```
+The fields `name` and `comment` are test metadata (although `name` is used when created the Mocha function itself) and the others are values for placeholders that can be found in the boilerplate code section of the test suite configuration.
+
+Configuring the tests in the way allowed me to quickly design and produce tests for a number of scenarios that had very very similar boilerplate code without having to manually write out each test or rewrite them all if I found a problem or wanted to make a change.
+
+It is far from perfect, but still saved a lot of time. The application along with its config can be found in `/util/test_generator`.
 
 ## Running Unit Tests
 
