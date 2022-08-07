@@ -12,7 +12,7 @@
   - [Unit Tests](#unit-tests)
     - [The Unit Test Generator (`test_generator.py`)](#the-unit-test-generator-test_generatorpy)
   - [Running Unit Tests](#running-unit-tests)
-  - [Test Iteration](#test-iteration)
+  - [Unit Test Methodology](#unit-test-methodology)
 - [Implementing Space Invaders](#implementing-space-invaders)
   - [Components](#components)
   - [Space Invaders Class Diagram](#space-invaders-class-diagram)
@@ -89,13 +89,15 @@ The class diagram, below, shows the core components and how they're related to e
 
 ## Unit Tests 
 
-Unit tests cover nearly all the 8080 operations. They are generated from config that can be found in the `/utils/test_generator' directory. The `test_generator.py` app is a python program that reads YAML config files to generate JavaScript unit tests.
+Unit tests cover nearly all the 8080 operations. They are generated from config that can be found in the `/utils/test_generator` directory.
 
 ### The Unit Test Generator (`test_generator.py`)
 
 The unit test generator takes a series of `YAML` config files which consist of various sets of common boilerplate code, set-up values and expected values. It uses this config to generate Mocha test-suites in JavaScript.
 
-For instance, the configuration for generating the test suite which consists of tests to check the `LXI` opcode is below:
+The first part of the `YAML` file (the `test_suite` section) contains the test suite configuration global to all tests such as the boilerplate test code. The second part of the file (the `tests` section) contains configuration for each test, usually a list of placeholders and their values.
+
+For example, below is the `test_suite` section of the configuration file for the `LXI` opcode unit tests.
 
 ```yaml
 ---
@@ -159,28 +161,25 @@ To actually generate a test, the `tests` section of the configuration file shoul
       lsb_register: C
       opcode: 0x01
 ```
-The fields `name` and `comment` are test metadata (although `name` is used when created the Mocha function itself) and the others are values for placeholders that can be found in the boilerplate code section of the test suite configuration.
+The fields `name` and `comment` are test metadata (although `name` is used when created the Mocha test function itself). The others are placeholders in the testsuite boilerplate code and the values they should be replaced with.
 
-Configuring the tests in the way allowed me to quickly design and produce tests for a number of scenarios that had very very similar boilerplate code without having to manually write out each test or rewrite them all if I found a problem or wanted to make a change.
+Configuring the tests in this way allowed me to quickly design and produce tests for a number of scenarios that had very similar boilerplate code without having to manually write out each test. Furthermore, if found a problem with one of the tests or wanted to make a change to the code, I only needed to do this in one place.
 
 It is far from perfect, but still saved a lot of time. The application along with its config can be found in `/util/test_generator`.
 
 ## Running Unit Tests
-
 Unit tests are written to: `/src/unit_tests` and require Mocha to run (`npm install`). To execute all tests, should be as simple as:
 
 ```bash
 i8080-javascript/src/unit_tests on  main [!] 
 ➜ npm run test
 ```
-
 There are 428 tests in total and all should pass cleanly.
 
-## Test Iteration
+## Unit Test Methodology
+Unit tests are written to closley resemble the way the i8080 programs would be executed. Instead of directly accessing internal members of the i8080 class to set-up, execute and tear-down tests, we use small binary programs stored in arrays that consist of a sequence of 8080 opcodes and operands. Basically, Unit teests are all mini 8080 executables.
 
-Unit tests are written to closley resemble the way 8080 programs would be executed. Instead of directly accessing internal members of the i8080 class to set-up and tear-down tests, we use small binary executable programs stored in arrays consisting of a sequence of 8080 opcodes and operands. Basically, Unit teests are all mini 8080 executables.
-
-For instance, one of the tests to check the `JNC` (Jump if Carry Not Set) command executes this sequence of bytes:
+For instance, one of the tests to check the `JNC` (Jump if Carry Not Set) command executes this sequence of bytes stored in an array called `program`.
 
 ```javascript
 		let program = [
@@ -200,18 +199,17 @@ For instance, one of the tests to check the `JNC` (Jump if Carry Not Set) comman
 		  0x76,                   // HALT
 		]
 ```
-The above sequence is as follows:
+The above sequence executes the following on the 8080 CPU:
 
-1. Loads the immediate value `255` (`0xFF`) into the accumulator, the largest number it can take.
-2. Load a 16bit memory address into the `H` and `L` registers
-3. Call the `MVI` command to load immediate value `0x76` (the HALT opcode) to the 16bit address now loaded into the `H` and `L` registers
-4. Add the immediate value `10` (`0xA`) to the accumulator which should set the CPU Carry bit.
-5. The actual test: Calls the `JNC` instruction. 
+1. Load the immediate value `255` (`0xFF`) into the accumulator (the largest number it can store).
+2. Load a 16bit memory address (`0x26FF`) into the `H` and `L` registers
+3. Call the `MVI` command to load immediate value `0x76` (the HALT opcode) into the 16bit address now loaded into the `H` and `L` registers (`0x26FF`).
+4. Add the immediate value `10` (`0xA`) to the accumulator, which should set the CPU Carry bit.
+5. Call the `JNC` instruction. 
 
-The expected result of this test is that a jump should *not* occur becaue the carry bit was set during the `ADD` operation in step 4.
+The expected result of this test is that a jump should *not* occur becaue the carry bit was set during the `ADD` operation in step 4. The test will, therefore, check that the CPU's program counter contains the expected address.
 
-This method of testing not only 
-
+This method of testing ensures that the emulator is tested as close to real operation as possible.
 
 ---
 # Implementing Space Invaders
