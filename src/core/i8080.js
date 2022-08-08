@@ -535,7 +535,7 @@ class i8080 {
     STC() {
         this._flagManager.SetFlag(this._flagManager.FlagType.Carry);
         this._clock += 4;
-        return 4;
+        return {Disassemble: 'STC', Ticks: 4 };
     }
 
     /**
@@ -546,7 +546,7 @@ class i8080 {
     CMC() {
         this._flagManager.IsSet(i8080.Carry) ? this._flagManager.ClearFlag(i8080.Carry) : this._flagManager.SetFlag(i8080.Carry);
         this._clock += 4;
-        return 4;
+        return {Disassemble: 'CMC', Ticks: 4 };
     }
 
     // SINGLE REGISTER INSTRUCTIONS
@@ -566,7 +566,7 @@ class i8080 {
         this._setFlagsOnIncDecOp(lhs, 1, rawResult);
         this._registers[reg] = rawResult & 0xFF;
         this._clock += 5;
-        return 5;
+        return {Disassemble: `INR ${reg}`, Ticks: 5 };
     }
 
     /**
@@ -584,7 +584,7 @@ class i8080 {
         this._setFlagsOnIncDecOp(lhs, 1, rawResult);
         this._bus.WriteRAM(rawResult & 0xFF, addr);
         this._clock += 10;
-        return 10;
+        return {Disassemble: `INR M`, Ticks: 10 };
     }
 
     /**
@@ -602,8 +602,7 @@ class i8080 {
         this._setFlagsOnIncDecOp(lhs, 0xFF, rawResult);
         this._registers[reg] = rawResult & 0xFF;
         this._clock += 5;
-        return 5;
-
+        return {Disassemble: `DCR ${reg}`, Ticks: 5 };
     }
 
     /**
@@ -622,7 +621,7 @@ class i8080 {
         this._setFlagsOnIncDecOp(lhs, 0xFF, rawResult);
         this._bus.WriteRAM(rawResult & 0xFF, addr);
         this._clock += 10;
-        return 10;
+        return {Disassemble: `DCR M`, Ticks: 10};
     }
 
     /** 
@@ -634,7 +633,7 @@ class i8080 {
         this._registers['A'] = ~(this._registers['A']) & 0xFF;
         this._registers['A'] & 0xFF;
         this._clock += 4;
-        return 4;
+        return {Disassemble: `CMA`, Ticks: 4 };
     }
 
     /**
@@ -681,7 +680,7 @@ class i8080 {
             this._registers['A'] = val & 0xFF;
         }
         this._clock += 4;
-        return 4;
+        return {Disassemble: `DAA`, Ticks: 4 };
     }
 
 
@@ -695,7 +694,7 @@ class i8080 {
      */
      NOP() {
         this._clock += 4;
-        return 4;
+        return {Disassemble: `NOP`, Ticks: 4 };
     }
 
     // DATA TRANSFER INSTRUCTIONS
@@ -712,7 +711,7 @@ class i8080 {
      MOV_R(regDestination, regSource) {
         this._registers[regDestination] = this._registers[regSource];
         this._clock += 5;
-        return 5;
+        return {Disassemble: `MOV ${regDestination}, ${regSource}`, Ticks: 5 };
     }
 
     /**
@@ -725,7 +724,7 @@ class i8080 {
     MOV_TO_MEM(regSource) {
         this._bus.WriteRAM(this._registers[regSource], this._getRegisterPairWord('H', 'L'));
         this._clock += 7;
-        return 7;
+        return {Disassemble: `MOV M, ${regSource}`, Ticks: 7 };
     }
 
     /**
@@ -739,7 +738,7 @@ class i8080 {
     MOV_FROM_MEM(regDestination) {
         this._registers[regDestination] = this._bus.ReadRAM(this._getRegisterPairWord('H', 'L'));
         this._clock += 7;
-        return 7;
+        return { Disassemble: `MOV ${regDestination}, M`, Ticks: 7 };
     }
 
     /**
@@ -749,11 +748,11 @@ class i8080 {
      * relevant memory address. `B` = `B` & `C`, `D` = `D` & `E`. 
      * @returns Number of clock cycles used.
      */
-    STAX(high_byte_register, low_byte_register) {
-        const addr = this._getRegisterPairWord(high_byte_register, low_byte_register);
+    STAX(highByteRegister, lowByteRegister) {
+        const addr = this._getRegisterPairWord(highByteRegister, lowByteRegister);
         this._bus.WriteRAM(this._registers['A'], addr);
         this._clock += 7;
-        return 7;
+        return { Disassemble: `STAX ${highByteRegister}, ${lowByteRegister}`, Ticks: 7 };
     }
 
     /**
@@ -768,7 +767,7 @@ class i8080 {
     LDAX(highByteRegister, lowByteRegister) {
         this._registers['A'] = this._bus.ReadRAM(this._registers[highByteRegister] << 8 | this._registers[lowByteRegister] & 0xFF);
         this._clock += 7;
-        return 7;
+        return { Disassemble: `LDAX ${highByteRegister}, ${lowByteRegister}`, Ticks: 7 };
     }
 
     // REGISTER OR MEMORY TO ACCUMULATOR INSTRUCTIONS
@@ -784,7 +783,7 @@ class i8080 {
     ADD_R(register) {
         this._registers['A'] = this._add(this._registers['A'], this._registers[register]);
         this._clock += 4;
-        return 4;
+        return { Disassemble: `ADD ${register}`, Ticks: 4 };
     }
 
     /**
@@ -795,7 +794,7 @@ class i8080 {
     ADD_M() {
         this._registers['A'] = this._add(this._registers['A'], this._bus.ReadRAM(this._getRegisterPairWord('H','L')));
         this._clock += 7;
-        return 7;
+        return { Disassemble: `ADD M`, Ticks: 7 };
     }
 
     /**
@@ -809,7 +808,7 @@ class i8080 {
     ADC_R(register) {
         this._registers['A'] = this._add(this._registers['A'], this._registers[register], this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0 );
         this._clock += 4;
-        return 4;
+        return { Disassemble: `ADC ${register}`, Ticks: 4 };
     }
 
     /**
@@ -821,7 +820,7 @@ class i8080 {
     ADC_M() {
         this._registers['A'] = this._add(this._registers['A'], this._bus.ReadRAM(this._getRegisterPairWord('H','L')), this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
         this._clock += 7;
-        return 7;
+        return { Disassemble: `ADC M`, Ticks: 4 };
     }
 
     /**
@@ -841,7 +840,7 @@ class i8080 {
      SUB_R(register) {
         this._registers['A'] = this._sub(this._registers['A'], this._registers[register]);
         this._clock += 4;
-        return 4;
+        return { Disassemble: `SUB ${register}`, Ticks: 4 };
     }
 
     /**
@@ -860,7 +859,7 @@ class i8080 {
     SUB_M() {      
         this._registers['A'] = this._sub(this._registers['A'], this._bus.ReadRAM(this._getRegisterPairWord('H','L')));
         this._clock += 7;
-        return 7;
+        return { Disassemble: `SUB M`, Ticks: 7 };
     }
 
     /**
@@ -874,7 +873,7 @@ class i8080 {
     SBB_R(register) {               
         this._registers['A'] = this._sub(this._registers['A'], this._registers[register], this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
         this._clock += 4
-        return 4;
+        return { Disassemble: `SBB ${register}`, Ticks: 4 };
     }
 
     /**
@@ -887,7 +886,7 @@ class i8080 {
     SBB_M() {
         this._registers['A'] = this._sub(this._registers['A'], this._bus.ReadRAM(this._getRegisterPairWord('H','L')), this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
         this._clock += 7;
-        return 7;
+        return { Disassemble: `SBB M`, Ticks: 7 };
     }
 
     /**
@@ -902,7 +901,7 @@ class i8080 {
         this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
         this._clock += 4;
-        return 4;
+        return { Disassemble: `ANA ${register}`, Ticks: 4 };
     }
 
     /**
@@ -918,7 +917,7 @@ class i8080 {
         this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
         this._clock += 7;
-        return 7;
+        return { Disassemble: `ANA M`, Ticks: 7 };
     }
 
 
@@ -926,15 +925,15 @@ class i8080 {
      * EXCLUSIVE OR contents of the Accumulator with the contents of a register.
      * Result is stored in the accumulator.
      *
-     * @param {char} reg Register to use.
+     * @param {char} register Register to use.
      * @returns Number of clock cycles used.
      */
-    XRA_R(reg) {
-        const raw_result = this._registers['A'] ^ this._registers[reg];
+    XRA_R(register) {
+        const raw_result = this._registers['A'] ^ this._registers[register];
         this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
         this._clock += 4;
-        return 4;
+        return { Disassemble: `XRA ${register}`, Ticks: 4 };
     }
 
     /**
@@ -951,7 +950,7 @@ class i8080 {
         this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
         this._clock += 7;
-        return 7;
+        return { Disassemble: `XRA M`, Ticks: 7 };
     }
 
     /**
@@ -966,7 +965,7 @@ class i8080 {
         this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
         this._clock += 4;
-        return 4;
+        return { Disassemble: `ORA ${register}`, Ticks: 4 };
     }
 
     /**
@@ -983,7 +982,7 @@ class i8080 {
         this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
         this._clock += 7;
-        return 7;
+        return { Disassemble: `ORA M`, Ticks: 7 };
     }
 
     /**
@@ -998,7 +997,7 @@ class i8080 {
     CMP_R(register) {
         const result = this._sub(this._registers['A'], this._registers[register]);
         this._clock += 4;
-        return 4;
+        return { Disassemble: `CMP ${register}`, Ticks: 4 };
     }
 
     /**
@@ -1013,7 +1012,7 @@ class i8080 {
     CMP_M() {
         const result = this._sub(this._registers['A'], this._bus.ReadRAM(this._getRegisterPairWord('H','L')));
         this._clock += 7;
-        return 7;
+        return { Disassemble: `CMP M`, Ticks: 7 };
     }
 
     // ROTATE ACCUMULATOR INSTRUCTIONS
@@ -1034,7 +1033,7 @@ class i8080 {
         this._registers['A'] |= (this._flags & 0x01);
         this._registers['A'] &= 0xFF;
         this._clock += 4;
-        return 4;
+        return { Disassemble: `RLC`, Ticks: 4 };
     }
 
     /**
@@ -1053,7 +1052,7 @@ class i8080 {
         this._registers['A'] |= (this._flags << 7) & 0x80;
         this._registers['A'] &= 0xFF;
         this._clock += 4;
-        return 4;
+        return { Disassemble: `RRC`, Ticks: 4 };
     }
 
     /**
@@ -1071,7 +1070,7 @@ class i8080 {
         this._registers['A'] |= carry_bit & 0x01;
         this._registers['A'] &= 0xFF;
         this._clock += 4;
-        return 4;
+        return { Disassemble: `RAL`, Ticks: 4 };
     }
 
     /**
@@ -1086,7 +1085,7 @@ class i8080 {
         this._registers['A'] |= (carry_bit << 7) & 0x80;
         this._registers['A'] &= 0xFF;
         this._clock += 4;
-        return 4;
+        return { Disassemble: `RAR`, Ticks: 4 };
     }
 
     // REGISTER PAIR INSTRUCTIONS
@@ -1106,7 +1105,8 @@ class i8080 {
         this._pushByteToStack(this._registers[highByteRegister]);
         this._pushByteToStack(this._registers[lowByteRegister]);
         this._clock += 11;
-        return 11;
+        return { Disassemble: `PUSH ${highByteRegister}`, Ticks: 11 };
+
     }
 
     /**
@@ -1119,7 +1119,7 @@ class i8080 {
         this._pushByteToStack(this._registers['A']);
         this._pushByteToStack(this._flags);
         this._clock += 11;
-        return 11;
+        return { Disassemble: `PUSH PSW`, Ticks: 11 };
     }
 
     /**
@@ -1138,8 +1138,7 @@ class i8080 {
         this._registers[lowByteRegister] = this._bus.ReadRAM(this._stackPointer++);
         this._registers[highByteRegister] = this._bus.ReadRAM(this._stackPointer++);
         this._clock += 10;
-        return 10;
-    }
+        return { Disassemble: `POP ${highByteRegister}`, Ticks: 10 };    }
 
     /**
      * Pop 2 bytes from the top of the stack and load the first byte into the
@@ -1151,7 +1150,7 @@ class i8080 {
         this._flags = this._bus.ReadRAM(this._stackPointer++);
         this._registers['A'] = this._bus.ReadRAM(this._stackPointer++);
         this._clock += 10;
-        return 10;
+        return { Disassemble: `POP PSW`, Ticks: 10 };
     }
 
     /**
@@ -1168,7 +1167,7 @@ class i8080 {
         this._registers['H'] = (result >> 8) & 0xFF;
         this._registers['L'] = result & 0xFF;
         this._clock += 10;
-        return 10;
+        return { Disassemble: `DAD ${highByteRegister}`, Ticks: 10 };
     }
     
     /**
@@ -1183,7 +1182,7 @@ class i8080 {
         this._registers['H'] = (result >> 8) & 0xFF;
         this._registers['L'] = result & 0xFF;
         this._clock += 10;
-        return 10
+        return { Disassemble: `DAD SP`, Ticks: 10 };
     }
 
     /**
@@ -1198,7 +1197,7 @@ class i8080 {
         this._registers[highByteRegister] = (word >> 8) & 0xFF;
         this._registers[lowByteRegister] = word & 0xFF;     
         this._clock += 5;   
-        return 5;
+        return { Disassemble: `INX ${highByteRegister}`, Ticks: 5 };
     }
     
     /**
@@ -1209,7 +1208,7 @@ class i8080 {
     INX_SP() {
         this._stackPointer = (this._stackPointer + 1) & 0xFFFF;
         this._clock += 5;
-        return 5;
+        return { Disassemble: `INX SP`, Ticks: 5 };    
     }
 
     /**
@@ -1225,7 +1224,7 @@ class i8080 {
         this._registers[highByteRegister] = (word >> 8) & 0xFF;
         this._registers[lowByteRegister] = word & 0xFF;
         this._clock += 5;
-        return 5;
+        return { Disassemble: `DCX ${highByteRegister}`, Ticks: 5 };
     }
 
     /**
@@ -1236,7 +1235,7 @@ class i8080 {
     DCX_SP() {
         this._stackPointer = (this._stackPointer + 0xFFFF) & 0xFFFF;
         this._clock += 5;
-        return 5;
+        return { Disassemble: `DCX SP`, Ticks: 5 };    
     }
 
     /**
@@ -1255,7 +1254,7 @@ class i8080 {
         this._registers['E'] = lowByte
         
         this._clock += 5;
-        return 5;
+        return { Disassemble: `XCHG`, Ticks: 5 };    
     }
 
     /**
@@ -1277,7 +1276,7 @@ class i8080 {
         this._registers['H'] = highByte;
 
         this._clock += 18;
-        return 18;
+        return { Disassemble: `XTHL`, Ticks: 11 };    
     }
 
     /**
@@ -1289,7 +1288,7 @@ class i8080 {
     SPHL() {
         this._stackPointer = this._getRegisterPairWord('H', 'L');
         this._clock += 5;
-        return 5;
+        return { Disassemble: `SPHL`, Ticks: 5 };    
     }
 
     // IMMEDIATE INSTRUCTIONS
@@ -1309,7 +1308,7 @@ class i8080 {
         this._registers[highByteRegister] = (val >> 8) & 0xFF;
         this._registers[lowByteRegister] = val & 0xFF;
         this._clock += 10;
-        return 10;
+        return { Disassemble: `LXI ${highByteRegister}`, Ticks: 10 };    
     }
     
     /**
@@ -1320,7 +1319,7 @@ class i8080 {
     LXI_SP(val) {
         this._stackPointer = val & 0xFFFF;
         this._clock += 10;
-        return 10;
+        return { Disassemble: `LXI SP`, Ticks: 10 };    
     }
 
     /**
@@ -1334,7 +1333,7 @@ class i8080 {
     MVI_R(regDestination, val) {
         this._registers[regDestination] = (val & 0xFF);
         this._clock += 7;
-        return 7;
+        return { Disassemble: `MVI ${regDestination}, #${val}`, Ticks: 7 };    
     }
 
     /**
@@ -1348,7 +1347,7 @@ class i8080 {
         const addr = this._getRegisterPairWord('H', 'L');
         this._bus.WriteRAM(val, addr);
         this._clock += 10;
-        return 10;
+        return { Disassemble: `MVI M, #${val}`, Ticks: 10 };    
     }
 
     /**
@@ -1360,7 +1359,8 @@ class i8080 {
     ADI(val) {
         this._registers['A'] = this._add(this._registers['A'], val);
         this._clock += 7;
-        return 7;
+        return { Disassemble: `ADI #${val}`, Ticks: 7 };
+
     }
 
     /**
@@ -1373,7 +1373,7 @@ class i8080 {
     ACI(val) {
         this._registers['A'] = this._add(this._registers['A'], val, this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
         this._clock += 7;
-        return 7;
+        return { Disassemble: `ACI #${val}`, Ticks: 7 };
     }
 
     /**
@@ -1385,7 +1385,7 @@ class i8080 {
     SUI(val) {
         this._registers['A'] = this._sub(this._registers['A'], val);
         this._clock += 7;
-        return 7;        
+        return { Disassemble: `SUI #${val}`, Ticks: 7 };      
     }
 
     /**
@@ -1397,7 +1397,7 @@ class i8080 {
     SBI(val) {
         this._registers['A'] = this._sub(this._registers['A'], val, this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
         this._clock += 7;
-        return 7;
+        return { Disassemble: `SBI #${val}`, Ticks: 7 };
     }
 
     /**
@@ -1412,7 +1412,7 @@ class i8080 {
         this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
         this._clock += 4;
-        return 4;
+        return { Disassemble: `ANI #${val}`, Ticks: 4 };
     }
 
 
@@ -1428,7 +1428,7 @@ class i8080 {
         this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
         this._clock += 4;
-        return 4;
+        return { Disassemble: `XRI #${val}`, Ticks: 4 };
     }
 
 
@@ -1444,7 +1444,7 @@ class i8080 {
         this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
         this._clock += 4;
-        return 4;
+        return { Disassemble: `ORI #${val}`, Ticks: 4 };
     }
 
     /**
@@ -1459,7 +1459,7 @@ class i8080 {
     CPI(val) {
         const result = this._sub(this._registers['A'], val & 0xFF);
         this._clock += 7;
-        return 7;
+        return { Disassemble: `CPI #${val}`, Ticks: 7 };
     }
 
     // DIRECT ADDRESSING OPCODES
@@ -1474,7 +1474,7 @@ class i8080 {
     STA(addr) {
         this._bus.WriteRAM(this._registers.A, addr);
         this._clock += 13;
-        return 13;
+        return { Disassemble: `STA 0x${addr.toString(16).padStart(4,'0')}`, Ticks: 13 };
     }
     
     /**
@@ -1486,7 +1486,7 @@ class i8080 {
     LDA(addr) {
         this._registers['A'] = this._bus.ReadRAM(addr);
         this._clock += 13;
-        return 13;
+        return { Disassemble: `LDA 0x${addr.toString(16).padStart(4,'0')}`, Ticks: 13 };
     }
 
     /**
@@ -1501,7 +1501,7 @@ class i8080 {
         this._bus.WriteRAM(this._registers.L, addr);
         this._bus.WriteRAM(this._registers.H, addr + 1);
         this._clock += 16;
-        return 16;
+        return { Disassemble: `SHLD 0x${addr.toString(16).padStart(4,'0')}`, Ticks: 16 };
     }
 
     /**
@@ -1516,7 +1516,7 @@ class i8080 {
         this._registers['L'] = this._bus.ReadRAM(addr);
         this._registers['H'] = this._bus.ReadRAM(addr+1);
         this._clock += 16;
-        return 16;
+        return { Disassemble: `LHLD 0x${addr.toString(16).padStart(4,'0')}`, Ticks: 16 };
     }
 
 
@@ -1534,7 +1534,7 @@ class i8080 {
     PCHL() {
         this._programCounter = this._getRegisterPairWord('H', 'L');
         this._clock += 5;
-        return 5;
+        return { Disassemble: `PCHL`, Ticks: 5 };
     }
 
 
@@ -1548,14 +1548,14 @@ class i8080 {
      * @param {number} addr Address in memory to jump to
      * @returns Number of clock cycles used
      */
-    JUMP(expr, addr) {
+    JUMP(expr, addr, mnemonic) {
         if (expr) {
             this._programCounter = addr;
             this._clock += 10;
-            return 10;
+            return { Disassemble: `${mnemonic}, 0x${addr.toString(16).padStart(4,'0')}`, Ticks: 10 };
         }
         this._clock += 3;
-        return 3;
+        return { Disassemble: `${mnemonic}, 0x${addr.toString(16).padStart(4,'0')}`, Ticks: 3 };
     }
 
     // CALL SUBROUTINE INSTRUCTIONS
@@ -1569,15 +1569,15 @@ class i8080 {
      * @param {addr} addr Address in memory to jump to
      * @returns Number of clock cycles used
      */
-    CALL(expr, addr) {
+    CALL(expr, addr, mnemonic) {
         if (expr) {
             this._pushWordToStack(this._programCounter);
             this._programCounter = addr;
             this._clock += 17;
-            return 17;
+            return { Disassemble: `${mnemonic}, 0x${addr.toString(16).padStart(4,'0')}`, Ticks: 17 };
         }
         this._clock += 11;
-        return 11;
+        return { Disassemble: `${mnemonic}, 0x${addr.toString(16).padStart(4,'0')}`, Ticks: 11 };
     }
 
     // RETURN FROM SUBROUTINE INSTRUCTIONS
@@ -1591,7 +1591,7 @@ class i8080 {
     RET() {
         this._programCounter = this._popWordFromStack();
         this._clock += 10;
-        return 10;
+        return { Disassemble: `RET`, Ticks: 10 };
     }
 
     /**
@@ -1602,14 +1602,14 @@ class i8080 {
      * @param {boolean} expr An expression that evaluates to true/false
      * @returns Number of clock cycles used
      */
-    RETURN(expr) {
+    RETURN(expr, mnemonic) {
         if (expr) {
             this._programCounter = this._popWordFromStack();
             this._clock += 11;
-            return 11;
+            return { Disassemble: `${mnemonic}`, Ticks: 11 };
         }
         this._clock += 5;
-        return 5;
+        return { Disassemble: `${mnemonic}`, Ticks: 5 };
     }
 
     // RESTART (RST) OPCODES
@@ -1625,7 +1625,7 @@ class i8080 {
         this._pushWordToStack(this._programCounter);
         this._programCounter = vector;
         this._clock += 11;
-        return 11;
+        return { Disassemble: `RST 0x${vector.toString(16).padStart(4,'0')}`, Ticks: 11 };
     }
 
     // INTERRUPT FLIP-FLOP INSTRUCTIONS
@@ -1638,8 +1638,8 @@ class i8080 {
      */
     EI() {
         this._interruptsEnabled = true;
-        ticks += 4;
-        return 4;
+        this._clock += 4;
+        return { Disassemble: `EI`, Ticks: 4 };
     }
 
     /**
@@ -1649,8 +1649,8 @@ class i8080 {
      */
     DI() {
         this._interruptsEnabled = false;
-        ticks += 4;
-        return 4;
+        this._clock += 4;
+        return { Disassemble: `DI`, Ticks: 4 };
     }
 
     // INPUT/OUTPUT INSTRUCTIONS
@@ -1666,7 +1666,7 @@ class i8080 {
     IN(deviceID) {
         this._registers.A = this._bus.ReadDevice(deviceID);
         this.clock += 10;
-        return 10;
+        return { Disassemble: `IN`, Ticks: 10 };
     }
 
     /**
@@ -1679,7 +1679,7 @@ class i8080 {
     OUT(port) {
         this._bus.WriteDevice(port, this._registers.A);
         this._clock += 10;
-        return 10;
+        return { Disassemble: `OUT`, Ticks: 10 };
     }
 
 
@@ -1694,311 +1694,7 @@ class i8080 {
     HALT() {
         this._halt = true;
         this._clock += 7;
-        return 7;
-    }
-
-    _opcodeFunctionTable = {
-        0x00: () => this.NOP(),
-        0x08: () => this.NOP(),
-        0x10: () => this.NOP(),
-        0x18: () => this.NOP(),
-        0x20: () => this.NOP(),
-        0x28: () => this.NOP(),
-        0x38: () => this.NOP(),
-        0x30: () => this.NOP(),
-
-        0xDB: () => this.IN(this._getNextByte()),
-        0xD3: () => this.OUT(this._getNextByte()),
-
-        0x27: () => this.DAA(),
-
-        0xC7: () => this.RST(0xC7 & 0x38),
-        0xD7: () => this.RST(0xD7 & 0x38),
-        0xE7: () => this.RST(0xE7 & 0x38),
-        0xF7: () => this.RST(0xF7 & 0x38),
-        0xC7: () => this.RST(0xC7 & 0x38),
-        0xCF: () => this.RST(0xCF & 0x38),
-        0xDF: () => this.RST(0xDF & 0x38),
-        0xEF: () => this.RST(0xEF & 0x38),
-        0xFF: () => this.RST(0xFF & 0x38),
-
-        0xFE: () => this.CPI(this._getNextByte()),
-
-        0xE9: () => this.PCHL(),
-
-        0xF8: () => this._interruptsEnabled = true,
-        0xF3: () => this._interruptsEnabled = false,
-
-        0xCD: () => this.CALL(true, this._getNextWord()),
-        0xDD: () => this.CALL(true, this._getNextWord()),
-        0xED: () => this.CALL(true, this._getNextWord()),
-        0xFD: () => this.CALL(true, this._getNextWord()),
-        0xFC: () => this.CALL(this._flagManager.IsSet(this._flagManager.FlagType.Sign), this._getNextWord()),
-        0xEC: () => this.CALL(this._flagManager.IsSet(this._flagManager.FlagType.Parity), this._getNextWord()),
-        0xDC: () => this.CALL(this._flagManager.IsSet(this._flagManager.FlagType.Carry), this._getNextWord()),
-        0xCC: () => this.CALL(this._flagManager.IsSet(this._flagManager.FlagType.Zero), this._getNextWord()),
-        0xF4: () => this.CALL(!this._flagManager.IsSet(this._flagManager.FlagType.Sign), this._getNextWord()),
-        0xE4: () => this.CALL(!this._flagManager.IsSet(this._flagManager.FlagType.Parity), this._getNextWord()),
-        0xD4: () => this.CALL(!this._flagManager.IsSet(this._flagManager.FlagType.Carry), this._getNextWord()),
-        0xC4: () => this.CALL(!this._flagManager.IsSet(this._flagManager.FlagType.Zero), this._getNextWord()),
-
-        0xF9: () => this.SPHL(),
-
-        0xEB: () => this.XCHG(),
-
-        0xE3: () => this.XTHL(),
-
-        0xC3: () => this.JUMP(true, this._getNextWord()),
-        0xC8: () => this.JUMP(true, this._getNextWord()),
-        0xFA: () => this.JUMP(this._flagManager.IsSet(this._flagManager.FlagType.Sign), this._getNextWord()),
-        0xEA: () => this.JUMP(this._flagManager.IsSet(this._flagManager.FlagType.Parity), this._getNextWord()),
-        0xCA: () => this.JUMP(this._flagManager.IsSet(this._flagManager.FlagType.Zero), this._getNextWord()),
-        0xDA: () => this.JUMP(this._flagManager.IsSet(this._flagManager.FlagType.Carry), this._getNextWord()),
-        0xF2: () => this.JUMP(!this._flagManager.IsSet(this._flagManager.FlagType.Sign), this._getNextWord()),
-        0xE2: () => this.JUMP(!this._flagManager.IsSet(this._flagManager.FlagType.Parity), this._getNextWord()),
-        0xD2: () => this.JUMP(!this._flagManager.IsSet(this._flagManager.FlagType.Carry), this._getNextWord()),
-        0xC2: () => this.JUMP(!this._flagManager.IsSet(this._flagManager.FlagType.Zero), this._getNextWord()),
-
-        0xC9: () => this.RET(),
-        0xD9: () => this.RET(),
-
-        0xF8: () => this.RETURN(this._flagManager.IsSet(this._flagManager.FlagType.Sign)),
-        0xE8: () => this.RETURN(this._flagManager.IsSet(this._flagManager.FlagType.Parity)),
-        0xD8: () => this.RETURN(this._flagManager.IsSet(this._flagManager.FlagType.Carry)),
-        0xC8: () => this.RETURN(this._flagManager.IsSet(this._flagManager.FlagType.Zero)),
-        0xF0: () => this.RETURN(!this._flagManager.IsSet(this._flagManager.FlagType.Sign)),
-        0xE0: () => this.RETURN(!this._flagManager.IsSet(this._flagManager.FlagType.Parity)),
-        0xC0: () => this.RETURN(!this._flagManager.IsSet(this._flagManager.FlagType.Zero)),
-        0xD0: () => this.RETURN(!this._flagManager.IsSet(this._flagManager.FlagType.Carry)),
-
-        0xC1: () => this.POP_R('B', 'C'),
-        0xD1: () => this.POP_R('D', 'E'),
-        0xE1: () => this.POP_R('H', 'L'),
-        0xF1: () => this.POP_PSW(),
-        0xC5: () => this.PUSH_R('B', 'C'),
-        0xD5: () => this.PUSH_R('D', 'E'),
-        0xE5: () => this.PUSH_R('H', 'L'),
-        0xF5: () => this.PUSH_PSW(),
-
-        0xB8: () => this.CMP_R('B'),
-        0xB9: () => this.CMP_R('C'),
-        0xBA: () => this.CMP_R('D'),
-        0xBB: () => this.CMP_R('E'),
-        0xBC: () => this.CMP_R('H'),
-        0xBD: () => this.CMP_R('L'),
-        0xBE: () => this.CMP_M(),
-        0xBF: () => this.CMP_R('A'),
-
-        0x3A: () => this.LDA(this._getNextWord()),
-
-        0x2A: () => this.LHLD(this._getNextWord()),
-
-        0x0A: () => this.LDAX('B', 'C'),
-        0x1A: () => this.LDAX('D', 'E'),
-
-        0x09: () => this.DAD('B', 'C'),
-        0x19: () => this.DAD('D', 'E'),
-        0x29: () => this.DAD('H', 'L'),
-        0x39: () => this.DAD_SP(),
-
-        0x2F: () => this.CMA(),
-
-        0x37: () => this.STC(),
-
-        0x3F: () => this.CMC(),
-
-        0x17: () => this.RAL(),
-
-        0x1F: () => this.RAR(),
-
-        0x07: () => this.RLC(),
-
-        0x0F: () => this.RRC(),
-
-        0x0B: () => this.DCX_R('B', 'C'),
-        0x1B: () => this.DCX_R('D', 'E'),
-        0x2B: () => this.DCX_R('H', 'L'),
-        0x3B: () => this.DCX_SP(),
-    
-        0x05: () => this.DCR_R('B'),
-        0x15: () => this.DCR_R('D'),
-        0x25: () => this.DCR_R('H'),
-        0x35: () => this.DCR_M(),
-        0x0D: () => this.DCR_R('C'),
-        0x1D: () => this.DCR_R('E'),
-        0x2D: () => this.DCR_R('L'),
-        0x3D: () => this.DCR_R('A'),
-
-        0x04: () => this.INR_R('B'),
-        0x14: () => this.INR_R('D'),
-        0x24: () => this.INR_R('H'),
-        0x34: () => this.INR_M(),
-        0x0C: () => this.INR_R('C'),
-        0x1C: () => this.INR_R('E'),
-        0x2C: () => this.INR_R('L'),
-        0x3C: () => this.INR_R('A'),
-        
-        0x01: () => this.LXI_R('B', 'C', this._getNextWord()),
-        0x02: () => this.STAX('B', 'C'),
-        0x03: () => this.INX_R('B', 'C'),
-        0x11: () => this.LXI_R('D', 'E', this._getNextWord()),
-        0x12: () => this.STAX('D', 'E'),
-        0x13: () => this.INX_R('D', 'E'),
-        0x21: () => this.LXI_R('H', 'L', this._getNextWord()),
-        0x0E: () => this.MVI_R('C', this._getNextByte()),
-        0x1E: () => this.MVI_R('E', this._getNextByte()),
-        0x22: () => this.SHLD(this._getNextWord()),
-        0x23: () => this.INX_R('H', 'L'),
-        0x2E: () => this.MVI_R('L', this._getNextByte()),
-        0x31: () => this.LXI_SP(this._getNextWord()),
-        0x32: () => this.STA(this._getNextWord()),
-        0x33: () => this.INX_SP(),
-        0x3E: () => this.MVI_R('A', this._getNextByte()),
-        0x06: () => this.MVI_R('B', this._getNextByte()),
-        0x16: () => this.MVI_R('D', this._getNextByte()),
-        0x26: () => this.MVI_R('H', this._getNextByte()),
-        0x36: () => this.MVI_TO_MEM(this._getNextByte()),
-        0x40: () => this.MOV_R('B', 'B'),
-        0x41: () => this.MOV_R('B', 'C'),
-        0x42: () => this.MOV_R('B', 'D'),
-        0x43: () => this.MOV_R('B', 'E'),
-        0x44: () => this.MOV_R('B', 'H'),
-        0x45: () => this.MOV_R('B', 'L'),
-        0x46: () => this.MOV_FROM_MEM('B'),
-        0x47: () => this.MOV_R('B', 'A'),
-        0x48: () => this.MOV_R('C', 'B'),
-        0x49: () => this.MOV_R('C', 'C'),
-        0x4A: () => this.MOV_R('C', 'D'),
-        0x4B: () => this.MOV_R('C', 'E'),
-        0x4C: () => this.MOV_R('C', 'H'),
-        0x4D: () => this.MOV_R('C', 'L'),
-        0x4E: () => this.MOV_FROM_MEM('C'),
-        0x4F: () => this.MOV_R('C', 'A'),
-        0x50: () => this.MOV_R('D', 'B'),
-        0x51: () => this.MOV_R('D', 'C'),
-        0x52: () => this.MOV_R('D', 'D'),
-        0x53: () => this.MOV_R('D', 'E'),
-        0x54: () => this.MOV_R('D', 'H'),
-        0x55: () => this.MOV_R('D', 'L'),
-        0x56: () => this.MOV_FROM_MEM('D'),
-        0x57: () => this.MOV_R('D', 'A'),
-        0x58: () => this.MOV_R('E', 'B'),
-        0x59: () => this.MOV_R('E', 'C'),
-        0x5A: () => this.MOV_R('E', 'D'),
-        0x5B: () => this.MOV_R('E', 'E'),
-        0x5C: () => this.MOV_R('E', 'H'),
-        0x5D: () => this.MOV_R('E', 'L'),
-        0x5E: () => this.MOV_FROM_MEM('E'),
-        0x5F: () => this.MOV_R('E', 'A'),
-
-        0x60: () => this.MOV_R('H', 'B'),
-        0x61: () => this.MOV_R('H', 'C'),
-        0x62: () => this.MOV_R('H', 'D'),
-        0x63: () => this.MOV_R('H', 'E'),
-        0x64: () => this.MOV_R('H', 'H'),
-        0x65: () => this.MOV_R('H', 'L'),
-        0x66: () => this.MOV_FROM_MEM('H'),
-        0x67: () => this.MOV_R('H', 'A'),
-
-        0x68: () => this.MOV_R('L', 'B'),
-        0x69: () => this.MOV_R('L', 'C'),
-        0x6A: () => this.MOV_R('L', 'D'),
-        0x6B: () => this.MOV_R('L', 'E'),
-        0x6C: () => this.MOV_R('L', 'H'),
-        0x6D: () => this.MOV_R('L', 'L'),
-        0x6E: () => this.MOV_FROM_MEM('L'),
-        0x6F: () => this.MOV_R('L', 'A'),
-
-        0x70: () => this.MOV_TO_MEM('B'),
-        0x71: () => this.MOV_TO_MEM('C'),
-        0x72: () => this.MOV_TO_MEM('D'),
-        0x73: () => this.MOV_TO_MEM('E'),
-        0x74: () => this.MOV_TO_MEM('H'),
-        0x75: () => this.MOV_TO_MEM('L'),
-        0x77: () => this.MOV_TO_MEM('A'),
-
-        0x78: () => this.MOV_R('A', 'B'),
-        0x79: () => this.MOV_R('A', 'C'),
-        0x7A: () => this.MOV_R('A', 'D'),
-        0x7B: () => this.MOV_R('A', 'E'),
-        0x7C: () => this.MOV_R('A', 'H'),
-        0x7D: () => this.MOV_R('A', 'L'),
-        0x7E: () => this.MOV_FROM_MEM('A'),
-        0x7F: () => this.MOV_R('A', 'A'),
-
-        0x76: () => this.HALT(),
-
-        0x80: () => this.ADD_R('B'),
-        0x81: () => this.ADD_R('C'),
-        0x82: () => this.ADD_R('D'),
-        0x83: () => this.ADD_R('E'),
-        0x84: () => this.ADD_R('H'),
-        0x85: () => this.ADD_R('L'),
-        0x86: () => this.ADD_M(),
-        0x87: () => this.ADD_R('A'),
-
-        0x88: () => this.ADC_R('B'),
-        0x89: () => this.ADC_R('C'),
-        0x8A: () => this.ADC_R('D'),
-        0x8B: () => this.ADC_R('E'),
-        0x8C: () => this.ADC_R('H'),
-        0x8D: () => this.ADC_R('L'),
-        0x8E: () => this.ADC_M(),
-        0x8F: () => this.ADC_R('A'),
-
-        0x90: () => this.SUB_R('B'),
-        0x91: () => this.SUB_R('C'),
-        0x92: () => this.SUB_R('D'),
-        0x93: () => this.SUB_R('E'),
-        0x94: () => this.SUB_R('H'),
-        0x95: () => this.SUB_R('L'),
-        0x96: () => this.SUB_M(),
-        0x97: () => this.SUB_R('A'),
-
-        0x98: () => this.SBB_R('B'),
-        0x99: () => this.SBB_R('C'),
-        0x9A: () => this.SBB_R('D'),
-        0x9B: () => this.SBB_R('E'),
-        0x9C: () => this.SBB_R('H'),
-        0x9D: () => this.SBB_R('L'),
-        0x9E: () => this.SBB_M(),
-        0x9F: () => this.SBB_R('A'),
-
-        0xA0: () => this.ANA_R('B'),
-        0xA1: () => this.ANA_R('C'),
-        0xA2: () => this.ANA_R('D'),
-        0xA3: () => this.ANA_R('E'),
-        0xA4: () => this.ANA_R('H'),
-        0xA5: () => this.ANA_R('L'),
-        0xA6: () => this.ANA_M(),
-        0xA7: () => this.ANA_R('A'),
-
-        0xA8: () => this.XRA_R('B'),
-        0xA9: () => this.XRA_R('C'),
-        0xAA: () => this.XRA_R('D'),
-        0xAB: () => this.XRA_R('E'),
-        0xAC: () => this.XRA_R('H'),
-        0xAD: () => this.XRA_R('L'),
-        0xAE: () => this.XRA_M(),
-        0xAF: () => this.XRA_R('A'),
-
-        0xB0: () => this.ORA_R('B'),
-        0xB1: () => this.ORA_R('C'),
-        0xB2: () => this.ORA_R('D'),
-        0xB3: () => this.ORA_R('E'),
-        0xB4: () => this.ORA_R('H'),
-        0xB5: () => this.ORA_R('L'),
-        0xB6: () => this.ORA_M(),
-        0xB7: () => this.ORA_R('A'),
-
-        0xC6: () => this.ADI(this._getNextByte()),
-        0xCE: () => this.ACI(this._getNextByte()),
-        0xD6: () => this.SUI(this._getNextByte()),
-        0xDE: () => this.SBI(this._getNextByte()),
-        0xE6: () => this.ANI(this._getNextByte()),
-        0xEE: () => this.XRI(this._getNextByte()),
-        0xF6: () => this.ORI(this._getNextByte()),
-
+        return { Disassemble: `HALT`, Ticks: 7 };
     }
 
     // PROGRAM EXECUTION
@@ -2009,1002 +1705,293 @@ class i8080 {
      * The program counter is incremented automatically, depending on the number
      * of bytes consumed by the instruction.
      *
-     * In the emulation world, this method is officially known as: '*The Big,
-     * Fuck-Off Switch Statement Technique*'. Others have used tables to lookup
-     * instructions, but switch works just as well and, although longer, is
-     * simple to read.
+     * Each function is stored in the _opcodeTable, an array indexed by the
+     * opcode itself for fast lookup. This used to be a switch statement, but
+     * was swapped out for an array lookup in the belief it would be more
+     * efficient. I'm not sure, though, looks very similar :-)
      */
-    ExecuteNextInstruction() {
+     ExecuteNextInstruction() {
 
         if (this._interruptWaiting) {
             this._processInterrupt();
         }
 
-        // Diagnostic info to return
-        let disassemble;
-        let ticks;
         const opcodeAddress = this._programCounter;
-
         const opcode = this._getNextByte();
-        // Get the address of this OpCode so we can return it as part of the
-        // diganostic information.
-        switch(opcode) {
-            case 0x00:
-            case 0x08:
-            case 0x10:
-            case 0x18:
-            case 0x20:
-            case 0x28:
-            case 0x38:
-            case 0x30:
-                disassemble = `NOP`;
-                ticks = this.NOP();
-                break;
-            case 0xDB:
-                disassemble = `IN\t0x${this._peekNextByte().toString(16)}`
-                ticks = this.IN(this._getNextByte());
-                break;
-            case 0xD3:
-                disassemble = `OUT\t0x${this._peekNextByte().toString(16)}`
-                ticks = this.OUT(this._getNextByte());
-                break;
-            case 0x27:
-                disassemble = `DAA`;
-                ticks = this.DAA();
-                break;                
-            case 0xC7:
-            case 0xD7:
-            case 0xE7:
-            case 0xF7:
-            case 0xCF:
-            case 0xDF:
-            case 0xEF:
-            case 0xFF:  
-                // Bits 3-5 of the OpCode hold the jump address
-                disassemble = `RST\t0x${(opcode & 0x38).toString(16)}`;
-                ticks = this.RST(opcode & 0x38);
-                break;
-            case 0xFE:
-                disassemble = `CPI\t0x${this._peekNextByte().toString(16)}`;
-                ticks = this.CPI(this._getNextByte());
-                break;
-            case 0xE9:
-                disassemble = `PCHL`;
-                ticks = this.PCHL();
-                break;
-            case 0xFB:
-                disassemble = `EI`;
-                ticks = this._interruptsEnabled = true;
-                break;
-            case 0xF3:
-                disassemble = `DI`
-                ticks = this._interruptsEnabled = false;
-                break;
-            case 0xCD:
-            case 0xDD:
-            case 0xED:
-            case 0xFD:
-                disassemble = `CALL\t0x${this._peekNextWord().toString(16)}`;
-                ticks = this.CALL(true, this._getNextWord());
-                break;
-            case 0xFC:
-                disassemble = `CM\t0x${this._peekNextWord().toString(16)}`;
-                ticks = this.CALL(this._flagManager.IsSet(this._flagManager.FlagType.Sign), this._getNextWord());
-                break;
-            case 0xEC:
-                disassemble = `CPE\t0x${this._peekNextWord().toString(16)}`
-                ticks = this.CALL(this._flagManager.IsSet(this._flagManager.FlagType.Parity), this._getNextWord());
-                break;
-            case 0xDC:
-                disassemble = `CC\t0x${this._peekNextWord().toString(16)}`
-                ticks = this.CALL(this._flagManager.IsSet(this._flagManager.FlagType.Carry), this._getNextWord());
-                break;
-            case 0xCC:
-                disassemble = `CZ\t0x${this._peekNextWord().toString(16)}`
-                ticks = this.CALL(this._flagManager.IsSet(this._flagManager.FlagType.Zero), this._getNextWord());
-                break;
-            case 0xF4:
-                disassemble = `CP\t0x${this._peekNextWord().toString(16)}`;
-                ticks = this.CALL(!this._flagManager.IsSet(this._flagManager.FlagType.Sign), this._getNextWord());
-                break;
-            case 0xE4:
-                disassemble = `CPO\t0x${this._peekNextWord().toString(16)}`;
-                ticks = this.CALL(!this._flagManager.IsSet(this._flagManager.FlagType.Parity), this._getNextWord());
-                break;
-            case 0xD4:
-                disassemble = `CNC\t0x${this._peekNextWord().toString(16)}`;
-                ticks = this.CALL(!this._flagManager.IsSet(this._flagManager.FlagType.Carry), this._getNextWord());
-                break;
-            case 0xC4:
-                disassemble = `CNZ\t0x${this._peekNextWord().toString(16)}`;
-                ticks = this.CALL(!this._flagManager.IsSet(this._flagManager.FlagType.Zero), this._getNextWord());
-                break;
-            case 0xF9:
-                disassemble =`SPHL`;
-                ticks = this.SPHL();
-                break;
-            case 0xEB:
-                disassemble = `XCHG`;
-                ticks = this.XCHG();
-                break;
-            case 0xE3:
-                disassemble = `XTHL`;
-                ticks = this.XTHL();
-                break;
-            case 0xC3:
-            case 0xCB:
-                disassemble = `JMP\t0x${this._peekNextWord().toString(16)}`
-                ticks = this.JUMP(true, this._getNextWord());
-                break;
-            case 0xFA:
-                disassemble = `JM\t0x${this._peekNextWord().toString(16)}`;
-                ticks = this.JUMP(this._flagManager.IsSet(this._flagManager.FlagType.Sign), this._getNextWord());
-                break;      
-            case 0xEA:
-                disassemble = `JPE\t0x${this._peekNextWord().toString(16)}`;
-                ticks = this.JUMP(this._flagManager.IsSet(this._flagManager.FlagType.Parity), this._getNextWord());
-                break;
-            case 0xCA:
-                disassemble = `JZ\t0x${this._peekNextWord().toString(16)}`;
-                ticks = this.JUMP(this._flagManager.IsSet(this._flagManager.FlagType.Zero), this._getNextWord());
-                break;
-            case 0xDA:
-                disassemble = `JC\t0x${this._peekNextWord().toString(16)}`;
-                ticks = this.JUMP(this._flagManager.IsSet(this._flagManager.FlagType.Carry), this._getNextWord());
-                break;                
-            case 0xF2:
-                disassemble = `JP\t0x${this._peekNextWord().toString(16)}`;
-                ticks = this.JUMP(!this._flagManager.IsSet(this._flagManager.FlagType.Sign), this._getNextWord());
-                break;                
-            case 0xE2:
-                disassemble = `JPO\t0x${this._peekNextWord().toString(16)}`;
-                ticks = this.JUMP(!this._flagManager.IsSet(this._flagManager.FlagType.Parity), this._getNextWord());
-                break;
-            case 0xD2:
-                disassemble = `JNC\t0x${this._peekNextWord().toString(16)}`;
-                ticks = this.JUMP(!this._flagManager.IsSet(this._flagManager.FlagType.Carry), this._getNextWord());
-                break;                
-            case 0xC2:
-                disassemble = `JNZ\t0x${this._peekNextWord().toString(16)}`;
-                ticks = this.JUMP(!this._flagManager.IsSet(this._flagManager.FlagType.Zero), this._getNextWord());
-                break;
-            case 0xC9:
-            case 0xD9:
-                disassemble = `RET`;
-                ticks = this.RET();
-                break;
-            case 0xF8:
-                disassemble = `RM`;
-                ticks = this.RETURN(this._flagManager.IsSet(this._flagManager.FlagType.Sign))
-                break;
-            case 0xE8:
-                disassemble = `RPE\t0x${this._peekNextWord().toString(16)}`;
-                ticks = this.RETURN(this._flagManager.IsSet(this._flagManager.FlagType.Parity))
-                break;
-            case 0xD8:
-                disassemble = `RC`
-                ticks = this.RETURN(this._flagManager.IsSet(this._flagManager.FlagType.Carry))
-                break;
-            case 0xC8:
-                disassemble = `RZ`;
-                ticks = this.RETURN(this._flagManager.IsSet(this._flagManager.FlagType.Zero))
-                break;
-            case 0xF0:
-                disassemble = `RP`;
-                ticks = this.RETURN(!this._flagManager.IsSet(this._flagManager.FlagType.Sign))
-                break;
-            case 0xE0:
-                disassemble = `RPO`;
-                ticks = this.RETURN(!this._flagManager.IsSet(this._flagManager.FlagType.Parity))
-                break;
-            case 0xC0:
-                disassemble = `RNZ`;
-                ticks = this.RETURN(!this._flagManager.IsSet(this._flagManager.FlagType.Zero));
-                break;
-            case 0xD0:
-                disassemble = `RNC`;
-                ticks = this.RETURN(!this._flagManager.IsSet(this._flagManager.FlagType.Carry));
-                break;
-            case 0xC1:
-                disassemble = `POP\tBC`;
-                ticks = this.POP_R('B', 'C');
-                break;
-            case 0xD1:
-                disassemble = `POP\tDE`;
-                ticks = this.POP_R('D', 'E');
-                break;
-            case 0xE1:
-                disassemble = `POP\tHL`;
-                ticks = this.POP_R('H', 'L');
-                break;
-            case 0xF1:
-                disassemble = `POP\tPSW`;
-                ticks = this.POP_PSW();
-                break;
-            case 0xC5:
-                disassemble = `PUSH\tBC`;
-                ticks = this.PUSH_R('B', 'C');
-                break;
-            case 0xD5:
-                disassemble = `PUSH\tDE`;
-                ticks = this.PUSH_R('D', 'E');
-                break;
-            case 0xE5:
-                disassemble = `PUSH\tHL`;
-                ticks = this.PUSH_R('H', 'L');
-                break;
-            case 0xF5:
-                disassemble = `PUSH\tPSW`;
-                ticks = this.PUSH_PSW();
-                break;
-            case 0xB8:
-                disassemble = `CMP\tB`;
-                ticks = this.CMP_R('B');
-                break;
-            case 0xB9:
-                disassemble = `CMP\tC`;
-                ticks = this.CMP_R('C');
-                break;
-            case 0xBA:
-                disassemble = `CMP\tD`;
-                ticks = this.CMP_R('D');
-                break;
-            case 0xBB:
-                disassemble = `CMP\tE`;
-                ticks = this.CMP_R('E');
-                break;
-            case 0xBC:
-                disassemble = `CMP\tH`;
-                ticks = this.CMP_R('H');
-                break;
-            case 0xBD:
-                disassemble = `CMP\tL`;
-                ticks = this.CMP_R('L');
-                break;
-            case 0xBE:
-                ticks = this.CMP_M();
-                disassemble = `CMP\tM`;
-                break;
-            case 0xBF:
-                disassemble = `CMP\tA`;
-                ticks = this.CMP_R('A');
-                break;
-            case 0x3A:
-                disassemble = `LDA\t0x${this._peekNextWord().toString(16)}`;
-                ticks = this.LDA(this._getNextWord());
-                break;
-            case 0x2A:
-                disassemble = `LHLD\t0x${this._peekNextWord().toString(16)}`;
-                ticks = this.LHLD(this._getNextWord());
-                break;
-            case 0x0A:
-                disassemble = `LDAX\tBC`;
-                ticks = this.LDAX('B', 'C');
-                break;
-            case 0x1A:
-                disassemble = `LDAX\tDE`;
-                ticks = this.LDAX('D', 'E');
-                break;
-            case 0x09:
-                disassemble = `DAD\tBC`;
-                ticks = this.DAD('B', 'C');
-                break;
-            case 0x19:
-                disassemble = `DAD\tDE`;
-                ticks = this.DAD('D', 'E');
-                break;
-            case 0x29:
-                disassemble = `DAD\tHL`;
-                ticks = this.DAD('H', 'L');
-                break;
-            case 0x39:
-                disassemble = `DAD\tSP`;
-                ticks = this.DAD_SP();
-                break;
-            case 0x2F:
-                disassemble = `CMA`;
-                ticks = this.CMA();
-                break;
-            case 0x37:
-                disassemble = `STC`;
-                ticks = this.STC();
-                break;
-            case 0x3F:
-                disassemble = `CMC`;
-                ticks = this.CMC();
-                break;
-            case 0x17:
-                disassemble = `RAL`;
-                ticks = this.RAL();
-                break;
-            case 0x1F:
-                disassemble = `RAR`;
-                ticks = this.RAR();
-                break;
-            case 0x07:
-                disassemble = `RLC`;
-                ticks = this.RLC();
-                break;
-            case 0x0F:
-                disassemble = `RRC`;
-                ticks = this.RRC();
-                break;
-            case 0x0B:
-                disassemble = `DXC\tBC`;
-                ticks = this.DCX_R('B', 'C');
-                break;
-            case 0x1B:
-                disassemble = `DXC\tDE`;
-                ticks = this.DCX_R('D', 'E');
-                break;
-            case 0x2B:
-                disassemble = `DXC\tHL`;
-                ticks = this.DCX_R('H', 'L');
-                break;
-            case 0x3B:
-                disassemble = `DXC\tSP`;
-                ticks = this.DCX_SP();
-                break;
-            case 0x05:
-                disassemble = `DCR\tB`;
-                ticks = this.DCR_R('B');
-                break;
-            case 0x15:
-                disassemble = `DCR\tD`;
-                ticks = this.DCR_R('D');
-                break;
-            case 0x25:
-                disassemble = `DCR\tH`;
-                ticks = this.DCR_R('H');
-                break;
-            case 0x35:
-                disassemble = `DCR\tM`;
-                ticks = this.DCR_M();
-                break;
-            case 0x0D:
-                disassemble = `DCR\tC`;
-                ticks = this.DCR_R('C');
-                break;
-            case 0x1D:
-                disassemble = `DCR\tE`;
-                ticks = this.DCR_R('E');
-                break;
-            case 0x2D:
-                disassemble = `DCR\tL`;
-                ticks = this.DCR_R('L');
-                break;
-            case 0x3D:
-                disassemble = `DCR\tA`;
-                ticks = this.DCR_R('A');
-                break;
-            case 0x04:
-                disassemble = `INR\tB`;
-                ticks = this.INR_R('B');
-                break;
-            case 0x14:
-                disassemble = `INR\tD`;
-                ticks = this.INR_R('D');
-                break;
-            case 0x24:
-                disassemble = `INR\tH`;
-                ticks = this.INR_R('H');
-                break;
-            case 0x34:
-                disassemble = `INR\tM`;
-                ticks = this.INR_M();
-                break;
-            case 0x0C:
-                disassemble = `INR\tC`;
-                ticks = this.INR_R('C');
-                break;
-            case 0x1C:
-                disassemble = `INR\tE`;
-                ticks = this.INR_R('E');
-                break;
-            case 0x2C:
-                disassemble = `INR\tL`;
-                ticks = this.INR_R('L');
-                break;
-            case 0x3C:
-                disassemble = `INR\tA`;
-                ticks = this.INR_R('A');
-                break;
-            case 0x01: 
-                disassemble = `LXI\tBC\t0x${this._peekNextWord().toString(16)}`;
-                ticks = this.LXI_R('B', 'C', this._getNextWord());
-                break;
-            case 0x02:
-                disassemble = `STAX\tBC`;
-                ticks = this.STAX('B', 'C');
-                break;
-            case 0x03:
-                disassemble = `INX\tBC`;
-                ticks = this.INX_R('B', 'C');
-                break;
-            case 0x11:
-                disassemble = `LXI\tDE\t0x${this._peekNextWord().toString(16)}`;
-                ticks = this.LXI_R('D', 'E', this._getNextWord());
-                break;
-            case 0x12:
-                disassemble = `STAX\tDE`;
-                ticks = this.STAX('D', 'E');
-                break;
-            case 0x13:
-                disassemble = `INX\tDE`;
-                ticks = this.INX_R('D', 'E');
-                break;
-            case 0x21:
-                disassemble = `LXI\tHL\t0x${this._peekNextWord().toString(16)}`;
-                ticks = this.LXI_R('H', 'L', this._getNextWord());
-                break;
-            case 0x0E:
-                disassemble = `MVI\tC\t0x${this._peekNextByte().toString(16)}`;
-                ticks = this.MVI_R('C', this._getNextByte());
-                break;
-            case 0x1E:
-                disassemble = `MVI\tE\t0x${this._peekNextByte().toString(16)}`;
-                ticks = this.MVI_R('E', this._getNextByte());
-                break;
-            case 0x22:
-                disassemble = `SHLD\t0x${this._peekNextWord().toString(16)}`;
-                ticks = this.SHLD(this._getNextWord());
-                break;
-            case 0x23:
-                disassemble = `INX\tHL`;
-                ticks = this.INX_R('H', 'L');
-                break;
-            case 0x2E:
-                disassemble = `MVI\tL\t0x${this._peekNextByte().toString(16)}`;
-                ticks = this.MVI_R('L', this._getNextByte());
-                break;
-            case 0x31:
-                disassemble = `LXI\tSP\t0x${this._peekNextWord().toString(16)}`;
-                ticks = this.LXI_SP(this._getNextWord());
-                break;
-            case 0x32:
-                disassemble = `STA`;
-                ticks = this.STA(this._getNextWord());
-                break;
-            case 0x33:
-                disassemble = `INX\tSP`;
-                ticks = this.INX_SP();
-                break;
-            case 0x3E:
-                disassemble = `MVI\tA\t0x${this._peekNextByte().toString(16)}`;
-                ticks = this.MVI_R('A', this._getNextByte());
-                break;
-            case 0x06:
-                disassemble = `MVI\tB\t0x${this._peekNextByte().toString(16)}`;
-                ticks = this.MVI_R('B', this._getNextByte());
-                break;
-            case 0x16:
-                disassemble = `MVI\tD\t0x${this._peekNextByte().toString(16)}`;
-                ticks = this.MVI_R('D', this._getNextByte());
-                break;
-            case 0x26:
-                disassemble = `MVI\tH\t0x${this._peekNextByte().toString(16)}`;
-                ticks = this.MVI_R('H', this._getNextByte());
-                break;
-            case 0x36:
-                disassemble = `MVI\tM\t0x${this._peekNextByte().toString(16)}`;
-                ticks = this.MVI_TO_MEM(this._getNextByte());
-                break;
-            case 0x40:
-                disassemble = `MOV\tB,B`;
-                ticks = this.MOV_R('B', 'B');
-                break;
-            case 0x41:
-                disassemble = `MOV\tB,C`;
-                ticks = this.MOV_R('B', 'C');
-                break;
-            case 0x42:
-                disassemble = `MOV\tB,D`;
-                ticks = this.MOV_R('B', 'D');
-                break;
-            case 0x43:
-                disassemble = `MOV\tB,E`;
-                ticks = this.MOV_R('B', 'E');
-                break;
-            case 0x44:
-                disassemble = `MOV\tB,H`;
-                ticks = this.MOV_R('B', 'H');
-                break;
-            case 0x45:
-                disassemble = `MOV\tB,L`;
-                ticks = this.MOV_R('B', 'L');
-                break;
-            case 0x46:
-                disassemble = `MOV\tB,M`;
-                ticks = this.MOV_FROM_MEM('B');
-                break;
-            case 0x47:
-                disassemble = `MOV\tB,A`;
-                ticks = this.MOV_R('B', 'A');
-                break;
-            case 0x48:
-                disassemble = `MOV\tC,B`;
-                ticks = this.MOV_R('C', 'B');
-                break;
-            case 0x49:
-                disassemble = `MOV\tC,C`;
-                ticks = this.MOV_R('C', 'C');
-                break;
-            case 0x4A:
-                disassemble = `MOV\tC,D`;
-                ticks = this.MOV_R('C', 'D');
-                break;
-            case 0x4B:
-                disassemble = `MOV\tC,E`;
-                ticks = this.MOV_R('C', 'E');
-                break;
-            case 0x4C:
-                disassemble = `MOV\tC,H`;
-                ticks = this.MOV_R('C', 'H');
-                break;
-            case 0x4D:
-                disassemble = `MOV\tC,L`;
-                ticks = this.MOV_R('C', 'L');
-                break;
-            case 0x4E:
-                disassemble = `MOV\tC,M`;
-                ticks = this.MOV_FROM_MEM('C');
-                break;
-            case 0x4F:
-                disassemble = `MOV\tC,A`;
-                ticks = this.MOV_R('C', 'A');
-                break;
-            case 0x50:
-                disassemble = `MOV\tD,B`;
-                ticks = this.MOV_R('D', 'B');
-                break;
-            case 0x51:
-                disassemble = `MOV\tD,C`;
-                ticks = this.MOV_R('D', 'C');
-                break;
-            case 0x52:
-                disassemble = `MOV\tD,D`;
-                ticks = this.MOV_R('D', 'D');
-                break;
-            case 0x53:
-                disassemble = `MOV\tD,E`;
-                ticks = this.MOV_R('D', 'E');
-                break;
-            case 0x54:
-                disassemble = `MOV\tD,H`;
-                ticks = this.MOV_R('D', 'H');
-                break;
-            case 0x55:
-                disassemble = `MOV\tD,H`;
-                ticks = this.MOV_R('D', 'L');
-                break;
-            case 0x56:
-                disassemble = `MOV\tD,M`;
-                ticks = this.MOV_FROM_MEM('D');
-                break;
-            case 0x57:
-                disassemble = `MOV\tD,A`;
-                ticks = this.MOV_R('D', 'A');
-                break;
-            case 0x58:
-                disassemble = `MOV\tE,B`;
-                ticks = this.MOV_R('E', 'B');
-                break;
-            case 0x59:
-                disassemble = `MOV\tE,C`;
-                ticks = this.MOV_R('E', 'C');
-                break;
-            case 0x5A:
-                disassemble = `MOV\tE,D`;
-                ticks = this.MOV_R('E', 'D');
-                break;
-            case 0x5B:
-                disassemble = `MOV\tE,E`;
-                ticks = this.MOV_R('E', 'E');
-                break;
-            case 0x5C:
-                disassemble = `MOV\tE,H`;
-                ticks = this.MOV_R('E', 'H');
-                break;
-            case 0x5D:
-                disassemble = `MOV\tE,L`;
-                ticks = this.MOV_R('E', 'L');
-                break;
-            case 0x5E:
-                disassemble = `MOV\tE,M`;
-                ticks = this.MOV_FROM_MEM('E');
-                break;
-            case 0x5F:
-                disassemble = `MOV\tE,A`;
-                ticks = this.MOV_R('E', 'A');
-                break;
-            case 0x60:
-                disassemble = `MOV\tH,B`;
-                ticks = this.MOV_R('H', 'B');
-                break;
-            case 0x61:
-                disassemble = `MOV\tH,C`;
-                ticks = this.MOV_R('H', 'C');
-                break;
-            case 0x62:
-                disassemble = `MOV\tH,D`;
-                ticks = this.MOV_R('H', 'D');
-                break;
-            case 0x63:
-                disassemble = `MOV\tH,E`;
-                ticks = this.MOV_R('H', 'E');
-                break;
-            case 0x64:
-                disassemble = `MOV\tH,H`;
-                ticks = this.MOV_R('H', 'H');
-                break;
-            case 0x65:
-                disassemble = `MOV\tH,L`;
-                ticks = this.MOV_R('H', 'L');
-                break;
-            case 0x66:
-                disassemble = `MOV\tH,M`;
-                ticks = this.MOV_FROM_MEM('H');
-                break;
-            case 0x67:
-                disassemble = `MOV\tH,A`;
-                ticks = this.MOV_R('H', 'A');
-                break;
-            case 0x68:
-                disassemble = `MOV\tL,B`;
-                ticks = this.MOV_R('L', 'B');
-                break;
-            case 0x69:
-                disassemble = `MOV\tL,C`;
-                ticks = this.MOV_R('L', 'C');
-                break;
-            case 0x6A:
-                disassemble = `MOV\tL,D`;
-                ticks = this.MOV_R('L', 'D');
-                break;
-            case 0x6B:
-                disassemble = `MOV\tL,E`;
-                ticks = this.MOV_R('L', 'E');
-                break;
-            case 0x6C:
-                disassemble = `MOV\tL,H`;
-                ticks = this.MOV_R('L', 'H');
-                break;
-            case 0x6D:
-                disassemble = `MOV\tL,L`;
-                ticks = this.MOV_R('L', 'L');
-                break;
-            case 0x6E:
-                disassemble = `MOV\tL,M`;
-                ticks = this.MOV_FROM_MEM('L');
-                break;
-            case 0x6F:
-                disassemble = `MOV\tL,A`;
-                ticks = this.MOV_R('L', 'A');
-                break;
-            case 0x70:
-                disassemble = `MOV\tM,B`;
-                ticks = this.MOV_TO_MEM('B');
-                break;
-            case 0x71:
-                disassemble = `MOV\tM,C`;
-                ticks = this.MOV_TO_MEM('C');
-                break;
-            case 0x72:
-                disassemble = `MOV\tM,D`;
-                ticks = this.MOV_TO_MEM('D');
-                break;
-            case 0x73:
-                disassemble = `MOV\tM,E`;
-                ticks = this.MOV_TO_MEM('E');
-                break;
-            case 0x74:
-                disassemble = `MOV\tM,H`;
-                ticks = this.MOV_TO_MEM('H');
-                break;
-            case 0x75:
-                disassemble = `MOV\tM,L`;
-                ticks = this.MOV_TO_MEM('L');
-                break;
-            case 0x77:
-                disassemble = `MOV\tM,A`;
-                ticks = this.MOV_TO_MEM('A');
-                break;
-            case 0x78:
-                disassemble = `MOV\tA,B`;
-                ticks = this.MOV_R('A', 'B');
-                break;
-            case 0x79:
-                disassemble = `MOV\tA,C`;
-                ticks = this.MOV_R('A', 'C');
-                break;
-            case 0x7A:
-                disassemble = `MOV\tA,D`;
-                ticks = this.MOV_R('A', 'D');
-                break;
-            case 0x7B:
-                disassemble = `MOV\tA,E`;
-                ticks = this.MOV_R('A', 'E');
-                break;
-            case 0x7C:
-                disassemble = `MOV\tA,H`;
-                ticks = this.MOV_R('A', 'H');
-                break;
-            case 0x7D:
-                disassemble = `MOV\tA,L`;
-                ticks = this.MOV_R('A', 'L');
-                break;
-            case 0x7E:
-                disassemble = `MOV\tA,M`;
-                ticks = this.MOV_FROM_MEM('A');
-                break;
-            case 0x7F:
-                disassemble = `MOV\tA,A`;
-                ticks = this.MOV_R('A', 'A');
-                break;
-            case 0x76:
-                disassemble = `HALT`;
-                ticks = this.HALT();
-                break;
-            case 0x80:
-                disassemble = `ADD\tB`;
-                ticks = this.ADD_R('B');
-                break;
-            case 0x81:
-                disassemble = `ADD\tC`;
-                ticks = this.ADD_R('C');
-                break;
-            case 0x82:
-                disassemble = `ADD\tC`;
-                ticks = this.ADD_R('D');
-                break;
-            case 0x83:
-                disassemble = `ADD\tE`;
-                ticks = this.ADD_R('E');
-                break;
-            case 0x84:
-                disassemble = `ADD\tH`;
-                ticks = this.ADD_R('H');
-                break;
-            case 0x85:
-                disassemble = `ADD\tL`;
-                ticks = this.ADD_R('L');
-                break;
-            case 0x86:
-                disassemble = `ADD\tM`;
-                ticks = this.ADD_M();
-                break;
-            case 0x87:
-                disassemble = `ADD\tA`;
-                ticks = this.ADD_R('A');
-                break;
-            case 0x88:
-                disassemble = `ADC\tB`;
-                ticks = this.ADC_R('B');
-                break;
-            case 0x89:
-                disassemble = `ADC\tC`;
-                ticks = this.ADC_R('C');
-                break;
-            case 0x8A:
-                disassemble = `ADC\tD`;
-                ticks = this.ADC_R('D');
-                break;
-            case 0x8B:
-                disassemble = `ADC\tE`;
-                ticks = this.ADC_R('E');
-                break;
-            case 0x8C:
-                disassemble = `ADC\tH`;
-                ticks = this.ADC_R('H');
-                break;
-            case 0x8D:
-                disassemble = `ADC\tL`;
-                ticks = this.ADC_R('L');
-                break;
-            case 0x8E:
-                disassemble = `ADC\tM`;
-                ticks = this.ADC_M();
-                break;
-            case 0x8F:
-                disassemble = `ADC\tA`;
-                ticks = this.ADC_R('A');
-                break;
-            case 0x90:
-                disassemble = `SUB\tB`;
-                ticks = this.SUB_R('B');
-                break;
-            case 0x91:
-                disassemble = `SUB\tC`;
-                ticks = this.SUB_R('C');
-                break;
-            case 0x92:
-                disassemble = `SUB\tD`;
-                ticks = this.SUB_R('D');
-                break;
-            case 0x93:
-                disassemble = `SUB\tE`;
-                ticks = this.SUB_R('E');
-                break;
-            case 0x94:
-                disassemble = `SUB\tH`;
-                ticks = this.SUB_R('H');
-                break;
-            case 0x95:
-                disassemble = `SUB\tL`;
-                ticks = this.SUB_R('L');
-                break;
-            case 0x96:
-                disassemble = `SUB\tM`;
-                ticks = this.SUB_M();
-                break;
-            case 0x97:
-                disassemble = `SUB\tA`;
-                ticks = this.SUB_R('A');
-                break;
-            case 0x98:
-                disassemble = `SBB\tB`;
-                ticks = this.SBB_R('B');
-                break;
-            case 0x99:
-                disassemble = `SBB\tC`;
-                ticks = this.SBB_R('C');
-                break;
-            case 0x9A:
-                disassemble = `SBB\tD`;
-                ticks = this.SBB_R('D');
-                break;
-            case 0x9B:
-                disassemble = `SBB\tE`;
-                ticks = this.SBB_R('E');
-                break;
-            case 0x9C:
-                disassemble = `SBB\tH`;
-                ticks = this.SBB_R('H');
-                break;
-            case 0x9D:
-                disassemble = `SBB\tL`;
-                ticks = this.SBB_R('L');
-                break;
-            case 0x9E:
-                disassemble = `SBB\tM`;
-                ticks = this.SBB_M();
-                break;
-            case 0x9F:
-                disassemble = `SBB\tA`;
-                ticks = this.SBB_R('A');
-                break;
-            case 0xA0:
-                disassemble = `ANA\tB`;
-                ticks = this.ANA_R('B');
-                break;
-            case 0xA1:
-                disassemble = `ANA\tC`;
-                ticks = this.ANA_R('C');
-                break;
-            case 0xA2:
-                disassemble = `ANA\tD`;
-                ticks = this.ANA_R('D');
-                break;
-            case 0xA3:
-                disassemble = `ANA\tE`;
-                ticks = this.ANA_R('E');
-                break;
-            case 0xA4:
-                disassemble = `ANA\tH`;
-                ticks = this.ANA_R('H');
-                break;
-            case 0xA5:
-                disassemble = `ANA\tL`;
-                ticks = this.ANA_R('L');
-                break;
-            case 0xA6:
-                disassemble = `ANA\tM`;
-                ticks = this.ANA_M();
-                break;
-            case 0xA7:
-                disassemble = `ANA\tA`;
-                ticks = this.ANA_R('A');
-                break;  
-            case 0xA8:
-                disassemble = `XRA\tB`;
-                ticks = this.XRA_R('B');
-                break;
-            case 0xA9:
-                disassemble = `XRA\tC`;
-                ticks = this.XRA_R('C');
-                break;
-            case 0xAA:
-                disassemble = `XRA\tD`;
-                ticks = this.XRA_R('D');
-                break;
-            case 0xAB:
-                disassemble = `XRA\tE`;
-                ticks = this.XRA_R('E');
-                break;
-            case 0xAC:
-                disassemble = `XRA\tH`;
-                ticks = this.XRA_R('H');
-                break;
-            case 0xAD:
-                disassemble = `XRA\tL`;
-                ticks = this.XRA_R('L');
-                break;       
-            case 0xAE:
-                disassemble = `XRA\tM`;
-                ticks = this.XRA_M();
-                break;
-            case 0xAF:
-                disassemble = `XRA\tA`;
-                ticks = this.XRA_R('A');
-                break;              
-            case 0xB0:
-                disassemble = `ORA\tB`;
-                ticks = this.ORA_R('B');
-                break;
-            case 0xB1:
-                disassemble = `ORA\tC`;
-                ticks = this.ORA_R('C');
-                break;
-            case 0xB2:
-                disassemble = `ORA\tD`;
-                ticks = this.ORA_R('D');
-                break;
-            case 0xB3:
-                disassemble = `ORA\tE`;
-                ticks = this.ORA_R('E');
-                break;
-            case 0xB4:
-                disassemble = `ORA\tH`;
-                ticks = this.ORA_R('H');
-                break;
-            case 0xB5:
-                disassemble = `ORA\tL`;
-                ticks = this.ORA_R('L');
-                break;
-            case 0xB6:
-                disassemble = `ORA\tM`;
-                ticks = this.ORA_M();
-                break;
-            case 0xB7:
-                disassemble = `ORA\tA`;
-                ticks = this.ORA_R('A');
-                break;                
-            case 0xC6:
-                disassemble = `ADI\t0x${this._peekNextByte().toString(16)}`;
-                ticks = this.ADI(this._getNextByte());
-                break;
-            case 0xCE:
-                disassemble = `ACI\t0x${this._peekNextByte().toString(16)}`;
-                ticks = this.ACI(this._getNextByte());
-                break;
-            case 0xD6:
-                disassemble = `SUI\t0x${this._peekNextByte().toString(16)}`;
-                ticks = this.SUI(this._getNextByte());
-                break;
-            case 0xDE:
-                disassemble = `SBI\t0x${this._peekNextByte().toString(16)}`;
-                ticks = this.SBI(this._getNextByte());
-                break;
-            case 0xE6:
-                disassemble = `ANI\t0x${this._peekNextByte().toString(16)}`;
-                ticks = this.ANI(this._getNextByte());
-                break;
-            case 0xEE:
-                disassemble = `XRI\t0x${this._peekNextByte().toString(16)}`;
-                ticks = this.XRI(this._getNextByte());
-                break;
-            case 0xF6:
-                disassemble = `ORI\t0x${this._peekNextByte().toString(16)}`;
-                ticks = this.ORI(this._getNextByte());
-                break;
-            default:
-                throw new Error(`Undefined OpCode ${opcode}`);
-        }
-        return { LastInstructionDisassembly: disassemble, 
-                 LastInstructionTicks: ticks, 
+
+        const result = this._opcodeTable[opcode]();
+
+        return { LastInstructionDisassembly: result.Disassemble, 
+                 LastInstructionTicks: result.Ticks, 
                  LastInstructionAddress: opcodeAddress,
                  CPUState: this.State }; 
     }
+
+
+    /**
+     * This table stores a reference to each Opcode function indexed by the
+     * Opcode number itself.
+     */
+    _opcodeTable = [
+       /* 0x00 */ () => this.NOP(),
+       /* 0x01 */ () => this.LXI_R('B', 'C', this._getNextWord()),
+       /* 0x02 */ () => this.STAX('B', 'C'),
+       /* 0x03 */ () => this.INX_R('B', 'C'),
+       /* 0x04 */ () => this.INR_R('B'),
+       /* 0x05 */ () => this.DCR_R('B'),
+       /* 0x06 */ () => this.MVI_R('B', this._getNextByte()),
+       /* 0x07 */ () => this.RLC(),
+       /* 0x08 */ () => this.NOP(),
+       /* 0x09 */ () => this.DAD('B', 'C'),
+       /* 0x0A */ () => this.LDAX('B', 'C'),
+       /* 0x0B */ () => this.DCX_R('B', 'C'),
+       /* 0x0C */ () => this.INR_R('C'),
+       /* 0x0D */ () => this.DCR_R('C'),
+       /* 0x0E */ () => this.MVI_R('C', this._getNextByte()),
+       /* 0x0F */ () => this.RRC(),
+       /* 0x10 */ () => this.NOP(),
+       /* 0x11 */ () => this.LXI_R('D', 'E', this._getNextWord()),
+       /* 0x12 */ () => this.STAX('D', 'E'),
+       /* 0x13 */ () => this.INX_R('D', 'E'),
+       /* 0x14 */ () => this.INR_R('D'),
+       /* 0x15 */ () => this.DCR_R('D'),
+       /* 0x16 */ () => this.MVI_R('D', this._getNextByte()),
+       /* 0x17 */ () => this.RAL(),
+       /* 0x18 */ () => this.NOP(),
+       /* 0x19 */ () => this.DAD('D', 'E'),
+       /* 0x1A */ () => this.LDAX('D', 'E'),
+       /* 0x1B */ () => this.DCX_R('D', 'E'),
+       /* 0x1C */ () => this.INR_R('E'),
+       /* 0x1D */ () => this.DCR_R('E'),
+       /* 0x1E */ () => this.MVI_R('E', this._getNextByte()),
+       /* 0x1F */ () => this.RAR(),
+       /* 0x20 */ () => this.NOP(),
+       /* 0x21 */ () => this.LXI_R('H', 'L', this._getNextWord()),
+       /* 0x22 */ () => this.SHLD(this._getNextWord()),
+       /* 0x23 */ () => this.INX_R('H', 'L'),
+       /* 0x24 */ () => this.INR_R('H'),
+       /* 0x25 */ () => this.DCR_R('H'),
+       /* 0x26 */ () => this.MVI_R('H', this._getNextByte()),
+       /* 0x27 */ () => this.DAA(),
+       /* 0x28 */ () => this.NOP(),
+       /* 0x29 */ () => this.DAD('H', 'L'),
+       /* 0x2A */ () => this.LHLD(this._getNextWord()),
+       /* 0x2B */ () => this.DCX_R('H', 'L'),
+       /* 0x2C */ () => this.INR_R('L'),
+       /* 0x2D */ () => this.DCR_R('L'),
+       /* 0x2E */ () => this.MVI_R('L', this._getNextByte()),
+       /* 0x2F */ () => this.CMA(),
+       /* 0x30 */ () => this.NOP(),
+       /* 0x31 */ () => this.LXI_SP(this._getNextWord()),
+       /* 0x32 */ () => this.STA(this._getNextWord()),
+       /* 0x33 */ () => this.INX_SP(),
+       /* 0x34 */ () => this.INR_M(),
+       /* 0x35 */ () => this.DCR_M(),
+       /* 0x36 */ () => this.MVI_TO_MEM(this._getNextByte()),
+       /* 0x37 */ () => this.STC(),
+       /* 0x38 */ () => this.NOP(),
+       /* 0x39 */ () => this.DAD_SP(),
+       /* 0x3A */ () => this.LDA(this._getNextWord()),
+       /* 0x3B */ () => this.DCX_SP(),
+       /* 0x3C */ () => this.INR_R('A'),
+       /* 0x3D */ () => this.DCR_R('A'),
+       /* 0x3E */ () => this.MVI_R('A', this._getNextByte()),
+       /* 0x3F */ () => this.CMC(),
+       /* 0x40 */ () => this.MOV_R('B', 'B'),
+       /* 0x41 */ () => this.MOV_R('B', 'C'),
+       /* 0x42 */ () => this.MOV_R('B', 'D'),
+       /* 0x43 */ () => this.MOV_R('B', 'E'),
+       /* 0x44 */ () => this.MOV_R('B', 'H'),
+       /* 0x45 */ () => this.MOV_R('B', 'L'),
+       /* 0x46 */ () => this.MOV_FROM_MEM('B'),
+       /* 0x47 */ () => this.MOV_R('B', 'A'),
+       /* 0x48 */ () => this.MOV_R('C', 'B'),
+       /* 0x49 */ () => this.MOV_R('C', 'C'),
+       /* 0x4A */ () => this.MOV_R('C', 'D'),
+       /* 0x4B */ () => this.MOV_R('C', 'E'),
+       /* 0x4C */ () => this.MOV_R('C', 'H'),
+       /* 0x4D */ () => this.MOV_R('C', 'L'),
+       /* 0x4E */ () => this.MOV_FROM_MEM('C'),
+       /* 0x4F */ () => this.MOV_R('C', 'A'),
+       /* 0x50 */ () => this.MOV_R('D', 'B'),
+       /* 0x51 */ () => this.MOV_R('D', 'C'),
+       /* 0x52 */ () => this.MOV_R('D', 'D'),
+       /* 0x53 */ () => this.MOV_R('D', 'E'),
+       /* 0x54 */ () => this.MOV_R('D', 'H'),
+       /* 0x55 */ () => this.MOV_R('D', 'L'),
+       /* 0x56 */ () => this.MOV_FROM_MEM('D'),
+       /* 0x57 */ () => this.MOV_R('D', 'A'),
+       /* 0x58 */ () => this.MOV_R('E', 'B'),
+       /* 0x59 */ () => this.MOV_R('E', 'C'),
+       /* 0x5A */ () => this.MOV_R('E', 'D'),
+       /* 0x5B */ () => this.MOV_R('E', 'E'),
+       /* 0x5C */ () => this.MOV_R('E', 'H'),
+       /* 0x5D */ () => this.MOV_R('E', 'L'),
+       /* 0x5E */ () => this.MOV_FROM_MEM('E'),
+       /* 0x5F */ () => this.MOV_R('E', 'A'),
+       /* 0x60 */ () => this.MOV_R('H', 'B'),
+       /* 0x61 */ () => this.MOV_R('H', 'C'),
+       /* 0x62 */ () => this.MOV_R('H', 'D'),
+       /* 0x63 */ () => this.MOV_R('H', 'E'),
+       /* 0x64 */ () => this.MOV_R('H', 'H'),
+       /* 0x65 */ () => this.MOV_R('H', 'L'),
+       /* 0x66 */ () => this.MOV_FROM_MEM('H'),
+       /* 0x67 */ () => this.MOV_R('H', 'A'),
+       /* 0x68 */ () => this.MOV_R('L', 'B'),
+       /* 0x69 */ () => this.MOV_R('L', 'C'),
+       /* 0x6A */ () => this.MOV_R('L', 'D'),
+       /* 0x6B */ () => this.MOV_R('L', 'E'),
+       /* 0x6C */ () => this.MOV_R('L', 'H'),
+       /* 0x6D */ () => this.MOV_R('L', 'L'),
+       /* 0x6E */ () => this.MOV_FROM_MEM('L'),
+       /* 0x6F */ () => this.MOV_R('L', 'A'),
+       /* 0x70 */ () => this.MOV_TO_MEM('B'),
+       /* 0x71 */ () => this.MOV_TO_MEM('C'),
+       /* 0x72 */ () => this.MOV_TO_MEM('D'),
+       /* 0x73 */ () => this.MOV_TO_MEM('E'),
+       /* 0x74 */ () => this.MOV_TO_MEM('H'),
+       /* 0x75 */ () => this.MOV_TO_MEM('L'),
+       /* 0x76 */ () => this.HALT(),
+       /* 0x77 */ () => this.MOV_TO_MEM('A'),
+       /* 0x78 */ () => this.MOV_R('A', 'B'),
+       /* 0x79 */ () => this.MOV_R('A', 'C'),
+       /* 0x7A */ () => this.MOV_R('A', 'D'),
+       /* 0x7B */ () => this.MOV_R('A', 'E'),
+       /* 0x7C */ () => this.MOV_R('A', 'H'),
+       /* 0x7D */ () => this.MOV_R('A', 'L'),
+       /* 0x7E */ () => this.MOV_FROM_MEM('A'),
+       /* 0x7F */ () => this.MOV_R('A', 'A'),
+       /* 0x80 */ () => this.ADD_R('B'),
+       /* 0x81 */ () => this.ADD_R('C'),
+       /* 0x82 */ () => this.ADD_R('D'),
+       /* 0x83 */ () => this.ADD_R('E'),
+       /* 0x84 */ () => this.ADD_R('H'),
+       /* 0x85 */ () => this.ADD_R('L'),
+       /* 0x86 */ () => this.ADD_M(),
+       /* 0x87 */ () => this.ADD_R('A'),
+       /* 0x88 */ () => this.ADC_R('B'),
+       /* 0x89 */ () => this.ADC_R('C'),
+       /* 0x8A */ () => this.ADC_R('D'),
+       /* 0x8B */ () => this.ADC_R('E'),
+       /* 0x8C */ () => this.ADC_R('H'),
+       /* 0x8D */ () => this.ADC_R('L'),
+       /* 0x8E */ () => this.ADC_M(),
+       /* 0x8F */ () => this.ADC_R('A'),
+       /* 0x90 */ () => this.SUB_R('B'),
+       /* 0x91 */ () => this.SUB_R('C'),
+       /* 0x92 */ () => this.SUB_R('D'),
+       /* 0x93 */ () => this.SUB_R('E'),
+       /* 0x94 */ () => this.SUB_R('H'),
+       /* 0x95 */ () => this.SUB_R('L'),
+       /* 0x96 */ () => this.SUB_M(),
+       /* 0x97 */ () => this.SUB_R('A'),
+       /* 0x98 */ () => this.SBB_R('B'),
+       /* 0x99 */ () => this.SBB_R('C'),
+       /* 0x9A */ () => this.SBB_R('D'),
+       /* 0x9B */ () => this.SBB_R('E'),
+       /* 0x9C */ () => this.SBB_R('H'),
+       /* 0x9D */ () => this.SBB_R('L'),
+       /* 0x9E */ () => this.SBB_M(),
+       /* 0x9F */ () => this.SBB_R('A'),
+       /* 0xA0 */ () => this.ANA_R('B'),
+       /* 0xA1 */ () => this.ANA_R('C'),
+       /* 0xA2 */ () => this.ANA_R('D'),
+       /* 0xA3 */ () => this.ANA_R('E'),
+       /* 0xA4 */ () => this.ANA_R('H'),
+       /* 0xA5 */ () => this.ANA_R('L'),
+       /* 0xA6 */ () => this.ANA_M(),
+       /* 0xA7 */ () => this.ANA_R('A'),
+       /* 0xA8 */ () => this.XRA_R('B'),
+       /* 0xA9 */ () => this.XRA_R('C'),
+       /* 0xAA */ () => this.XRA_R('D'),
+       /* 0xAB */ () => this.XRA_R('E'),
+       /* 0xAC */ () => this.XRA_R('H'),
+       /* 0xAD */ () => this.XRA_R('L'),
+       /* 0xAE */ () => this.XRA_M(),
+       /* 0xAF */ () => this.XRA_R('A'),
+       /* 0xB0 */ () => this.ORA_R('B'),
+       /* 0xB1 */ () => this.ORA_R('C'),
+       /* 0xB2 */ () => this.ORA_R('D'),
+       /* 0xB3 */ () => this.ORA_R('E'),
+       /* 0xB4 */ () => this.ORA_R('H'),
+       /* 0xB5 */ () => this.ORA_R('L'),
+       /* 0xB6 */ () => this.ORA_M(),
+       /* 0xB7 */ () => this.ORA_R('A'),
+       /* 0xB8 */ () => this.CMP_R('B'),
+       /* 0xB9 */ () => this.CMP_R('C'),
+       /* 0xBA */ () => this.CMP_R('D'),
+       /* 0xBB */ () => this.CMP_R('E'),
+       /* 0xBC */ () => this.CMP_R('H'),
+       /* 0xBD */ () => this.CMP_R('L'),
+       /* 0xBE */ () => this.CMP_M(),
+       /* 0xBF */ () => this.CMP_R('A'),
+       /* 0xC0 */ () => this.RETURN(!this._flagManager.IsSet(this._flagManager.FlagType.Zero), 'RNZ'),
+       /* 0xC1 */ () => this.POP_R('B', 'C'),
+       /* 0xC2 */ () => this.JUMP(!this._flagManager.IsSet(this._flagManager.FlagType.Zero), this._getNextWord(), 'JNZ'),
+       /* 0xC3 */ () => this.JUMP(true, this._getNextWord(), 'JMP'),
+       /* 0xC4 */ () => this.CALL(!this._flagManager.IsSet(this._flagManager.FlagType.Zero), this._getNextWord(), 'CNZ'),
+       /* 0xC5 */ () => this.PUSH_R('B', 'C'),
+       /* 0xC6 */ () => this.ADI(this._getNextByte()),
+       /* 0xC7 */ () => this.RST(0xC7 & 0x38),
+       /* 0xC8 */ () => this.RETURN(this._flagManager.IsSet(this._flagManager.FlagType.Zero), 'RZ'),
+       /* 0xC9 */ () => this.RET(),
+       /* 0xCA */ () => this.JUMP(this._flagManager.IsSet(this._flagManager.FlagType.Zero), this._getNextWord(), 'JZ'),
+       /* 0xCB */ () => this.JUMP(true, this._getNextWord(), 'JMP'),
+       /* 0xCC */ () => this.CALL(this._flagManager.IsSet(this._flagManager.FlagType.Zero), this._getNextWord(), 'CZ'),
+       /* 0xCD */ () => this.CALL(true, this._getNextWord(), 'CALL'),
+       /* 0xCE */ () => this.ACI(this._getNextByte()),
+       /* 0xCF */ () => this.RST(0xCF & 0x38),
+       /* 0xD0 */ () => this.RETURN(!this._flagManager.IsSet(this._flagManager.FlagType.Carry), 'RNC'),
+       /* 0xD1 */ () => this.POP_R('D', 'E'),
+       /* 0xD2 */ () => this.JUMP(!this._flagManager.IsSet(this._flagManager.FlagType.Carry), this._getNextWord(), 'JNC'),
+       /* 0xD3 */ () => this.OUT(this._getNextByte()),
+       /* 0xD4 */ () => this.CALL(!this._flagManager.IsSet(this._flagManager.FlagType.Carry), this._getNextWord(), 'CNC'),
+       /* 0xD5 */ () => this.PUSH_R('D', 'E'),
+       /* 0xD6 */ () => this.SUI(this._getNextByte()),
+       /* 0xD7 */ () => this.RST(0xD7 & 0x38),
+       /* 0xD8 */ () => this.RETURN(this._flagManager.IsSet(this._flagManager.FlagType.Carry), 'RC'),
+       /* 0xD9 */ () => this.RET(),
+       /* 0xDA */ () => this.JUMP(this._flagManager.IsSet(this._flagManager.FlagType.Carry), this._getNextWord(), 'JC'),
+       /* 0xDB */ () => this.IN(this._getNextByte()),
+       /* 0xDC */ () => this.CALL(this._flagManager.IsSet(this._flagManager.FlagType.Carry), this._getNextWord(), 'CC'),
+       /* 0xDD */ () => this.CALL(true, this._getNextWord(), 'CALL'),
+       /* 0xDE */ () => this.SBI(this._getNextByte()),
+       /* 0xDF */ () => this.RST(0xDF & 0x38),
+       /* 0xE0 */ () => this.RETURN(!this._flagManager.IsSet(this._flagManager.FlagType.Parity), 'RPO'),
+       /* 0xE1 */ () => this.POP_R('H', 'L'),
+       /* 0xE2 */ () => this.JUMP(!this._flagManager.IsSet(this._flagManager.FlagType.Parity), this._getNextWord(), 'JPO'),
+       /* 0xE3 */ () => this.XTHL(),
+       /* 0xE4 */ () => this.CALL(!this._flagManager.IsSet(this._flagManager.FlagType.Parity), this._getNextWord(), 'CPO'),
+       /* 0xE5 */ () => this.PUSH_R('H', 'L'),
+       /* 0xE6 */ () => this.ANI(this._getNextByte()),
+       /* 0xE7 */ () => this.RST(0xE7 & 0x38),
+       /* 0xE8 */ () => this.RETURN(this._flagManager.IsSet(this._flagManager.FlagType.Parity), 'RPE'),
+       /* 0xE9 */ () => this.PCHL(),
+       /* 0xEA */ () => this.JUMP(this._flagManager.IsSet(this._flagManager.FlagType.Parity), this._getNextWord(), 'JPE'),
+       /* 0xEB */ () => this.XCHG(),
+       /* 0xEC */ () => this.CALL(this._flagManager.IsSet(this._flagManager.FlagType.Parity), this._getNextWord(), 'CPE'),
+       /* 0xED */ () => this.CALL(true, this._getNextWord(), 'CALL'),
+       /* 0xEE */ () => this.XRI(this._getNextByte()),
+       /* 0xEF */ () => this.RST(0xEF & 0x38),
+       /* 0xF0 */ () => this.RETURN(!this._flagManager.IsSet(this._flagManager.FlagType.Sign), 'RP'),
+       /* 0xF1 */ () => this.POP_PSW(),
+       /* 0xF2 */ () => this.JUMP(!this._flagManager.IsSet(this._flagManager.FlagType.Sign), this._getNextWord(), 'JP'),
+       /* 0xF3 */ () => this.DI(),
+       /* 0xF4 */ () => this.CALL(!this._flagManager.IsSet(this._flagManager.FlagType.Sign), this._getNextWord(), 'CP'),
+       /* 0xF5 */ () => this.PUSH_PSW(),
+       /* 0xF6 */ () => this.ORI(this._getNextByte()),
+       /* 0xF7 */ () => this.RST(0xF7 & 0x38),
+       /* 0xF8 */ () => this.RETURN(this._flagManager.IsSet(this._flagManager.FlagType.Sign), 'RM'),
+       /* 0xF9 */ () => this.SPHL(),
+       /* 0xFA */ () => this.JUMP(this._flagManager.IsSet(this._flagManager.FlagType.Sign), this._getNextWord(), 'JM'),
+       /* 0xFB */ () => this.EI(),
+       /* 0xFC */ () => this.CALL(this._flagManager.IsSet(this._flagManager.FlagType.Sign), this._getNextWord(), 'CM'),
+       /* 0xFD */ () => this.CALL(true, this._getNextWord(), 'CALL'),
+       /* 0xFE */ () => this.CPI(this._getNextByte()),
+       /* 0xFF */ () => this.RST(0xFF & 0x38),
+    ]
+
+
 }
 
 export { i8080 };
