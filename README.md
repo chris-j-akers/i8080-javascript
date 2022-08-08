@@ -9,10 +9,10 @@
   - [Core Component Class Diagram](#core-component-class-diagram)
 - [Testing](#testing)
   - [Unit Tests](#unit-tests)
-    - [The Unit Test Generator (`test_generator.py`)](#the-unit-test-generator-test_generatorpy)
   - [Running Unit Tests](#running-unit-tests)
   - [Unit Test Methodology](#unit-test-methodology)
   - [CPU Diag (1980)](#cpu-diag-1980)
+    - [Instructions](#instructions)
 - [Implementing Space Invaders](#implementing-space-invaders)
   - [Components](#components)
   - [Space Invaders Class Diagram](#space-invaders-class-diagram)
@@ -31,44 +31,44 @@
 ---
 # Description
 
-Briefly, this repo contains the following:
+This Repo contains the following:
 
 * An Intel 8080 CPU emulator written in JavaScript, plus various other components that can be used to build a virtual machine with the Intel 8080 as its processor.
 
 * A 'Space Invaders' emulator which uses the 8080 virtual machine components to run the original 1978 game ROM in a modern web browser using React (all client-side). To see this in action, visit: http://8080.cakers.io.
 
-* A 'CPU Diag' emulator that also runs on a the 8080 virtual machine components. 'CPU Diag' is a piece of software written in 1980 by Kelly Smith of Microcosm Associates to test that the 8080 chip is in full working order. The version in this repo runs in a simple static website, but it does require a running web-server to use (albeit a simple one such as 'live-server' or `python -m SimpleHttpServer`).
+* A 'CPU Diag' emulator that also runs on the 8080 virtual machine components. 'CPU Diag' is a piece of software written in 1980 by Kelly Smith of *Microcosm Associates*. It tests the 8080 chip is in full working order. The version in this repo runs in a simple static website, and requires a running web-server to use (albeit a small, simple one such as 'live-server' or `python -m SimpleHttpServer`).
 
-* Unit tests for nearly all of the 8080 operations in 'Mocha' format and the unit test generator Python app.
-
+* Unit tests for nearly all of the 8080 operations in 'Mocha' format
+* The Unit Test Generator App
 * An app to convert 8080 ROM binary files into JavaScript arrays of bytes.
 
 ---
 # 8080 Core Components
 
-In `/src/core`, the following JavaScript classes can be used to make-up a virtual machine that runs an 8080 CPU. 
+In `/src/core`, the following JavaScript classes can be used to form a simple virtual machine with an 8080 CPU at its core. 
 
 ## `i8080.js`
 
-The 8080 CPU component which emulates all 8080 operations and contains a few debug functions that output strings related to the current state of the CPU. It also contains a method for executing an 8080 program, including adjusting the program counter.
+The 8080 CPU component which emulates all 8080 operations and contains a few debug functions that output strings related to the current state of the CPU. It also contains a method for executing lines of 8080 binary commands (OpCodes).
 
 ## `mmu.js`
 
-A simple class used to store the RAM of the machine (in a `Number` `Array`) and provide an interface for reading and writing to that RAM.
+A simple class used to store the RAM of the machine (in a `Number` `Array`) and provide an interface for reading and writing to the RAM.
 
 ## `bus.js`
 
-A class used to connect the CPU, MMU and any added devices together. CPU operations that use RAM, for instance, only interact with the bus which passes the request to the `MMU`.
+A class used to connect the CPU, MMU and any additional devices together. CPU operations that use RAM, for instance, only interact with the bus which passes the request to the `MMU`.
 
-Devices are added to `Read` and `Write` arrays in positions that reflect the ports they are hooked up to. For instance, the 'Space Invaders' custom bit-shift device (see below) is added to the `Read` array at positions `2` and `4` and the `Write` array at position `3`. These are the three ports it uses to communicate with the CPU via the `IN` and `OUT` opcodes.
+Devices are added to `Read` and `Write` arrays in positions that reflect the ports they are hooked up to. For instance, the 'Space Invaders' custom bit-shift device (see below) is added to the `Read` array at positions `2` and `4` and the `Write` array at position `3` because these are the three ports it uses to communicate with the CPU via the `IN` and `OUT` opcodes.
 
 ## `device.js`
 
-An abstract class that provides an interface for any device that needs to be connected to the bus. This just ensures each device provides a `Read()` and a `Write()` method.
+An abstract class that provides an interface for any device that needs to be connected to the bus. This just ensures each device provides a `Read()` and a `Write()` method. It can't be instantiated directly.
 
 ## Core Component Class Diagram
 
-The class diagram, below, shows the core components and how they're related to each other.
+Core components and their relationships are below.
 
 ![Core UML](/documentation/diagrams/uml-diagrams/core-uml.drawio.png)
 
@@ -77,83 +77,14 @@ The class diagram, below, shows the core components and how they're related to e
 
 ## Unit Tests 
 
-Unit tests cover nearly all the 8080 operations. They are generated from config that can be found in the `/utils/test_generator` directory.
+Unit tests cover nearly all the 8080 operations. They are automatically generated by the `test_generator.py` application found in `/utils` which reads in a set of `YAML` config files to generate JavaScript Mocha test suites. This simple application saves a lot of time in maintaining unit tests that contain very similar boilerplate code but expect slightly different results.
 
-### The Unit Test Generator (`test_generator.py`)
+To generate Unit Tests:
 
-The unit test generator takes a series of `YAML` config files which consist of various sets of common boilerplate code, set-up values and expected values. It uses this config to generate Mocha test-suites in JavaScript.
-
-The first part of the `YAML` file (the `test_suite` section) contains the test suite configuration global to all tests such as the boilerplate test code. The second part of the file (the `tests` section) contains configuration for each test, usually a list of placeholders and their values.
-
-For example, below is the `test_suite` section of the configuration file for the `LXI` opcode unit tests.
-
-```yaml
----
-test_suite:
-  enable: True
-  generator_function: lxi_tests.generate_lxi
-  description: 'LXI Register'
-  output_file_name: '/load/lxi.reg.test.js'
-  header: |
-    import { Computer } from '../../core/computer.js'
-    import { strict as assert } from 'assert'
-  footer: |
-    });
-  boilerplate: |
-    const max_value_to_test = {max_value_to_test};
-    const c = new Computer();
-
-    let program = [
-      {opcode},      // LXI into {msb_register}/{lsb_register}...
-      null,          // ...low-byte of 16-bit data (inserted, below)
-      null,          // ...high-byte of 16-bit data (inserted, below)
-      0x76           // HALT
-    ]
-
-    for (let word = 0x0000; word <= max_value_to_test; word++) {{
-      program[1] = word & 0xFF;
-      program[2] = (word >> 8) & 0xFF;
-
-      c.LoadProgram(program);
-      c.ExecuteProgram();
-
-      assert.equal(c.CPUState.Registers.{msb_register}, (word >> 8) & 0xFF);
-      assert.equal(c.CPUState.Registers.{lsb_register}, word & 0xFF);
-      assert.equal(word, (c.CPUState.Registers.{msb_register} << 8) | c.CPUState.Registers.{lsb_register});
-      
-      assert.equal(c.CPUState.Clock, 17);
-      c.Reset();
-
-    }}
-    }});
+```shell
+cd utils/test_generator
+python3 ./gen_i8080_unit_tests.py
 ```
-The table below describes each field.
-
-| Key                | Description                                                                                                            |
-|--------------------|------------------------------------------------------------------------------------------------------------------------|
-| `enable`             | Whether or not to actually generate this test                                                                          |
-| `generator_function` | The name of the function in the `test_generator.py` application that will be used to generate this test.               |
-| `description`        | Brief description of the test                                                                                          |
-| `output_file_name`   | The full path and name of the resulting test suite file (should end in `.js`)                                          |
-| `header`             | Any code that should be at the top of the test file (usually import statements or global variables required)           |
-| `footer`             | Any code that should be at the bottom of the test file                                                                 |
-| `boilerplate`        | The test code itself. This should include placeholders for any values that would change according to the test running. |
-
-To actually generate a test, the `tests` section of the configuration file should contain subsections similar to the following:
-
-```yaml
-    - test:
-      name: LXI B,d16
-      comment: 
-      msb_register: B
-      lsb_register: C
-      opcode: 0x01
-```
-The fields `name` and `comment` are test metadata (although `name` is used when created the Mocha test function itself). The others are placeholders in the testsuite boilerplate code and the values they should be replaced with.
-
-Configuring the tests in this way allowed me to quickly design and produce tests for a number of scenarios that had very similar boilerplate code without having to manually write out each test. Furthermore, if found a problem with one of the tests or wanted to make a change to the code, I only needed to do this in one place.
-
-It is far from perfect, but still saved a lot of time. The application along with its config can be found in `/util/test_generator`.
 
 ## Running Unit Tests
 Unit tests are written to: `/src/unit_tests` and require Mocha to run (`npm install`). To execute all tests, should be as simple as:
@@ -195,17 +126,31 @@ The above sequence executes the following on the 8080 CPU:
 4. Add the immediate value `10` (`0xA`) to the accumulator, which should set the CPU Carry bit.
 5. Call the `JNC` instruction. 
 
-The expected result of this test is that a jump should *not* occur becaue the carry bit was set during the `ADD` operation in step 4. The test will, therefore, check that the CPU's program counter contains the expected address in order for it to pass.
+The expected result of this test is that a jump should *not* occur becaue the carry bit was set during the `ADD` operation in step 4. The test will pass or fail, therefore, depending on the value of the CPU's Program Counter field when the test is complete.
 
-This method of testing ensures that the emulator is tested as close to real operation as possible.
+This method ensures that the emulator is tested as close to its real operation as possible.
 
 ## CPU Diag (1980)
 
-CPU Diag is an 8080 assembler program written in 1980 by Kelly Smith of Microcosm Associates. It’s full source can be viewed, below.
+CPU Diag is an 8080 assembler program written in 1980 by Kelly Smith of `Microcosm Associates`. It’s full source can be found in this repo in `documentation/cpu-diag`. It is designed to test the functionality of the 8080 chip and, therefore, was the first piece of software I wanted to get running in the emulator.
 
-It is designed to test the functionality of the 8080 chip and, therefore, was the first piece of software to get running in an emulator.
+The program runs as a simple, static website and requires a simple local webserver to run such as the one that ships with Python:
 
-This is where the investment in unit testing paid off. When I first ran the CPU Diag program, the only issue I encountered was the DAA instruction. An instruction that I hadn’t fully implemented, yet, and hadn’t written any unit tests for. The reason is that a lot of others writing 8080 emulators actually skipped this instruction because it wasn’t used very much, at least in games. I was in two minds on whether to implement it myself or skip it. 
+```shell
+cd src/cpu-test-program
+python -m SimpleHttpServer
+```
+Once the server is running, select the `cpudiag-page.html` file to load the main screen.
+
+<img src="documentation/cpu-diag/readme-img/cpu-diag-screenshot.png" alt="CPU Diag Screennshot" width="800"/>
+
+### Instructions
+
+The various internal CPU registers and fields are displayed along the top. On the bottom left is the trace window which outputs a disassembly of each instruction as it is executed, in the middle is the output and on the right is the RAM contents. The control panel in the middle provides a couple of different ways to run the program which helped when debugging.
+
+`Run Clocked at Speed` slows down the emulator to a number of instructions per second. This is really just so you can observe the fields being updated easily, otherwise its too quick. To run the whole program as fast as possible, just click on `Run Unclocked`. To step through the program instruction by instruction, click `Step Single Instruction` and, finally, enter a memory address in the text field and click `Run to Breakpoint` to pause program execution when the program counter hits that particular address.
+
+Investment in unit testing paid off when the emulator reached this stage. When I first ran this program, the only issue I encountered was the `DAA` instruction. An instruction that I hadn’t fully implemented, yet, and hadn’t written any unit tests for. A lot of others writing 8080 emulators actually skipped this instruction because it wasn’t used very much, at least in games. I was in two-minds on whether to implement it myself or skip it. In the end, it is fully implemented and passes all tests in `CPU Diag`.
 
 ---
 # Implementing Space Invaders
