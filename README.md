@@ -1,5 +1,6 @@
+# Intel 8080 JavaScript Emulator
 
-
+- [Intel 8080 JavaScript Emulator](#intel-8080-javascript-emulator)
 - [Description](#description)
 - [8080 Core Components](#8080-core-components)
   - [`i8080.js`](#i8080js)
@@ -25,7 +26,7 @@
     - [Controller Devices](#controller-devices)
   - [Front-End](#front-end)
     - [Implementing the Web Worker](#implementing-the-web-worker)
-- [APPENDIX: Why JavaScript?](#appendix-why-javascript)
+- [Why JavaScript?](#why-javascript)
 - [References and Sources](#references-and-sources)
 
 ---
@@ -132,30 +133,42 @@ This method ensures that the emulator is tested as close to its real operation a
 
 ## CPU Diag (1980)
 
-CPU Diag is an 8080 assembler program written in 1980 by Kelly Smith of `Microcosm Associates`. It’s full source can be found in this repo in `documentation/cpu-diag`. It is designed to test the functionality of the 8080 chip and, therefore, was the first piece of software I wanted to get running in the emulator.
+CPU Diag is an 8080 assembler program written in 1980 by Kelly Smith of *Microcosm Associates*. It’s full source can be found in this repo in `documentation/cpu-diag`. It is designed to test the functionality of the 8080 chip and, therefore, was the first piece of software I wanted to get running in the emulator.
 
-The program runs as a simple, static website and requires a simple local webserver to run such as the one that ships with Python:
+The program runs as a small, static website and requires a simple local webserver to run such as the one that ships with Python:
 
 ```shell
-cd src/cpu-test-program
-python -m SimpleHttpServer
+>cd src/cpu-test-program
+>python -m SimpleHttpServer
 ```
 Once the server is running, select the `cpudiag-page.html` file to load the main screen.
+
+The back-end of the program runs in a similar way to *Space Invaders* so details won't be repeated here, suffice to say that a Web Worker is used to prevent the browser locking up.
 
 <img src="documentation/cpu-diag/readme-img/cpu-diag-screenshot.png" alt="CPU Diag Screennshot" width="800"/>
 
 ### Instructions
 
-The various internal CPU registers and fields are displayed along the top. On the bottom left is the trace window which outputs a disassembly of each instruction as it is executed, in the middle is the output and on the right is the RAM contents. The control panel in the middle provides a couple of different ways to run the program which helped when debugging.
+The various internal CPU registers and fields are displayed along the top. On the bottom left is the trace window which outputs a disassembly of each instruction as it is executed. In the middle is the console output and on the right, the RAM contents. 
 
-`Run Clocked at Speed` slows down the emulator to a number of instructions per second. This is really just so you can observe the fields being updated easily, otherwise its too quick. To run the whole program as fast as possible, just click on `Run Unclocked`. To step through the program instruction by instruction, click `Step Single Instruction` and, finally, enter a memory address in the text field and click `Run to Breakpoint` to pause program execution when the program counter hits that particular address.
+The buttons in the middle provide a couple of different ways to run the program which helped when debugging.
 
-Investment in unit testing paid off when the emulator reached this stage. When I first ran this program, the only issue I encountered was the `DAA` instruction. An instruction that I hadn’t fully implemented, yet, and hadn’t written any unit tests for. A lot of others writing 8080 emulators actually skipped this instruction because it wasn’t used very much, at least in games. I was in two-minds on whether to implement it myself or skip it. In the end, it is fully implemented and passes all tests in `CPU Diag`.
+* `Run Clocked at Speed` slows down the emulator to a number of instructions per second. This is really just so you can observe the fields being updated easily, otherwise its too quick.
+  
+* `Run Unclocked` just executes the whole program as quickly as possible.
+  
+* `Step Single Instruction` allows you to step through the program instruction-by-instruction.
+  
+* `Run to Breakpoint` will execute the program up to the memory address entered in the text-box.
+
+The expected result is for the phrase ` CPU IS OPERATIONAL` to pop out of the console. If there are any issues, the phrase `  CPU HAS ERRORS` will pop out instead. This text output actually used some old CP/M kernel routines that had to be trapped and emulated. See source for details.
+
+*NOTE: Proof that time invested in unit testing pays off arrived when the emulator reached this stage. When I first ran this program, I expected to mired in 8080 assembler, as I faced plenty of failures. In fact, the only issue I encountered was the `DAA` instruction. An instruction that I hadn’t fully implemented, yet, and hadn’t written any unit tests for. A lot of others writing 8080 emulators actually skipped this instruction because it wasn’t used very much, at least in games. I was in two-minds on whether to implement it myself or skip it. In the end, it is fully implemented and passes all tests in `CPU Diag`.*
 
 ---
 # Implementing Space Invaders
 
-'Space Invaders' seemed a logical, if slightly cliched choice for emulation. It also has a great write-up on [Computer Archeology](https://www.computerarcheology.com/Arcade/SpaceInvaders/) and there are a few other implementations out there so, if I got stuck, I had references available. The [Hardware](https://www.computerarcheology.com/Arcade/SpaceInvaders/Hardware.html) section in the above link provides the most useful information along with a few suprises.
+*Space Invaders* seemed a logical, if slightly cliched choice for emulation. It also has a great write-up on [Computer Archeology](https://www.computerarcheology.com/Arcade/SpaceInvaders/) and there are a few other implementations out there so, if I got stuck, I had references available. The [Hardware](https://www.computerarcheology.com/Arcade/SpaceInvaders/Hardware.html) section in the above link provides the most useful information along with a few suprises.
 
 ---
 
@@ -208,7 +221,7 @@ The Space Invaders arcade machine included some additional, custom hardware that
 ### Implementing the Web Worker
 
 ---
-# APPENDIX: Why JavaScript?
+# Why JavaScript?
 
 Originally, this project was started in `C`. After all, research suggested this was the language most people wrote their emulators in and would also serve to illustrate just how fucking hard-core I am when it comes to programming, but as I got going a few issues appeared on the horizon:
 
