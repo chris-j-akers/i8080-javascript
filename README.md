@@ -39,7 +39,14 @@ This Repo contains the following:
     - [3.4.1. Bit-Shift Device](#341-bit-shift-device)
     - [3.4.2. Controller Devices](#342-controller-devices)
   - [3.5. Front-End](#35-front-end)
-    - [3.5.1. Implementing the Web Worker](#351-implementing-the-web-worker)
+    - [Control Panel](#control-panel)
+    - [Data Tables](#data-tables)
+      - [Field State](#field-state)
+      - [CPU Register State](#cpu-register-state)
+      - [CPU Flag State](#cpu-flag-state)
+    - [Disassembly](#disassembly)
+    - [Game Window](#game-window)
+  - [3.5.1. Game Loop Implementation and the Web Worker](#351-game-loop-implementation-and-the-web-worker)
 - [4. Why JavaScript?](#4-why-javascript)
 - [5. References and Sources](#5-references-and-sources)
 
@@ -184,37 +191,95 @@ Below is the updated class diagram that includes the additional *Space Invaders*
 
 ## 3.3. Video
 
+As this is a computer game, there are a number of things to consider when it comes to graphics, even if they're primitive by today's standards.
+
 ### 3.3.1. The Video Buffer
 
-According to [Computer Archeaology](https://www.computerarcheology.com/Arcade/SpaceInvaders/Hardware.html), the 8080 'Space Invaders' video memory is located betwen addresses `0x2400` and `0x3FFF`. How is that memory interpreted into the screen image? For older analogue displays, hardware in the computer would read these sections of RAM and interpret them into electronic signals that are sent to the monitor in the cabinet. The monitor draws the image one line at a time from the top down. When the last line at the bottom of the screen has been drawn, an interrupt is sent to the CPU called a 'Vertical Blank'. This tells the CPU that the screen has been refreshed so it has some time to update the video memory with the next frame before the drawing starts agin. 
+According to [Computer Archeaology](https://www.computerarcheology.com/Arcade/SpaceInvaders/Hardware.html), the 8080 'Space Invaders' video memory is located betwen addresses `0x2400` and `0x3FFF`. Hardware in the arcade cabinet would read this section of RAM and interpret the data into electronic signals to be sent to the monitor which would draw data out one line at a time from the top down. 
 
-The CPU typically had about 16ms to update video memory before another attempt was made to re-draw the screen, but *Space Invaders* is a little different because it generates two interrupts: One when the screen has been half-way drawn and one when the screen has been fully drawn. Important sprite positioning code is updated during both these interrupts, so they must be emulated.
+When the screen is half-way drawn, an interrupt is sent to the CPU which we'll call the 'half-blank interrupt', and, similarly, when the scan-line reaches the bottom of the screen, another interrupt is sent to the CPU, which we'll call the 'Vertical Blank' interrupt. 
 
-It is critical that screen updates are in sync with video ram updates to avoid a side-effect known as 'tearing'. Imagine if the monitor has just drawn the top of a sprite at position (0,1) but, before it finished, the video RAM updates the sprite to position 0,5. The rest of the sprite will be drawn to the screen in the different position, making it look disjointed or 'torn'.
+The point of the interrupts is to 'advise' the CPU that certains sections of the screen have been redrawn to screen, so their respective video RAM can now be recalculated. It is critical that screen updates are in sync with video ram updates or you will see a side-effect known as 'tearing'. Imagine if the monitor has just drawn the top of a sprite at position (0,1) but, before it finished, the video RAM updates the sprite to position 0,5. The rest of the sprite will be drawn to screen in this different position, making it look disjointed or 'torn'.
 
 ### 3.3.2. Colour Palette
 
-Each pixel in the display is represented by 1 bit of display memory. If the bit is `0` then the pixel is off, or black, if it's `1` then it is on, or white. Screenshots and photographs of the early arcade machine may show the aliens and player's spaceship in different colours, but that was just a trick acheived by sticking coloured cellophane over certain sections of the cabinet's monitor. Space Invaders is a black and white game. One advantage of a black and white game, of course, is that we can save time by ensureing our background is always black and only drawing the white pixels.
+Each pixel in the display is represented by 1 bit of video RAM. If the bit is `0` then the pixel is off, or black, if it's `1` then it is on, or white. Screenshots and photographs of the early arcade cabinets may show alien and player spaceships in different colours, but that was just a trick achieved by sticking coloured cellophane over certain sections of the monitor. Certainly, one advantage of a black and white screen is that we can be more efficient by always ensuring that each frame our canvas is cleared to black, so we only have to worry about drawing the white pixels.
 
 ### 3.3.3. Roated Screen
 
-One thing that's apparent when seeing *Space Invaders* emulation results for the first time is that the video data is written to the video buffer at a 90 degree angle. To resolve this back in the '70s, they simply rotated the monitor in the original arcade cabinet by 90 degrees. We don't have that luxury, here. It is resolved in this emulator by temporarily rotating the context of an html canvas, outputting the contents of the video buffer, then rotating it back each time the frame is drawn.
+The video data is written to the video buffer at a 90 degree angle. Back in the '70s, they simply rotated the monitor in the arcade cabinet by 90 degrees to set it upright. It is resolved in this emulator by temporarily rotating the context of the HTML canvas, writing contents of the video buffer, then rotating it back.
 
 ## 3.4. Additional Hardware
 
-The Space Invaders arcade machine included some additional, custom hardware that connected to the 8080 through device ports.
+The Space Invaders arcade machine included some additional, custom hardware that connected to the 8080 through device ports and communicated with it using the `IN` and `OUT` opcodes.
 
 ### 3.4.1. Bit-Shift Device
 
+A hardware shift register was added to the original *Space Invaders* cabinet and used when computing the positions of sprites. The 8080 only has instructions that allow bit-shifting one bit at a time, which would not be quick enough. The additional Bit-Shift hardware permits multiple bit-shifs in less instructions.
 
+A byte sent to the device on port 2 tells the register how many bits to shift, and a byte sent to port 4 adds to the data to shift a byte at a time (the data is a 16bit word).
+
+The device will output the shifted data to port `3`.
+
+The `BitShift` class implements the `Device` abstract class and is added to `Bus` read port `3` and write ports `2` and `4` in this emulator.
 
 ### 3.4.2. Controller Devices
 
+Additional controller devices are also implemented, here, though only the Player 1 controls will work. Again, they are simply implemented from the `Device` abstract class and added to the correct ports of the `Bus`.
+
 ## 3.5. Front-End
 
-The front-end was written using *React*. 
+The front-end is a basic *React* application.
 
-### 3.5.1. Implementing the Web Worker
+<img src="documentation/cpu-diag/readme-img/space-invaders-screenshot.png" alt="CPU Diag Screennshot" width="800"/>
+
+### Control Panel
+
+The Control Panel, on the far-right, allows you to control the program:
+
+| Button                | Description                                                                                                      |
+|-----------------------|------------------------------------------------------------------------------------------------------------------|
+| Disable Trace         | Allows you to stop the Disasembly window from updating as the program runs.                                      |
+| Play Space Invaders   | Start the game at full speed                                                                                     |
+| Pause Game            | Stop the game running  - the game can be resumed by clicking 'Play Space Invaders' or by 'Step Next Instruction' |
+| Reset Computer        | Restart and refresh the game                                                                                     |
+| Step Next Instruction | Execute the next instruction (all diagnostic tables will be updated if this button is clicked)                   |
+| VBlank Interrupt      | Send a VBlank Interrupt signal to the CPU                                                                        |
+| Half-VBlank Interrupt | Send a Half-VBlank Interrupt signal to the CPU      
+
+### Data Tables
+
+Note that, during standard execution (from hitting the `Play Space Invaders` button) these tables will not be updated in real time. This was attempted, but the sheer number of messages coming back from the Web Worker slowed down the screen updates too much. The tables are updated to their latest values only when `Pause` is clicked. For `Single-Step-Instruction` they are updated immediatly.
+
+#### Field State
+
+The table on the top-left displays the state of miscelleanous internal fields - the Program Counter, the Stack Pointer and whether interrupts are currently enabled.
+
+#### CPU Register State
+
+This table display the current values stored in the CPU registers.
+
+#### CPU Flag State
+
+This table displays the current status of each of the CPU Flags
+
+### Disassembly
+
+This window displays the last 1000 executed instructions. It is updated as the program executes and during the `single-step-instruction` command.
+
+### Game Window
+
+This window displays the graphics of the game.          |
+
+## 3.5.1. Game Loop Implementation and the Web Worker
+
+Ideally, when running software through an emulator, you would employ a tight loop so instructions can be executed one after the other. In-between these instructions, the screen can be repainted and everything seems normal.
+
+The problem with this is that browsers are, by default, single-threaded and synchronous. Anything that takes up too much time inteferes with the repainting process and it can look like your program has hung. In fact, often the browsers will present a warning dialog informing you that no response has been recievd in a while and would you like to wait or kill the process. This, even as you're watching the 8080 screen being updated.
+
+The solution is to take the emulator's loop away from the main browser and have it run in a separate thread. This can be achieved through the use of Web Workers, essentially scripts that can be told to run separatley from the main browser and controlled via messages. This has the added advantage of utterly decoupling the emulator from the GUI.
+
+For *Space Invaders* (and *CPU Diag*) Web Workers are used to run the programs and they swap event messages with the main *React* application running in the browser.
 
 ---
 # 4. Why JavaScript?
