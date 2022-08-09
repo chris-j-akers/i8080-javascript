@@ -108,6 +108,7 @@ python3 ./gen_i8080_unit_tests.py
 ## 3.2. Running Unit Tests
 Unit tests are written to: `/src/unit_tests` and require Mocha to run (`npm install`). To execute all tests, should be as simple as:
 
+
 ```bash
 i8080-javascript/src/unit_tests on  main [!] 
 ➜ npm run test
@@ -166,7 +167,7 @@ The back-end of the program runs in a similar way to *Space Invaders* so details
 <img src="documentation/cpu-diag/readme-img/cpu-diag-screenshot.png" alt="CPU Diag Screennshot" width="800"/>
 
 
-The various internal CPU registers and fields are displayed along the top. On the bottom left is the trace window which outputs a disassembly of each instruction as it executes. In the middle is the console output and on the right, the RAM contents. 
+CPU registers and fields are displayed along the top. On the bottom left is the trace window which outputs a disassembly of each instruction as it executes. In the middle is the console output and on the right, the RAM contents. 
 
 The buttons in the middle provide a couple of different ways to run the program which helped when debugging.
 
@@ -187,7 +188,6 @@ The expected result is for the phrase `  CPU IS OPERATIONAL` to pop out of the c
 
 *Space Invaders* seemed a logical, if slightly cliched choice for emulation, but it also has a great write-up on [Computer Archeology](https://www.computerarcheology.com/Arcade/SpaceInvaders/) and there are a few other implementations out there so, if I got stuck, I had references available. The [Hardware](https://www.computerarcheology.com/Arcade/SpaceInvaders/Hardware.html) section in the above link provides the most useful information along with a few suprises.
 
----
 
 ## 4.1. Components
 
@@ -289,24 +289,19 @@ This window displays the last 1000 executed instructions. It is updated as the p
 
 ### 4.6.4. Game Window
 
-This window displays the graphics of the game.          |
-
-
+This window simply displays the graphics of the game and where it is controlled from.
 
 ---
 
-
-
 # 5. References and Sources
 
-* OneLonleyCoder
-* Emulator101.com
-* A guide to the game boy half-carry flag
-https://robdor.com/2016/08/10/gameboy-emulator-half-carry-flag/
-
-* Binary/decimal to hex converter: https://www.mathsisfun.com/binary-decimal-hexadecimal-converter.html
-
-* Intel opCode list: https://pastraiser.com/cpu/i8080/i8080_opcodes.html
-
-* https://www.computerarcheology.com/Arcade/SpaceInvaders/Hardware.html
-
+| Ref                                        | Link                                                                      | Description                                                                                                                                                                                                                                          |
+|--------------------------------------------|---------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| One Lonely Coder NES Emulator from Scratch | https://www.youtube.com/playlist?list=PLrOv9FMX8xJHqMvSGB_9G9nZZ_4IgteYf  | JavidX9 has an excellent (and free!) YouTube channel where he instructs and discusses a wide range of low-level technical topics in a very accessible and entertaining way. His tutorial on building a NES emulator was an early inspiration. |
+| Emulator 101                               | http://www.emulator101.com/                                               | A great site to start off with. Provides a lot of information on what you should expect when you start running emulators for the first time and what to watch out for.                                                                               |
+| Intel 8080 OpCode List                     | https://pastraiser.com/cpu/i8080/i8080_opcodes.html                       | Provides a handy, visual tick-list of all 8080 OpCodes                                                                                                                                                                                               |
+| A Guide to the Gameboy Half-Carry Flag     | https://robdor.com/2016/08/10/gameboy-emulator-half-carry-flag/           | If, like me, you were confused about the Aux Carry flag, this link makes it easily understandable, even though it's a different chip!                                                                                                                |
+| Computer Archeology: Space Invaders        | https://www.computerarcheology.com/Arcade/SpaceInvaders/                  | Low-level implementation details about the inner-workings of Space Invaders                                                                                                                                                                          |
+| Binary/Decimal to Hex Converter            | https://www.mathsisfun.com/binary-decimal-hexadecimal-converter.html      |                                                                                                                                                                                                                                                      |
+| CPU Diag Source                            | https://github.com/ddelnano/8080-emulator/blob/master/cpudiag.asm         | Source Code for the 'CPU Diag' program that tests the 8080 chip                                                                                                                                                                                      |
+| 8080 Programmers Manual                    | https://altairclone.com/downloads/manuals/8080%20Programmers%20Manual.pdf | Everything you need to know about the 8080                                                                                                                                                                                                           |
