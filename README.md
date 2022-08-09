@@ -203,7 +203,7 @@ As this is a computer game, there were a number of things to consider when it co
 
 ### 4.3.1. The Video Buffer
 
-According to [Computer Archaeology](https://www.computerarcheology.com/Arcade/SpaceInvaders/Hardware.html), the 8080 'Space Invaders' video memory is located between addresses `0x2400` and `0x3FFF`. Hardware in the arcade cabinet would read this section of RAM and interpret the data into electronic signals to be sent to the monitor which would draw data out one line at a time from the top down. 
+According to [Computer Archaeology](https://www.computerarcheology.com/Arcade/SpaceInvaders/Hardware.html), the 8080 *Space Invaders* video memory is located between addresses `0x2400` and `0x3FFF`. Hardware in the arcade cabinet would read this section of RAM and interpret the data into electronic signals to be sent to the monitor which would draw data out one line at a time from the top down. 
 
 When the screen is half-way drawn, an interrupt is sent to the CPU which we'll call the 'half-blank interrupt', and, similarly, when the screen is fully drawn, another interrupt is sent to the CPU, which we'll call the 'Vertical Blank' interrupt. 
 
@@ -241,7 +241,7 @@ Additional controller devices are also implemented, here, though only the Player
 
 Ideally, when running software through an emulator, you would employ a tight loop so instructions can be executed one after the other and in-between these instructions, the screen can be repainted.
 
-The problem with this is that browsers are, by default, single-threaded and synchronous. JavaScript is executed in the same thread as the browser updates, so any scripts that take too much time interfere with the repainting process it looks like your program has hung. In fact, often the browsers will present a warning dialog informing you that no response has been received in a while and would like to wait or kill the process. This, even as you're watching the 8080 screen being updated.
+The problem with this is that browsers are, by default, single-threaded and synchronous. JavaScript is executed in the same thread as the browser updates, so any scripts that take too much time interfere with the repainting process and it looks like your program has hung. In fact, often the browsers will present a warning dialog informing you that no response has been received in a while and would like to wait or kill the process. This, even as you're watching the 8080 screen being updated.
 
 The solution is to take the emulator's loop away from the main browser and have it run in a separate thread. This is achieved through the use of [Web Workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers), essentially scripts that can be told to run separately from the main browser and controlled via messages. This has the added advantage of utterly decoupling the emulator from the GUI.
 
