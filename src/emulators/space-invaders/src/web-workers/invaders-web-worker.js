@@ -28,11 +28,14 @@ const WebWorkerState = {
  * or making the browser think it's hanging. Just a 1ms wait using setTimeout()
  * is all that's needed.
  *
- * @param {number} drawScreenInterval Interval in milliseconds between each call
- * to vertical blank and verticak half-blank interrupts.
- * @param {boolean} traceMessagesEnabled Whether to send trace messages back to
- * the browser.
- * @param {number} breakpointAddr Address of break-point (optional)
+ * We push trace messages back in batches of 1000. Sending a trace message back
+ * each time an instruction is executed locked up the main window due to volume.
+ *
+ * @param {number} drawScreenInterval Interval in milliseconds between each
+ * request to re-draw the screen.
+ * @param {number} vblankInterval Interval in milliseconds between each call to
+ * vertical blank and verticak half-blank interrupts.
+
  */
  function run(drawScreenInterval, vblankInterval) {
     let programState;
