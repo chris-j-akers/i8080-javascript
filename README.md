@@ -12,6 +12,8 @@ This Repo contains the following:
 * The Unit Test Generator App
 * An app to convert 8080 ROM binary files into JavaScript arrays of bytes.
 
+The rest of this document consists of notes regarding the implementation. For details, please consult the code.
+
 ---
 
 ### Table of Contents <!-- omit in toc -->
@@ -48,6 +50,12 @@ This Repo contains the following:
     - [4.6.3. Disassembly](#463-disassembly)
     - [4.6.4. Game Window](#464-game-window)
 - [5. References and Sources](#5-references-and-sources)
+  - [8080 Programmers Manual](#8080-programmers-manual)
+  - [Computer Archeology: Space Invaders](#computer-archeology-space-invaders)
+  - [CPU Diag Source](#cpu-diag-source)
+  - [One Lonely Coder NES Emulator from Scratch](#one-lonely-coder-nes-emulator-from-scratch)
+  - [Emulator 101](#emulator-101)
+  - [Intel 8080 OpCode List](#intel-8080-opcode-list)
 
 ---
 # 1. Why JavaScript?
@@ -295,13 +303,20 @@ This window simply displays the graphics of the game and where it is controlled 
 
 # 5. References and Sources
 
-| Ref                                        | Link                                                                      | Description                                                                                                                                                                                                                                          |
-|--------------------------------------------|---------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| One Lonely Coder NES Emulator from Scratch | https://www.youtube.com/playlist?list=PLrOv9FMX8xJHqMvSGB_9G9nZZ_4IgteYf  | JavidX9 has an excellent (and free!) YouTube channel where he instructs and discusses a wide range of low-level technical topics in a very accessible and entertaining way. His tutorial on building a NES emulator was an early inspiration. |
-| Emulator 101                               | http://www.emulator101.com/                                               | A great site to start off with. Provides a lot of information on what you should expect when you start running emulators for the first time and what to watch out for.                                                                               |
-| Intel 8080 OpCode List                     | https://pastraiser.com/cpu/i8080/i8080_opcodes.html                       | Provides a handy, visual tick-list of all 8080 OpCodes                                                                                                                                                                                               |
-| A Guide to the Gameboy Half-Carry Flag     | https://robdor.com/2016/08/10/gameboy-emulator-half-carry-flag/           | If, like me, you were confused about the Aux Carry flag, this link makes it easily understandable, even though it's a different chip!                                                                                                                |
-| Computer Archeology: Space Invaders        | https://www.computerarcheology.com/Arcade/SpaceInvaders/                  | Low-level implementation details about the inner-workings of Space Invaders                                                                                                                                                                          |
-| Binary/Decimal to Hex Converter            | https://www.mathsisfun.com/binary-decimal-hexadecimal-converter.html      |                                                                                                                                                                                                                                                      |
-| CPU Diag Source                            | https://github.com/ddelnano/8080-emulator/blob/master/cpudiag.asm         | Source Code for the 'CPU Diag' program that tests the 8080 chip                                                                                                                                                                                      |
-| 8080 Programmers Manual                    | https://altairclone.com/downloads/manuals/8080%20Programmers%20Manual.pdf | Everything you need to know about the 8080                                                                                                                                                                                                           |
+## [8080 Programmers Manual](https://altairclone.com/downloads/manuals/8080%20Programmers%20Manual.pdf)
+The main source for this emulator - everything you need to know about every OpCode and the way the CPU operates.
+
+## [Computer Archeology: Space Invaders](https://www.computerarcheology.com/Arcade/SpaceInvaders/)
+Low-level implementation details about the inner-workings of Space Invaders
+
+## [CPU Diag Source](https://github.com/ddelnano/8080-emulator/blob/master/cpudiag.asm)
+Source Code for the 'CPU Diag' program that tests the 8080
+
+## [One Lonely Coder NES Emulator from Scratch](https://www.youtube.com/playlist?list=PLrOv9FMX8xJHqMvSGB_9G9nZZ_4IgteYf)
+JavidX9 has an excellent (and free!) YouTube channel where he instructs and discusses a wide range of low-level technical topics in a very accessible and entertaining way. His tutorial on building a NES emulator was an early inspiration.
+
+## [Emulator 101](http://www.emulator101.com/)
+A great site to start off with. Provides a lot of information on what you should expect when you start running emulators for the first time and possible pitfalls.
+
+## [Intel 8080 OpCode List](https://pastraiser.com/cpu/i8080/i8080_opcodes.html)
+If, like me, you were confused about the Aux Carry flag, this link makes it easily understandable, even though it's a different chip.
