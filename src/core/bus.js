@@ -74,12 +74,7 @@
      * @param {number} val The value to write
      */
     WriteDevice(port, val) {
-        switch(port) {
-            case 0x02:
-            case 0x04:
-            this._writeDevices[port].Write(port, val);
-            break;
-        }
+        this._writeDevices[port].Write(port, val);
     }
 
     /**
@@ -89,15 +84,7 @@
      * @returns The value returned from the device
      */
     ReadDevice(port) {
-        switch(port) {
-            case 0x01:
-                return this._readDevices[port].Read(port);
-            case 0x03:
-                return this._readDevices[port].Read(port);
-            default:
-                return 0x0;
-        }
-
+        return this._readDevices[port].Read(port);
     }
 
 }

@@ -2,10 +2,12 @@ import { Computer } from './computer.js';
 import { BitShiftDevice } from './bitshift-device.js';
 import { InputDevicePortOne } from './input-device-1.js';
 import { InputDevicePortTwo } from './input-device-2.js';
+import { SoundDevice } from './sound-device.js';
 import { InvadersE } from './rom/invaders-e.js';
 import { InvadersF } from './rom/invaders-f.js';
 import { InvadersG } from './rom/invaders-g.js';
 import { InvadersH } from './rom/invaders-h.js';
+import { WatchDogDevice } from './watchdog-device.js';
 
 class InvadersComputer extends Computer {
 
@@ -20,6 +22,13 @@ class InvadersComputer extends Computer {
         this._inputDevicePortTwo = new InputDevicePortTwo();
         this.Bus.ConnectDeviceToReadPort(0x01, this._inputDevicePortOne);
         this.Bus.ConnectDeviceToReadPort(0x02, this._inputDevicePortTwo);
+
+        this._soundDevice = new SoundDevice();
+        this.Bus.ConnectDeviceToWritePort(0x03, this._soundDevice);
+        this.Bus.ConnectDeviceToWritePort(0x05, this._soundDevice);
+
+        this._watchDogDevice = new WatchDogDevice();
+        this.Bus.ConnectDeviceToWritePort(0x06, this._watchDogDevice);
 
         this._videoRamStart = 0x2400;
         this._videoRamEnd = 0x3FFF;
