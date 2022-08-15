@@ -38,6 +38,7 @@ This Repo contains:
 
 ### Table of Contents <!-- omit in toc -->
 
+- [Set-up](#set-up)
 - [8080 Core Components](#8080-core-components)
   - [`i8080.js`](#i8080js)
   - [`mmu.js`](#mmujs)
@@ -70,10 +71,15 @@ This Repo contains:
       - [CPU Flag State](#cpu-flag-state)
     - [Disassembly](#disassembly)
     - [Game Window](#game-window)
+  - [Running Space Invaders Locally](#running-space-invaders-locally)
 - [Appendix A: References and Sources](#appendix-a-references-and-sources)
 - [Appendix B: Why JavaScript?](#appendix-b-why-javascript)
 
 ---
+# Set-up
+
+This project uses various JavaScript libraries for testing, *React* and third-party open-source *React* components. Ensure you run `npm install` in the relevant directories before trying stuff out.
+
 # 8080 Core Components
 
 In `/src/core`, the following JavaScript classes can be used to form a simple virtual machine with an 8080 CPU.
@@ -388,6 +394,19 @@ This window displays the last 1000 executed instructions. It is updated as the p
 
 This window simply displays the graphics of the game and where it is controlled from.
 
+## Running Space Invaders Locally
+
+*Space Invaders* can be run locally through the *React* development server, but you must make sure that you run `npm install` from the correct directory to ensure all required libraries and components have been downloaded to your machine.
+
+```shell
+i8080-javascript/src/emulators/space-invaders on  main is 📦 v0.1.0 via ⬢ v16.14.2 took 17s 
+➜ npm install  
+```
+Once this has been done, from the same directory, type:
+
+```shell
+➜ npm start
+```
 ---
 
 # Appendix A: References and Sources
