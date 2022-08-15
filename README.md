@@ -78,6 +78,7 @@ This Repo contains:
 
 In `/src/core`, the following JavaScript classes can be used to form a simple virtual machine with an 8080 CPU.
 
+*NOTE: When core components are used elsewhere in this project, they are accessed via symlink to this directory*
 
   <img class="image" src="documentation/diagrams/virtual-machine.png"/>
 
@@ -285,23 +286,23 @@ When the screen is half-way drawn, an interrupt is sent to the CPU which we'll c
 
 The screen-updates and interrupt firings must be in sync or you will see a side-effect known as 'tearing'. Imagine if the monitor has just drawn the top of a sprite at position (0,1) but, before it finished, the video RAM updates the sprite to position (0,5). The rest of the sprite will be drawn to screen in this different position, making it look disjointed or 'torn'.
 
-In *Space Invaders*, the interrupts are also critical for the games timing and a lot of update code depends on them being fired at exactly the right point. Having said that, this emulation doesn't quite manage this. Instead of firing the half-blank when the screen is halfway draw and the full-blank when the screen is fully drawn, it takes it in turns to send each interrupt after the screen is fully drawn (see `run()` in the [`invaders-web-worker.js`](src/emulators/space-invaders/src/web-workers/invaders-web-worker.js) module). Testing determined this was enough to keep the game running at a decent speed.
+In *Space Invaders*, the interrupts are also critical for game timing and a lot of update code depends on them being fired at exactly the right point. Having said that, this emulation doesn't quite manage this. Instead of firing the half-blank when the screen is halfway draw and the full-blank when the screen is fully drawn, it only sends one interrupt after the whole screen is drawn and toggles the interrupt type each time (see `run()` in the [`invaders-web-worker.js`](src/emulators/space-invaders/src/web-workers/invaders-web-worker.js) module). Testing determined this was enough to keep the game running at a decent speed.
 
 ### Colour Palette
 
 Each pixel in the display is represented by 1 bit of video RAM. If the bit is `0` then the pixel is off, or black, if it's `1` then it is on, or white. Screenshots and photographs of the early arcade cabinets may show alien and player spaceships in different colours, but that was just a trick achieved by sticking coloured cellophane over certain sections of the monitor.
 
-Certainly, one advantage of a black and white screen is that we can be more efficient by always ensuring that each frame our canvas is cleared to black, so we only have to worry about drawing the white pixels.
+Certainly, one advantage of a black and white screen is efficiency when updating the screen. We always clear the entire frame to black, then only have to worry about drawing the white pixels.
 
 ### Rotated Screen
 
-For *Space Invaders*, the video buffer is written at a 90 degree angle. Back in the '70s, they simply rotated the monitor in the arcade cabinet by 90 degrees to set it upright. In this emulator, it is resolved by temporarily rotating the context of the HTML canvas by 90 degrees before writing out the contents of the video buffer, then rotating the context back, all in one frame.
+For *Space Invaders*, the video buffer is written at a 90 degree angle. Back in the '70s, they simply rotated the monitor in the arcade cabinet by 90 degrees to set it upright. In this emulator, it's resolved by temporarily rotating the context of an HTML canvas by 90 degrees, writing out the contents of the video buffer, then rotating the context back, all in one frame.
 
 See the `useEffect()` function in the [Screen.jsx](src/emulators/space-invaders/src/components/game-cabinet-components/Screen.jsx) component which fires each time the `VRAM` state changes.
 
 ### Sound
 
-Sound is not yet implemented in the emulator, but will be eventually. It should be as simple as trapping calls the `OUT` opcode and playing a sound through the users browser.
+Sound is not yet implemented in the emulator, but will be eventually. A sound device is prepared and hooked up, it just doesn't do anything, yet.
 
 ## Additional Hardware
 
