@@ -1,9 +1,3 @@
-<style>
-  img {
-    border-radius: 10px;
-  }
-</style>
-
 # Intel 8080 JavaScript Emulator <!-- omit in toc -->
 
 This Repo contains:
@@ -108,8 +102,7 @@ An abstract class that provides an interface for any device that needs to be con
 
 Core components and their relationships are below. Raw file is [here](documentation/diagrams/uml-diagrams/core-uml.drawio.png).
 
-<img src="documentation/diagrams/uml-diagrams/core-uml.drawio.png" class="image"/>
-
+![Core Component Classes](documentation/diagrams/uml-diagrams/core-uml.drawio.png)
 
 ---
 # Testing
@@ -244,7 +237,7 @@ Once the server is running, select the `cpudiag-page.html` file to load the main
 
 The back-end of the program runs in a similar way to *Space Invaders* so details won't be repeated here, suffice to say that a Web Worker is used to decouple the interface from the emulator and prevent the browser from locking up.
 
-<img src="documentation/cpu-diag/readme-img/cpu-diag-screenshot.png" class="image" alt="CPU Diag Screenshot" width="800"/>
+![CPU Diag Screenshot](documentation/cpu-diag/readme-img/cpu-diag-screenshot.png")
 
 
 CPU registers and fields are displayed along the top. On the bottom left is the trace window which outputs a disassembly of each instruction as it executes. In the middle is the console output and on the right, the RAM contents. 
