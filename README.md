@@ -237,7 +237,7 @@ Once the server is running, select the `cpudiag-page.html` file to load the main
 
 The back-end of the program runs in a similar way to *Space Invaders* so details won't be repeated here, suffice to say that a Web Worker is used to decouple the interface from the emulator and prevent the browser from locking up.
 
-![CPU Diag Screenshot](documentation/cpu-diag/readme-img/cpu-diag-screenshot.png")
+![CPU Diag Screenshot](documentation/cpu-diag/readme-img/cpu-diag-screenshot.png)
 
 
 CPU registers and fields are displayed along the top. On the bottom left is the trace window which outputs a disassembly of each instruction as it executes. In the middle is the console output and on the right, the RAM contents. 
