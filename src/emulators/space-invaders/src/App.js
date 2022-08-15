@@ -82,9 +82,4 @@ function App({ invadersWebWorker }) {
   );
 }
 
-// www.cakers.io is improperly configured Your site's DNS settings are using a
-// custom subdomain, www.cakers.io, that is set up as an A record. We recommend
-// you change this to a CNAME record pointing to chris-j-akers.github.io. For
-// more information, see documentation (InvalidARecordError).
-
 export default App;

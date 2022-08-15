@@ -9,18 +9,18 @@ function PortableDeviceControls( {invadersWebWorker} ) {
     <div id='portable-device-controls' className='shadow'>
         <div id='direction-controls' className='shadow'>
             <Button className='button-controls' icon={<AiFillCaretLeft />} 
-                ontouchstart={() => {
+                onTouchStart={() => {
                     invadersWebWorker.postMessage({Type: 'P1-LEFT-DOWN'});
                 }}
-                ontouchend={() => {
+                onTouchEnd={() => {
                     invadersWebWorker.postMessage({Type: 'P1-LEFT-UP'})
                 }}>
             </Button>
             <Button className='button-controls' icon={<AiFillCaretRight className='icons' />} 
-                ontouchstart={() => {
+                onTouchStart={() => {
                     invadersWebWorker.postMessage({Type: 'P1-RIGHT-DOWN'});
                 }}
-                ontouchend={() => {
+                onTouchEnd={() => {
                     invadersWebWorker.postMessage({Type: 'P1-RIGHT-UP'});
                 }}>
             </Button>
@@ -31,18 +31,18 @@ function PortableDeviceControls( {invadersWebWorker} ) {
             }}>
             </Button>
             <Button icon={<FaRunning />} className='button-controls' 
-                ontouchstart={() => {
+                onTouchStart={() => {
                     invadersWebWorker.postMessage({Type: 'P1-START-DOWN'});
                 }}
-                ontouchend={ () => {
+                onTouchEnd={ () => {
                     invadersWebWorker.postMessage({Type: 'P1-START-UP'});
                 }}>
             </Button>
             <Button className='button-controls' icon={<GiBolterGun />} 
-                ontouchstart={() => {
+                onTouchStart={() => {
                 invadersWebWorker.postMessage({Type: 'P1-FIRE-DOWN'});
                 }} 
-                ontouchend={() => {
+                onTouchEnd={() => {
                     invadersWebWorker.postMessage({Type: 'P1-FIRE-UP'});
                 }}>
             </Button>
