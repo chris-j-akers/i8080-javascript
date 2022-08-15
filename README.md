@@ -56,6 +56,7 @@ This Repo contains:
     - [The Video Buffer](#the-video-buffer)
     - [Colour Palette](#colour-palette)
     - [Rotated Screen](#rotated-screen)
+    - [Sound](#sound)
   - [Additional Hardware](#additional-hardware)
     - [Bit-Shift Device](#bit-shift-device)
     - [Controller Devices](#controller-devices)
@@ -246,13 +247,13 @@ The buttons in the middle provide a couple of different ways to run the program 
 
 * `Run Clocked at Speed` slows down the emulator to a number of instructions per second. This is really just so you can observe the fields being updated as the test runs.
   
-* `Run Un-clocked` executes the whole program as quickly as possible.
+* `Run Unclocked` executes the whole program as quickly as possible.
   
 * `Step Single Instruction` allows you to step through the program instruction-by-instruction.
   
 * `Run to Breakpoint` will execute the program up to the memory address entered in the text-box.
 
-The expected result is for the phrase `  CPU IS OPERATIONAL` to pop out of the console. If there are any issues, the phrase `  CPU HAS FAILED!` will pop out instead. This text output actually used some old CP/M kernel routines that had to be trapped and emulated. See source for details.
+The expected result is for the phrase `  CPU IS OPERATIONAL` to pop out of the console. If there are any issues, the phrase `  CPU HAS FAILED!` will pop out instead. This text output actually used some old CP/M kernel routines that had to be trapped and emulated. See `ExecuteNextInstruction()` in [`cpudiag-computer.js](src/cpu-test-program/cpudiag-computer.js) for details.
 
 *NOTE: Time invested in unit testing pays off! When I first ran this program, I expected to be mired in 8080 assembler debugging because I anticipated plenty of failures. In fact, the only issue I encountered was with the `DAA` instruction, an instruction that I hadn’t fully implemented, yet, and hadn’t written any unit tests for. A lot of 8080 emulators actually skip this instruction because it wasn’t used very much, at least in games. I was in two-minds on whether to implement it myself or skip it. In the end, it is fully implemented and passes all tests in `CPU Diag`.*
 
@@ -280,9 +281,11 @@ As this is a computer game, there were a number of things to consider when it co
 
 According to [Computer Archaeology](https://www.computerarcheology.com/Arcade/SpaceInvaders/Hardware.html), the 8080 *Space Invaders* video memory is located between addresses `0x2400` and `0x3FFF`. Hardware in the arcade cabinet would read this section of RAM and interpret the data into electronic signals to be sent to the monitor which would draw data out one line at a time from the top down. 
 
-When the screen is half-way drawn, an interrupt is sent to the CPU which we'll call the 'half-blank interrupt', and, similarly, when the screen is fully drawn, another interrupt is sent to the CPU, which we'll call the 'Vertical Blank' interrupt. 
+When the screen is half-way drawn, an interrupt is sent to the CPU which we'll call the 'half-blank interrupt', and, similarly, when the screen is fully drawn, another interrupt is sent to the CPU, which we'll call the 'Vertical Blank' interrupt.
 
-The point of the interrupts is to 'advise' the CPU that certain sections of the screen have been drawn, so their respective video RAM can now be recalculated. It is critical that screen updates are in sync with video ram updates or you will see a side-effect known as 'tearing'. Imagine if the monitor has just drawn the top of a sprite at position (0,1) but, before it finished, the video RAM updates the sprite to position (0,5). The rest of the sprite will be drawn to screen in this different position, making it look disjointed or 'torn'.
+The screen-updates and interrupt firings must be in sync or you will see a side-effect known as 'tearing'. Imagine if the monitor has just drawn the top of a sprite at position (0,1) but, before it finished, the video RAM updates the sprite to position (0,5). The rest of the sprite will be drawn to screen in this different position, making it look disjointed or 'torn'.
+
+In *Space Invaders*, the interrupts are also critical for the games timing and a lot of update code depends on them being fired at exactly the right point. Having said that, this emulation doesn't quite manage this. Instead of firing the half-blank when the screen is halfway draw and the full-blank when the screen is fully drawn, it takes it in turns to send each interrupt after the screen is fully drawn (see `run()` in the [`invaders-web-worker.js`](src/emulators/space-invaders/src/web-workers/invaders-web-worker.js) module). Testing determined this was enough to keep the game running at a decent speed.
 
 ### Colour Palette
 
@@ -295,6 +298,10 @@ Certainly, one advantage of a black and white screen is that we can be more effi
 For *Space Invaders*, the video buffer is written at a 90 degree angle. Back in the '70s, they simply rotated the monitor in the arcade cabinet by 90 degrees to set it upright. In this emulator, it is resolved by temporarily rotating the context of the HTML canvas by 90 degrees before writing out the contents of the video buffer, then rotating the context back, all in one frame.
 
 See the `useEffect()` function in the [Screen.jsx](src/emulators/space-invaders/src/components/game-cabinet-components/Screen.jsx) component which fires each time the `VRAM` state changes.
+
+### Sound
+
+Sound is not yet implemented in the emulator, but will be eventually. It should be as simple as trapping calls the `OUT` opcode and playing a sound through the users browser.
 
 ## Additional Hardware
 
