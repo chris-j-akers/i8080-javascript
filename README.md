@@ -124,11 +124,11 @@ Core components and their relationships are below. Raw file is [here](documentat
 
 This section presents a quick tutorial that shows how easy it is to build out a virtual machine using the `core` sources in this repo.
 
-The program that will be run through the machine is very, very simple. It will just add the numbers 40 and 2 together leaving the Accumulator with the number 42. Then it will use a custom-written `OutputDevice` to print that Accumulator value out to the console.
+The program that will be run through the machine is very, very simple. It will just add the numbers 40 and 2 together leaving the Accumulator with the number 42. Then it will use a custom-written `OutputDevice` to print that Accumulator value to a browser's console.
 
 ## 1. Create basic `index.html`
 
-To begin with, we'll be using the script in the browser, so we need a simple `index.html` file. The script we'll be writing is to be called `tutorial.js`.
+To begin with, we'll be using the script in the browser, so we need a simple `index.html` file. The script we'll be writing is to be called `tutorial.js` so that needs to be imported using a `<script>` tag.
 
   ```html
   <!DOCTYPE html>
@@ -148,7 +148,7 @@ To begin with, we'll be using the script in the browser, so we need a simple `in
 
 ## 2. Copy `core` files to source directory
 
-This file should be saved in a directory somewhere, then the `core` 8080 source files from the repo copied over.
+The `core` 8080 source files from the repo copied over to the same directory as the `index.html` file created above.
 
   ```shell
   ~/Source/i8080-tutorial via ⬢ v16.14.2
@@ -167,9 +167,7 @@ This file should be saved in a directory somewhere, then the `core` 8080 source 
 
 ## 3. Create a custom `OutputDevice` by extending the `Device` class
 
-Next, create a custom `OutputDevice` so the result can be written to the console. This is a simple class that extends the `Device` class in `device.js` and implements the `Write()` method. Note that the `port` parameter is not used in the code, here, as this device will only be connected to one port. If a device is connected to more than one port, it is useful to split logic depending on which port on the device received the value. For instance, a sound device might play different sounds depending on which port received the value.
-
-For this tutorial, all the `Write()` method does is print out the value to the browser's console.
+Next, create a custom `OutputDevice` class so the result can be written to the console. This is a simple class that extends the `Device` class in `device.js` and implements the `Write()` method which will simply print out the received value to the browser's console.
 
   ```javascript
   import { Device } from './device.js'
@@ -184,10 +182,11 @@ For this tutorial, all the `Write()` method does is print out the value to the b
   export { OutputDevice }
 
   ```
+Note that the `port` parameter is not used in the code, here, as this device will only be connected to one port. If a device is connected to more than one port, it is useful to split logic depending on which port on the device received the value. For instance, a sound device might play different sounds depending on which port received the value.
 
 ## 4. Create the `TutorialComputer` class by extending the `Computer` class
 
-Next, the `Computer` class is extended to create the `TutorialComputer` and hook it up the `OutputDevice`. Extending the class, instead of implementing it, may seem overkill for this example but in a lot of cases there will be additional devices to add and different hooks required to emulate OS or ROM functions (see `ExecuteNextInstruction()` in [`cpudiag-computer.js`](src/cpu-test-program/cpudiag-computer.js) for an example of emulating OS API calls without an OS). Extending the `Computer` class helps to decouple specific machine behaviour from the `core` components.
+Next, the `Computer` class is extended to create the `TutorialComputer` and hook it up to the `OutputDevice`.
 
 ```javascript
 import { Computer } from './computer.js';
@@ -206,17 +205,21 @@ export { TutorialComputer }
 ```
 Above, the `OutputDevice` is connected to port 0x01 (1) of the `Bus`. To access this device, the source code needs to use the `OUT` opcode with an operand of `0x01`.
 
+Extending the class, instead of implementing it, may seem overkill for this example but in a lot of cases there will be additional devices to add and different hooks required to emulate OS or ROM functions (see `ExecuteNextInstruction()` in [`cpudiag-computer.js`](src/cpu-test-program/cpudiag-computer.js) for an example of emulating OS API calls without an OS). Extending the `Computer` class helps to decouple specific machine behaviour from the `core` components.
+
 ## 5. Write the main `tutorial.js` script to be executed through the browser
 
 Now to write the main `tutorial.js` script which will instantiate the `TutorialComputer` and execute some 8080 binary code. 
   
-Code is stored as byte values in an array called `program`. This `program` is loaded into the virtual memory of the `TutorialComputer` object using the `LoadProgram()` method, then the `ExecuteNextInstruction()` method is called to step through it.
+Code is stored as byte values in an array called `program`. This `program` is loaded into the virtual memory of the `TutorialComputer` object using the `LoadProgram()` method, then the `ExecuteNextInstruction()` method is called to step through it until the `HALT` status of the CPU is set to `true`.
+
+The program is loaded into memory address 0x0 (the default), but this could be changed by passing the `addr` parameter to the `LoadProgram()` method.
 
   ```javascript
   import { TutorialComputer } from './tutorial-computer.js'
 
   const computer = new TutorialComputer();
-  
+
   const program = [
       0x3E,            // MVI A...
       0x28,            // #0x28 (40)
@@ -228,13 +231,13 @@ Code is stored as byte values in an array called `program`. This `program` is lo
   ]
 
   computer.LoadProgram(program);
-
-  for (let i=0; i<program.length;i++) {
+  while(!computer.CPUState.Halt) {
       computer.ExecuteNextInstruction();
   }
+
   ```
 
-Above, the program loads the immediate value 40 (0x28) into the Accumulator, then adds the immediate value 2 (0x02) to the Accumulator. It then calls the `OUT` opcode with a parameter of 0x01, telling the CPU to send the contents of the Accumulator to the device listening on port 0x01 (which is the `OutputDevice` written in step 3). Finally, it uses the `HALT` opcode to stop the program.
+Above, the program loads the immediate value 40 (0x28) into the Accumulator, then adds the immediate value 2 (0x02) to the Accumulator. It then calls the `OUT` opcode with a parameter of 0x01, telling the CPU to send the contents of the Accumulator to the device listening on port 0x01 (which is the `OutputDevice` written in step 3). Finally, it uses the `HALT` opcode to stop the program. Without this `HALT` code, the program will keep running through memory trying to execute whatever was there.
 
 ## 6. Run the script through a browser
 
