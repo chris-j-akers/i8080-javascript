@@ -45,6 +45,13 @@ This Repo contains:
   - [`bus.js`](#busjs)
   - [`device.js`](#devicejs)
   - [Core Component Class Diagram](#core-component-class-diagram)
+- [Tutorial: Building an i8080 Virtual Machine and Executing Code](#tutorial-building-an-i8080-virtual-machine-and-executing-code)
+  - [1. Create basic `index.html`](#1-create-basic-indexhtml)
+  - [2. Copy `core` files to source directory](#2-copy-core-files-to-source-directory)
+  - [3. Create a custom `OutputDevice` by extending the `Device` class](#3-create-a-custom-outputdevice-by-extending-the-device-class)
+  - [4. Create the `TutorialComputer` class by extending the `Computer` class](#4-create-the-tutorialcomputer-class-by-extending-the-computer-class)
+  - [5. Write the main `tutorial.js` script to be executed through the browser](#5-write-the-main-tutorialjs-script-to-be-executed-through-the-browser)
+  - [6. Run the script through a browser and check output](#6-run-the-script-through-a-browser-and-check-output)
 - [Testing](#testing)
   - [Unit Tests](#unit-tests)
   - [Running Unit Tests](#running-unit-tests)
@@ -111,6 +118,136 @@ An abstract class that provides an interface for any device that needs to be con
 Core components and their relationships are below. Raw file is [here](documentation/diagrams/uml-diagrams/core-uml.drawio.png).
 
 ![Core Component Classes](documentation/diagrams/uml-diagrams/core-uml.drawio.png)
+
+---
+# Tutorial: Building an i8080 Virtual Machine and Executing Code
+
+This section presents a quick tutorial that will show you how easy it is to build out a virtual machine using the `core` sources in this repo, then execute some 8080 binary code.
+
+The program is very, very simple. It will just add the numbers 40 and 2 together so the Accumulator contains the number 42. Then it will use a custom-written `OutputDevice` to print the Accumulator value out to the console.
+
+## 1. Create basic `index.html`
+
+To begin with, we'll be using the script in the browser, so we need a simple `index.html` file. The script we'll be writing is to be called `tutorial.js`.
+
+  ```html
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <title>i8080 JavaScript Tutorial</title>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+      <script type="module" src="tutorial.js"></script>
+    </head>
+    <body>
+      <p>i8080 Tutorial Program: Open Debug Tools for any Output</p>
+    </body>
+  </html>
+  ```
+
+## 2. Copy `core` files to source directory
+
+This file should be saved in a directory somewhere, then the `core` 8080 source files from the repo copied over.
+
+  ```shell
+  ~/Source/i8080-tutorial via ⬢ v16.14.2
+  ➜ ls -ltr
+  total 104
+  -rw-rw-r-- 1 cakers cakers   898 Aug 10 23:07 mmu.js
+  -rw-rw-r-- 1 cakers cakers 73643 Aug 10 23:07 i8080.js
+  -rw-rw-r-- 1 cakers cakers   218 Aug 10 23:07 device.js
+  -rw-rw-r-- 1 cakers cakers  2959 Aug 10 23:07 computer.js
+  -rw-rw-r-- 1 cakers cakers  2408 Aug 15 21:50 bus.js
+  -rw-rw-r-- 1 cakers cakers   411 Aug 16 10:39 index.html
+
+  ~/Source/i8080-tutorial via ⬢ v16.14.2
+  ➜
+  ```
+
+## 3. Create a custom `OutputDevice` by extending the `Device` class
+
+Next, create a custom `OutputDevice` so the result can be written to the console. This is a simple class that extends the `Device` class in `device.js` and implements the `Write()` method. Note that the `port` parameter is not used in the code, here, as this device will only be connected to one port. If a device is connected to more than one port, it is useful to split logic depending on which port on the device received the value. For instance, a sound device might play different sounds depending on what port was triggered.
+
+  ```javascript
+  import { Device } from './device.js'
+
+  class OutputDevice extends Device {
+
+      Write(port, val) {
+          console.log(val);
+      }
+  }
+
+  export { OutputDevice }
+
+  ```
+
+## 4. Create the `TutorialComputer` class by extending the `Computer` class
+
+Next, the `Computer` class is extended to create the `TutorialComputer` and hook it up the `OutputDevice`. Extending the class, instead of implementing it, may seem overkill for this example but in a lot of cases there will be additional devices to add and different hooks required to emulate OS or ROM functions (see `ExecuteNextInstruction()` in [`cpudiag-computer.js`](src/cpu-test-program/cpudiag-computer.js) for an example of emulating OS API calls without an OS). Extending the `Computer` class helps to decouple specific machine behaviour from the `core` components.
+
+```javascript
+import { Computer } from './computer.js';
+import { OutputDevice } from './output-device.js';
+
+class TutorialComputer extends Computer {
+
+    constructor() {
+        super();
+        this._outputDevice = new OutputDevice();
+        this._bus.ConnectDeviceToWritePort(0x01, this._outputDevice);
+    }
+}
+
+export { TutorialComputer }
+```
+
+## 5. Write the main `tutorial.js` script to be executed through the browser
+
+Now to write the main `tutorial.js` script which will instantiate the `TutorialComputer` and execute some 8080 binary code. 
+  
+Code is stored as byte values in an array called `program`. This `program` is loaded into the virtual memory of the `TutorialComputer` object using the `LoadProgram()` method, then the `ExecuteNextInstruction()` method is called to step through it.
+
+  ```javascript
+  import { TutorialComputer } from './tutorial-computer.js'
+
+  const computer = new TutorialComputer();
+
+  const program = [
+      0x3E,            // MVI A...
+      0x28,            // #0x28 (40)
+      0xC6,            // ADI A...
+      0x02,            // #0x02 (2)
+      0xD3,            // OUT...
+      0x01,            // ...to Port 0x01 (1)
+      0x76,            // HALT
+  ]
+
+  computer.LoadProgram(program);
+  for (let i=0; i<program.length;i++) {
+      computer.ExecuteNextInstruction();
+  }
+  ```
+## 6. Run the script through a browser and check output
+
+Finally, the program can be run through the newly created virtual machine. In order for a browser to run all the JavaScript, the `index.html` file must be loaded through an `HTTP` server. Fortunately, there are a number of simple ones out there, including one that ships with `python`. For simplicity, it should be started from the tutorial source directory.
+
+  ```shell
+  ~/Source/i8080-tutorial via ⬢ v16.14.2
+  ➜ python3 -m "http.server"
+  Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
+  ```
+
+There is also [`live-server`](https://www.npmjs.com/package/live-server) which can be installed using `npm` and automatically refreshes if it detects any changes in the source.
+
+If the `index.html` loads correctly, it should look something like this:
+
+![Tutorial Screenshot 1](documentation/readme-img/tutorial-screenshot-1.png)
+
+Opening the debug tools (CTRL-SHIFT-I on Chrome) and clicking on the `Console` tab, should show output from the program (`42`).
+
+![Tutorial Screenshot 2](documentation/readme-img/tutorial-screenshot-2.png)
 
 ---
 # Testing
