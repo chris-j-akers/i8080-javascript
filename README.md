@@ -216,6 +216,7 @@ Code is stored as byte values in an array called `program`. This `program` is lo
   import { TutorialComputer } from './tutorial-computer.js'
 
   const computer = new TutorialComputer();
+  
   const program = [
       0x3E,            // MVI A...
       0x28,            // #0x28 (40)
