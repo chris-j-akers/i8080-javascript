@@ -45,7 +45,7 @@ This Repo contains:
   - [`bus.js`](#busjs)
   - [`device.js`](#devicejs)
   - [Core Component Class Diagram](#core-component-class-diagram)
-- [Tutorial: Build an i8080 Virtual Machine and Executing Code](#tutorial-build-an-i8080-virtual-machine-and-executing-code)
+- [Tutorial: Build an i8080 Virtual Machine and Execute Some Code](#tutorial-build-an-i8080-virtual-machine-and-execute-some-code)
   - [1. Create basic `index.html`](#1-create-basic-indexhtml)
   - [2. Copy `core` files to source directory](#2-copy-core-files-to-source-directory)
   - [3. Create a custom `OutputDevice` by extending the `Device` class](#3-create-a-custom-outputdevice-by-extending-the-device-class)
@@ -120,11 +120,11 @@ Core components and their relationships are below. Raw file is [here](documentat
 ![Core Component Classes](documentation/diagrams/uml-diagrams/core-uml.drawio.png)
 
 ---
-# Tutorial: Build an i8080 Virtual Machine and Executing Code
+# Tutorial: Build an i8080 Virtual Machine and Execute Some Code
 
-This section presents a quick tutorial that will show you how easy it is to build out a virtual machine using the `core` sources in this repo, then execute some 8080 binary code.
+This section presents a quick tutorial that shows how easy it is to build out a virtual machine using the `core` sources in this repo.
 
-The program is very, very simple. It will just add the numbers 40 and 2 together so the Accumulator contains the number 42. Then it will use a custom-written `OutputDevice` to print the Accumulator value out to the console.
+The program that will be run through the machine is very, very simple. It will just add the numbers 40 and 2 together leaving the Accumulator with the number 42. Then it will use a custom-written `OutputDevice` to print that Accumulator value out to the console.
 
 ## 1. Create basic `index.html`
 
