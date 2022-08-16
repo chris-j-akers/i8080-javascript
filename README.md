@@ -1,6 +1,58 @@
 # Intel 8080 JavaScript Emulator <!-- omit in toc -->
 
-This Repo contains:
+## Table of Contents <!-- omit in toc -->
+
+- [Repo Contents](#repo-contents)
+- [Set-up](#set-up)
+- [8080 Core Components](#8080-core-components)
+  - [`i8080.js`](#i8080js)
+  - [`mmu.js`](#mmujs)
+  - [`bus.js`](#busjs)
+  - [`device.js`](#devicejs)
+  - [Core Component Class Diagram](#core-component-class-diagram)
+- [Tutorial: Build an i8080 Virtual Machine and Run Some Code](#tutorial-build-an-i8080-virtual-machine-and-run-some-code)
+  - [1. Create basic `index.html`](#1-create-basic-indexhtml)
+  - [2. Copy `core` files to source directory](#2-copy-core-files-to-source-directory)
+  - [3. Create a custom `OutputDevice` by extending the `Device` class](#3-create-a-custom-outputdevice-by-extending-the-device-class)
+  - [4. Create the `TutorialComputer` class by extending the `Computer` class](#4-create-the-tutorialcomputer-class-by-extending-the-computer-class)
+  - [5. Write the main `tutorial.js` script to be executed through the browser](#5-write-the-main-tutorialjs-script-to-be-executed-through-the-browser)
+  - [6. Run the script through a browser](#6-run-the-script-through-a-browser)
+- [Running ROMs through the virtual machine](#running-roms-through-the-virtual-machine)
+- [Testing](#testing)
+  - [Unit Tests](#unit-tests)
+  - [Running Unit Tests](#running-unit-tests)
+  - [Unit Test Methodology](#unit-test-methodology)
+  - [CPU Diag (1980)](#cpu-diag-1980)
+- [Implementing Space Invaders](#implementing-space-invaders)
+  - [Components](#components)
+  - [Space Invaders Class Diagram](#space-invaders-class-diagram)
+  - [Video](#video)
+    - [The Video Buffer](#the-video-buffer)
+    - [Colour Palette](#colour-palette)
+    - [Rotated Screen](#rotated-screen)
+    - [Sound](#sound)
+  - [Additional Hardware](#additional-hardware)
+    - [Bit-Shift Device](#bit-shift-device)
+    - [Controller Devices](#controller-devices)
+  - [Game Loop Implementation and the Web Worker](#game-loop-implementation-and-the-web-worker)
+  - [Front-End](#front-end)
+    - [Control Panel](#control-panel)
+    - [Player Instructions](#player-instructions)
+    - [Data Tables](#data-tables)
+      - [Field State](#field-state)
+      - [CPU Register State](#cpu-register-state)
+      - [CPU Flag State](#cpu-flag-state)
+    - [Disassembly](#disassembly)
+    - [Game Window](#game-window)
+  - [Running Space Invaders Locally](#running-space-invaders-locally)
+- [Appendix A: References and Sources](#appendix-a-references-and-sources)
+- [Appendix B: Why JavaScript?](#appendix-b-why-javascript)
+
+---
+
+# Repo Contents
+
+This repo contains the following:
 
 * [src/core/](src/core/)  
   
@@ -33,55 +85,7 @@ This Repo contains:
 * [README](README.md)
 
   This README.
-
----
-
-### Table of Contents <!-- omit in toc -->
-
-- [Set-up](#set-up)
-- [8080 Core Components](#8080-core-components)
-  - [`i8080.js`](#i8080js)
-  - [`mmu.js`](#mmujs)
-  - [`bus.js`](#busjs)
-  - [`device.js`](#devicejs)
-  - [Core Component Class Diagram](#core-component-class-diagram)
-- [Tutorial: Build an i8080 Virtual Machine and Execute Some Code](#tutorial-build-an-i8080-virtual-machine-and-execute-some-code)
-  - [1. Create basic `index.html`](#1-create-basic-indexhtml)
-  - [2. Copy `core` files to source directory](#2-copy-core-files-to-source-directory)
-  - [3. Create a custom `OutputDevice` by extending the `Device` class](#3-create-a-custom-outputdevice-by-extending-the-device-class)
-  - [4. Create the `TutorialComputer` class by extending the `Computer` class](#4-create-the-tutorialcomputer-class-by-extending-the-computer-class)
-  - [5. Write the main `tutorial.js` script to be executed through the browser](#5-write-the-main-tutorialjs-script-to-be-executed-through-the-browser)
-  - [6. Run the script through a browser](#6-run-the-script-through-a-browser)
-- [Testing](#testing)
-  - [Unit Tests](#unit-tests)
-  - [Running Unit Tests](#running-unit-tests)
-  - [Unit Test Methodology](#unit-test-methodology)
-  - [CPU Diag (1980)](#cpu-diag-1980)
-- [Implementing Space Invaders](#implementing-space-invaders)
-  - [Components](#components)
-  - [Space Invaders Class Diagram](#space-invaders-class-diagram)
-  - [Video](#video)
-    - [The Video Buffer](#the-video-buffer)
-    - [Colour Palette](#colour-palette)
-    - [Rotated Screen](#rotated-screen)
-    - [Sound](#sound)
-  - [Additional Hardware](#additional-hardware)
-    - [Bit-Shift Device](#bit-shift-device)
-    - [Controller Devices](#controller-devices)
-  - [Game Loop Implementation and the Web Worker](#game-loop-implementation-and-the-web-worker)
-  - [Front-End](#front-end)
-    - [Control Panel](#control-panel)
-    - [Player Instructions](#player-instructions)
-    - [Data Tables](#data-tables)
-      - [Field State](#field-state)
-      - [CPU Register State](#cpu-register-state)
-      - [CPU Flag State](#cpu-flag-state)
-    - [Disassembly](#disassembly)
-    - [Game Window](#game-window)
-  - [Running Space Invaders Locally](#running-space-invaders-locally)
-- [Appendix A: References and Sources](#appendix-a-references-and-sources)
-- [Appendix B: Why JavaScript?](#appendix-b-why-javascript)
-
+  
 ---
 # Set-up
 
@@ -120,7 +124,7 @@ Core components and their relationships are below. Raw file is [here](documentat
 ![Core Component Classes](documentation/diagrams/uml-diagrams/core-uml.drawio.png)
 
 ---
-# Tutorial: Build an i8080 Virtual Machine and Execute Some Code
+# Tutorial: Build an i8080 Virtual Machine and Run Some Code
 
 This section presents a quick tutorial that shows how easy it is to build out a virtual machine using the `core` sources in this repo.
 
@@ -260,6 +264,12 @@ Opening the debug tools (CTRL-SHIFT-I on Chrome) and clicking on the `Console` t
 ![Tutorial Screenshot 2](documentation/readme-img/tutorial-screenshot-2.png)
 
 ---
+# Running ROMs through the virtual machine
+
+This repo contains a small program called [`rom_extractor.py`](utils/rom_extractor/rom_extractor.py). It takes a single parameter which is a path to an 8080 binary file and rewrites the contents of that file as a `JavaScript` script that contains an array of bytes called `Code`. This array can be imported into a virtual machine script and then loaded into an `i8080` object using the `LoadProgram()` method of the `Computer` class, similar to step 5, above.
+
+
+
 # Testing
 
 ## Unit Tests 
