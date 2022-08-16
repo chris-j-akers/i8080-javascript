@@ -32,6 +32,14 @@ class CPUDiagComputer extends Computer {
         return ret_str;
     }
 
+    /**
+     *
+     * Checks to see if the Program Counter is at one of the CP/M OS Kernel API
+     * addresses (0x0, 0x9, 0x2). If so, then emulates those API calls. If not,
+     * just calls the super().ExecuteNextInstruction().
+     *
+     * @returns Object containing State of the CPU
+     */
     ExecuteNextInstruction() {
         if (this.CPUState.Halt == false ) {
             switch(this.CPUState.ProgramCounter) {
