@@ -148,7 +148,7 @@ To begin with, we'll be using the script in the browser, so we need a simple `in
 
 ## 2. Copy `core` files to source directory
 
-The `core` 8080 source files from the repo copied over to the same directory as the `index.html` file created above.
+The `core` 8080 source files from the repo need to be copied to the same directory as the `index.html` file created above.
 
   ```shell
   ~/Source/i8080-tutorial via ⬢ v16.14.2
