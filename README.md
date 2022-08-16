@@ -1,6 +1,6 @@
 # Intel 8080 JavaScript Emulator <!-- omit in toc -->
 
-## Table of Contents <!-- omit in toc -->
+## Contents <!-- omit in toc -->
 
 - [Repo Contents](#repo-contents)
 - [Set-up](#set-up)
