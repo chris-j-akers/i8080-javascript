@@ -45,13 +45,13 @@ This Repo contains:
   - [`bus.js`](#busjs)
   - [`device.js`](#devicejs)
   - [Core Component Class Diagram](#core-component-class-diagram)
-- [Tutorial: Building an i8080 Virtual Machine and Executing Code](#tutorial-building-an-i8080-virtual-machine-and-executing-code)
+- [Tutorial: Build an i8080 Virtual Machine and Executing Code](#tutorial-build-an-i8080-virtual-machine-and-executing-code)
   - [1. Create basic `index.html`](#1-create-basic-indexhtml)
   - [2. Copy `core` files to source directory](#2-copy-core-files-to-source-directory)
   - [3. Create a custom `OutputDevice` by extending the `Device` class](#3-create-a-custom-outputdevice-by-extending-the-device-class)
   - [4. Create the `TutorialComputer` class by extending the `Computer` class](#4-create-the-tutorialcomputer-class-by-extending-the-computer-class)
   - [5. Write the main `tutorial.js` script to be executed through the browser](#5-write-the-main-tutorialjs-script-to-be-executed-through-the-browser)
-  - [6. Run the script through a browser and check output](#6-run-the-script-through-a-browser-and-check-output)
+  - [6. Run the script through a browser](#6-run-the-script-through-a-browser)
 - [Testing](#testing)
   - [Unit Tests](#unit-tests)
   - [Running Unit Tests](#running-unit-tests)
@@ -120,7 +120,7 @@ Core components and their relationships are below. Raw file is [here](documentat
 ![Core Component Classes](documentation/diagrams/uml-diagrams/core-uml.drawio.png)
 
 ---
-# Tutorial: Building an i8080 Virtual Machine and Executing Code
+# Tutorial: Build an i8080 Virtual Machine and Executing Code
 
 This section presents a quick tutorial that will show you how easy it is to build out a virtual machine using the `core` sources in this repo, then execute some 8080 binary code.
 
@@ -167,7 +167,9 @@ This file should be saved in a directory somewhere, then the `core` 8080 source 
 
 ## 3. Create a custom `OutputDevice` by extending the `Device` class
 
-Next, create a custom `OutputDevice` so the result can be written to the console. This is a simple class that extends the `Device` class in `device.js` and implements the `Write()` method. Note that the `port` parameter is not used in the code, here, as this device will only be connected to one port. If a device is connected to more than one port, it is useful to split logic depending on which port on the device received the value. For instance, a sound device might play different sounds depending on what port was triggered.
+Next, create a custom `OutputDevice` so the result can be written to the console. This is a simple class that extends the `Device` class in `device.js` and implements the `Write()` method. Note that the `port` parameter is not used in the code, here, as this device will only be connected to one port. If a device is connected to more than one port, it is useful to split logic depending on which port on the device received the value. For instance, a sound device might play different sounds depending on which port received the value.
+
+For this tutorial, all the `Write()` method does is print out the value to the browser's console.
 
   ```javascript
   import { Device } from './device.js'
@@ -202,6 +204,7 @@ class TutorialComputer extends Computer {
 
 export { TutorialComputer }
 ```
+Above, the `OutputDevice` is connected to port 0x01 (1) of the `Bus`. To access this device, the source code needs to use the `OUT` opcode with an operand of `0x01`.
 
 ## 5. Write the main `tutorial.js` script to be executed through the browser
 
@@ -229,7 +232,7 @@ Code is stored as byte values in an array called `program`. This `program` is lo
       computer.ExecuteNextInstruction();
   }
   ```
-## 6. Run the script through a browser and check output
+## 6. Run the script through a browser
 
 Finally, the program can be run through the newly created virtual machine. In order for a browser to run all the JavaScript, the `index.html` file must be loaded through an `HTTP` server. Fortunately, there are a number of simple ones out there, including one that ships with `python`. For simplicity, it should be started from the tutorial source directory.
 
