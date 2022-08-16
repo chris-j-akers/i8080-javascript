@@ -227,17 +227,17 @@ Code is stored as byte values in an array called `program`. This `program` is lo
   ]
 
   computer.LoadProgram(program);
-  
+
   for (let i=0; i<program.length;i++) {
       computer.ExecuteNextInstruction();
   }
   ```
 
-Above, the program uses opcodes to load the immediate value 40 (0x28) into the Accumulator, then adds the immediate value 2 (0x02) to the Accumulator. It then calls te `OUT` opcode with a parameter of 0x01 which tells the CPU to send the contents of the Accumulator to the device listening on port 0x01 (which is the `OutpuDevice` written in step 3). Finally, it uses the `HALT` opcode to stop the program.
+Above, the program loads the immediate value 40 (0x28) into the Accumulator, then adds the immediate value 2 (0x02) to the Accumulator. It then calls the `OUT` opcode with a parameter of 0x01, telling the CPU to send the contents of the Accumulator to the device listening on port 0x01 (which is the `OutputDevice` written in step 3). Finally, it uses the `HALT` opcode to stop the program.
 
 ## 6. Run the script through a browser
 
-Finally, the program can be run through the newly created virtual machine. In order for a browser to run all the JavaScript, the `index.html` file must be loaded through an `HTTP` server. Fortunately, there are a number of simple ones out there, including one that ships with `python`. For simplicity, it should be started from the tutorial source directory.
+The program can be run through the newly created virtual machine. In order for a browser to run all the JavaScript, the `index.html` file must be loaded through an `HTTP` server. Fortunately, there are a number of simple ones out there, including one that ships with `python`. For simplicity, it should be started from the tutorial source directory.
 
   ```shell
   ~/Source/i8080-tutorial via ⬢ v16.14.2
