@@ -28,7 +28,7 @@ function ControlPanel({ invadersWebWorker, traceDisabled, toggleTraceDisabled, p
             <div className='shadow'>
                 <ButtonGroup vertical={true} alignText='left' fill={true}>
                     
-                    <Button className='button-style' small={true} disabled={running} type ='button' icon={<GiAlienBug/>} onClick={() => {
+                    <Button className='button-style' disabled={running} type ='button' icon={<GiAlienBug/>} onClick={() => {
                         invadersWebWorker.postMessage({Type: 'RUN'});
                         updateProgramStatus('RUNNING');
                         updateRunning(true);
@@ -36,7 +36,7 @@ function ControlPanel({ invadersWebWorker, traceDisabled, toggleTraceDisabled, p
                     Play Space Invaders
                     </Button>
 
-                    <Button className='button-style' small={true} type ='button' icon={<AiFillPauseCircle />} onClick={() => {
+                    <Button className='button-style' type ='button' icon={<AiFillPauseCircle />} onClick={() => {
                         invadersWebWorker.postMessage({Type: 'STOP'});
                         updateProgramStatus('PAUSED');
                         updateRunning(false);
@@ -44,7 +44,7 @@ function ControlPanel({ invadersWebWorker, traceDisabled, toggleTraceDisabled, p
                     Pause Game
                     </Button>
                     
-                    <Button className='button-style' small={true} type ='button' disabled={programStatus==='RUNNING'} icon={<GrPowerReset />} onClick={() => {
+                    <Button className='button-style' type ='button' disabled={programStatus==='RUNNING'} icon={<GrPowerReset />} onClick={() => {
                         invadersWebWorker.postMessage({Type: 'RESET'});
                         updateProgramStatus('RESET');
                         }}>
@@ -56,19 +56,19 @@ function ControlPanel({ invadersWebWorker, traceDisabled, toggleTraceDisabled, p
             <div className='shadow'>
                 <ButtonGroup vertical={true} alignText='left' fill={true}>
 
-                    <Button className='button-style' small={true} icon={<AiFillStepForward/>} onClick={() => {
+                    <Button className='button-style' icon={<AiFillStepForward/>} onClick={() => {
                             invadersWebWorker.postMessage({Type: 'STEP-NEXT'});
                             }}>
                         Step Next Instruction
                     </Button>
 
-                    <Button className='button-style' small={true} icon={<FaSquareFull/>} onClick={() => {
+                    <Button className='button-style' icon={<FaSquareFull/>} onClick={() => {
                     invadersWebWorker.postMessage({Type: 'VBLANK'});
                     }}>
                         VBlank Interrupt
                     </Button>
 
-                    <Button className='button-style' small={true} icon={<BsSquareHalf/>} onClick={ () => {
+                    <Button className='button-style' icon={<BsSquareHalf/>} onClick={ () => {
                     invadersWebWorker.postMessage({Type: 'HALF-VBLANK'});
                     }}>
                         Half-VBlank Interrupt

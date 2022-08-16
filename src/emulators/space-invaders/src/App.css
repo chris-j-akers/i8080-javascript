@@ -106,14 +106,14 @@
     }
 
   .button-controls {
-    height: 8em;
-    width: 8em;
+    height: 5em;
+    width: 5em;
   }
 
   @media (max-width: 568px) {
     .button-controls {
-        height: 4em;
-        width: 4em;
+        height: 2em;
+        width: 2em;
     }
   }
 }
@@ -133,17 +133,6 @@
   align-items: center;
 }
 
-@media (max-width: 568px) {
-  #game-cabinet-logo {
-    width: 30em;
-  }
-}
-
-#game-cabinet-logo {
-  width: 30.0em;
-  height: 12em;
-  padding-bottom: 0.5em;
-}
 
 #control-panel-container {
   text-align: center;
@@ -213,6 +202,12 @@
   height: 43.5em;
   margin: 0;
   padding: 0;
+}
+
+@media (max-width: 1000px) {
+  #instructions-table {
+    display: none;
+  }
 }
 
 #instructions-container {
