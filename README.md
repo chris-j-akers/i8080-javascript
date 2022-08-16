@@ -266,9 +266,26 @@ Opening the debug tools (CTRL-SHIFT-I on Chrome) and clicking on the `Console` t
 ---
 # Running ROMs through the virtual machine
 
-This repo contains a small program called [`rom_extractor.py`](utils/rom_extractor/rom_extractor.py). It takes a single parameter which is a path to an 8080 binary file and rewrites the contents of that file as a `JavaScript` script that contains an array of bytes called `Code`. This array can be imported into a virtual machine script and then loaded into an `i8080` object using the `LoadProgram()` method of the `Computer` class, similar to step 5, above.
+This repo contains a small program called [`rom_extractor.py`](utils/rom_extractor/rom_extractor.py). It takes a single parameter which is a path to an 8080 binary file and rewrites the contents of that file as a `JavaScript` script called `out.js` that contains an array of bytes called `Code`. This array can be imported into a virtual machine script and then loaded into an `i8080` object using the `LoadProgram()` method of the `Computer` class, similar to step 5, above.
 
+e.g.
 
+```shell
+➜ python3 rom_extractor.py '/path/to/my/romfile.bin'
+```
+
+```javascript
+import { Code } from './out.js'
+
+const computer = new Computer();
+computer.LoadProgram(Code);
+
+while(!computer.CPUState.Halt) {
+    computer.ExecuteNextInstruction();
+}
+```
+
+Obviously, the filename and the array name can (and should) be renamed.
 
 # Testing
 

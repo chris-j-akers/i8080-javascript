@@ -24,7 +24,7 @@ def usage():
     print('USAGE: python3 rom_extractor.py [path-to-rom-file]')
 
 def main():
-    if len(sys.argv) != 3:
+    if len(sys.argv) != 2:
         usage()
         exit()
     extract(sys.argv[1])
