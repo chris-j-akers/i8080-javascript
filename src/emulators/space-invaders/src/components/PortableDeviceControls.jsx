@@ -6,7 +6,7 @@ import { FaRunning } from 'react-icons/fa';
 
 function PortableDeviceControls( {invadersWebWorker} ) {
   return (
-    <div id='portable-device-controls' className='shadow' onContextMenu={() => false}>
+    <div id='portable-device-controls' className='shadow'>
         <div id='direction-controls' className='shadow'>
             <Button className='button-controls' icon={<AiFillCaretLeft />} 
                 onTouchStart={() => {
@@ -14,7 +14,12 @@ function PortableDeviceControls( {invadersWebWorker} ) {
                 }}
                 onTouchEnd={() => {
                     invadersWebWorker.postMessage({Type: 'P1-LEFT-UP'})
-                }}>
+                }}
+                onContextMenu={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false; }}
+                >
             </Button>
             <Button className='button-controls' icon={<AiFillCaretRight className='icons' />} 
                 onTouchStart={() => {
@@ -22,7 +27,12 @@ function PortableDeviceControls( {invadersWebWorker} ) {
                 }}
                 onTouchEnd={() => {
                     invadersWebWorker.postMessage({Type: 'P1-RIGHT-UP'});
-                }}>
+                }}
+                onContextMenu={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false; }}
+                >
             </Button>
         </div>
         <div id='fire-start-controls' className='shadow'>
@@ -30,21 +40,26 @@ function PortableDeviceControls( {invadersWebWorker} ) {
                 invadersWebWorker.postMessage({Type: 'COIN'});
             }}>
             </Button>
-            <Button icon={<FaRunning />} className='button-controls' 
+            <Button className='button-controls' 
                 onTouchStart={() => {
                     invadersWebWorker.postMessage({Type: 'P1-START-DOWN'});
                 }}
                 onTouchEnd={ () => {
                     invadersWebWorker.postMessage({Type: 'P1-START-UP'});
-                }}>
+                }}>START
             </Button>
-            <Button className='button-controls' icon={<GiBolterGun />} 
+            <Button className='button-controls' 
                 onTouchStart={() => {
                 invadersWebWorker.postMessage({Type: 'P1-FIRE-DOWN'});
                 }} 
                 onTouchEnd={() => {
                     invadersWebWorker.postMessage({Type: 'P1-FIRE-UP'});
-                }}>
+                }}
+                onContextMenu={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false; }}
+                >FIRE
             </Button>
         </div>
     </div>
