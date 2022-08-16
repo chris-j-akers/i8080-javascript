@@ -203,9 +203,9 @@ class TutorialComputer extends Computer {
 
 export { TutorialComputer }
 ```
-Above, the `OutputDevice` is connected to port 0x01 (1) of the `Bus`. To access this device, the source code needs to use the `OUT` opcode with an operand of `0x01`.
+Above, the `OutputDevice` is connected to port 0x01 (`1`) of the `Bus`. To access this device, the source code needs to use the `OUT` opcode with an operand of `0x01`.
 
-Extending the class, instead of implementing it, may seem overkill for this example but in a lot of cases there will be additional devices to add and different hooks required to emulate OS or ROM functions (see `ExecuteNextInstruction()` in [`cpudiag-computer.js`](src/cpu-test-program/cpudiag-computer.js) for an example of emulating OS API calls without an OS). Extending the `Computer` class helps to decouple specific machine behaviour from the `core` components.
+Extending the class, instead of implementing it, may seem overkill for this example but in a lot of cases there will be additional devices to add and different hooks required to emulate OS or ROM functions (see `ExecuteNextInstruction()` in [`cpudiag-computer.js`](src/cpu-test-program/cpudiag-computer.js) for an example of emulating OS API calls without an OS). Extending the `Computer` class helps to decouple machine-specific behaviour from the `core` components.
 
 ## 5. Write the main `tutorial.js` script to be executed through the browser
 
