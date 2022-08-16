@@ -446,7 +446,7 @@ The expected result is for the phrase `  CPU IS OPERATIONAL` to pop out of the c
 
 ## Components
 
-Below is the updated class diagram that includes the additional *Space Invaders* components. Again, click for larger version.
+Below is the updated class diagram that includes the additional *Space Invaders* components.
 
 ## Space Invaders Class Diagram
 
