@@ -14,12 +14,7 @@ function PortableDeviceControls( {invadersWebWorker} ) {
                 }}
                 onTouchEnd={() => {
                     invadersWebWorker.postMessage({Type: 'P1-LEFT-UP'})
-                }}
-                onContextMenu={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    return false; }}
-                >
+                }}>
             </Button>
             <Button className='button-controls' icon={<AiFillCaretRight className='icons' />} 
                 onTouchStart={() => {
@@ -27,12 +22,7 @@ function PortableDeviceControls( {invadersWebWorker} ) {
                 }}
                 onTouchEnd={() => {
                     invadersWebWorker.postMessage({Type: 'P1-RIGHT-UP'});
-                }}
-                onContextMenu={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    return false; }}
-                >
+                }}>
             </Button>
         </div>
         <div id='fire-start-controls' className='shadow'>
@@ -54,12 +44,7 @@ function PortableDeviceControls( {invadersWebWorker} ) {
                 }} 
                 onTouchEnd={() => {
                     invadersWebWorker.postMessage({Type: 'P1-FIRE-UP'});
-                }}
-                onContextMenu={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    return false; }}
-                >FIRE
+                }}>FIRE
             </Button>
         </div>
     </div>
