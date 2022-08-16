@@ -6,7 +6,7 @@ import { FaRunning } from 'react-icons/fa';
 
 function PortableDeviceControls( {invadersWebWorker} ) {
   return (
-    <div id='portable-device-controls' className='shadow'>
+    <div id='portable-device-controls' className='shadow' onContextMenu={false}>
         <div id='direction-controls' className='shadow'>
             <Button className='button-controls' icon={<AiFillCaretLeft />} 
                 onTouchStart={() => {
