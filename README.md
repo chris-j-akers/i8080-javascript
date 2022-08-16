@@ -213,7 +213,7 @@ Now to write the main `tutorial.js` script which will instantiate the `TutorialC
   
 Code is stored as byte values in an array called `program`. This `program` is loaded into the virtual memory of the `TutorialComputer` object using the `LoadProgram()` method, then the `ExecuteNextInstruction()` method is called to step through it until the `HALT` status of the CPU is set to `true`.
 
-The program is loaded into memory address 0x0 (the default), but this could be changed by passing the `addr` parameter to the `LoadProgram()` method.
+The program is loaded into memory address `0x0` (the default), but this could be changed by passing the `addr` parameter to the `LoadProgram()` method.
 
   ```javascript
   import { TutorialComputer } from './tutorial-computer.js'
@@ -237,11 +237,11 @@ The program is loaded into memory address 0x0 (the default), but this could be c
 
   ```
 
-Above, the program loads the immediate value 40 (0x28) into the Accumulator, then adds the immediate value 2 (0x02) to the Accumulator. It then calls the `OUT` opcode with a parameter of 0x01, telling the CPU to send the contents of the Accumulator to the device listening on port 0x01 (which is the `OutputDevice` written in step 3). Finally, it uses the `HALT` opcode to stop the program. Without this `HALT` code, the program will keep running through memory trying to execute whatever was there.
+Above, the program loads the immediate value `40` (`0x28`) into the Accumulator, then adds the immediate value `2` (`0x02`) to the Accumulator. It then calls the `OUT` opcode with a parameter of `0x01`, telling the CPU to send the contents of the Accumulator to the device listening on port `0x01` (which is the `OutputDevice` written in step 3). Finally, it uses the `HALT` opcode to stop the program. Without this `HALT` code, the program will keep running through memory trying to execute whatever it finds.
 
 ## 6. Run the script through a browser
 
-The program can be run through the newly created virtual machine. In order for a browser to run all the JavaScript, the `index.html` file must be loaded through an `HTTP` server. Fortunately, there are a number of simple ones out there, including one that ships with `python`. For simplicity, it should be started from the tutorial source directory.
+In order for a browser to run everything over `http` and avoid `Cross Origin` errors, the `index.html` file must be served through an `HTTP` server. Fortunately, there are a number of simple ones out there, including one that ships with `python`. For simplicity, it should be started from the tutorial source directory.
 
   ```shell
   ~/Source/i8080-tutorial via ⬢ v16.14.2
