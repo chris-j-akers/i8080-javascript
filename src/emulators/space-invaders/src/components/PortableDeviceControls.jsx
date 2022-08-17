@@ -6,8 +6,8 @@ import { FaRunning } from 'react-icons/fa';
 
 function PortableDeviceControls( {invadersWebWorker} ) {
   return (
-    <div id='portable-device-controls' className='shadow'>
-        <div id='direction-controls' className='shadow'>
+    <div id='portable-device-controls'>
+        <div id='direction-controls'>
             <Button className='button-controls' icon={<AiFillCaretLeft />} 
                 onTouchStart={() => {
                     invadersWebWorker.postMessage({Type: 'P1-LEFT-DOWN'});
@@ -25,7 +25,7 @@ function PortableDeviceControls( {invadersWebWorker} ) {
                 }}>
             </Button>
         </div>
-        <div id='fire-start-controls' className='shadow'>
+        <div id='fire-start-controls'>
             <Button className='button-controls' icon={<BsCoin />} onClick={() => {
                 invadersWebWorker.postMessage({Type: 'COIN'});
             }}>

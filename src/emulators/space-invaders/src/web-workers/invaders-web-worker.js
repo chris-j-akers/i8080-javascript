@@ -112,7 +112,7 @@ function onMessage(e) {
             WebWorkerState.stopClicked = false;
             /* Stop VBlanks running as soon as it starts */
             WebWorkerState.lastScreenDrawRequestTime = new Date().getTime();
-            run(14,7, false);
+            run(12,6, false);
             break;
         case 'STOP':
             WebWorkerState.stopClicked = true;

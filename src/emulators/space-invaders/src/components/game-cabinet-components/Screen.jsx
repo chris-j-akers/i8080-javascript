@@ -70,8 +70,8 @@ function Screen({connectScreenToVRAMState, backgroundColor, color, programStatus
 }
 
 Screen.defaultProps = {
-    backgroundColor: 'black',
-    color: 'white'
+    backgroundColor: '#1D2228',
+    color: '#E1E2E2'
 }
 
 export default Screen

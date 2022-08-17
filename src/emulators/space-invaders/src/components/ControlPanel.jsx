@@ -21,64 +21,60 @@ function ControlPanel({ invadersWebWorker, traceDisabled, toggleTraceDisabled, p
         <div id='control-panel-container'>
             <StatusCard running={running}></StatusCard>
 
-            <div id='control-panel-disable-trace-checkbox' className='shadow button-style'>
-                <Checkbox onChange={() => toggleTraceDisabled(!traceDisabled)} defaultChecked={false} label='Disable Trace' large={false}/>
+            <div id='control-panel-disable-trace-checkbox'>
+                <Checkbox onChange={() => toggleTraceDisabled(!traceDisabled)} defaultChecked={false} label='Disable Trace Output' large={false}/>
             </div>
 
-            <div className='shadow'>
+            <div>
                 <ButtonGroup vertical={true} alignText='left' fill={true}>
                     
-                    <Button className='button-style' disabled={running} type ='button' icon={<GiAlienBug/>} onClick={() => {
+                    <button className='control-panel-button' disabled={running} type ='button' icon={<GiAlienBug/>} onClick={() => {
                         invadersWebWorker.postMessage({Type: 'RUN'});
                         updateProgramStatus('RUNNING');
                         updateRunning(true);
                         }}>
                     Play Space Invaders
-                    </Button>
+                    </button>
 
-                    <Button className='button-style' type ='button' icon={<AiFillPauseCircle />} onClick={() => {
+                    <button className='control-panel-button' disabled={!running} type ='button' icon={<AiFillPauseCircle />} onClick={() => {
                         invadersWebWorker.postMessage({Type: 'STOP'});
                         updateProgramStatus('PAUSED');
                         updateRunning(false);
                     }}>
                     Pause Game
-                    </Button>
+                    </button>
                     
-                    <Button className='button-style' type ='button' disabled={programStatus==='RUNNING'} icon={<GrPowerReset />} onClick={() => {
+                    <button className='control-panel-button' type ='button' disabled={programStatus==='RUNNING'} icon={<GrPowerReset />} onClick={() => {
                         invadersWebWorker.postMessage({Type: 'RESET'});
                         updateProgramStatus('RESET');
                         }}>
                     Reset Computer
-                    </Button>
+                    </button>
                 </ButtonGroup>
             </div>
 
-            <div className='shadow'>
+            <div>
                 <ButtonGroup vertical={true} alignText='left' fill={true}>
 
-                    <Button className='button-style' icon={<AiFillStepForward/>} onClick={() => {
+                    <button className='control-panel-button' icon={<AiFillStepForward/>} onClick={() => {
                             invadersWebWorker.postMessage({Type: 'STEP-NEXT'});
                             }}>
                         Step Next Instruction
-                    </Button>
+                    </button>
 
-                    <Button className='button-style' icon={<FaSquareFull/>} onClick={() => {
+                    <button className='control-panel-button' icon={<FaSquareFull/>} onClick={() => {
                     invadersWebWorker.postMessage({Type: 'VBLANK'});
                     }}>
                         VBlank Interrupt
-                    </Button>
+                    </button>
 
-                    <Button className='button-style' icon={<BsSquareHalf/>} onClick={ () => {
+                    <button className='control-panel-button' icon={<BsSquareHalf/>} onClick={ () => {
                     invadersWebWorker.postMessage({Type: 'HALF-VBLANK'});
                     }}>
                         Half-VBlank Interrupt
-                    </Button>
+                    </button>
                     
                 </ButtonGroup>
-            </div>
-
-            <div id='instructions-container' className='shadow'>
-              <InstructionsTable />
             </div>
         </div>
     )

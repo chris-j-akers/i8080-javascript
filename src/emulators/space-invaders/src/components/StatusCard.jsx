@@ -1,7 +1,7 @@
 
 function StatusCard({ running }) {
   return (
-    <div id='control-panel-status-card' className={running ? 'status-card-running' : 'status-card-stopped'}>
+    <div id='control-panel-status-card'>
       {running ? 'RUNNING' : 'STOPPED'}
     </div>
   )

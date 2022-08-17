@@ -12,7 +12,8 @@
 #footer-container,
 #body-container {
   margin-left: 2em;
-  margin-right: 2em;;
+  margin-right: 2em;
+  color: #E1E2E2;
 }
 
 #header-container,
@@ -26,6 +27,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+a {
+  color: #FB8122;
 }
 
 @media (min-width: 1181px) {
@@ -49,11 +54,10 @@
 #app-container {
   display: flex;
   flex-direction: column;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;  margin: 5px;
+  border: solid 1px #E1E2E2
 }
 
 #header-title {
-  border-top: 0.1em solid;
   border-bottom: 0.1em solid;
   margin-top: 1em;
   margin-bottom: 1em;
@@ -64,7 +68,7 @@
   flex-direction: row;
 }
 
-#game-cabinet-container {
+#game-cabinet-screen-container{
   width: 30em;
   display: flex;
   flex-direction: column;
@@ -73,6 +77,7 @@
   margin-top: 1.3em;
   margin-left: 1em;
   margin-right: 1em;
+  border: solid 1px #E1E2E2;
 }
 
 #portable-device-controls {
@@ -147,20 +152,8 @@
   align-items: center;
   font-weight: bold;
   font-size: 1.5em;
-  margin-bottom: 1.5em;
-  height: 4em;
   border-radius: 0.5em;
   }
-
-.status-card-stopped {
-  background-color: #f7eded;
-  color: #AC2F33;
-}
-
-.status-card-running {
-  background-color: #ebf3eb;
-  color: #36453c
-}
 
 @media (max-width: 820px) {
   #control-panel-disable-trace-checkbox {
@@ -169,13 +162,31 @@
 }
 
 #control-panel-disable-trace-checkbox {
-  padding-top: 1.1em;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: none;
+  outline: none;
+  color:#E1E2E2;
+  background-color:#1D2228;
+  height: 3em;
+  padding-top: 0.9em;
   padding-bottom: 0.3em;
   margin-bottom: 0.5em;
 }
 
-#control-panel-instruction-card {
-  text-align: center;
+#control-panel-disable-trace-checkbox:checked:after {
+  color:#E1E2E2;
+  background-color:#1D2228;
+}
+
+
+#instruction-card-container {
+  font-size: 1em;
+  display: flex;
+  justify-content: center;
+  margin-top: 1em;
+  margin-left: 1em;
+  margin-right: 1em;
 }
 
 @media (max-width: 820px) {
@@ -183,7 +194,6 @@
     padding: 0;
     margin-left: 5em;
     width: 1em;
-    /* display: none; */
   }
 }
 
@@ -207,16 +217,13 @@
   }
 }
 
-#instructions-container {
-  font-size: 1em;
-  display: flex;
-  justify-content: center;
-  margin-top: 1em;
-}
 
 #instructions-table {
   border-collapse: collapse;
+  border-style: solid;
+  border-color: #E1E2E2;
   margin-bottom: 0.5em;
+  width: 100%;
 }
 
 #instructions-table caption {
@@ -233,24 +240,58 @@
   text-align: left;
 }
 
-.button-style {
-  font-size: 1em;
-  padding-top: 0.5em;
-  padding-bottom: 0.5em;
+
+.control-panel-button {
+  box-shadow: none;
+  outline: none;
+  color:#E1E2E2;
+  background-color:#1D2228;
+  height: 3em;
+  border-style: solid;
+  border-color: #E1E2E2;
+  margin-bottom: 0.5em;
+  border-radius: 0.5em;
 }
 
-.shadow {
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;  margin: 5px;
+.control-panel-button:hover:enabled {
+  color:#1D2228;
+  background-color:#E1E2E2;
+  cursor: pointer;
+}
+
+.control-panel-button:disabled {
+  opacity: 0.5;
 }
 
 .greyed-out {
   opacity: 0.5;
 }
 
+
 .scrollable {
   height: 43.5em;
   overflow-y: scroll;
   overflow-x: hidden;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #181a20;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #E1E2E2;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 .diag-table-container {
@@ -267,15 +308,12 @@
   border-collapse: collapse;
 }
 
-.diag-table thead {
-  background-color: #24337a;
-  color: #efe80d;
-}
-
 .diag-table th, td {
-  border: 0.1em solid #999;
-  padding-left: 0.2em;
-  padding-right: 0.2em;
+  border: 0.01em solid #999;
+  padding-left: 0.3em;
+  padding-right: 0.3em;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
 }
 
 .diag-table th, tfoot {
@@ -283,7 +321,6 @@
 }
 
 .diag-table td {
-  background-color: black;
   color: white;
   text-align: left;
 }
