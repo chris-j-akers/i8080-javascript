@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { Button, ButtonGroup, Checkbox, FocusStyleManager  } from "@blueprintjs/core";
+import { ButtonGroup, Checkbox, FocusStyleManager  } from "@blueprintjs/core";
 import { AiFillPauseCircle } from 'react-icons/ai'
 import { GiAlienBug } from 'react-icons/gi'
 import { GrPowerReset } from 'react-icons/gr'
 import { AiFillStepForward } from 'react-icons/ai'
 import { BsSquareHalf } from 'react-icons/bs'
 import { FaSquareFull } from 'react-icons/fa'
-import InstructionsTable from "./state-tables-components/InstructionsTable";
 import StatusCard from "./StatusCard";
 
 function ControlPanel({ invadersWebWorker, traceDisabled, toggleTraceDisabled, programStatus, updateProgramStatus}) {
