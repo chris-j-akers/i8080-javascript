@@ -1,5 +1,7 @@
 # Intel 8080 JavaScript Emulator <!-- omit in toc -->
 
+<img src="documentation/readme-img/space-invaders-screenshot.png" alt="Space Invaders Screenshot"/>
+
 ## Contents <!-- omit in toc -->
 
 - [Repo Contents](#repo-contents)
@@ -543,7 +545,7 @@ View the [CPU Diag Web Worker](src/cpu-test-program/cpudiag-worker.js)
 
 The front-end is a basic *React* application.
 
-<img src="documentation/readme-img/space-invaders-screenshot.png" alt="CPU Diag Screenshot"/>
+<img src="documentation/readme-img/space-invaders-screenshot.png" alt="Space Invaders Screenshot"/>
 
 ### Control Panel
 
