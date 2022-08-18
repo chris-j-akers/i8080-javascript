@@ -17,7 +17,7 @@
   - [4. Create the `TutorialComputer` class by extending the `Computer` class](#4-create-the-tutorialcomputer-class-by-extending-the-computer-class)
   - [5. Write the main `tutorial.js` script to be executed through the browser](#5-write-the-main-tutorialjs-script-to-be-executed-through-the-browser)
   - [6. Run the script through a browser](#6-run-the-script-through-a-browser)
-- [Running ROMs through the virtual machine](#running-roms-through-the-virtual-machine)
+- [Loading 8080 Binary ROMS](#loading-8080-binary-roms)
 - [Testing](#testing)
   - [Unit Tests](#unit-tests)
   - [Running Unit Tests](#running-unit-tests)
@@ -264,7 +264,7 @@ Opening the debug tools (CTRL-SHIFT-I on Chrome) and clicking on the `Console` t
 ![Tutorial Screenshot 2](documentation/readme-img/tutorial-screenshot-2.png)
 
 ---
-# Running ROMs through the virtual machine
+# Loading 8080 Binary ROMS
 
 This repo contains an app called [`rom_extractor.py`](utils/rom_extractor/rom_extractor.py). It takes a single parameter - a path to an 8080 binary file - and rewrites the contents of that file as a `JavaScript` script called `out.js`. This script contains an array of bytes called `Code`. which can be loaded and executed by an `i8080` object using the `LoadProgram()` method of the `Computer` class, similar to step 5, above.
 
@@ -302,8 +302,9 @@ while(!computer.CPUState.Halt) {
     computer.ExecuteNextInstruction();
 }
 ```
+Obviously, the filename and the array name can (and probably should, in most circumstances) be renamed once generated.
 
-Obviously, the filename and the array name can (and should) be renamed.
+For more complex examples of this, checkout the `Space Invaders` implementation. The ROM is split over four files, but each can be loaded in one after the other using the `addr` parameter of `LoadProgram()`.
 
 # Testing
 
