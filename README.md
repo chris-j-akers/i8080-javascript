@@ -35,7 +35,7 @@
     - [Bit-Shift Device](#bit-shift-device)
     - [Controller Devices](#controller-devices)
   - [Game Loop Implementation and the Web Worker](#game-loop-implementation-and-the-web-worker)
-  - [Front-End](#front-end)
+  - [The Front-End](#the-front-end)
     - [Control Panel](#control-panel)
     - [Player Instructions](#player-instructions)
     - [Data Tables](#data-tables)
@@ -523,23 +523,27 @@ Additional controller devices are also implemented, though, at the time of writi
 
 ## Game Loop Implementation and the Web Worker
 
-Ideally, when running software through an emulator, you would employ a tight loop so instructions can be executed one after the other and in-between these instructions, the screen can be repainted.
+It became apparent, early on, that simply running a tight JavaScript loop inside, even the simplest of web-pages, was not going to work.
 
-The problem with this is that browsers are, by default, single-threaded and synchronous. JavaScript is executed in the same thread as the browser updates, so any scripts that take too much time interfere with the repainting process and your program hangs. In fact, often the browsers will present a warning dialog informing you that no response has been received in a while and would you like to wait or kill the process. 
+The problem is that browsers are, by default, single-threaded and synchronous. JavaScript is executed in the same thread as any browser updates, so scripts that take too long interfere with the these processes and the browser appears to lock-up.
 
-The solution was to take the emulator's loop away from the main browser and have it run in a separate thread. This is achieved through the use of [Web Workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers), essentially scripts that can be told to run separately from the main browser and controlled via messages. This has the added advantage of utterly decoupling the emulator from the GUI.
+The solution was to take the emulator's loop away from the main browser and have it run separately. This is achieved through the use of a [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers), which is essentially a script that runs in a separate thread from the main browser and can be controlled via events. This has the added advantage of further decoupling the emulator from the GUI.
 
-For *Space Invaders* (and *CPU Diag*) Web Workers are used to run the programs in the 8080 emulator and  swap event messages with the main *React* application running in the browser. 
+Web workers instantiate and maintain the virtual machine objects and manipulate them according to control messages received from the main browser when certain events occur. For instance, clicking the `Fire` button or pressing the `Fire` key sends an event to the web-worker which has the type `P1-FIRE-DOWN`. The web-worker then sets the state of the relevant control device accordingly (it calls the `PlayerOneFireButtonDown()` method of the [`input-device-1.js`](src/emulators/space-invaders/src/back-end/input-device-1.js) object). When the key or button is released, another event of type `P1-FIRE-UP` is sent to the web worker which, again, sets the state of the relevant control device (by calling `PlayerOneFireButtonUp()` of the[`input-device-1.js`](src/emulators/space-invaders/src/back-end/input-device-1.js) object).
+
+A list of events swapped between the web browser and the web worker for *Space Invaders* is below.
+
+
 
 View the [Space Invaders Web Worker](src/emulators/space-invaders/src/web-workers/invaders-web-worker.js).
 
 View the [CPU Diag Web Worker](src/cpu-test-program/cpudiag-worker.js)
 
-## Front-End
+## The Front-End
 
 The front-end is a basic *React* application.
 
-<img src="documentation/cpu-diag/readme-img/space-invaders-screenshot.png" alt="CPU Diag Screenshot"/>
+<img src="documentation/readme-img/space-invaders-screenshot.png" alt="CPU Diag Screenshot"/>
 
 ### Control Panel
 
@@ -547,7 +551,7 @@ The Control Panel, on the far-right, allows you to control the program:
 
 | Button                | Description                                                                                                      |
 |-----------------------|------------------------------------------------------------------------------------------------------------------|
-| Disable Trace         | Allows you to stop the Disassembly window from updating as the program runs.                                      |
+| Trace Disabled         | Allows you to stop the Disassembly window from updating as the program runs.                                      |
 | Play Space Invaders   | Start the game at full speed                                                                                     |
 | Pause Game            | Stop the game running  - the game can be resumed by clicking 'Play Space Invaders' or by 'Step Next Instruction' |
 | Reset Computer        | Restart and refresh the game                                                                                     |
@@ -555,11 +559,13 @@ The Control Panel, on the far-right, allows you to control the program:
 | VBlank Interrupt      | Send a VBlank Interrupt signal to the CPU                                                                        |
 | Half-VBlank Interrupt | Send a Half-VBlank Interrupt signal to the CPU      
 
+The `VBlank Interrupt` and `Half-VBlank Interrupt` buttons are required if the program is being stepped through per instruction using the `Step Next Instruction` button otherwise it may just get stuck in a perpetual loop (a lot of update code depends on these interrupts). If the program is being stepped through and doesn't appear to be doing much, it is worth inserting one (or many) of these interrupts.
+
 ### Player Instructions
 
-Instructions for playing the game can be found underneath the control panel. 
+On laptops, or larger tablets in landscape mode, instructions for playing the game can be found underneath the control panel. 
 
-For mobile devices, touch-screen buttons will be visible that allow users to play the game on their device without needing keyboard.
+For mobile devices, touch-screen buttons allow users to play the game without needing a keyboard. Some of the diagnostic windows will be unavailable in some configurations, simply due to lack of screen real estate.
 
 <img src="documentation/readme-img/mobile-device-controls.png" alt="CPU Diag Screenshot" width="500"/>
 
