@@ -84,6 +84,30 @@ a {
   display: none;
 }
 
+.portable-device-controller-button {
+  width: 10em;
+  height: 10em;
+  border: solid 1px #E1E2E2;
+  background-color: #1D2228;
+  color:#E1E2E2;
+  touch-action: none;
+  margin-right: 2em;
+  border-radius: 10px;
+}
+
+.portable-device-controller-button:active {
+  color:#1D2228;
+  background-color:#E1E2E2;
+}
+
+.portable-device-controller-button-icon {
+  font-size: 5em;
+}
+
+#portable-device-controller-fire-button {
+  margin-left: 4em;
+}
+
 @media (max-width: 900px) {
   #portable-device-controls {
     margin-top: 2em;
@@ -173,12 +197,6 @@ a {
   padding-bottom: 0.3em;
   margin-bottom: 0.5em;
 }
-
-#control-panel-disable-trace-checkbox:checked:after {
-  color:#E1E2E2;
-  background-color:#1D2228;
-}
-
 
 #instruction-card-container {
   font-size: 1em;

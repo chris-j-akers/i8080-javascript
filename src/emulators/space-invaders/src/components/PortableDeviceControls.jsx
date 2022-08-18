@@ -1,54 +1,85 @@
-import { Button } from "@blueprintjs/core";
+import React from 'react'
 import { AiFillCaretLeft, AiFillCaretRight } from 'react-icons/ai';
-import { BsCoin } from 'react-icons/bs';
-import { GiBolterGun } from 'react-icons/gi';
-import { FaRunning } from 'react-icons/fa';
+import { BsCoin, BsFillPersonFill } from 'react-icons/bs';
+import { IoIosRadioButtonOn } from 'react-icons/io'
+import { useEffect } from "react";
 
 function PortableDeviceControls( {invadersWebWorker} ) {
-  return (
-    <div id='portable-device-controls'>
-        <div id='direction-controls'>
-            <Button className='button-controls' icon={<AiFillCaretLeft />} 
-                onTouchStart={() => {
-                    invadersWebWorker.postMessage({Type: 'P1-LEFT-DOWN'});
-                }}
-                onTouchEnd={() => {
-                    invadersWebWorker.postMessage({Type: 'P1-LEFT-UP'})
-                }}>
-            </Button>
-            <Button className='button-controls' icon={<AiFillCaretRight className='icons' />} 
-                onTouchStart={() => {
-                    invadersWebWorker.postMessage({Type: 'P1-RIGHT-DOWN'});
-                }}
-                onTouchEnd={() => {
-                    invadersWebWorker.postMessage({Type: 'P1-RIGHT-UP'});
-                }}>
-            </Button>
+
+    const buttonLeftRef = React.useRef(null);
+    const buttonRightRef = React.useRef(null);
+    const buttonFireRef = React.useRef(null);
+
+    useEffect( () => {
+        buttonFireRef.current.addEventListener('touchstart', 
+        (e) => {
+            e.preventDefault();
+            invadersWebWorker.postMessage({Type: 'P1-FIRE-DOWN'});
+        },{ passive: false });
+
+        buttonFireRef.current.addEventListener('touchend', 
+        (e) => {
+            e.preventDefault();
+            invadersWebWorker.postMessage({Type: 'P1-FIRE-UP'});
+        },{ passive: false });
+       
+        buttonLeftRef.current.addEventListener('touchstart', 
+            (e) => {
+                e.preventDefault();
+                invadersWebWorker.postMessage({Type: 'P1-LEFT-DOWN'});
+            },{ passive: false });
+
+        buttonLeftRef.current.addEventListener('touchend', 
+            (e) => {
+                e.preventDefault();
+                invadersWebWorker.postMessage({Type: 'P1-LEFT-UP'});
+            },{ passive: false });
+
+        buttonRightRef.current.addEventListener('touchstart', 
+            (e) => {
+                e.preventDefault();
+                invadersWebWorker.postMessage({Type: 'P1-RIGHT-DOWN'});
+            },{ passive: false });
+
+        buttonRightRef.current.addEventListener('touchend', 
+            (e) => {
+                e.preventDefault();
+                invadersWebWorker.postMessage({Type: 'P1-RIGHT-UP'});
+            },{ passive: false });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[]);
+
+
+    return (
+        <div id='portable-device-controls'>
+            <div id='direction-controls' >
+                <button className="portable-device-controller-button" ref={buttonLeftRef}>
+                    <AiFillCaretLeft className="portable-device-controller-button-icon"/>
+                </button>
+                <button className="portable-device-controller-button" ref={buttonRightRef}>
+                    <AiFillCaretRight className="portable-device-controller-button-icon" />
+                </button>
+            </div>
+
+            <div id='fire-start-controls'>
+                <button className="portable-device-controller-button" icon={<BsCoin />} onClick={() => {
+                    invadersWebWorker.postMessage({Type: 'COIN'});
+                }}> <BsCoin className="portable-device-controller-button-icon"/>
+                </button>
+                <button className="portable-device-controller-button" 
+                    onTouchStart={() => {
+                        invadersWebWorker.postMessage({Type: 'P1-START-DOWN'});
+                    }}
+                    onTouchEnd={ () => {
+                        invadersWebWorker.postMessage({Type: 'P1-START-UP'});
+                    }}> <BsFillPersonFill className="portable-device-controller-button-icon"/>
+                </button>
+                <button id='portable-device-controller-fire-button' className="portable-device-controller-button" ref={buttonFireRef}>
+                    <IoIosRadioButtonOn className="portable-device-controller-button-icon" />
+                </button>
+            </div>
         </div>
-        <div id='fire-start-controls'>
-            <Button className='button-controls' icon={<BsCoin />} onClick={() => {
-                invadersWebWorker.postMessage({Type: 'COIN'});
-            }}>
-            </Button>
-            <Button className='button-controls' 
-                onTouchStart={() => {
-                    invadersWebWorker.postMessage({Type: 'P1-START-DOWN'});
-                }}
-                onTouchEnd={ () => {
-                    invadersWebWorker.postMessage({Type: 'P1-START-UP'});
-                }}>START
-            </Button>
-            <Button className='button-controls' 
-                onTouchStart={() => {
-                invadersWebWorker.postMessage({Type: 'P1-FIRE-DOWN'});
-                }} 
-                onTouchEnd={() => {
-                    invadersWebWorker.postMessage({Type: 'P1-FIRE-UP'});
-                }}>FIRE
-            </Button>
-        </div>
-    </div>
-  )
+    )
 }
 
 export default PortableDeviceControls
