@@ -1,6 +1,6 @@
 # Intel 8080 JavaScript Emulator <!-- omit in toc -->
 
-<img src="documentation/readme-img/space-invaders.gif" alt="Space Invaders Screenshot"/>
+<img src="documentation/readme-img/space-invaders-screenshot.png" alt="Space Invaders Screenshot"/>
 
 ## Contents <!-- omit in toc -->
 
