@@ -20,7 +20,7 @@ function ControlPanel({ invadersWebWorker, traceDisabled, toggleTraceDisabled, p
         <div id='control-panel-container'>
             <StatusCard running={running}></StatusCard>
             <div id='control-panel-disable-trace-checkbox'>
-                <Checkbox onChange={() => toggleTraceDisabled(!traceDisabled)} defaultChecked={false} label='Disable Trace Output' large={false}/>
+                <Checkbox onChange={() => toggleTraceDisabled(!traceDisabled)} defaultChecked={false} label='Trace Disabled' large={false}/>
             </div>
             <div>
                 <ButtonGroup vertical={true} alignText='left' fill={true}>
