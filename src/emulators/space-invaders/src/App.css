@@ -43,7 +43,6 @@ a {
 @media (max-width: 1180px) {
   #app-container {
     font-size: 10px;
-    max-width: 717px;
   }
 }
 
@@ -69,7 +68,13 @@ a {
 
 #body-container {
   display: flex;
+  flex-direction: column;
+}
+
+#main-container {
+  display: flex;
   flex-direction: row;
+  justify-content: space-between;
 }
 
 #game-cabinet-screen-container{
@@ -95,7 +100,7 @@ a {
   background-color: #1D2228;
   color:#E1E2E2;
   touch-action: none;
-  margin-right: 2em;
+  margin-left: 1em;
   border-radius: 10px;
 }
 
@@ -109,29 +114,33 @@ a {
 }
 
 #portable-device-controller-fire-button {
-  margin-left: 4em;
+    margin-right: 0.5rem;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 840px) {
   #portable-device-controls {
     margin-top: 2em;
     display: flex;
-    flex-direction: row;
-    margin-left: 3em;
-    margin-right: 1em;
+    flex-direction: row;  
     border-radius: 1em;
   }
 
   #fire-start-controls {
-    justify-content: left;
     margin-left: auto;
     border-radius: 1em;
   }
 
-  #direction-controls {
-    display: flex;
-    flex-direction: row;
-    }
+@media (max-width: 568px) {
+  .portable-device-controller-button {
+    margin-left: auto;
+    margin-right: 0.5rem;
+  }
+}
+
+#direction-controls {
+  display: flex;
+  flex-direction: row;
+  }
 }
 
 #footer-container {
@@ -222,8 +231,6 @@ a {
   margin: 0;
   padding: 0;
 }
-
-
 
 @media (max-width: 1000px) {
   #instructions-table {

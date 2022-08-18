@@ -66,16 +66,20 @@ function App({ invadersWebWorker }) {
       <div id='app-container'>
           <Header />
           <div id='body-container'>
-            <CPUStateTables programState={programState} programStatus={programStatus}/>
-            <TraceWindow trace={trace} traceDisabled={traceDisabled} />
-            <GameCabinet connectScreenToVRAMState={connectScreenToVRAMState} programStatus={programStatus}/>
-            <ControlPanel invadersWebWorker={invadersWebWorker} 
-                          traceDisabled={traceDisabled}
-                          toggleTraceDisabled={toggleTraceDisabled}
-                          programStatus={programStatus}
-                          updateProgramStatus={updateProgramStatus} />
+            <div id='main-container'>
+              <CPUStateTables programState={programState} programStatus={programStatus}/>
+              <TraceWindow trace={trace} traceDisabled={traceDisabled} />
+              <GameCabinet connectScreenToVRAMState={connectScreenToVRAMState} programStatus={programStatus}/>
+              <ControlPanel invadersWebWorker={invadersWebWorker} 
+                            traceDisabled={traceDisabled}
+                            toggleTraceDisabled={toggleTraceDisabled}
+                            programStatus={programStatus}
+                            updateProgramStatus={updateProgramStatus} />
+            </div>
+            <div id='portable-control-container'>
+            <PortableDeviceControls invadersWebWorker={invadersWebWorker}/>
+            </div>
           </div>
-          <PortableDeviceControls invadersWebWorker={invadersWebWorker}/>
           <Footer />
       </div>
     </div>
