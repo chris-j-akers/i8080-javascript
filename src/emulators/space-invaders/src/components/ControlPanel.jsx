@@ -19,14 +19,11 @@ function ControlPanel({ invadersWebWorker, traceDisabled, toggleTraceDisabled, p
     return (
         <div id='control-panel-container'>
             <StatusCard running={running}></StatusCard>
-
             <div id='control-panel-disable-trace-checkbox'>
                 <Checkbox onChange={() => toggleTraceDisabled(!traceDisabled)} defaultChecked={false} label='Disable Trace Output' large={false}/>
             </div>
-
             <div>
                 <ButtonGroup vertical={true} alignText='left' fill={true}>
-                    
                     <button className='control-panel-button' disabled={running} type ='button' icon={<GiAlienBug/>} onClick={() => {
                         invadersWebWorker.postMessage({Type: 'RUN'});
                         updateProgramStatus('RUNNING');
@@ -34,7 +31,6 @@ function ControlPanel({ invadersWebWorker, traceDisabled, toggleTraceDisabled, p
                         }}>
                     Play Space Invaders
                     </button>
-
                     <button className='control-panel-button' disabled={!running} type ='button' icon={<AiFillPauseCircle />} onClick={() => {
                         invadersWebWorker.postMessage({Type: 'STOP'});
                         updateProgramStatus('PAUSED');
@@ -42,7 +38,6 @@ function ControlPanel({ invadersWebWorker, traceDisabled, toggleTraceDisabled, p
                     }}>
                     Pause Game
                     </button>
-                    
                     <button className='control-panel-button' type ='button' disabled={programStatus==='RUNNING'} icon={<GrPowerReset />} onClick={() => {
                         invadersWebWorker.postMessage({Type: 'RESET'});
                         updateProgramStatus('RESET');
@@ -51,28 +46,23 @@ function ControlPanel({ invadersWebWorker, traceDisabled, toggleTraceDisabled, p
                     </button>
                 </ButtonGroup>
             </div>
-
             <div>
                 <ButtonGroup vertical={true} alignText='left' fill={true}>
-
-                    <button className='control-panel-button' icon={<AiFillStepForward/>} onClick={() => {
+                    <button className='control-panel-button' disabled={running} icon={<AiFillStepForward/>} onClick={() => {
                             invadersWebWorker.postMessage({Type: 'STEP-NEXT'});
                             }}>
                         Step Next Instruction
                     </button>
-
-                    <button className='control-panel-button' icon={<FaSquareFull/>} onClick={() => {
+                    <button className='control-panel-button' disabled={running} icon={<FaSquareFull/>} onClick={() => {
                     invadersWebWorker.postMessage({Type: 'VBLANK'});
                     }}>
                         VBlank Interrupt
                     </button>
-
-                    <button className='control-panel-button' icon={<BsSquareHalf/>} onClick={ () => {
+                    <button className='control-panel-button' disabled={running} icon={<BsSquareHalf/>} onClick={ () => {
                     invadersWebWorker.postMessage({Type: 'HALF-VBLANK'});
                     }}>
                         Half-VBlank Interrupt
                     </button>
-                    
                 </ButtonGroup>
             </div>
         </div>

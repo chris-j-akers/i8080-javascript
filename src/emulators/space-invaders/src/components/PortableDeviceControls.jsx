@@ -10,6 +10,14 @@ function PortableDeviceControls( {invadersWebWorker} ) {
     const buttonRightRef = React.useRef(null);
     const buttonFireRef = React.useRef(null);
 
+    /* We have to do this otherwise when users hold the buttons on the
+       touchscreen, it defaults to an annoying context menu ('copy - paste -
+       translate' etc). There doesn't seem to be a way in React, right now, to
+       set passive eventlisteners, so references need to be obtained and
+       addEventListener() called manually on each button when the control is
+       first rendered.
+    */
+
     useEffect( () => {
         buttonFireRef.current.addEventListener('touchstart', 
         (e) => {

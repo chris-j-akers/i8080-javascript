@@ -54,7 +54,9 @@ a {
 #app-container {
   display: flex;
   flex-direction: column;
-  border: solid 1px #E1E2E2
+  border: solid 1px #E1E2E2;
+  margin-top: 5%;
+ 
 }
 
 #header-title {
@@ -127,18 +129,6 @@ a {
     display: flex;
     flex-direction: row;
     }
-
-  .button-controls {
-    height: 4em;
-    width: 4em;
-  }
-
-  @media (max-width: 568px) {
-    .button-controls {
-        height: 4em;
-        width: 4em;
-    }
-  }
 }
 
 #footer-container {
@@ -194,8 +184,9 @@ a {
   background-color:#1D2228;
   height: 3em;
   padding-top: 0.9em;
-  padding-bottom: 0.3em;
-  margin-bottom: 0.5em;
+  padding-bottom: 0.5em;
+  margin-bottom: 1em;
+  margin-top: 1em;
 }
 
 #instruction-card-container {
@@ -235,10 +226,10 @@ a {
   }
 }
 
-
 #instructions-table {
   border-collapse: collapse;
   border-style: solid;
+  border-width: 1px;
   border-color: #E1E2E2;
   margin-bottom: 0.5em;
   width: 100%;
@@ -248,43 +239,51 @@ a {
   padding-bottom: 0.5em;;
 }
 
+#instructions-table thead {
+  border-style: solid;
+  border-width: 1px;
+  border-color: #E1E2E2;
+}
+
 #instructions-table th {
+  border-style: solid;
+  border-width: 1px;
+  border-color: #E1E2E2;
   text-align: center;
 }
 
 #instructions-table td {
-  border-left: 0;
-  border-right: 0;
-  text-align: left;
+  text-align: center;
+  border-left: 0; 
 }
-
 
 .control-panel-button {
   box-shadow: none;
   outline: none;
   color:#E1E2E2;
   background-color:#1D2228;
-  height: 3em;
+  height: 5em;
   border-style: solid;
   border-color: #E1E2E2;
-  margin-bottom: 0.5em;
+  margin-bottom: 1.5em;
   border-radius: 0.5em;
+  transition: 0.3s;
 }
 
-.control-panel-button:hover:enabled {
+.control-panel-button:enabled:hover {
   color:#1D2228;
   background-color:#E1E2E2;
-  cursor: pointer;
+  cursor:pointer;
 }
 
 .control-panel-button:disabled {
   opacity: 0.5;
+  cursor:not-allowed;
 }
 
 .greyed-out {
   opacity: 0.5;
 }
-
 
 .scrollable {
   height: 43.5em;
@@ -317,7 +316,7 @@ a {
   flex-direction: column;
   margin-left: 1em;
   margin-right: 1em;
-  margin-bottom: 1em;
+  margin-bottom: 5em;
 }
 
 .diag-table {
