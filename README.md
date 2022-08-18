@@ -30,8 +30,8 @@
     - [The Video Buffer](#the-video-buffer)
     - [Colour Palette](#colour-palette)
     - [Rotated Screen](#rotated-screen)
-    - [Sound](#sound)
   - [Additional Hardware](#additional-hardware)
+    - [Sound Device](#sound-device)
     - [Bit-Shift Device](#bit-shift-device)
     - [Controller Devices](#controller-devices)
   - [Game Loop Implementation and the Web Worker](#game-loop-implementation-and-the-web-worker)
@@ -499,13 +499,13 @@ For *Space Invaders*, the video buffer is written at a 90 degree angle. Back in 
 
 See the `useEffect()` function in the [Screen.jsx](src/emulators/space-invaders/src/components/game-cabinet-components/Screen.jsx) component which fires each time the `VRAM` state changes.
 
-### Sound
-
-Sound is not yet implemented in the emulator, but will be eventually. A sound device is prepared and hooked up, it just doesn't do anything, yet.
-
 ## Additional Hardware
 
 The Space Invaders arcade machine included some additional, custom hardware that connected to the 8080 through device ports and communicated using the `IN` and `OUT` opcodes.
+
+### Sound Device
+
+Sound is not yet implemented in the emulator, but will be eventually. A sound device is prepared and hooked up, it just doesn't do anything, yet.
 
 ### Bit-Shift Device
 
