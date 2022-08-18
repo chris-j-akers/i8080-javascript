@@ -266,13 +266,31 @@ Opening the debug tools (CTRL-SHIFT-I on Chrome) and clicking on the `Console` t
 ---
 # Running ROMs through the virtual machine
 
-This repo contains a small program called [`rom_extractor.py`](utils/rom_extractor/rom_extractor.py). It takes a single parameter which is a path to an 8080 binary file and rewrites the contents of that file as a `JavaScript` script called `out.js` that contains an array of bytes called `Code`. This array can be imported into a virtual machine script and then loaded into an `i8080` object using the `LoadProgram()` method of the `Computer` class, similar to step 5, above.
+This repo contains an app called [`rom_extractor.py`](utils/rom_extractor/rom_extractor.py). It takes a single parameter - a path to an 8080 binary file - and rewrites the contents of that file as a `JavaScript` script called `out.js`. This script contains an array of bytes called `Code`. which can be loaded and executed by an `i8080` object using the `LoadProgram()` method of the `Computer` class, similar to step 5, above.
 
-e.g.
+For example, to extract an array of bytes from the [`cpudiag.bin`](roms/cpudiag/cpudiag.bin) file.
 
 ```shell
-➜ python3 rom_extractor.py '/path/to/my/romfile.bin'
+i8080-javascript/utils/rom_extractor on  main [!?] via ⬢ v16.14.2 
+➜ python3 rom_extractor.py ../../roms/cpudiag/cpudiag.bin
+Written 1453 bytes to out.js
 ```
+
+The output file (`out.js`) will look similar to below (some data has been removed for clarity):
+
+```javascript
+const Code = [
+  0xc3,0xab,0x1,0x4d,0x49,0x43,0x52,0x4f,0x43,0x4f,0x53,
+  0x4d,0x20,0x41,0x53,0x53,0x4f,0x43,0x49,0x41,0x54,0x45,
+  0x53,0x20,0x38,0x30,0x38,0x30,0x2f,0x38,0x30,0x38,0x35,
+  ...
+  ...
+  ...
+  0x0,];
+
+export { Code };
+```
+To use this array of bytes in an i8080 virtual machine, simply instantiate a `Computer` object and pass it to the `LoadProgram()` method.
 
 ```javascript
 import { Code } from './out.js'

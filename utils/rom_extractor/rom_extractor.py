@@ -8,6 +8,7 @@ def extract(rom_path):
     with open(rom_path, 'rb') as rom_file:
         rom_data = bytearray(rom_file.read())
 
+    total_bytes = 0;
     byte_count = 0;
     with open('out.js', 'w') as out_file:
         out_file.write('const Code = [\n\t')
@@ -17,8 +18,10 @@ def extract(rom_path):
                 byte_count = 0
             out_file.write('{0},'.format(hex(byte)))
             byte_count += 1
+            total_bytes += 1
         out_file.write('];\n')
         out_file.write('export { Code };')
+    print('Written {0} bytes to out.js'.format(total_bytes))
 
 def usage():
     print('USAGE: python3 rom_extractor.py [path-to-rom-file]')
