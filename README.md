@@ -13,9 +13,9 @@
   - [`device.js`](#devicejs)
   - [Core Component Class Diagram](#core-component-class-diagram)
 - [Tutorial: Build an i8080 Virtual Machine and Run Some Code](#tutorial-build-an-i8080-virtual-machine-and-run-some-code)
-  - [1. Create basic `index.html`](#1-create-basic-indexhtml)
+  - [1. Create `index.html`](#1-create-indexhtml)
   - [2. Copy `core` files to source directory](#2-copy-core-files-to-source-directory)
-  - [3. Create a custom `OutputDevice` by extending the `Device` class](#3-create-a-custom-outputdevice-by-extending-the-device-class)
+  - [3. Create a custom `ConsoleDevice` by extending the `Device` class](#3-create-a-custom-consoledevice-by-extending-the-device-class)
   - [4. Create the `TutorialComputer` class by extending the `Computer` class](#4-create-the-tutorialcomputer-class-by-extending-the-computer-class)
   - [5. Write the main `tutorial.js` script](#5-write-the-main-tutorialjs-script)
   - [6. Run the main `tutorial.js` script](#6-run-the-main-tutorialjs-script)
@@ -132,18 +132,15 @@ This section presents a quick tutorial that shows how easy it is to build out a 
 
 The program that will be run through the machine is very, very simple. It will just add the numbers 40 and 2 together leaving the Accumulator with the number 42. Then it will use a custom-written `OutputDevice` to print that Accumulator value to a browser's console.
 
-## 1. Create basic `index.html`
+## 1. Create `index.html`
 
-To begin with, we'll be using the script in the browser, so we need a simple `index.html` file. The script we'll be writing is to be called `tutorial.js` so that needs to be imported using a `<script>` tag.
+The final script wil be run in a browser, so a simple `index.html` file needs to be created, first. The script will be called `tutorial.js` so that needs to be imported using a `<script>` tag.
 
   ```html
   <!DOCTYPE html>
   <html lang="en">
     <head>
       <title>i8080 JavaScript Tutorial</title>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta http-equiv="X-UA-Compatible" content="ie=edge" />
       <script type="module" src="tutorial.js"></script>
     </head>
     <body>
@@ -171,21 +168,21 @@ The `core` 8080 source files from the repo need to be copied to the same directo
   ➜
   ```
 
-## 3. Create a custom `OutputDevice` by extending the `Device` class
+## 3. Create a custom `ConsoleDevice` by extending the `Device` class
 
-Next, create a custom `OutputDevice` class so the result can be written to the console. This is a simple class that extends the `Device` class in `device.js` and implements the `Write()` method which will simply print out the received value to the browser's console.
+Next, create a custom `ConsoleDevice` class in a file called `console-device.js` so the result can be written to the browser's console. This is a simple class that extends the `Device` class in `device.js` and implements the `Write()` method which will simply print out the received value.
 
   ```javascript
   import { Device } from './device.js'
 
-  class OutputDevice extends Device {
+  class ConsoleDevice extends Device {
 
       Write(port, val) {
           console.log(val);
       }
   }
 
-  export { OutputDevice }
+  export { ConsoleDevice }
 
   ```
 Note that the `port` parameter is not used in the code, here, as this device will only be connected to one port. If a device is connected to more than one port, it is useful to split logic depending on which port on the device received the value. For instance, a sound device might play different sounds depending on which port received the value.
@@ -196,20 +193,20 @@ Next, the `Computer` class is extended to create the `TutorialComputer` and hook
 
 ```javascript
 import { Computer } from './computer.js';
-import { OutputDevice } from './output-device.js';
+import { ConsoleDevice } from './console-device.js';
 
 class TutorialComputer extends Computer {
 
     constructor() {
         super();
-        this._outputDevice = new OutputDevice();
-        this._bus.ConnectDeviceToWritePort(0x01, this._outputDevice);
+        this._consoleDevice_ = new ConsoleDevice();
+        this._bus.ConnectDeviceToWritePort(0x01, this._consoleDevice_);
     }
 }
 
 export { TutorialComputer }
 ```
-Above, the `OutputDevice` is connected to port `0x01` (`1`) of the `Bus`. To access this device, the source code needs to use the `OUT` opcode with an operand of `0x01`.
+The `ConsoleDevice` is connected to port `0x01` (`1`) of the `Bus`. To access this device, the source code needs to use the `OUT` opcode with an operand of `0x01`.
 
 Extending the class, instead of implementing it, may seem overkill for this example but in a lot of cases there will be additional devices to add and different hooks required to emulate OS or ROM functions (see `ExecuteNextInstruction()` in [`cpudiag-computer.js`](src/cpu-test-program/cpudiag-computer.js) for an example of emulating OS API calls without an OS). Extending the `Computer` class helps to decouple machine-specific behaviour from the `core` components.
 
@@ -264,6 +261,8 @@ If the `index.html` loads correctly, it should look something like this:
 Opening the debug tools (CTRL-SHIFT-I on Chrome) and clicking on the `Console` tab, should show output from the program (`42`).
 
 ![Tutorial Screenshot 2](documentation/readme-img/tutorial-screenshot-2.png)
+
+This is a very simple program, obviously, but more complex ones can be written or eben imported from old 8080 binaries (see below)
 
 ---
 # Loading 8080 Binary ROMS
@@ -532,10 +531,6 @@ The problem is that browsers are, by default, single-threaded and synchronous. J
 The solution was to take the emulator's loop away from the main browser and have it run separately. This is achieved through the use of a [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers), which is essentially a script that runs in a separate thread from the main browser and can be controlled via events. This has the added advantage of further decoupling the emulator from the GUI.
 
 Web workers instantiate and maintain the virtual machine objects and manipulate them according to control messages received from the main browser when certain events occur. For instance, clicking the `Fire` button or pressing the `Fire` key sends an event to the web-worker which has the type `P1-FIRE-DOWN`. The web-worker then sets the state of the relevant control device accordingly (it calls the `PlayerOneFireButtonDown()` method of the [`input-device-1.js`](src/emulators/space-invaders/src/back-end/input-device-1.js) object). When the key or button is released, another event of type `P1-FIRE-UP` is sent to the web worker which, again, sets the state of the relevant control device (by calling `PlayerOneFireButtonUp()` of the[`input-device-1.js`](src/emulators/space-invaders/src/back-end/input-device-1.js) object).
-
-A list of events swapped between the web browser and the web worker for *Space Invaders* is below.
-
-
 
 View the [Space Invaders Web Worker](src/emulators/space-invaders/src/web-workers/invaders-web-worker.js).
 
