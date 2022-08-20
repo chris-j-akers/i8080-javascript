@@ -4,8 +4,25 @@ import { i8080 } from './i8080.js';
 import { MMU } from './mmu.js';
 import { Bus } from './bus.js';
 
+/**
+ * Top level object for any emulator.
+ *
+ * @param {cpuType} String describing the CPU to use (currently only 'i8080'
+ * available)
+ *
+ */
 class Computer {
-    constructor() {
+    constructor(cpuType='i8080') {
+        
+        switch(cpuType) {
+            case 'i8080':
+                this._cpu = new i8080();
+                break;
+            default:
+                console.log('ERROR: Invalid CPU Type specified');
+                break;
+        }
+
         this._cpu = new i8080();
         this._mmu = new MMU();
         this._bus = new Bus();
@@ -83,10 +100,12 @@ class Computer {
      * Inject a program (an array of OpCodes & data) into memory ready for
      * execution. 
      *
-     * @param {array[number]} program Program to insert
+     * @param {Array} program Array of Number (bytes that make up the program)
      * @param {number} atAddr Memory address at which to insert (default is
      * 0x0)
-     */
+     * 
+     * @returns {number} Number of bytes loaded.
+     **/
     LoadProgram(program, atAddr=0x0) {
         for (let i=0; i<program.length; i++) {
             this._bus.WriteRAM(program[i], atAddr + i);
