@@ -17,8 +17,8 @@
   - [2. Copy `core` files to source directory](#2-copy-core-files-to-source-directory)
   - [3. Create a custom `OutputDevice` by extending the `Device` class](#3-create-a-custom-outputdevice-by-extending-the-device-class)
   - [4. Create the `TutorialComputer` class by extending the `Computer` class](#4-create-the-tutorialcomputer-class-by-extending-the-computer-class)
-  - [5. Write the main `tutorial.js` script to be executed through the browser](#5-write-the-main-tutorialjs-script-to-be-executed-through-the-browser)
-  - [6. Run the script through a browser](#6-run-the-script-through-a-browser)
+  - [5. Write the main `tutorial.js` script](#5-write-the-main-tutorialjs-script)
+  - [6. Run the main `tutorial.js` script](#6-run-the-main-tutorialjs-script)
 - [Loading 8080 Binary ROMS](#loading-8080-binary-roms)
 - [Testing](#testing)
   - [Unit Tests](#unit-tests)
@@ -58,11 +58,11 @@ This repo contains the following:
 
 * [src/core/](src/core/)  
   
-   An Intel 8080 CPU emulator, written in JavaScript, and accompanying components that, together, can be used to build a virtual machine using the Intel 8080 as the CPU.
+   An Intel 8080 CPU emulator, written in JavaScript, and associated components that can be used to build a virtual machine using the Intel 8080 as the CPU.
 
 * [src/emulators/space-invaders](src/emulators/space-invaders)
 
-  A *Space Invaders* emulator which runs the original 1978 game ROM in a modern web browser with a basic *React* front-end (can be viewed at: http://8080.cakers.io).
+  A *Space Invaders* emulator which runs the original 1978 game ROM in a modern web browser with a *React*-based front-end (to see this in action, visit: http://8080.cakers.io).
 
 * [src/cpu-test-program](src/cpu-test-program)
 
@@ -91,7 +91,7 @@ This repo contains the following:
 ---
 # Set-up
 
-This project uses various JavaScript libraries for testing, *React* and third-party open-source *React* components. Ensure you run `npm install` in the relevant directories before trying stuff out.
+This project uses various JavaScript libraries for testing, *React* and third-party open-source *React* components. Ensure that `npm install` has been run in the relevant directories to deploy required libraries.
 
 # 8080 Core Components
 
@@ -213,7 +213,7 @@ Above, the `OutputDevice` is connected to port `0x01` (`1`) of the `Bus`. To acc
 
 Extending the class, instead of implementing it, may seem overkill for this example but in a lot of cases there will be additional devices to add and different hooks required to emulate OS or ROM functions (see `ExecuteNextInstruction()` in [`cpudiag-computer.js`](src/cpu-test-program/cpudiag-computer.js) for an example of emulating OS API calls without an OS). Extending the `Computer` class helps to decouple machine-specific behaviour from the `core` components.
 
-## 5. Write the main `tutorial.js` script to be executed through the browser
+## 5. Write the main `tutorial.js` script
 
 Now to write the main `tutorial.js` script which will instantiate the `TutorialComputer` and execute some 8080 binary code. 
   
@@ -245,7 +245,7 @@ The program is loaded into memory address `0x0` (the default), but this could be
 
 Above, the program loads the immediate value `40` (`0x28`) into the Accumulator, then adds the immediate value `2` (`0x02`) to the Accumulator. It then calls the `OUT` opcode with a parameter of `0x01`, telling the CPU to send the contents of the Accumulator to the device listening on port `0x01` (which is the `OutputDevice` written in step 3). Finally, it uses the `HALT` opcode to stop the program. Without this `HALT` code, the program will keep running through memory trying to execute whatever it finds.
 
-## 6. Run the script through a browser
+## 6. Run the main `tutorial.js` script
 
 In order for a browser to run everything over `http` and avoid `Cross Origin` errors, the `index.html` file must be served through an `HTTP` server. Fortunately, there are a number of simple ones out there, including one that ships with `python`. For simplicity, it should be started from the tutorial source directory.
 
@@ -547,6 +547,10 @@ The front-end is a basic *React* application.
 
 <img src="documentation/readme-img/space-invaders-screenshot.png" alt="Space Invaders Screenshot"/>
 
+For mobile devices, touch-screen buttons allow users to play the game without needing a keyboard. Some of the diagnostic windows will be unavailable in some configurations, simply due to lack of screen real estate.
+
+<img src="documentation/readme-img/mobile-device-controls.png" alt="CPU Diag Screenshot" width="500"/>
+
 ### Control Panel
 
 The Control Panel, on the far-right, allows you to control the program:
@@ -566,10 +570,6 @@ The `VBlank Interrupt` and `Half-VBlank Interrupt` buttons are required if the p
 ### Player Instructions
 
 On laptops, or larger tablets in landscape mode, instructions for playing the game can be found underneath the control panel. 
-
-For mobile devices, touch-screen buttons allow users to play the game without needing a keyboard. Some of the diagnostic windows will be unavailable in some configurations, simply due to lack of screen real estate.
-
-<img src="documentation/readme-img/mobile-device-controls.png" alt="CPU Diag Screenshot" width="500"/>
 
 ### Data Tables
 
