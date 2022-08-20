@@ -1,5 +1,8 @@
 'use strict'
 
+/**
+ * Memory Management Unit. Stores memory and handles Read/Write access.
+ */
 class MMU {
     constructor() {
         this._ram = new Array(65536);
