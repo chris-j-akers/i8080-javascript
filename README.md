@@ -48,7 +48,6 @@
     - [Game Window](#game-window)
   - [Running Space Invaders Locally](#running-space-invaders-locally)
 - [Appendix A: References and Sources](#appendix-a-references-and-sources)
-- [Appendix B: Why JavaScript?](#appendix-b-why-javascript)
 
 ---
 
@@ -99,7 +98,7 @@ In `/src/core`, the following JavaScript classes can be used to form a simple vi
 
 *NOTE: When core components are used elsewhere in this project, they are accessed via symlink to this directory*
 
-  <img class="image" src="documentation/diagrams/virtual-machine.png"/>
+![Core Components](documentation/readme-img/virtual-machine.drawio.png)
 
 ## `i8080.js`
 
@@ -624,15 +623,3 @@ A great site to start off with. Provides a lot of information on what you should
 
 ### [Intel 8080 OpCode List](https://pastraiser.com/cpu/i8080/i8080_opcodes.html) <!-- omit in toc -->
 If, like me, you were confused about the Aux Carry flag, this link makes it easily understandable, even though it's a different chip.
-
-# Appendix B: Why JavaScript?
-
-Originally, this project was started in `C`. After all, research suggested this was the language most people wrote their emulators in and would also serve to illustrate just how fucking hard-core I was when it comes to programming, but a few issues presented themselves early on:
-
-- Emulating 8080 software, in particular games, means drawing graphics and controlling sprites. For C, some sort of display library like `SDL` would need to be used and, therefore, studied, whereas a modern web browser has all that capability built-in and can easily controlled using a well-known and ubiquitous scripting language.
-
-- This is a personal research project, but I still want people to be able to access a demo easily without having to download an executable and deal with all those hand-wringing security issues, plus I didn't want to have to provide a set of executables for different OS types. This way, I can just stick it on the web. For instance, here: [http://8080.cakers.io](http://8080.cakers.io).
-
-- Chromium-based browsers have great dev tools built in. It was either that or spending some more quality time with `GDB` which - and I'm sorry - just isn't pretty enough.
-
-- Time is a factor. I have a family and work on the emulator could only really be done when a couple of hours were snatched each evening or during nap-time (the baby's, not mine). I didn't want to spend those precious few hours chasing down endless, fucking segmentation errors. A high-level language with great, visual debugging tools available is far better suited to this endeavour.
