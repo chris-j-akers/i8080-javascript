@@ -455,7 +455,7 @@ The buttons in the middle provide a couple of different ways to run the program 
   
 * `Run to Breakpoint` will execute the program up to the memory address entered in the text-box.
 
-The expected result is for the phrase `  CPU IS OPERATIONAL` to pop out of the console. If there are any issues, the phrase `  CPU HAS FAILED!` will pop out instead. This text output actually used some old CP/M kernel routines that had to be trapped and emulated. See `ExecuteNextInstruction()` in [`cpudiag-computer.js](src/cpu-test-program/cpudiag-computer.js) for details.
+The expected result is for the phrase `  CPU IS OPERATIONAL` to pop out of the console (including double-space at the beginning). If there are any issues, the phrase `  CPU HAS FAILED!` will pop out instead. This text output actually used some old CP/M kernel routines that had to be trapped and emulated. See `ExecuteNextInstruction()` in [`cpudiag-computer.js](src/cpu-test-program/cpudiag-computer.js) for details.
 
 *NOTE: Time invested in unit testing pays off! When I first ran this program, I expected to be mired in 8080 assembler debugging because I anticipated plenty of failures. In fact, the only issue I encountered was with the `DAA` instruction, an instruction that I hadn’t fully implemented, yet, and hadn’t written any unit tests for. A lot of 8080 emulators actually skip this instruction because it wasn’t used very much, at least in games. I was in two-minds on whether to implement it myself or skip it. In the end, it is fully implemented and passes all tests in `CPU Diag`.*
 
