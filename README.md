@@ -196,8 +196,8 @@ import { ConsoleDevice } from './console-device.js';
 
 class TutorialComputer extends Computer {
 
-    constructor() {
-        super();
+    constructor(cpu) {
+        super(cpu);
         this._consoleDevice_ = new ConsoleDevice();
         this._bus.ConnectDeviceToWritePort(0x01, this._consoleDevice_);
     }
@@ -217,10 +217,12 @@ Code is stored as byte values in an array called `program`. This `program` is lo
 
 The program is loaded into memory address `0x0` (the default), but this could be changed by passing the `addr` parameter to the `LoadProgram()` method.
 
+Note that the string 'i8080' is passed to the `Computer` constructor to tell it to instantiate an i8080 cpu. This is not required as it is the default value for this parameter (i8080 is the only cpu implemented at the moment), but is included for completeness.
+
   ```javascript
   import { TutorialComputer } from './tutorial-computer.js'
 
-  const computer = new TutorialComputer();
+  const computer = new TutorialComputer('i8080');
 
   const program = [
       0x3E,            // MVI A...
@@ -445,11 +447,11 @@ CPU registers and fields are displayed along the top. On the bottom left is the 
 
 The buttons in the middle provide a couple of different ways to run the program which helped when debugging.
 
-* `Run Clocked at Speed` slows down the emulator to a number of instructions per second. This is really just so you can observe the fields being updated as the test runs.
+* `Run Clocked at Speed` slows down the emulator to a number of instructions per second. This is really just so the field updates can observed as the test runs.
   
 * `Run Unclocked` executes the whole program as quickly as possible.
   
-* `Step Single Instruction` allows you to step through the program instruction-by-instruction.
+* `Step Single Instruction` steps through the program instruction-by-instruction.
   
 * `Run to Breakpoint` will execute the program up to the memory address entered in the text-box.
 
@@ -483,7 +485,7 @@ According to [Computer Archaeology](https://www.computerarcheology.com/Arcade/Sp
 
 When the screen is half-way drawn, an interrupt is sent to the CPU which we'll call the 'half-blank interrupt', and, similarly, when the screen is fully drawn, another interrupt is sent to the CPU, which we'll call the 'Vertical Blank' interrupt.
 
-The screen-updates and interrupt firings must be in sync or you will see a side-effect known as 'tearing'. Imagine if the monitor has just drawn the top of a sprite at position (0,1) but, before it finished, the video RAM updates the sprite to position (0,5). The rest of the sprite will be drawn to screen in this different position, making it look disjointed or 'torn'.
+The screen-updates and interrupt firings must be in sync or a side-effect known as 'tearing' will occur. Imagine if the monitor has just drawn the top of a sprite at position (0,1) but, before it finished, the video RAM updates the sprite to position (0,5). The rest of the sprite will be drawn to screen in this different position, making it look disjointed or 'torn'.
 
 In *Space Invaders*, the interrupts are also critical for game timing and a lot of update code depends on them being fired at exactly the right point. Having said that, this emulation doesn't quite manage this. Instead of firing the half-blank when the screen is halfway draw and the full-blank when the screen is fully drawn, it only sends one interrupt after the whole screen is drawn and toggles the interrupt type each time (see `run()` in the [`invaders-web-worker.js`](src/emulators/space-invaders/src/web-workers/invaders-web-worker.js) module). Testing determined this was enough to keep the game running at a decent speed.
 
@@ -547,11 +549,11 @@ For mobile devices, touch-screen buttons allow users to play the game without ne
 
 ### Control Panel
 
-The Control Panel, on the far-right, allows you to control the program:
+The Control Panel is on the far-right.
 
 | Button                | Description                                                                                                      |
 |-----------------------|------------------------------------------------------------------------------------------------------------------|
-| Trace Disabled         | Allows you to stop the Disassembly window from updating as the program runs.                                      |
+| Trace Disabled         | Stop the Disassembly window from updating as the program runs.                                      |
 | Play Space Invaders   | Start the game at full speed                                                                                     |
 | Pause Game            | Stop the game running  - the game can be resumed by clicking 'Play Space Invaders' or by 'Step Next Instruction' |
 | Reset Computer        | Restart and refresh the game                                                                                     |
@@ -591,7 +593,9 @@ This window simply displays the graphics of the game and where it is controlled 
 
 ## Running Space Invaders Locally
 
-*Space Invaders* can be run locally through the *React* development server, but you must make sure that you run `npm install` from the correct directory to ensure all required libraries and components have been downloaded to your machine.
+*Space Invaders* can be run locally through the *React* development server, but `npm install` must be run from the correct directory, first, to ensure all required libraries and components have been downloaded.
+
+The following command will start the app:
 
 ```shell
 i8080-javascript/src/emulators/space-invaders on  main is 📦 v0.1.0 via ⬢ v16.14.2 took 17s 
@@ -607,7 +611,7 @@ Once this has been done, from the same directory, type:
 # Appendix A: References and Sources
 
 ### [8080 Programmers Manual](https://altairclone.com/downloads/manuals/8080%20Programmers%20Manual.pdf) <!-- omit in toc -->
-The main source for this emulator - everything you need to know about every OpCode and the way the CPU operates.
+The main source for this emulator - everything about every OpCode and the way the CPU operates.
 
 ### [Computer Archeology: Space Invaders](https://www.computerarcheology.com/Arcade/SpaceInvaders/) <!-- omit in toc -->
 Low-level implementation details about the inner-workings of Space Invaders
@@ -619,7 +623,7 @@ Source Code for the 'CPU Diag' program that tests the 8080
 JavidX9 has an excellent (and free!) YouTube channel where he instructs and discusses a wide range of low-level technical topics in a very accessible and entertaining way. His tutorial on building a NES emulator was an early inspiration.
 
 ### [Emulator 101](http://www.emulator101.com/) <!-- omit in toc -->
-A great site to start off with. Provides a lot of information on what you should expect when you start running emulators for the first time and possible pitfalls.
+A great site to start off with. Provides information on what to should expect when building 8-bit emulators for the first time and possible pitfalls.
 
 ### [Intel 8080 OpCode List](https://pastraiser.com/cpu/i8080/i8080_opcodes.html) <!-- omit in toc -->
-If, like me, you were confused about the Aux Carry flag, this link makes it easily understandable, even though it's a different chip.
+Initially, the Aux Carry flag can seem confusing, this link makes it easily understandable (even though it's a different chip).
