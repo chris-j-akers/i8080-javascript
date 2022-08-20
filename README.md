@@ -96,7 +96,7 @@ This project uses various JavaScript libraries for testing, *React* and third-pa
 
 In `/src/core`, the following JavaScript classes can be used to form a simple virtual machine with an 8080 CPU.
 
-*NOTE: When core components are used elsewhere in this project, they are accessed via symlink to this directory*
+*NOTE: When these core components are used elsewhere in this project, they are accessed via symlink to this directory to keep it simple.*
 
 ![Core Components](documentation/readme-img/virtual-machine.drawio.png)
 
