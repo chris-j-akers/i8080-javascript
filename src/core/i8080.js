@@ -1552,10 +1552,10 @@ class i8080 {
         if (expr) {
             this._programCounter = addr;
             this._clock += 10;
-            return { Disassemble: `${mnemonic}, 0x${addr.toString(16).padStart(4,'0')}`, Ticks: 10 };
+            return { Disassemble: `${mnemonic} 0x${addr.toString(16).padStart(4,'0')}`, Ticks: 10 };
         }
         this._clock += 3;
-        return { Disassemble: `${mnemonic}, 0x${addr.toString(16).padStart(4,'0')}`, Ticks: 3 };
+        return { Disassemble: `${mnemonic} 0x${addr.toString(16).padStart(4,'0')}`, Ticks: 3 };
     }
 
     // CALL SUBROUTINE INSTRUCTIONS
@@ -1574,10 +1574,10 @@ class i8080 {
             this._pushWordToStack(this._programCounter);
             this._programCounter = addr;
             this._clock += 17;
-            return { Disassemble: `${mnemonic}, 0x${addr.toString(16).padStart(4,'0')}`, Ticks: 17 };
+            return { Disassemble: `${mnemonic} 0x${addr.toString(16).padStart(4,'0')}`, Ticks: 17 };
         }
         this._clock += 11;
-        return { Disassemble: `${mnemonic}, 0x${addr.toString(16).padStart(4,'0')}`, Ticks: 11 };
+        return { Disassemble: `${mnemonic} 0x${addr.toString(16).padStart(4,'0')}`, Ticks: 11 };
     }
 
     // RETURN FROM SUBROUTINE INSTRUCTIONS
@@ -1660,13 +1660,13 @@ class i8080 {
      * A byte is read from the input device with id `deviceID` and loaded into
      * the accumulator.
      *
-     * @param {number} deviceID Id of device to receive data from
+     * @param {number} port Id of device to receive data from
      * @returns 
      */
-    IN(deviceID) {
-        this._registers.A = this._bus.ReadDevice(deviceID);
+    IN(port) {
+        this._registers.A = this._bus.ReadDevice(port);
         this.clock += 10;
-        return { Disassemble: `IN`, Ticks: 10 };
+        return { Disassemble: `IN ${port}`, Ticks: 10 };
     }
 
     /**
@@ -1679,7 +1679,7 @@ class i8080 {
     OUT(port) {
         this._bus.WriteDevice(port, this._registers.A);
         this._clock += 10;
-        return { Disassemble: `OUT`, Ticks: 10 };
+        return { Disassemble: `OUT ${port}`, Ticks: 10 };
     }
 
 
