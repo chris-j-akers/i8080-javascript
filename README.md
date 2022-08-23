@@ -2,6 +2,8 @@
 
 <img src="documentation/readme-img/space-invaders-screenshot.png" alt="Space Invaders Screenshot"/>
 
+Visit https://8080.cakers.io to view the above website and see 'Space Invaders' running in a modern browser.
+
 ## Contents <!-- omit in toc -->
 
 - [Repo Contents](#repo-contents)
