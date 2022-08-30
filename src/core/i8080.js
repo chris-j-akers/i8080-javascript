@@ -1308,7 +1308,7 @@ class i8080 {
         this._registers[highByteRegister] = (val >> 8) & 0xFF;
         this._registers[lowByteRegister] = val & 0xFF;
         this._clock += 10;
-        return { Disassemble: `LXI ${highByteRegister}, ${val}`, Ticks: 10 };    
+        return { Disassemble: `LXI ${highByteRegister}, #${val.toString(16).padStart(4,'0')}`, Ticks: 10 };    
     }
     
     /**
@@ -1319,7 +1319,7 @@ class i8080 {
     LXI_SP(val) {
         this._stackPointer = val & 0xFFFF;
         this._clock += 10;
-        return { Disassemble: `LXI SP, ${val}`, Ticks: 10 };    
+        return { Disassemble: `LXI SP, #${val.toString(16).padStart(4,'0')}`, Ticks: 10 };    
     }
 
     /**
@@ -1333,7 +1333,7 @@ class i8080 {
     MVI_R(regDestination, val) {
         this._registers[regDestination] = (val & 0xFF);
         this._clock += 7;
-        return { Disassemble: `MVI ${regDestination}, #${val}`, Ticks: 7 };    
+        return { Disassemble: `MVI ${regDestination}, #${val.toString(16).padStart(2,'0')}`, Ticks: 7 };    
     }
 
     /**
@@ -1347,7 +1347,7 @@ class i8080 {
         const addr = this._getRegisterPairWord('H', 'L');
         this._bus.WriteRAM(val, addr);
         this._clock += 10;
-        return { Disassemble: `MVI M, #${val}`, Ticks: 10 };    
+        return { Disassemble: `MVI M, #${val.toString(16).padStart(2,'0')}`, Ticks: 10 };    
     }
 
     /**
@@ -1359,7 +1359,7 @@ class i8080 {
     ADI(val) {
         this._registers['A'] = this._add(this._registers['A'], val);
         this._clock += 7;
-        return { Disassemble: `ADI #${val}`, Ticks: 7 };
+        return { Disassemble: `ADI #${val.toString(16).padStart(2,'0')}`, Ticks: 7 };
 
     }
 
@@ -1373,7 +1373,7 @@ class i8080 {
     ACI(val) {
         this._registers['A'] = this._add(this._registers['A'], val, this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
         this._clock += 7;
-        return { Disassemble: `ACI #${val}`, Ticks: 7 };
+        return { Disassemble: `ACI #${val.toString(16).padStart(2,'0')}`, Ticks: 7 };
     }
 
     /**
@@ -1385,7 +1385,7 @@ class i8080 {
     SUI(val) {
         this._registers['A'] = this._sub(this._registers['A'], val);
         this._clock += 7;
-        return { Disassemble: `SUI #${val}`, Ticks: 7 };      
+        return { Disassemble: `SUI #${val.toString(16).padStart(2,'0')}`, Ticks: 7 };      
     }
 
     /**
@@ -1397,7 +1397,7 @@ class i8080 {
     SBI(val) {
         this._registers['A'] = this._sub(this._registers['A'], val, this._flagManager.IsSet(this._flagManager.FlagType.Carry) ? 1 : 0);
         this._clock += 7;
-        return { Disassemble: `SBI #${val}`, Ticks: 7 };
+        return { Disassemble: `SBI #${val.toString(16).padStart(2,'0')}`, Ticks: 7 };
     }
 
     /**
@@ -1412,7 +1412,7 @@ class i8080 {
         this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
         this._clock += 4;
-        return { Disassemble: `ANI #${val}`, Ticks: 4 };
+        return { Disassemble: `ANI #${val.toString(16).padStart(2,'0')}`, Ticks: 4 };
     }
 
 
@@ -1428,7 +1428,7 @@ class i8080 {
         this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
         this._clock += 4;
-        return { Disassemble: `XRI #${val}`, Ticks: 4 };
+        return { Disassemble: `XRI #${val.toString(16).padStart(2,'0')}`, Ticks: 4 };
     }
 
 
@@ -1444,7 +1444,7 @@ class i8080 {
         this._setFlagsOnLogicalOp(raw_result);
         this._registers['A'] = raw_result & 0xFF;
         this._clock += 4;
-        return { Disassemble: `ORI #${val}`, Ticks: 4 };
+        return { Disassemble: `ORI #${val.toString(16).padStart(2,'0')}`, Ticks: 4 };
     }
 
     /**
@@ -1459,7 +1459,7 @@ class i8080 {
     CPI(val) {
         const result = this._sub(this._registers['A'], val & 0xFF);
         this._clock += 7;
-        return { Disassemble: `CPI #${val}`, Ticks: 7 };
+        return { Disassemble: `CPI #${val.toString(16).padStart(2,'0')}`, Ticks: 7 };
     }
 
     // DIRECT ADDRESSING OPCODES
@@ -1666,7 +1666,7 @@ class i8080 {
     IN(port) {
         this._registers.A = this._bus.ReadDevice(port);
         this.clock += 10;
-        return { Disassemble: `IN ${port}`, Ticks: 10 };
+        return { Disassemble: `IN #${port.toString(16).padStart(2,'0')}`, Ticks: 10 };
     }
 
     /**
@@ -1679,7 +1679,7 @@ class i8080 {
     OUT(port) {
         this._bus.WriteDevice(port, this._registers.A);
         this._clock += 10;
-        return { Disassemble: `OUT ${port}`, Ticks: 10 };
+        return { Disassemble: `OUT $#${port.toString(16).padStart(2,'0')}`, Ticks: 10 };
     }
 
 
