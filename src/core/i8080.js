@@ -1308,7 +1308,7 @@ class i8080 {
         this._registers[highByteRegister] = (val >> 8) & 0xFF;
         this._registers[lowByteRegister] = val & 0xFF;
         this._clock += 10;
-        return { Disassemble: `LXI ${highByteRegister}`, Ticks: 10 };    
+        return { Disassemble: `LXI ${highByteRegister}, ${val}`, Ticks: 10 };    
     }
     
     /**
@@ -1319,7 +1319,7 @@ class i8080 {
     LXI_SP(val) {
         this._stackPointer = val & 0xFFFF;
         this._clock += 10;
-        return { Disassemble: `LXI SP`, Ticks: 10 };    
+        return { Disassemble: `LXI SP, ${val}`, Ticks: 10 };    
     }
 
     /**
