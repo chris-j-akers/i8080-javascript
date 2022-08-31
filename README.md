@@ -200,8 +200,8 @@ class TutorialComputer extends Computer {
 
     constructor(cpu) {
         super(cpu);
-        this._consoleDevice_ = new ConsoleDevice();
-        this._bus.ConnectDeviceToWritePort(0x01, this._consoleDevice_);
+        this._consoleDevice = new ConsoleDevice();
+        this._bus.ConnectDeviceToWritePort(0x01, this._consoleDevice);
     }
 }
 
